@@ -10,9 +10,9 @@ import { HomeBody } from "./component/HomeBody";
 import { TransPort } from "./page/transport/TransPort";
 import { Hotel } from "./page/hotel/Hotel";
 import { Board } from "./page/board/Board";
-import { MemberLogin } from "./page/user/MemberLogin";
-import { MemberSignup } from "./page/user/MemberSignup";
-import { UserEdit } from "./page/user/UserEdit";
+import { MemberLogin } from "./page/member/MemberLogin";
+import { MemberSignup } from "./page/member/MemberSignup";
+import { UserEdit } from "./page/member/UserEdit";
 
 const routes = createBrowserRouter(
   createRoutesFromElements(
@@ -27,7 +27,6 @@ const routes = createBrowserRouter(
     </Route>,
   ),
 );
-
 
 function App() {
   return <RouterProvider router={routes} />;
