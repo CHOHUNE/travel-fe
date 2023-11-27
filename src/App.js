@@ -10,8 +10,8 @@ import { HomeBody } from "./component/HomeBody";
 import { TransPort } from "./page/transport/TransPort";
 import { Hotel } from "./page/hotel/Hotel";
 import { Board } from "./page/board/Board";
-import { MemberLogin } from "./page/member/MemberLogin";
-import { MemberSignup } from "./page/member/MemberSignup";
+import { UserLogin } from "./page/member/UserLogin";
+import { UserSignup } from "./page/member/UserSignup";
 import { UserEdit } from "./page/member/UserEdit";
 
 const routes = createBrowserRouter(
@@ -21,8 +21,8 @@ const routes = createBrowserRouter(
       <Route path="transport" element={<TransPort />} />
       <Route path="hotel" element={<Hotel />} />
       <Route path="board" element={<Board />} />
-      <Route path="signup" element={<MemberSignup />} />
-      <Route path="login" element={<MemberLogin />} />
+      <Route path="signup" element={<UserSignup />} />
+      <Route path="login" element={<UserLogin />} />
       <Route path="userEdit" element={<UserEdit />} />
     </Route>,
   ),
