@@ -10,8 +10,8 @@ import { HomeBody } from "./component/HomeBody";
 import { TransPort } from "./page/transport/TransPort";
 import { Hotel } from "./page/hotel/Hotel";
 import { Board } from "./page/board/Board";
-import { UserLogin } from "./page/user/UserLogin";
-import { UserSignup } from "./page/user/UserSignup";
+import { MemberLogin } from "./page/user/MemberLogin";
+import { MemberSignup } from "./page/user/MemberSignup";
 import { UserEdit } from "./page/user/UserEdit";
 
 const routes = createBrowserRouter(
@@ -21,12 +21,13 @@ const routes = createBrowserRouter(
       <Route path="transport" element={<TransPort />} />
       <Route path="hotel" element={<Hotel />} />
       <Route path="board" element={<Board />} />
-      <Route path="login" element={<UserLogin />} />
-      <Route path="signup" element={<UserSignup />} />
+      <Route path="signup" element={<MemberSignup />} />
+      <Route path="login" element={<MemberLogin />} />
       <Route path="userEdit" element={<UserEdit />} />
     </Route>,
   ),
 );
+
 
 function App() {
   return <RouterProvider router={routes} />;
