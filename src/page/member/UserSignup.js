@@ -111,7 +111,7 @@ export function UserSignup() {
   }
 
   return (
-    <Center>
+    <Center m={20}>
       <Card w={"xl"}>
         <CardHeader>
           <Heading textAlign={"center"}>회원가입</Heading>
@@ -198,6 +198,7 @@ export function UserSignup() {
                 우편번호
               </FormLabel>
               <Input
+                placeholder="우편번호"
                 mb={3}
                 value={userAddress1}
                 onChange={(e) => setUserAddress1(e.target.value)}
