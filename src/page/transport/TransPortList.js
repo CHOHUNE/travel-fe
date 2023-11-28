@@ -6,17 +6,10 @@ import {
   CardBody,
   CardFooter,
   CardHeader,
-  Center,
   Flex,
   Input,
   SimpleGrid,
   Spinner,
-  Table,
-  Tbody,
-  Td,
-  Th,
-  Thead,
-  Tr,
 } from "@chakra-ui/react";
 import axios from "axios";
 import { useEffect, useState } from "react";
@@ -104,6 +97,7 @@ export function TransPortList() {
             h={"275px"}
             _hover={{ cursor: "pointer" }}
             onClick={() => navigate("/transport/" + transport.tid)}
+            key={transport.tid}
           >
             <CardHeader>
               {transport.tid}
