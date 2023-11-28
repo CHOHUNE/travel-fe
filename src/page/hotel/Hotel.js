@@ -103,7 +103,7 @@ export function Hotel() {
                     <Card maxW='sm'>
                         <CardBody>
                             <Image
-                                src='./hotel_img/images/1.jpg'
+                                src=''
                                 alt='Green double couch with wooden legs'
                                 borderRadius='lg'
                             />
@@ -135,7 +135,7 @@ export function Hotel() {
                     <Card maxW='sm'>
                         <CardBody>
                             <Image
-                                src='./hotel_img/images/1.jpg'
+                                src=''
                                 alt='Green double couch with wooden legs'
                                 borderRadius='lg'
                             />
@@ -165,7 +165,7 @@ export function Hotel() {
                     <Card maxW='sm'>
                         <CardBody>
                             <Image
-                                src='./hotel_img/images/1.jpg'
+                                src=''
                                 alt='Green double couch with wooden legs'
                                 borderRadius='lg'
                             />
@@ -194,7 +194,7 @@ export function Hotel() {
                     <Card maxW='sm'>
                         <CardBody>
                             <Image
-                                src='./hotel_img/images/1.jpg'
+                                src=''
                                 alt='Green double couch with wooden legs'
                                 borderRadius='lg'
                             />
@@ -232,7 +232,7 @@ export function Hotel() {
                     <Card maxW='sm'>
                         <CardBody>
                             <Image
-                                src='./hotel_img/images/1.jpg'
+                                src=''
                                 alt='Green double couch with wooden legs'
                                 borderRadius='lg'
                             />
@@ -262,7 +262,7 @@ export function Hotel() {
                     <Card maxW='sm'>
                         <CardBody>
                             <Image
-                                src='./hotel_img/images/1.jpg'
+                                src=''
                                 alt='Green double couch with wooden legs'
                                 borderRadius='lg'
                             />
@@ -291,7 +291,7 @@ export function Hotel() {
                     <Card maxW='sm'>
                         <CardBody>
                             <Image
-                                src='./hotel_img/images/1.jpg'
+                                src=''
                                 alt='Green double couch with wooden legs'
                                 borderRadius='lg'
                             />
@@ -324,7 +324,7 @@ export function Hotel() {
                     <Card maxW='sm'>
                         <CardBody>
                             <Image
-                                src='./hotel_img/images/1.jpg'
+                                src=''
                                 alt='Green double couch with wooden legs'
                                 borderRadius='lg'
                             />
@@ -354,7 +354,7 @@ export function Hotel() {
                     <Card maxW='sm'>
                         <CardBody>
                             <Image
-                                src='./hotel_img/images/1.jpg'
+                                src=''
                                 alt='Green double couch with wooden legs'
                                 borderRadius='lg'
                             />
@@ -383,7 +383,7 @@ export function Hotel() {
                     <Card maxW='sm'>
                         <CardBody>
                             <Image
-                                src='./hotel_img/images/1.jpg'
+                                src=''
                                 alt='Green double couch with wooden legs'
                                 borderRadius='lg'
                             />
