@@ -1,7 +1,25 @@
 import { useNavigate, useSearchParams } from "react-router-dom";
-import { Box, Button, Flex, Input } from "@chakra-ui/react";
+import {
+  Box,
+  Button,
+  Card,
+  CardBody,
+  CardFooter,
+  CardHeader,
+  Center,
+  Flex,
+  Input,
+  SimpleGrid,
+  Spinner,
+  Table,
+  Tbody,
+  Td,
+  Th,
+  Thead,
+  Tr,
+} from "@chakra-ui/react";
 import axios from "axios";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faMagnifyingGlass } from "@fortawesome/free-solid-svg-icons";
 import DatePicker from "react-datepicker";
@@ -9,17 +27,23 @@ import "react-datepicker/dist/react-datepicker.css";
 
 export function TransPortList() {
   const [startDate, setStartDate] = useState(new Date());
+  const [list, setList] = useState([]);
 
   const navigate = useNavigate();
 
   const [params] = useSearchParams();
   console.log(params.get("type"));
 
-  // useEffect(() => {
-  //   if (params.get("type") === 0) {
-  //     axios.get();
-  //   }
-  // }, []);
+  useEffect(() => {
+    axios.get("/api/transport/list").then((response) => {
+      setList(response.data);
+    });
+  }, []);
+
+  if (list === null) {
+    <Spinner />;
+  }
+
   return (
     <Box>
       <Box
@@ -73,62 +97,30 @@ export function TransPortList() {
           </Button>
         </Box>
       </Flex>
-      <Flex w={"80%"} ml={"10%"} mt={10}>
-        <Box w={"275px"} h={"275px"} bg={"#d9d9d9"}>
-          버스 게시글
-        </Box>
-        <Box w={"275px"} h={"275px"} bg={"#d9d9d9"} ml={7}>
-          버스 게시글
-        </Box>
-        <Box w={"275px"} h={"275px"} bg={"#d9d9d9"} ml={7}>
-          버스 게시글
-        </Box>
-        <Box w={"275px"} h={"275px"} bg={"#d9d9d9"} ml={7}>
-          버스 게시글
-        </Box>
-      </Flex>
-      <Flex w={"80%"} ml={"10%"} mt={10}>
-        <Box w={"275px"} h={"275px"} bg={"#d9d9d9"}>
-          버스 게시글
-        </Box>
-        <Box w={"275px"} h={"275px"} bg={"#d9d9d9"} ml={7}>
-          버스 게시글
-        </Box>
-        <Box w={"275px"} h={"275px"} bg={"#d9d9d9"} ml={7}>
-          버스 게시글
-        </Box>
-        <Box w={"275px"} h={"275px"} bg={"#d9d9d9"} ml={7}>
-          버스 게시글
-        </Box>
-      </Flex>
-      <Flex w={"80%"} ml={"10%"} mt={10}>
-        <Box w={"275px"} h={"275px"} bg={"#d9d9d9"}>
-          버스 게시글
-        </Box>
-        <Box w={"275px"} h={"275px"} bg={"#d9d9d9"} ml={7}>
-          버스 게시글
-        </Box>
-        <Box w={"275px"} h={"275px"} bg={"#d9d9d9"} ml={7}>
-          버스 게시글
-        </Box>
-        <Box w={"275px"} h={"275px"} bg={"#d9d9d9"} ml={7}>
-          버스 게시글
-        </Box>
-      </Flex>
-      <Flex w={"80%"} ml={"10%"} mt={10}>
-        <Box w={"275px"} h={"275px"} bg={"#d9d9d9"}>
-          버스 게시글
-        </Box>
-        <Box w={"275px"} h={"275px"} bg={"#d9d9d9"} ml={7}>
-          버스 게시글
-        </Box>
-        <Box w={"275px"} h={"275px"} bg={"#d9d9d9"} ml={7}>
-          버스 게시글
-        </Box>
-        <Box w={"275px"} h={"275px"} bg={"#d9d9d9"} ml={7}>
-          버스 게시글
-        </Box>
-      </Flex>
+      <SimpleGrid columns={4} w={"85%"} ml={"8.5%"} mt={4} spacing={"25px"}>
+        {list.map((transport) => (
+          <Card
+            w={"275px"}
+            h={"275px"}
+            _hover={{ cursor: "pointer" }}
+            onClick={() => navigate("/transport/" + transport.tid)}
+          >
+            <CardHeader>
+              {transport.tid}
+              <br />
+              제목 : {transport.transTitle}
+            </CardHeader>
+            <CardBody>
+              가격 : {transport.transPrice} 원<br />
+              출발일 : {transport.transStartDay}
+            </CardBody>
+            <CardFooter>
+              <Button>장바구니</Button>
+            </CardFooter>
+          </Card>
+        ))}
+      </SimpleGrid>
+
       <Flex w={"80%"} ml={"10%"} mt={10} justifyContent={"center"}>
         <Button>1</Button>
         <Button>2</Button>
