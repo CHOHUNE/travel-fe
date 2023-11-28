@@ -28,7 +28,6 @@ const routes = createBrowserRouter(
       <Route path="transport/list" element={<TransPortList />} />
       <Route path="transport/write" element={<TransPortWrite />} />
       <Route path="hotel" element={<Hotel />} />
-      <Route path="board" element={<Board />} />
       <Route path="boardlist" element={<BoardList />} />
       <Route path="boardwrite" element={<BoardWrite />} />
       <Route path="board/:id" element={<BoardView />} />
