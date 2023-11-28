@@ -84,7 +84,6 @@ export function TransPortList() {
           버스 게시글 목록
         </Box>
         <Box>
-          <Button>버스 상품 수정</Button>
           <Button ml={2} onClick={() => navigate("/transport/write?type=0")}>
             버스 상품 등록
           </Button>
