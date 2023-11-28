@@ -10,9 +10,11 @@ import { HomeBody } from "./component/HomeBody";
 import { TransPort } from "./page/transport/TransPort";
 import { Hotel } from "./page/hotel/Hotel";
 import { Board } from "./page/board/Board";
-import { UserLogin } from "./page/user/UserLogin";
-import { UserSignup } from "./page/user/UserSignup";
-import { UserEdit } from "./page/user/UserEdit";
+import { UserLogin } from "./page/member/UserLogin";
+import { UserSignup } from "./page/member/UserSignup";
+import { UserEdit } from "./page/member/UserEdit";
+import { TransPortList } from "./page/transport/TransPortList";
+import { TransPortWrite } from "./page/transport/TransPortWrite";
 import {BoardList} from "./page/board/BoardList";
 import {BoardWrite} from "./page/board/BoardWrite";
 import {BoardView} from "./page/board/BoardView";
@@ -23,6 +25,8 @@ const routes = createBrowserRouter(
     <Route path="/" element={<HomeLayout />}>
       <Route index element={<HomeBody />} />
       <Route path="transport" element={<TransPort />} />
+      <Route path="transport/list" element={<TransPortList />} />
+      <Route path="transport/write" element={<TransPortWrite />} />
       <Route path="hotel" element={<Hotel />} />
       <Route path="board" element={<Board />} />
       <Route path="boardlist" element={<BoardList />} />
