@@ -13,6 +13,10 @@ import { Board } from "./page/board/Board";
 import { UserLogin } from "./page/user/UserLogin";
 import { UserSignup } from "./page/user/UserSignup";
 import { UserEdit } from "./page/user/UserEdit";
+import {BoardList} from "./page/board/BoardList";
+import {BoardWrite} from "./page/board/BoardWrite";
+import {BoardView} from "./page/board/BoardView";
+import {BoardEdit} from "./page/board/BoardEdit";
 
 const routes = createBrowserRouter(
   createRoutesFromElements(
@@ -21,6 +25,10 @@ const routes = createBrowserRouter(
       <Route path="transport" element={<TransPort />} />
       <Route path="hotel" element={<Hotel />} />
       <Route path="board" element={<Board />} />
+      <Route path="boardlist" element={<BoardList />} />
+      <Route path="boardwrite" element={<BoardWrite />} />
+      <Route path="board/:id" element={<BoardView />} />
+      <Route path="edit/:id" element={<BoardEdit />} />
       <Route path="login" element={<UserLogin />} />
       <Route path="signup" element={<UserSignup />} />
       <Route path="userEdit" element={<UserEdit />} />
