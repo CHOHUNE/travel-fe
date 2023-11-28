@@ -13,12 +13,16 @@ import { Board } from "./page/board/Board";
 import { UserLogin } from "./page/member/UserLogin";
 import { UserSignup } from "./page/member/UserSignup";
 import { UserEdit } from "./page/member/UserEdit";
+import { TransPortList } from "./page/transport/TransPortList";
+import { TransPortWrite } from "./page/transport/TransPortWrite";
 
 const routes = createBrowserRouter(
   createRoutesFromElements(
     <Route path="/" element={<HomeLayout />}>
       <Route index element={<HomeBody />} />
       <Route path="transport" element={<TransPort />} />
+      <Route path="transport/list" element={<TransPortList />} />
+      <Route path="transport/write" element={<TransPortWrite />} />
       <Route path="hotel" element={<Hotel />} />
       <Route path="board" element={<Board />} />
       <Route path="signup" element={<UserSignup />} />
