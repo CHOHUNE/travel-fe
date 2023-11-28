@@ -4,7 +4,7 @@ export function Footer() {
   return (
     <Box w={"100%"} height={"220px"} backgroundColor={"#eeecee"}>
       <Flex
-        w={"1000px"}
+        w={"80%"}
         height={"100%"}
         ml={"220px"}
         backgroundColor={"#d9d9d9"}

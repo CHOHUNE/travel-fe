@@ -74,6 +74,7 @@ export function NavBar() {
               전체메뉴
             </Button>
 
+
             {/* 호텔 */}
             <Button
               w={"100px"}
