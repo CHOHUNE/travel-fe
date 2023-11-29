@@ -17,7 +17,6 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faMagnifyingGlass } from "@fortawesome/free-solid-svg-icons";
 
 export function TransPortList() {
-  const [startDate, setStartDate] = useState(new Date());
   const [list, setList] = useState([]);
 
   const navigate = useNavigate();
