@@ -24,7 +24,7 @@ export function TransPort() {
           value={"버스 카테고리 게시글"}
           textAlign={"center"}
           mb={10}
-          onClick={() => navigate("list?type=0")}
+          onClick={() => navigate("list?type=bus")}
           _hover={{ cursor: "pointer", color: "green" }}
         />
         <Flex mb={10}>
@@ -50,7 +50,7 @@ export function TransPort() {
           value={"항공 카테고리 게시글"}
           textAlign={"center"}
           mb={10}
-          onClick={() => navigate("list?type=1")}
+          onClick={() => navigate("list?type=air")}
           _hover={{ cursor: "pointer", color: "green" }}
         />
         <Flex mb={10}>

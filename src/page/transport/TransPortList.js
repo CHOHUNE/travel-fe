@@ -15,8 +15,6 @@ import axios from "axios";
 import { useEffect, useState } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faMagnifyingGlass } from "@fortawesome/free-solid-svg-icons";
-import DatePicker from "react-datepicker";
-import "react-datepicker/dist/react-datepicker.css";
 
 export function TransPortList() {
   const [startDate, setStartDate] = useState(new Date());
@@ -58,14 +56,22 @@ export function TransPortList() {
         justifyContent={"space-evenly"}
         alignItems={"center"}
       >
-        <Input w={"290px"} h={"60px"} bg={"white"} />
-        <DatePicker
-          w={"200px"}
+        <Input
+          w={"290px"}
           h={"60px"}
-          selected={startDate}
-          onChange={(date) => setStartDate(date)}
+          bg={"white"}
+          placeholder={"검색어를 입력해 주세요"}
         />
-        <FontAwesomeIcon icon={faMagnifyingGlass} w={"50px"} h={"50px"} />
+        <Input
+          placeholder="Select Date and Time"
+          type="datetime-local"
+          bg={"white"}
+          w={"200px"}
+          h={"50px"}
+        />
+        <Button w={"50px"} h={"50px"} bg={"white"}>
+          <FontAwesomeIcon icon={faMagnifyingGlass} />
+        </Button>
       </Flex>
       <Flex
         ml={"7.5%"}
@@ -81,11 +87,16 @@ export function TransPortList() {
           textAlign={"center"}
           fontSize={"2rem"}
         >
-          버스 게시글 목록
+          {params.get("type") === "bus" && <Box>버스 게시글 목록</Box>}
+          {params.get("type") === "air" && <Box>항공 게시글 목록</Box>}
         </Box>
         <Box>
-          <Button ml={2} onClick={() => navigate("/transport/write?type=0")}>
-            버스 상품 등록
+          <Button
+            ml={2}
+            onClick={() => navigate("/transport/write?" + params.toString())}
+          >
+            {params.get("type") === "bus" && <Box>버스 상품 등록</Box>}
+            {params.get("type") === "air" && <Box>항공 상품 등록</Box>}
           </Button>
         </Box>
       </Flex>
