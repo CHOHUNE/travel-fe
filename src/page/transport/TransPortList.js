@@ -101,28 +101,31 @@ export function TransPortList() {
         </Box>
       </Flex>
       <SimpleGrid columns={4} w={"85%"} ml={"8.5%"} mt={4} spacing={"25px"}>
-        {list.map((transport) => (
-          <Card
-            w={"275px"}
-            h={"275px"}
-            _hover={{ cursor: "pointer" }}
-            onClick={() => navigate("/transport/" + transport.tid)}
-            key={transport.tid}
-          >
-            <CardHeader>
-              {transport.tid}
-              <br />
-              제목 : {transport.transTitle}
-            </CardHeader>
-            <CardBody>
-              가격 : {transport.transPrice} 원<br />
-              출발일 : {transport.transStartDay}
-            </CardBody>
-            <CardFooter>
-              <Button>장바구니</Button>
-            </CardFooter>
-          </Card>
-        ))}
+        {list.map(
+          (transport) =>
+            params.get("type") === transport.typeName && (
+              <Card
+                w={"275px"}
+                h={"275px"}
+                _hover={{ cursor: "pointer" }}
+                onClick={() => navigate("/transport/" + transport.tid)}
+                key={transport.tid}
+              >
+                <CardHeader>
+                  {transport.tid}
+                  <br />
+                  제목 : {transport.transTitle}
+                </CardHeader>
+                <CardBody>
+                  가격 : {transport.transPrice} 원<br />
+                  출발일 : {transport.transStartDay}
+                </CardBody>
+                <CardFooter>
+                  <Button>장바구니</Button>
+                </CardFooter>
+              </Card>
+            ),
+        )}
       </SimpleGrid>
 
       <Flex w={"80%"} ml={"10%"} mt={10} justifyContent={"center"}>
