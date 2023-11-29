@@ -88,14 +88,14 @@ export function TransPortWrite() {
             fontSize={"1.1rem"}
             bg={"#d9d9d9"}
           >
-            출발 일지
+            출발 일시
           </Th>
           <Td border={"1px solid gray"}>
-            <DatePicker
-              w={"200px"}
-              h={"60px"}
-              selected={transStartDay}
-              onChange={(date) => setTransStartDay(date)}
+            <Input
+              placeholder="Select Date and Time"
+              size="md"
+              type="datetime-local"
+              onChange={(e) => setTransStartDay(e.target.value)}
             />
           </Td>
         </Tr>
