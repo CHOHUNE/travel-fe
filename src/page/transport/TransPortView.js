@@ -10,6 +10,7 @@ import {
   NumberInput,
   NumberInputField,
   NumberInputStepper,
+  useToast,
 } from "@chakra-ui/react";
 import { useEffect, useState } from "react";
 import axios from "axios";
@@ -20,6 +21,9 @@ export function TransPortView() {
   const [trans, setTrans] = useState("");
 
   const navigate = useNavigate();
+
+  const toast = useToast();
+
   const handleChange = (value) => setValue(value);
 
   const { id } = useParams();
@@ -29,6 +33,26 @@ export function TransPortView() {
       .get("/api/transport/id/" + id)
       .then((response) => setTrans(response.data));
   }, []);
+
+  // 운송 상품 삭제 기능 시작 ----------------------------------------------------
+  function handleTransDelete() {
+    axios
+      .delete("/api/transport/delete/" + id)
+      .then(() => {
+        toast({
+          description: id + " 번 운송 상품이 삭제되었습니다.",
+          colorScheme: "orange",
+        });
+        navigate(-1);
+      })
+      .catch(() => {
+        toast({
+          description: "운송 상품 삭제중 문제가 발생하였습니다.",
+          status: "error",
+        });
+      });
+  }
+  // 운송 상품 삭제 기능 끝 ----------------------------------------------------
 
   return (
     <Box mt={10} w={"80%"} ml={"10%"} key={trans.tid}>
@@ -41,7 +65,7 @@ export function TransPortView() {
         >
           수송 상품 수정
         </Button>
-        <Button w={"100px"} h={"50px"}>
+        <Button w={"100px"} h={"50px"} onClick={handleTransDelete}>
           수송 상품 삭제
         </Button>
       </Flex>
