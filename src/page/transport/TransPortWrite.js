@@ -32,7 +32,7 @@ export function TransPortWrite() {
   const type = params.get("type");
   function handleSubmitTrans() {
     axios
-      .post("/api/transport/add", {
+      .post("/api/transport/add?" + params.toString(), {
         type,
         transStartDay,
         transTitle,
