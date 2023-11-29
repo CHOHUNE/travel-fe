@@ -13,11 +13,13 @@ import {
 } from "@chakra-ui/react";
 import { useEffect, useState } from "react";
 import axios from "axios";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 
 export function TransPortView() {
   const [value, setValue] = useState(0);
   const [trans, setTrans] = useState("");
+
+  const navigate = useNavigate();
   const handleChange = (value) => setValue(value);
 
   const { id } = useParams();
@@ -31,7 +33,12 @@ export function TransPortView() {
   return (
     <Box mt={10} w={"80%"} ml={"10%"} key={trans.tid}>
       <Flex alignItems="center" gap={"10px"}>
-        <Button w={"100px"} h={"50px"} ml={"80%"}>
+        <Button
+          w={"100px"}
+          h={"50px"}
+          ml={"80%"}
+          onClick={() => navigate("/transport/edit/" + trans.tid)}
+        >
           수송 상품 수정
         </Button>
         <Button w={"100px"} h={"50px"}>
