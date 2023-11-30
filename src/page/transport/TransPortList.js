@@ -8,8 +8,16 @@ import {
   CardHeader,
   Flex,
   Input,
+  Modal,
+  ModalBody,
+  ModalCloseButton,
+  ModalContent,
+  ModalFooter,
+  ModalHeader,
+  ModalOverlay,
   SimpleGrid,
   Spinner,
+  useDisclosure,
 } from "@chakra-ui/react";
 import axios from "axios";
 import { useEffect, useState } from "react";
@@ -18,6 +26,8 @@ import { faMagnifyingGlass } from "@fortawesome/free-solid-svg-icons";
 
 export function TransPortList() {
   const [list, setList] = useState([]);
+
+  const { isOpen, onClose, onOpen } = useDisclosure();
 
   const navigate = useNavigate();
 
@@ -61,13 +71,8 @@ export function TransPortList() {
           bg={"white"}
           placeholder={"검색어를 입력해 주세요"}
         />
-        <Input
-          placeholder="Select Date and Time"
-          type="datetime-local"
-          bg={"white"}
-          w={"200px"}
-          h={"50px"}
-        />
+        <Button onClick={onOpen}>출발일</Button>
+
         <Button w={"50px"} h={"50px"} bg={"white"}>
           <FontAwesomeIcon icon={faMagnifyingGlass} />
         </Button>
@@ -133,6 +138,30 @@ export function TransPortList() {
         <Button>3</Button>
         <Button>4</Button>
       </Flex>
+
+      <Modal isOpen={isOpen} onClose={onClose}>
+        <ModalOverlay />
+        <ModalContent>
+          <ModalHeader>Modal Title</ModalHeader>
+          <ModalCloseButton />
+          <ModalBody>
+            <Input
+              placeholder="Select Date and Time"
+              type="date"
+              bg={"white"}
+              w={"200px"}
+              h={"50px"}
+            />
+          </ModalBody>
+
+          <ModalFooter>
+            <Button colorScheme="blue" mr={3} onClick={onClose}>
+              Close
+            </Button>
+            <Button variant="ghost">Secondary Action</Button>
+          </ModalFooter>
+        </ModalContent>
+      </Modal>
     </Box>
   );
 }
