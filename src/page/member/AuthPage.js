@@ -20,13 +20,12 @@ export function AuthPage() {
         .then((response) => {
           // 서버 응답에 따른 처리
           if (response.data.success) {
-            // 로그인 또는 회원가입 성공
-            console.log("로그인 또는 회원가입 성공");
+            // 로그인 성공
+            console.log("로그인 성공");
           } else {
             // 실패에 대한 처리
             console.log(code);
-
-            console.error("로그인 또는 회원가입 실패:", response.data.message);
+            console.error("로그인 실패:", response.data.message);
           }
         })
         .catch((error) => {

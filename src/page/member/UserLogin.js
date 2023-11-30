@@ -52,8 +52,7 @@ export function UserLogin() {
       .get("/api/member/kakaoKey")
       .then((response) => {
         // response에서 받은 키 정보를 사용하여 카카오 로그인 URL 생성
-        const kakaourl = `https://kauth.kakao.com/oauth/authorize?
-        client_id=${response.data.key}&redirect_uri=${response.data.redirect}&response_type=code`;
+        const kakaourl = `https://kauth.kakao.com/oauth/authorize?client_id=${response.data.key}&redirect_uri=${response.data.redirect}&response_type=code&prompt=login`;
         // 여기서 URL로 리디렉션하면 사용자는 카카오 로그인 페이지로 이동
         window.location.href = kakaourl;
       })
