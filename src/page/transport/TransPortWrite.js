@@ -8,10 +8,13 @@ import {
   Td,
   Th,
   Tr,
+  useToast,
 } from "@chakra-ui/react";
 import { useState } from "react";
 import { useNavigate, useSearchParams } from "react-router-dom";
 import axios from "axios";
+import DatePicker from "react-datepicker";
+import "react-datepicker/dist/react-datepicker.css";
 
 export function TransPortWrite() {
   const [transMainImage, setTransMainImage] = useState(null);
@@ -23,19 +26,34 @@ export function TransPortWrite() {
 
   const navigate = useNavigate();
 
-  const [params] = useSearchParams();
+  const toast = useToast();
 
+  const [params] = useSearchParams();
   const type = params.get("type");
   function handleSubmitTrans() {
-    axios.postForm("/api/transport/add", {
-      type,
-      transMainImage,
-      transStartDay,
-      transTitle,
-      transPrice,
-      transSubImage,
-      transContent,
-    });
+    axios
+      .post("/api/transport/add?" + params.toString(), {
+        type,
+        transStartDay,
+        transTitle,
+        transPrice,
+        transContent,
+      })
+      .then(() => {
+        toast({
+          description: "운송 상품 등록에 성공하였습니다.",
+          status: "success",
+        });
+      })
+      .catch(() => {
+        toast({
+          description: "운송 상품 등록에 실패 했습니다.",
+          status: "error",
+        });
+      })
+      .finally(() => {
+        navigate(-1);
+      });
   }
 
   return (
@@ -70,11 +88,13 @@ export function TransPortWrite() {
             fontSize={"1.1rem"}
             bg={"#d9d9d9"}
           >
-            출발 일지
+            출발 일시
           </Th>
           <Td border={"1px solid gray"}>
             <Input
-              value={transStartDay}
+              placeholder="Select Date and Time"
+              size="md"
+              type="datetime-local"
               onChange={(e) => setTransStartDay(e.target.value)}
             />
           </Td>
@@ -119,7 +139,7 @@ export function TransPortWrite() {
             fontSize={"1.1rem"}
             bg={"#d9d9d9"}
           >
-            상품 설명 이미지
+            상품 설명 이미지₩
           </Th>
           <Td border={"1px solid gray"}>
             <Input
