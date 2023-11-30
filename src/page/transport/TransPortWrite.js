@@ -119,7 +119,7 @@ export function TransPortWrite() {
             fontSize={"1.1rem"}
             bg={"#d9d9d9"}
           >
-            상품 설명 이미지
+            상품 설명 이미지₩
           </Th>
           <Td border={"1px solid gray"}>
             <Input

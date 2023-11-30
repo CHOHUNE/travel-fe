@@ -6,7 +6,7 @@ export function Footer() {
       <Flex
         w={"80%"}
         height={"100%"}
-        ml={"220px"}
+        ml={"10%"}
         backgroundColor={"#d9d9d9"}
         justifyContent={"space-between"}
       >
