@@ -19,6 +19,7 @@ import { BoardWrite } from "./page/board/BoardWrite";
 import { BoardView } from "./page/board/BoardView";
 import { BoardEdit } from "./page/board/BoardEdit";
 import { Reserv } from "./page/hotel/Reserv";
+import { AuthPage } from "./page/member/AuthPage";
 import { TransPortView } from "./page/transport/TransPortView";
 import { TransPortEdit } from "./page/transport/TransPortEdit";
 
@@ -37,10 +38,10 @@ const routes = createBrowserRouter(
       <Route path="board/:id" element={<BoardView />} />
       <Route path="edit/:id" element={<BoardEdit />} />
       <Route path="login" element={<UserLogin />} />
+      <Route path="auth" element={<AuthPage />} />
       <Route path="signup" element={<UserSignup />} />
       <Route path="userEdit" element={<UserEdit />} />
-        <Route path="hotel/reserv/:id" element={<Reserv/>}/>
-     
+      <Route path="hotel/reserv/:id" element={<Reserv/>}/>
     </Route>,
   ),
 );

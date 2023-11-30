@@ -8,25 +8,39 @@ import {
   Center,
   Flex,
   FormControl,
+  FormErrorMessage,
   FormLabel,
   Heading,
   Input,
+  Modal,
+  ModalBody,
+  ModalCloseButton,
+  ModalContent,
+  ModalFooter,
+  ModalHeader,
+  ModalOverlay,
+  useDisclosure,
   useToast,
 } from "@chakra-ui/react";
 import { useState } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
+import DaumPostcodeEmbed, { useDaumPostcodePopup } from "react-daum-postcode";
+import { postcodeScriptUrl } from "react-daum-postcode/lib/loadPostcode";
 
 export function UserSignup() {
-  // - - - - - - - 고객 정보 - - - - - - -
+  // ------------- 고객 정보 -------------
   const [userId, setUserId] = useState("");
   const [userPassword, setUserPassword] = useState("");
   const [userName, setUserName] = useState("");
-  const [userAddress1, setUserAddress1] = useState("");
-  const [userAddress2, setUserAddress2] = useState("");
-  const [userAddress3, setUserAddress3] = useState("");
+  const [userPostCode, setUserPostCode] = useState(""); // 우편번호
+  const [userAddress, setUserAddress] = useState(""); // 도로명 주소
+  const [userDetailAddress, setUserDetailAddress] = useState(""); // 상세주소
   const [userPhoneNumber, setUserPhoneNumber] = useState("");
   const [userEmail, setUserEmail] = useState("");
+
+  // ------------- SMS 정보 -------------
+  const [sendSMS, setSendSMS] = useState("");
 
   // ------------- 비밀번호 체크 -------------
   const [userPasswordCheck, setUserPasswordCheck] = useState("");
@@ -37,6 +51,13 @@ export function UserSignup() {
   // ------------- toast / navigate -------------
   const toast = useToast();
   const navigate = useNavigate();
+
+  // ------------- 우편번호 검색 HOOK -------------
+  // ------------- 카카오 우편번호 팝업 -------------
+  const daumPostcode = useDaumPostcodePopup(postcodeScriptUrl);
+
+  // ------------- 모달창 -------------
+  const { isOpen, onClose, onOpen } = useDisclosure();
 
   // ------------- 가입버튼 활성화/비활성화 -------------
   let submitAvailable = true;
@@ -57,9 +78,9 @@ export function UserSignup() {
         userId,
         userPassword,
         userName,
-        userAddress1,
-        userAddress2,
-        userAddress3,
+        userPostCode,
+        userAddress,
+        userDetailAddress,
         userPhoneNumber,
         userEmail,
       })
@@ -71,14 +92,14 @@ export function UserSignup() {
         navigate("/");
       })
       .catch((error) => {
-        if (error.response.status === 400) {
+        if (error.response.status === 401) {
           toast({
             description: "입력값을 확인해주세요.",
             status: "error",
           });
         } else {
           toast({
-            description: "서버 오류가 발생하였습니다.",
+            description: "관리자에게 문의해주시기 바랍니다.",
             status: "error",
           });
         }
@@ -110,6 +131,95 @@ export function UserSignup() {
       });
   }
 
+  // ------------- SMS 인증 로직 -------------
+  function handleSMSButton() {
+    axios
+      .post("/api/member/sendSMS", {
+        userPhoneNumber,
+      })
+      .then(() => {
+        toast({
+          description: "인증번호가 발송되었습니다.",
+          status: "success",
+        });
+      })
+      .catch((error) => {
+        if (error.response.status === 401) {
+          toast({
+            description: "핸드폰 번호를 다시 입력해주시기 바랍니다.",
+            status: "error",
+          });
+        } else {
+          toast({
+            description: "관리자에게 문의해주시기 바랍니다.",
+            status: "error",
+          });
+        }
+      });
+  }
+  function handleSMSOk() {
+    axios
+      .post("/api/member/sendSmsOk", {
+        verificationCode: sendSMS,
+        userPhoneNumber,
+      })
+      .then((response) => {
+        toast({
+          description: "인증번호 확인되었습니다.",
+          status: "success",
+        });
+      })
+      .catch((error) => {
+        if (error.response.status === 401) {
+          // 인증되지 않거나 다른 값을 쓸 경우
+          toast({
+            description: "입력값을 확인해주세요",
+            status: "error",
+          });
+        } else {
+          toast({
+            description: "관리자에게 문의해주시기 바랍니다.",
+            status: "error",
+          });
+        }
+      });
+  }
+
+  // ---------- 카카오 우편번호 API 로직 ----------
+  const handleDaumPostcode = () => {
+    new window.daum.Postcode({
+      oncomplete: function (data) {
+        handleAddressComplete(data);
+      },
+    }).open();
+  };
+  const handleComplete = (data) => {
+    let extraAddress = "";
+    let address = data.address;
+
+    if (data.addressType === "R") {
+      if (data.bname !== "") {
+        extraAddress += data.bname;
+      }
+      if (data.buildingName !== "") {
+        extraAddress +=
+          extraAddress !== "" ? `, ${data.buildingName}` : data.buildingName;
+      }
+      address += extraAddress !== "" ? ` (${extraAddress})` : "";
+    }
+
+    handleAddressComplete({
+      zonecode: data.zonecode,
+      address: address,
+    });
+  };
+  const handleAddressComplete = (data) => {
+    setUserPostCode(data.zonecode);
+    setUserAddress(data.address);
+    setUserDetailAddress(""); // 주소를 클릭할 때 상세주소를 초기화하거나 필요한 처리 수행
+  };
+
+  // ---------- 회원가입 Form ----------
   return (
     <Center m={20}>
       <Card w={"xl"}>
@@ -118,7 +228,7 @@ export function UserSignup() {
         </CardHeader>
 
         <CardBody>
-          <FormControl mb={3}>
+          <FormControl mb={3} isInvalid={!userIdCheck}>
             <Flex gap={2}>
               <FormLabel
                 w={160}
@@ -130,10 +240,16 @@ export function UserSignup() {
               </FormLabel>
               <Input
                 value={userId}
-                onChange={(e) => setUserId(e.target.value)}
+                onChange={(e) => {
+                  setUserId(e.target.value);
+                  setUserIdCheck(false);
+                }}
               />
               <Button onClick={handleIdCheck}>중복확인</Button>
             </Flex>
+            <FormErrorMessage textAlign={"center"}>
+              ID 중복체크 해주세요.
+            </FormErrorMessage>
           </FormControl>
 
           <FormControl mb={3}>
@@ -147,13 +263,14 @@ export function UserSignup() {
                 비밀번호
               </FormLabel>
               <Input
+                type="password"
                 value={userPassword}
                 onChange={(e) => setUserPassword(e.target.value)}
               />
             </Flex>
           </FormControl>
 
-          <FormControl mb={3}>
+          <FormControl mb={3} isInvalid={userPassword !== userPasswordCheck}>
             <Flex textAlign={"center"} display={"flex"} alignItems={"center"}>
               <FormLabel
                 w={138}
@@ -164,10 +281,14 @@ export function UserSignup() {
                 비밀번호 확인
               </FormLabel>
               <Input
+                type="password"
                 value={userPasswordCheck}
-                onChange={(e) => setUserPasswordCheck(e.target.value)}
+                onChange={(e) => {
+                  setUserPasswordCheck(e.target.value);
+                }}
               />
             </Flex>
+            <FormErrorMessage>암호가 다릅니다.</FormErrorMessage>
           </FormControl>
 
           <FormControl mb={3}>
@@ -200,11 +321,28 @@ export function UserSignup() {
               <Input
                 placeholder="우편번호"
                 mb={3}
-                value={userAddress1}
-                onChange={(e) => setUserAddress1(e.target.value)}
+                value={userPostCode}
+                onClick={handleDaumPostcode} // 주소검색 버튼 클릭 시 팝업 열도록 설정
               />
-              <Button>주소검색</Button>
+              <Button onClick={handleDaumPostcode}>주소검색</Button>
             </Flex>
+
+            {/*/!* 주소검색 버튼 눌렀을때 모달창  *!/*/}
+            {/*<Modal isOpen={isOpen} onClose={onClose}>*/}
+            {/*  <ModalOverlay />*/}
+            {/*  <ModalContent>*/}
+            {/*    <ModalHeader>저장 확인</ModalHeader>*/}
+            {/*    <ModalCloseButton />*/}
+            {/*    <ModalBody>저장 하시겠습니까?</ModalBody>*/}
+
+            {/*    <ModalFooter>*/}
+            {/*      <Button onClick={onClose}>닫기</Button>*/}
+            {/*      <Button onClick={handleComplete} colorScheme="blue">*/}
+            {/*        저장*/}
+            {/*      </Button>*/}
+            {/*    </ModalFooter>*/}
+            {/*  </ModalContent>*/}
+            {/*</Modal>*/}
 
             <Flex>
               <FormLabel
@@ -217,8 +355,8 @@ export function UserSignup() {
               </FormLabel>
               <Input
                 mb={3}
-                value={userAddress2}
-                onChange={(e) => setUserAddress2(e.target.value)}
+                value={userAddress}
+                onChange={(e) => setUserAddress(e.target.value)}
               />
             </Flex>
 
@@ -232,8 +370,8 @@ export function UserSignup() {
                 나머지주소
               </FormLabel>
               <Input
-                value={userAddress3}
-                onChange={(e) => setUserAddress3(e.target.value)}
+                value={userDetailAddress}
+                onChange={(e) => setUserDetailAddress(e.target.value)}
               />
             </Flex>
           </FormControl>
@@ -249,10 +387,32 @@ export function UserSignup() {
                 휴대전화
               </FormLabel>
               <Input
+                type="number"
                 value={userPhoneNumber}
                 onChange={(e) => setUserPhoneNumber(e.target.value)}
               />
-              <Button>본인인증</Button>
+              <Button onClick={handleSMSButton}>본인인증</Button>
+            </Flex>
+          </FormControl>
+
+          <FormControl mb={3}>
+            <Flex gap={2}>
+              <FormLabel
+                w={160}
+                textAlign={"center"}
+                display={"flex"}
+                alignItems={"center"}
+              >
+                본인인증번호
+              </FormLabel>
+              <Input
+                type="number"
+                value={sendSMS}
+                onChange={(e) => setSendSMS(e.target.value)}
+              />
+              <Button w={95} onClick={handleSMSOk}>
+                확인
+              </Button>
             </Flex>
           </FormControl>
 
