@@ -7,6 +7,8 @@ export function Footer() {
         w={"80%"}
         ml={"10%"}
         height={"100%"}
+ 
+
         backgroundColor={"#d9d9d9"}
         justifyContent={"space-between"}
       >

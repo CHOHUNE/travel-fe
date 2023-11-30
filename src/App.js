@@ -39,7 +39,8 @@ const routes = createBrowserRouter(
       <Route path="login" element={<UserLogin />} />
       <Route path="signup" element={<UserSignup />} />
       <Route path="userEdit" element={<UserEdit />} />
-      <Route path="hotel/reserv" element={<Reserv />} />
+        <Route path="hotel/reserv/:id" element={<Reserv/>}/>
+     
     </Route>,
   ),
 );
