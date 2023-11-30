@@ -6,8 +6,10 @@ import {
   CardFooter,
   CardHeader,
   Center,
+  Flex,
   FormControl,
   Heading,
+  Img,
   Input,
   useToast,
 } from "@chakra-ui/react";
@@ -41,6 +43,17 @@ export function UserLogin() {
           status: "warning",
         });
       });
+  }
+
+  // -------------------- 카카오 로그인 --------------------
+  function handleKakaoLogin() {
+    // 프론트에서 서버로 카카오 로그인을 위한 정보 요청
+    axios.get("/api/member/kakaoKey").then((response) => {
+      // response에서 받은 키 정보를 사용하여 카카오 로그인 URL 생성
+      const kakaourl = `https://kauth.kakao.com/oauth/authorize?client_id=${response.data.key}&redirect_uri=${response.data.redirect}&response_type=code`;
+      // 여기서 URL로 리디렉션하면 사용자는 카카오 로그인 페이지로 이동
+      window.location.href = kakaourl;
+    });
   }
 
   // -------------------- 로그인 폼 --------------------
@@ -83,6 +96,28 @@ export function UserLogin() {
               <Link to={"/"}>아이디 찾기</Link>
               <Link to={"/"}>비밀번호 찾기</Link>
               <Link to={"/signup"}>회원가입</Link>
+            </Center>
+
+            <Center w={"100%"}>
+              <Flex w={"60px"} justifyContent={"space-around"} mt={10}>
+                {/* 카카오 로그인 이미지 */}
+                <Img
+                  _hover={{
+                    cursor: "pointer",
+                  }}
+                  src="https://image.hanatour.com/usr/static/img2/mobile/com/btn_kakao_192x192.png"
+                  onClick={handleKakaoLogin}
+                  mr={20}
+                />
+
+                {/* 네이버 로그인 이미지 */}
+                <Img
+                  _hover={{
+                    cursor: "pointer",
+                  }}
+                  src="https://image.hanatour.com/usr/static/img2/mobile/com/btn_naver_192x192.png"
+                />
+              </Flex>
             </Center>
           </Box>
         </CardFooter>
