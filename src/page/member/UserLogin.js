@@ -48,12 +48,18 @@ export function UserLogin() {
   // -------------------- 카카오 로그인 --------------------
   function handleKakaoLogin() {
     // 프론트에서 서버로 카카오 로그인을 위한 정보 요청
-    axios.get("/api/member/kakaoKey").then((response) => {
-      // response에서 받은 키 정보를 사용하여 카카오 로그인 URL 생성
-      const kakaourl = `https://kauth.kakao.com/oauth/authorize?client_id=${response.data.key}&redirect_uri=${response.data.redirect}&response_type=code`;
-      // 여기서 URL로 리디렉션하면 사용자는 카카오 로그인 페이지로 이동
-      window.location.href = kakaourl;
-    });
+    axios
+      .get("/api/member/kakaoKey")
+      .then((response) => {
+        // response에서 받은 키 정보를 사용하여 카카오 로그인 URL 생성
+        const kakaourl = `https://kauth.kakao.com/oauth/authorize?
+        client_id=${response.data.key}&redirect_uri=${response.data.redirect}&response_type=code`;
+        // 여기서 URL로 리디렉션하면 사용자는 카카오 로그인 페이지로 이동
+        window.location.href = kakaourl;
+      })
+      .catch((error) => {
+        console.error("카카오 키 가져오는 중 오류 발생 : ", error);
+      });
   }
 
   // -------------------- 로그인 폼 --------------------
