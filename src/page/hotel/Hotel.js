@@ -211,6 +211,7 @@ export function Hotel() {
                                 </Button>
                             </ButtonGroup>
                         </CardFooter>
+
                     </Card>
                 ))}
             </Flex>
