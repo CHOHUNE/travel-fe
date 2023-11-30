@@ -14,11 +14,12 @@ import { UserSignup } from "./page/member/UserSignup";
 import { UserEdit } from "./page/member/UserEdit";
 import { TransPortList } from "./page/transport/TransPortList";
 import { TransPortWrite } from "./page/transport/TransPortWrite";
-import {BoardList} from "./page/board/BoardList";
-import {BoardWrite} from "./page/board/BoardWrite";
-import {BoardView} from "./page/board/BoardView";
-import {BoardEdit} from "./page/board/BoardEdit";
-import {Reserv} from "./page/hotel/Reserv"
+import { BoardList } from "./page/board/BoardList";
+import { BoardWrite } from "./page/board/BoardWrite";
+import { BoardView } from "./page/board/BoardView";
+import { BoardEdit } from "./page/board/BoardEdit";
+import { Reserv } from "./page/hotel/Reserv";
+import { AuthPage } from "./page/member/AuthPage";
 
 const routes = createBrowserRouter(
   createRoutesFromElements(
@@ -33,9 +34,10 @@ const routes = createBrowserRouter(
       <Route path="board/:id" element={<BoardView />} />
       <Route path="edit/:id" element={<BoardEdit />} />
       <Route path="login" element={<UserLogin />} />
+      <Route path="auth" element={<AuthPage />} />
       <Route path="signup" element={<UserSignup />} />
       <Route path="userEdit" element={<UserEdit />} />
-        <Route path="hotel/reserv" element={<Reserv/>}/>
+      <Route path="hotel/reserv" element={<Reserv />} />
     </Route>,
   ),
 );
