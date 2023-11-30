@@ -12,11 +12,7 @@ export function AuthPage() {
     if (code) {
       // 카카오에서 받은 code를 서버로 전송
       axios
-        .post("/api/member/kakaoLogin", null, {
-          params: {
-            code: code,
-          },
-        })
+        .post("/api/member/kakaoLogin", { code })
         .then((response) => {
           // 서버 응답에 따른 처리
           if (response.data.success) {
@@ -28,7 +24,7 @@ export function AuthPage() {
           }
         })
         .catch((error) => {
-          console.error("서버 요청 오류:", error.response.data);
+          console.error("서버 요청 오류:", error);
         });
     } else {
       // 카카오로부터 받은 code가 없는 경우에 대한 처리
