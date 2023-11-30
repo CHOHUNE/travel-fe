@@ -1,25 +1,49 @@
 import { useNavigate, useSearchParams } from "react-router-dom";
-import { Box, Button, Flex, Input } from "@chakra-ui/react";
+import {
+  Box,
+  Button,
+  Card,
+  CardBody,
+  CardFooter,
+  CardHeader,
+  Flex,
+  Input,
+  Modal,
+  ModalBody,
+  ModalCloseButton,
+  ModalContent,
+  ModalFooter,
+  ModalHeader,
+  ModalOverlay,
+  SimpleGrid,
+  Spinner,
+  useDisclosure,
+} from "@chakra-ui/react";
 import axios from "axios";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faMagnifyingGlass } from "@fortawesome/free-solid-svg-icons";
-import DatePicker from "react-datepicker";
-import "react-datepicker/dist/react-datepicker.css";
 
 export function TransPortList() {
-  const [startDate, setStartDate] = useState(new Date());
+  const [list, setList] = useState([]);
+
+  const { isOpen, onClose, onOpen } = useDisclosure();
 
   const navigate = useNavigate();
 
   const [params] = useSearchParams();
   console.log(params.get("type"));
 
-  // useEffect(() => {
-  //   if (params.get("type") === 0) {
-  //     axios.get();
-  //   }
-  // }, []);
+  useEffect(() => {
+    axios.get("/api/transport/list").then((response) => {
+      setList(response.data);
+    });
+  }, []);
+
+  if (list === null) {
+    <Spinner />;
+  }
+
   return (
     <Box>
       <Box
@@ -41,14 +65,17 @@ export function TransPortList() {
         justifyContent={"space-evenly"}
         alignItems={"center"}
       >
-        <Input w={"290px"} h={"60px"} bg={"white"} />
-        <DatePicker
-          w={"200px"}
+        <Input
+          w={"290px"}
           h={"60px"}
-          selected={startDate}
-          onChange={(date) => setStartDate(date)}
+          bg={"white"}
+          placeholder={"검색어를 입력해 주세요"}
         />
-        <FontAwesomeIcon icon={faMagnifyingGlass} w={"50px"} h={"50px"} />
+        <Button onClick={onOpen}>출발일</Button>
+
+        <Button w={"50px"} h={"50px"} bg={"white"}>
+          <FontAwesomeIcon icon={faMagnifyingGlass} />
+        </Button>
       </Flex>
       <Flex
         ml={"7.5%"}
@@ -64,77 +91,77 @@ export function TransPortList() {
           textAlign={"center"}
           fontSize={"2rem"}
         >
-          버스 게시글 목록
+          {params.get("type") === "bus" && <Box>버스 게시글 목록</Box>}
+          {params.get("type") === "air" && <Box>항공 게시글 목록</Box>}
         </Box>
         <Box>
-          <Button>버스 상품 수정</Button>
-          <Button ml={2} onClick={() => navigate("/transport/write?type=0")}>
-            버스 상품 등록
+          <Button
+            ml={2}
+            onClick={() => navigate("/transport/write?" + params.toString())}
+          >
+            {params.get("type") === "bus" && <Box>버스 상품 등록</Box>}
+            {params.get("type") === "air" && <Box>항공 상품 등록</Box>}
           </Button>
         </Box>
       </Flex>
-      <Flex w={"80%"} ml={"10%"} mt={10}>
-        <Box w={"275px"} h={"275px"} bg={"#d9d9d9"}>
-          버스 게시글
-        </Box>
-        <Box w={"275px"} h={"275px"} bg={"#d9d9d9"} ml={7}>
-          버스 게시글
-        </Box>
-        <Box w={"275px"} h={"275px"} bg={"#d9d9d9"} ml={7}>
-          버스 게시글
-        </Box>
-        <Box w={"275px"} h={"275px"} bg={"#d9d9d9"} ml={7}>
-          버스 게시글
-        </Box>
-      </Flex>
-      <Flex w={"80%"} ml={"10%"} mt={10}>
-        <Box w={"275px"} h={"275px"} bg={"#d9d9d9"}>
-          버스 게시글
-        </Box>
-        <Box w={"275px"} h={"275px"} bg={"#d9d9d9"} ml={7}>
-          버스 게시글
-        </Box>
-        <Box w={"275px"} h={"275px"} bg={"#d9d9d9"} ml={7}>
-          버스 게시글
-        </Box>
-        <Box w={"275px"} h={"275px"} bg={"#d9d9d9"} ml={7}>
-          버스 게시글
-        </Box>
-      </Flex>
-      <Flex w={"80%"} ml={"10%"} mt={10}>
-        <Box w={"275px"} h={"275px"} bg={"#d9d9d9"}>
-          버스 게시글
-        </Box>
-        <Box w={"275px"} h={"275px"} bg={"#d9d9d9"} ml={7}>
-          버스 게시글
-        </Box>
-        <Box w={"275px"} h={"275px"} bg={"#d9d9d9"} ml={7}>
-          버스 게시글
-        </Box>
-        <Box w={"275px"} h={"275px"} bg={"#d9d9d9"} ml={7}>
-          버스 게시글
-        </Box>
-      </Flex>
-      <Flex w={"80%"} ml={"10%"} mt={10}>
-        <Box w={"275px"} h={"275px"} bg={"#d9d9d9"}>
-          버스 게시글
-        </Box>
-        <Box w={"275px"} h={"275px"} bg={"#d9d9d9"} ml={7}>
-          버스 게시글
-        </Box>
-        <Box w={"275px"} h={"275px"} bg={"#d9d9d9"} ml={7}>
-          버스 게시글
-        </Box>
-        <Box w={"275px"} h={"275px"} bg={"#d9d9d9"} ml={7}>
-          버스 게시글
-        </Box>
-      </Flex>
+      <SimpleGrid columns={4} w={"85%"} ml={"8.5%"} mt={4} spacing={"25px"}>
+        {list.map(
+          (transport) =>
+            params.get("type") === transport.typeName && (
+              <Card
+                w={"275px"}
+                h={"275px"}
+                _hover={{ cursor: "pointer" }}
+                onClick={() => navigate("/transport/" + transport.tid)}
+                key={transport.tid}
+              >
+                <CardHeader>
+                  {transport.tid}
+                  <br />
+                  제목 : {transport.transTitle}
+                </CardHeader>
+                <CardBody>
+                  가격 : {transport.transPrice} 원<br />
+                  출발일 : {transport.transStartDay}
+                </CardBody>
+                <CardFooter>
+                  <Button>장바구니</Button>
+                </CardFooter>
+              </Card>
+            ),
+        )}
+      </SimpleGrid>
+
       <Flex w={"80%"} ml={"10%"} mt={10} justifyContent={"center"}>
         <Button>1</Button>
         <Button>2</Button>
         <Button>3</Button>
         <Button>4</Button>
       </Flex>
+
+      <Modal isOpen={isOpen} onClose={onClose}>
+        <ModalOverlay />
+        <ModalContent>
+          <ModalHeader>Modal Title</ModalHeader>
+          <ModalCloseButton />
+          <ModalBody>
+            <Input
+              placeholder="Select Date and Time"
+              type="date"
+              bg={"white"}
+              w={"200px"}
+              h={"50px"}
+            />
+          </ModalBody>
+
+          <ModalFooter>
+            <Button colorScheme="blue" mr={3} onClick={onClose}>
+              Close
+            </Button>
+            <Button variant="ghost">Secondary Action</Button>
+          </ModalFooter>
+        </ModalContent>
+      </Modal>
     </Box>
   );
 }
