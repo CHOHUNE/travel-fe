@@ -35,6 +35,7 @@ export function UserLogin() {
           description: "로그인 성공하였습니다.",
           status: "success",
         });
+        sessionStorage.setItem("userId", userId);
         navigate("/");
       })
       .catch(() => {

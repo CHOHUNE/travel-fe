@@ -2,9 +2,18 @@ import { Box, Button, Flex, Input } from "@chakra-ui/react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faMagnifyingGlass } from "@fortawesome/free-solid-svg-icons";
 import { useNavigate } from "react-router-dom";
+import axios from "axios";
 
 export function NavBar() {
   const navigate = useNavigate();
+
+  function handleLogout() {
+    axios
+      .post("/api/member/logout")
+      .then(() => console.log("로그아웃 성공"))
+      .catch(() => console.log("로그아웃 실패"));
+  }
+
   return (
     <Box>
       {/* 헤더 네브바1 */}
@@ -63,6 +72,18 @@ export function NavBar() {
             >
               로그인
             </Button>
+            <Button
+              w={"50px"}
+              h={"60px"}
+              borderRadius={0}
+              fontSize={"0.8rem"}
+              ml={4}
+              mr={2}
+              backgroundColor={"#b0daeb"}
+              onClick={handleLogout}
+            >
+              로그아웃
+            </Button>
           </Flex>
         </Flex>
       </Box>
@@ -73,7 +94,6 @@ export function NavBar() {
             <Button w={"100px"} h={"40px"}>
               전체메뉴
             </Button>
-
 
             {/* 호텔 */}
             <Button

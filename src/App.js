@@ -1,4 +1,4 @@
-import React from "react";
+import React, { createContext, useEffect, useState } from "react";
 import {
   createBrowserRouter,
   createRoutesFromElements,
@@ -22,6 +22,7 @@ import { Reserv } from "./page/hotel/Reserv";
 import { AuthPage } from "./page/member/AuthPage";
 import { TransPortView } from "./page/transport/TransPortView";
 import { TransPortEdit } from "./page/transport/TransPortEdit";
+import axios from "axios";
 
 const routes = createBrowserRouter(
   createRoutesFromElements(
@@ -41,13 +42,49 @@ const routes = createBrowserRouter(
       <Route path="auth" element={<AuthPage />} />
       <Route path="signup" element={<UserSignup />} />
       <Route path="userEdit" element={<UserEdit />} />
-      <Route path="hotel/reserv/:id" element={<Reserv/>}/>
+      <Route path="hotel/reserv/:id" element={<Reserv />} />
     </Route>,
   ),
 );
 
+const LoginContext = createContext(null);
+
 function App() {
-  return <RouterProvider router={routes} />;
+  const [login, setLogin] = useState("");
+  // const code = new URL(window.location.href).searchParams.get("code");
+  const code = new URL(window.location.href).searchParams.get("code");
+
+  useEffect(() => {
+    fetchLogin();
+  }, []);
+
+  function fetchLogin() {
+    if (code) {
+      axios
+        .post("/api/member/kakaoLogin", null, {
+          params: {
+            code: code,
+          },
+        })
+        .then((response) => setLogin(response.data));
+    }
+  }
+  // function fetchLogin() {
+  //   axios.get("/api/member/login").then((response) => setLogin(response.data));
+  // }
+
+  // 로그인상태
+  function isAuthenTicated() {
+    return login !== ""; // 빈 스트링이 아니면 로그인상태
+  }
+
+  console.log(login);
+
+  return (
+    <LoginContext.Provider value={null}>
+      <RouterProvider router={routes} />;
+    </LoginContext.Provider>
+  );
 }
 
 export default App;
