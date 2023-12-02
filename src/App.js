@@ -47,7 +47,7 @@ const routes = createBrowserRouter(
             <Route path="hotel/reserv/:id" element={<HotelView/>}/>
             <Route path="hotel/write" element={<HotelWrite/>}/>
             <Route path="hotel/edit/:id" element={<HotelEdit/>}/>
-            <Route path="hotel/pay/" element={<HotelPay/>}/>
+            <Route path="hotel/pay/:id" element={<HotelPay/>}/>
                 </Route>,
                 ),
                 );

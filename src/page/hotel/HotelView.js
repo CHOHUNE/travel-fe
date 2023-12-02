@@ -96,7 +96,7 @@ export function HotelView() {
                                 </ButtonGroup>
                                 <Button variant={"outline"}>인원</Button>
                                 <ButtonGroup variant={"outline"} colorScheme={"blue"} display={"flex"} justifyContent={"center"}>
-                                    <Button variant={'solid'} colorScheme={'red'} onClick={()=>navigate('/hotel/pay')} >예약</Button>
+                                    <Button variant={'solid'} colorScheme={'red'} onClick={()=>navigate('/hotel/pay/'+id)} >예약</Button>
                                     <Button variant={'solid'} colorScheme={'blue'}>장바구니</Button>
                                 </ButtonGroup>
                             </Box>
