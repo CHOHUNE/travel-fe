@@ -15,12 +15,14 @@ import {
 } from "@chakra-ui/react";
 import { Link, useNavigate } from "react-router-dom";
 import axios from "axios";
-import { useState } from "react";
+import { useContext, useState } from "react";
+import { LoginContext } from "../../App";
 
 export function UserLogin() {
   // -------------------- 로그인 상태 --------------------
   const [userId, setUserId] = useState("");
   const [userPassword, setUserPassword] = useState("");
+  const { fetchLogin } = useContext(LoginContext);
 
   // -------------------- toast / navigate --------------------
   const toast = useToast();
@@ -33,9 +35,9 @@ export function UserLogin() {
       .then(() => {
         toast({
           description: "로그인 성공하였습니다.",
-          status: "success",
+          status: "info",
         });
-        sessionStorage.setItem("userId", userId);
+        // sessionStorage.setItem("userId", userId);
         navigate("/");
       })
       .catch(() => {
@@ -43,6 +45,9 @@ export function UserLogin() {
           description: "아이디와 암호를 다시 확인해주세요.",
           status: "warning",
         });
+      })
+      .finally(() => {
+        fetchLogin();
       });
   }
 

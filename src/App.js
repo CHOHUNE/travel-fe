@@ -47,7 +47,7 @@ const routes = createBrowserRouter(
   ),
 );
 
-const LoginContext = createContext(null);
+export const LoginContext = createContext(null);
 
 function App() {
   const [login, setLogin] = useState("");
@@ -58,30 +58,33 @@ function App() {
     fetchLogin();
   }, []);
 
-  function fetchLogin() {
-    if (code) {
-      axios
-        .post("/api/member/kakaoLogin", null, {
-          params: {
-            code: code,
-          },
-        })
-        .then((response) => setLogin(response.data));
-    }
-  }
+  console.log(login);
+
+  // 카카오 로그인 세션저장용 -동작안됨-
   // function fetchLogin() {
-  //   axios.get("/api/member/login").then((response) => setLogin(response.data));
+  //   if (code) {
+  //     axios
+  //       .post("/api/member/kakaoLogin", null, {
+  //         params: {
+  //           code: code,
+  //         },
+  //       })
+  //       .then((response) => setLogin(response.data));
+  //   }
   // }
 
+  // 일반로그인 세션저장용
+  function fetchLogin() {
+    axios.get("/api/member/login").then((response) => setLogin(response.data));
+  }
+
   // 로그인상태
-  function isAuthenTicated() {
+  function isAuthenticated() {
     return login !== ""; // 빈 스트링이 아니면 로그인상태
   }
 
-  console.log(login);
-
   return (
-    <LoginContext.Provider value={null}>
+    <LoginContext.Provider value={{ login, fetchLogin, isAuthenticated }}>
       <RouterProvider router={routes} />;
     </LoginContext.Provider>
   );

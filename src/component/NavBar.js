@@ -1,17 +1,29 @@
-import { Box, Button, Flex, Input } from "@chakra-ui/react";
+import { Box, Button, Flex, Input, useToast } from "@chakra-ui/react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faMagnifyingGlass } from "@fortawesome/free-solid-svg-icons";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
+import { useContext } from "react";
+import { LoginContext } from "../App";
 
 export function NavBar() {
+  const { fetchLogin, login, isAuthenticated } = useContext(LoginContext);
+  const toast = useToast();
   const navigate = useNavigate();
 
   function handleLogout() {
     axios
       .post("/api/member/logout")
-      .then(() => console.log("로그아웃 성공"))
-      .catch(() => console.log("로그아웃 실패"));
+      .then(() => {
+        toast({
+          description: "로그아웃 되었습니다.",
+          status: "info",
+        });
+        navigate("/");
+      })
+      .finally(() => {
+        fetchLogin();
+      });
   }
 
   return (
@@ -38,52 +50,60 @@ export function NavBar() {
 
           {/* 회원정보, 회원가입, 로그인 버튼 */}
           <Flex alignItems={"center"}>
-            <Button
-              w={"50px"}
-              h={"60px"}
-              borderRadius={0}
-              fontSize={"0.8rem"}
-              lineHeight={"80px"}
-              backgroundColor={"#b0daeb"}
-              onClick={() => navigate("userEdit")}
-            >
-              회원수정
-            </Button>
-            <Button
-              w={"50px"}
-              h={"60px"}
-              borderRadius={0}
-              fontSize={"0.8rem"}
-              ml={4}
-              backgroundColor={"#b0daeb"}
-              onClick={() => navigate("signup")}
-            >
-              회원가입
-            </Button>
-            <Button
-              w={"50px"}
-              h={"60px"}
-              borderRadius={0}
-              fontSize={"0.8rem"}
-              ml={4}
-              mr={2}
-              backgroundColor={"#b0daeb"}
-              onClick={() => navigate("login")}
-            >
-              로그인
-            </Button>
-            <Button
-              w={"50px"}
-              h={"60px"}
-              borderRadius={0}
-              fontSize={"0.8rem"}
-              ml={4}
-              mr={2}
-              backgroundColor={"#b0daeb"}
-              onClick={handleLogout}
-            >
-              로그아웃
-            </Button>
+            {isAuthenticated() && (
+              <Button
+                w={"50px"}
+                h={"60px"}
+                borderRadius={0}
+                fontSize={"0.8rem"}
+                lineHeight={"80px"}
+                backgroundColor={"#b0daeb"}
+                onClick={() => navigate("userEdit")}
+              >
+                회원수정
+              </Button>
+            )}
+            {isAuthenticated() || (
+              <Button
+                w={"50px"}
+                h={"60px"}
+                borderRadius={0}
+                fontSize={"0.8rem"}
+                ml={4}
+                backgroundColor={"#b0daeb"}
+                onClick={() => navigate("signup")}
+              >
+                회원가입
+              </Button>
+            )}
+            {isAuthenticated() || (
+              <Button
+                w={"50px"}
+                h={"60px"}
+                borderRadius={0}
+                fontSize={"0.8rem"}
+                ml={4}
+                mr={2}
+                backgroundColor={"#b0daeb"}
+                onClick={() => navigate("login")}
+              >
+                로그인
+              </Button>
+            )}
+            {isAuthenticated() && (
+              <Button
+                w={"50px"}
+                h={"60px"}
+                borderRadius={0}
+                fontSize={"0.8rem"}
+                ml={4}
+                mr={2}
+                backgroundColor={"#b0daeb"}
+                onClick={handleLogout}
+              >
+                로그아웃
+              </Button>
+            )}
           </Flex>
         </Flex>
       </Box>
