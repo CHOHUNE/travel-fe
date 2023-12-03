@@ -4,6 +4,7 @@ import {
   Center,
   Flex,
   FormControl,
+  FormHelperText,
   Heading,
   Input,
   Select,
@@ -90,6 +91,11 @@ export function TransPortWrite() {
                 accept="image/*"
                 onChange={(e) => setTransMainImage(e.target.files[0])}
               />
+              <FormControl>
+                <FormHelperText>
+                  파일 크기는 1MB 이하로 첨부하세요
+                </FormHelperText>
+              </FormControl>
             </Td>
           </Tr>
           <Tr>
@@ -127,7 +133,7 @@ export function TransPortWrite() {
               />
             </Td>
           </Tr>
-          {/* --------------------------------------- 출발지 도착지 경로 컬럼 추가 연습중 --------------------------------------- */}
+          {/* --------------------------------------- 출발지 도착지 경로 컬럼 추가 연습중 (시작) --------------------------------------- */}
           <Tr>
             <Th
               border={"1px solid gray"}
@@ -172,7 +178,7 @@ export function TransPortWrite() {
               </FormControl>
             </Td>
           </Tr>
-          {/* --------------------------------------- 출발지 도착지 경로 컬럼 추가 연습중 --------------------------------------- */}
+          {/* --------------------------------------- 출발지 도착지 경로 컬럼 추가 연습중 (끝)--------------------------------------- */}
           <Tr>
             <Th
               border={"1px solid gray"}
