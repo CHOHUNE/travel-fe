@@ -244,6 +244,7 @@ export function Hotel() {
                                     </Box>
                                 </Box>
 
+
                                 <Box display='flex' mt='2' alignItems='center'>
                                     {Array(5)
                                         .fill('')
