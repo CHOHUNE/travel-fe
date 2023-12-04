@@ -7,11 +7,13 @@ import {
   Flex,
   FormControl,
   FormLabel,
+  Image,
   NumberDecrementStepper,
   NumberIncrementStepper,
   NumberInput,
   NumberInputField,
   NumberInputStepper,
+  Spinner,
   useToast,
 } from "@chakra-ui/react";
 import { useEffect, useState } from "react";
@@ -35,6 +37,10 @@ export function TransPortView() {
       .get("/api/transport/id/" + id)
       .then((response) => setTrans(response.data));
   }, []);
+
+  if (trans === null) {
+    return <Spinner />;
+  }
 
   // 운송 상품 삭제 기능 시작 ----------------------------------------------------
   function handleTransDelete() {
@@ -73,9 +79,18 @@ export function TransPortView() {
           </Button>
         </Flex>
         <Flex justifyContent={"space-between"} mt={10}>
-          <Box w={"750px"} h={"500px"} bg={"#d9d9d9"}>
-            메인 이미지
-          </Box>
+          <FormControl w={"750px"} h={"500px"} bg={"#d9d9d9"}>
+            <FormLabel>메인 이미지</FormLabel>
+
+            {/* 이미지 출력 */}
+            {/*{trans.mainImage.map((file) => (*/}
+            {/*  <Card key={file.id} my={5}>*/}
+            {/*    <CardBody>*/}
+            {/*      <Image width="100%" src={file.url} alt={file.name} />*/}
+            {/*    </CardBody>*/}
+            {/*  </Card>*/}
+            {/*))}*/}
+          </FormControl>
           <Card w={"400px"} h={"500px"} bg={"#d9d9d9"}>
             <CardBody w={"80%"} bg={"#eeeccc"} ml={"10%"}>
               <Box bg={"#f3eeee"} w={"200px"} h={"100px"}>
