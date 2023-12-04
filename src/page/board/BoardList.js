@@ -17,7 +17,6 @@ import { useNavigate } from "react-router-dom";
 
 export function BoardList() {
   const [boardList, setBoardList] = useState(null);
-
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -28,6 +27,14 @@ export function BoardList() {
 
   return (
     <Box>
+      <Flex>
+        <Button onClick={() => navigate("/boradList")}>게시판 목록</Button>
+        <Button onClick={() => navigate("/boardwrite")}>게시판 작성</Button>
+        <Button onClick={() => navigate("/signup")}>회원가입</Button>
+        <Button onClick={() => navigate("/member/list")}>회원목록</Button>
+        <Button onClick={() => navigate("/login")}>로그인</Button>
+      </Flex>
+
       <h1> 게시물 목록</h1>
       <Flex justifyContent={"space-between"}>
         <select>
