@@ -81,15 +81,11 @@ export function TransPortView() {
         <Flex justifyContent={"space-between"} mt={10}>
           <FormControl w={"750px"} h={"500px"} bg={"#d9d9d9"}>
             <FormLabel>메인 이미지</FormLabel>
-
-            {/* 이미지 출력 */}
-            {/*{trans.mainImage.map((file) => (*/}
-            {/*  <Card key={file.id} my={5}>*/}
-            {/*    <CardBody>*/}
-            {/*      <Image width="100%" src={file.url} alt={file.name} />*/}
-            {/*    </CardBody>*/}
-            {/*  </Card>*/}
-            {/*))}*/}
+            {trans.mainImage != null ? (
+              <Image src={trans.mainImage.url} />
+            ) : (
+              <Box>빈값</Box>
+            )}
           </FormControl>
           <Card w={"400px"} h={"500px"} bg={"#d9d9d9"}>
             <CardBody w={"80%"} bg={"#eeeccc"} ml={"10%"}>
