@@ -55,15 +55,14 @@ export function TransPortWrite() {
           description: "운송 상품 등록에 성공하였습니다.",
           status: "success",
         });
+        navigate(-1);
       })
       .catch(() => {
         toast({
-          description: "운송 상품 등록에 실패 했습니다.",
+          title: "운송 상품 등록에 실패 했습니다.",
+          description: "빈값이 있는지 확인해주세요.",
           status: "error",
         });
-      })
-      .finally(() => {
-        navigate(-1);
       });
   }
 
