@@ -168,7 +168,7 @@ export function NavBar() {
             mr={2}
             mt={"10px"}
             fontSize={"0.8rem"}
-            onClick={() => navigate("board")}
+            onClick={() => navigate("boardlist")}
           >
             게시판 / 커뮤니티
           </Button>

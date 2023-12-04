@@ -4,7 +4,6 @@ import {
   Button,
   Card,
   CardBody,
-  CardFooter,
   CardHeader,
   Flex,
   Input,
@@ -124,9 +123,6 @@ export function TransPortList() {
                   가격 : {transport.transPrice} 원<br />
                   출발일 : {transport.transStartDay}
                 </CardBody>
-                <CardFooter>
-                  <Button>장바구니</Button>
-                </CardFooter>
               </Card>
             ),
         )}
