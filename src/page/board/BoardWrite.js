@@ -30,7 +30,7 @@ export function BoardWrite() {
       .then((response) => {
         console.log(response.data);
         toast({ description: "글이 작성되었습니다.", status: "success" });
-        navigate("/");
+        navigate("/boardList");
       })
       .catch(() => {
         toast({ description: "글이 작성 안됬습니다.", status: "error" });
