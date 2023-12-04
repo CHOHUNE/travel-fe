@@ -28,7 +28,7 @@ export function BoardList() {
   return (
     <Box>
       <Flex>
-        <Button onClick={() => navigate("/boradList")}>게시판 목록</Button>
+        <Button onClick={() => navigate("/boardList")}>게시판 목록</Button>
         <Button onClick={() => navigate("/boardwrite")}>게시판 작성</Button>
         <Button onClick={() => navigate("/signup")}>회원가입</Button>
         <Button onClick={() => navigate("/member/list")}>회원목록</Button>
