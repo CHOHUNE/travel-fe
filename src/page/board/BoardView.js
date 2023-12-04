@@ -1,17 +1,9 @@
-import React, { useEffect, useState } from "react";
-import { useNavigate, useParams } from "react-router-dom";
+import React, {useEffect, useState} from "react";
+import {useNavigate, useParams} from "react-router-dom";
 import axios from "axios";
-import {
-  Box,
-  Button,
-  Flex,
-  FormControl,
-  FormLabel,
-  Input,
-  Spinner,
-  Textarea,
-  useToast,
-} from "@chakra-ui/react";
+import {Box, Button, Flex, FormControl, FormLabel, Input, Spinner, Textarea, useToast,} from "@chakra-ui/react";
+import { CommentContainer } from "../../page/comment/CommentContainer";
+
 
 export function BoardView() {
   const [board, setBoard] = useState(null);
@@ -66,6 +58,8 @@ export function BoardView() {
           삭제
         </Button>
       </Flex>
+
+      <CommentContainer boardId={id}/>
     </Box>
   );
 }
