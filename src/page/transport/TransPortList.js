@@ -6,6 +6,7 @@ import {
   CardBody,
   CardHeader,
   Flex,
+  Image,
   Input,
   Modal,
   ModalBody,
@@ -19,9 +20,10 @@ import {
   useDisclosure,
 } from "@chakra-ui/react";
 import axios from "axios";
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faMagnifyingGlass } from "@fortawesome/free-solid-svg-icons";
+import { LoginContext } from "../../component/LoginProvider";
 
 export function TransPortList() {
   const [list, setList] = useState([]);
@@ -29,6 +31,8 @@ export function TransPortList() {
   const { isOpen, onClose, onOpen } = useDisclosure();
 
   const navigate = useNavigate();
+
+  const { isAdmin } = useContext(LoginContext);
 
   const [params] = useSearchParams();
   console.log(params.get("type"));
@@ -93,6 +97,7 @@ export function TransPortList() {
           {params.get("type") === "bus" && <Box>버스 게시글 목록</Box>}
           {params.get("type") === "air" && <Box>항공 게시글 목록</Box>}
         </Box>
+        {/*{isAdmin() && (*/}
         <Box>
           <Button
             ml={2}
@@ -102,6 +107,7 @@ export function TransPortList() {
             {params.get("type") === "air" && <Box>항공 상품 등록</Box>}
           </Button>
         </Box>
+        {/*)}*/}
       </Flex>
       <SimpleGrid columns={4} w={"85%"} ml={"8.5%"} mt={4} spacing={"25px"}>
         {list.map(
@@ -115,6 +121,9 @@ export function TransPortList() {
                 key={transport.tid}
               >
                 <CardHeader>
+                  <Box w={"80%"} ml={"10%"}>
+                    <Image src={transport.url} />
+                  </Box>
                   {transport.tid}
                   <br />
                   제목 : {transport.transTitle}
