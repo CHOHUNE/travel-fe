@@ -5,6 +5,7 @@ import {
   CardBody,
   CardHeader,
   Flex,
+  Image,
   Input,
 } from "@chakra-ui/react";
 import { useNavigate } from "react-router-dom";
@@ -57,6 +58,7 @@ export function TransPort() {
             (bus) =>
               bus.typeName === "bus" && (
                 <Card
+                  key={bus.tid}
                   w={"275px"}
                   h={"275px"}
                   bg={"#eeecec"}
@@ -64,7 +66,12 @@ export function TransPort() {
                   _hover={{ cursor: "pointer" }}
                   onClick={() => navigate("/transport/" + bus.tid)}
                 >
-                  <CardHeader>{bus.transTitle}</CardHeader>
+                  <CardHeader>
+                    <Box w={"80%"} ml={"10%"}>
+                      <Image src={bus.url} />
+                    </Box>
+                    <Box>{bus.transTitle}</Box>
+                  </CardHeader>
                   <CardBody>
                     <Box>가격 : {bus.transPrice}원</Box>
                     <Box>출발일 : {bus.transStartDay}</Box>
@@ -90,6 +97,7 @@ export function TransPort() {
             (air) =>
               air.typeName === "air" && (
                 <Card
+                  key={air.tid}
                   w={"275px"}
                   h={"275px"}
                   bg={"#eeecec"}
@@ -97,7 +105,12 @@ export function TransPort() {
                   _hover={{ cursor: "pointer" }}
                   onClick={() => navigate("/transport/" + air.tid)}
                 >
-                  <CardHeader>{air.transTitle}</CardHeader>
+                  <CardHeader>
+                    <Box w={"80%"} ml={"10%"}>
+                      <Image src={air.url} />
+                    </Box>
+                    <Box>{air.transTitle}</Box>
+                  </CardHeader>
                   <CardBody>
                     <Box>가격 : {air.transPrice}원</Box>
                     <Box>출발일 : {air.transStartDay}</Box>
