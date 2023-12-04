@@ -3,7 +3,6 @@ import {
   Button,
   Card,
   CardBody,
-  CardFooter,
   CardHeader,
   Flex,
   Input,
@@ -54,18 +53,22 @@ export function TransPort() {
           _hover={{ cursor: "pointer", color: "green" }}
         />
         <Flex>
-          {listAir.map(
-            (air) =>
-              air.typeName === "air" && (
-                <Card w={"275px"} h={"275px"} bg={"#eeecec"} mr={7}>
-                  <CardHeader>{air.transTitle}</CardHeader>
+          {listBus.map(
+            (bus) =>
+              bus.typeName === "bus" && (
+                <Card
+                  w={"275px"}
+                  h={"275px"}
+                  bg={"#eeecec"}
+                  mr={7}
+                  _hover={{ cursor: "pointer" }}
+                  onClick={() => navigate("/transport/" + bus.tid)}
+                >
+                  <CardHeader>{bus.transTitle}</CardHeader>
                   <CardBody>
-                    <Box>가격 : {air.transPrice}원</Box>
-                    <Box>출발일 : {air.transStartDay}</Box>
+                    <Box>가격 : {bus.transPrice}원</Box>
+                    <Box>출발일 : {bus.transStartDay}</Box>
                   </CardBody>
-                  <CardFooter>
-                    <Button>장바구니</Button>
-                  </CardFooter>
                 </Card>
               ),
           )}
@@ -83,18 +86,22 @@ export function TransPort() {
           _hover={{ cursor: "pointer", color: "green" }}
         />
         <Flex>
-          {listBus.map(
-            (bus) =>
-              bus.typeName === "bus" && (
-                <Card w={"275px"} h={"275px"} bg={"#eeecec"} mr={7}>
-                  <CardHeader>{bus.transTitle}</CardHeader>
+          {listAir.map(
+            (air) =>
+              air.typeName === "air" && (
+                <Card
+                  w={"275px"}
+                  h={"275px"}
+                  bg={"#eeecec"}
+                  mr={7}
+                  _hover={{ cursor: "pointer" }}
+                  onClick={() => navigate("/transport/" + air.tid)}
+                >
+                  <CardHeader>{air.transTitle}</CardHeader>
                   <CardBody>
-                    <Box>가격 : {bus.transPrice}원</Box>
-                    <Box>출발일 : {bus.transStartDay}</Box>
+                    <Box>가격 : {air.transPrice}원</Box>
+                    <Box>출발일 : {air.transStartDay}</Box>
                   </CardBody>
-                  <CardFooter>
-                    <Button>장바구니</Button>
-                  </CardFooter>
                 </Card>
               ),
           )}
