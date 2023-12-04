@@ -23,6 +23,9 @@ import { AuthPage } from "./page/member/AuthPage";
 import { TransPortView } from "./page/transport/TransPortView";
 import { TransPortEdit } from "./page/transport/TransPortEdit";
 import axios from "axios";
+import { UserList } from "./page/member/UserList";
+import { UserView } from "./page/member/UserView";
+import LoginProvider from "./component/LoginProvider";
 
 const routes = createBrowserRouter(
   createRoutesFromElements(
@@ -38,55 +41,25 @@ const routes = createBrowserRouter(
       <Route path="boardwrite" element={<BoardWrite />} />
       <Route path="board/:id" element={<BoardView />} />
       <Route path="edit/:id" element={<BoardEdit />} />
+
+      {/* 회원관련 */}
       <Route path="login" element={<UserLogin />} />
       <Route path="auth" element={<AuthPage />} />
       <Route path="signup" element={<UserSignup />} />
-      <Route path="userEdit" element={<UserEdit />} />
+      <Route path="user/edit" element={<UserEdit />} />
+      <Route path="user/list" element={<UserList />} />
+      <Route path="user" element={<UserView />} />
+
       <Route path="hotel/reserv/:id" element={<Reserv />} />
     </Route>,
   ),
 );
 
-export const LoginContext = createContext(null);
-
 function App() {
-  const [login, setLogin] = useState("");
-  // const code = new URL(window.location.href).searchParams.get("code");
-  const code = new URL(window.location.href).searchParams.get("code");
-
-  useEffect(() => {
-    fetchLogin();
-  }, []);
-
-  console.log(login);
-
-  // 카카오 로그인 세션저장용 -동작안됨-
-  // function fetchLogin() {
-  //   if (code) {
-  //     axios
-  //       .post("/api/member/kakaoLogin", null, {
-  //         params: {
-  //           code: code,
-  //         },
-  //       })
-  //       .then((response) => setLogin(response.data));
-  //   }
-  // }
-
-  // 일반로그인 세션저장용
-  function fetchLogin() {
-    axios.get("/api/member/login").then((response) => setLogin(response.data));
-  }
-
-  // 로그인상태
-  function isAuthenticated() {
-    return login !== ""; // 빈 스트링이 아니면 로그인상태
-  }
-
   return (
-    <LoginContext.Provider value={{ login, fetchLogin, isAuthenticated }}>
-      <RouterProvider router={routes} />;
-    </LoginContext.Provider>
+    <LoginProvider>
+      <RouterProvider router={routes} />
+    </LoginProvider>
   );
 }
 

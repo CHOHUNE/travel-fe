@@ -1,15 +1,26 @@
 import { Box, Button, Flex, Input, useToast } from "@chakra-ui/react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faMagnifyingGlass } from "@fortawesome/free-solid-svg-icons";
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import axios from "axios";
-import { useContext } from "react";
-import { LoginContext } from "../App";
+import { useContext, useEffect } from "react";
+import { LoginContext } from "./LoginProvider";
 
 export function NavBar() {
-  const { fetchLogin, login, isAuthenticated } = useContext(LoginContext);
+  const { fetchLogin, login, isAuthenticated, isAdmin } =
+    useContext(LoginContext);
   const toast = useToast();
   const navigate = useNavigate();
+  const urlParams = new URLSearchParams();
+  const location = useLocation();
+
+  useEffect(() => {
+    fetchLogin();
+  }, [location]);
+
+  if (login !== "") {
+    urlParams.set("userId", login.userId);
+  }
 
   function handleLogout() {
     axios
@@ -50,7 +61,7 @@ export function NavBar() {
 
           {/* 회원정보, 회원가입, 로그인 버튼 */}
           <Flex alignItems={"center"}>
-            {isAuthenticated() && (
+            {isAdmin() && (
               <Button
                 w={"50px"}
                 h={"60px"}
@@ -58,11 +69,27 @@ export function NavBar() {
                 fontSize={"0.8rem"}
                 lineHeight={"80px"}
                 backgroundColor={"#b0daeb"}
-                onClick={() => navigate("userEdit")}
+                onClick={() => navigate("/user/list")}
               >
-                회원수정
+                회원목록
               </Button>
             )}
+
+            {isAuthenticated() && (
+              <Button
+                w={"50px"}
+                h={"60px"}
+                ml={5}
+                borderRadius={0}
+                fontSize={"0.8rem"}
+                lineHeight={"80px"}
+                backgroundColor={"#b0daeb"}
+                onClick={() => navigate("/user?" + urlParams.toString())}
+              >
+                {login.userId}님
+              </Button>
+            )}
+
             {isAuthenticated() || (
               <Button
                 w={"50px"}

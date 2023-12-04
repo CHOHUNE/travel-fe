@@ -41,12 +41,19 @@ export function UserSignup() {
 
   // ------------- SMS 정보 -------------
   const [sendSMS, setSendSMS] = useState("");
+  const [sendSmsOk, setSendSmsOk] = useState(false);
 
   // ------------- 비밀번호 체크 -------------
   const [userPasswordCheck, setUserPasswordCheck] = useState("");
 
   // ------------- Id 중복확인 -------------
   const [userIdCheck, setUserIdCheck] = useState(false);
+
+  // ------------- Email 중복확인 -------------
+  const [userEmailCheck, setUserEmailCheck] = useState(false);
+
+  // ------------- 연속 클릭 방지 -------------
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
   // ------------- toast / navigate -------------
   const toast = useToast();
@@ -66,6 +73,12 @@ export function UserSignup() {
   if (!userIdCheck) {
     submitAvailable = false;
   }
+  if (!userEmailCheck) {
+    submitAvailable = false;
+  }
+  if (!sendSmsOk) {
+    submitAvailable = false;
+  }
 
   // ------------- 패스워드 일치하지 않으면 가입버튼 비활성화 -------------
   if (userPassword !== userPasswordCheck) {
@@ -73,6 +86,8 @@ export function UserSignup() {
   }
 
   function handleSubmit() {
+    setIsSubmitting(true);
+
     axios
       .post("/api/member/signup", {
         userId,
@@ -103,6 +118,9 @@ export function UserSignup() {
             status: "error",
           });
         }
+      })
+      .finally(() => {
+        setIsSubmitting(false);
       });
   }
 
@@ -164,6 +182,7 @@ export function UserSignup() {
         userPhoneNumber,
       })
       .then((response) => {
+        setSendSmsOk(true);
         toast({
           description: "인증번호 확인되었습니다.",
           status: "success",
@@ -219,6 +238,31 @@ export function UserSignup() {
     setUserDetailAddress(""); // 주소를 클릭할 때 상세주소를 초기화하거나 필요한 처리 수행
   };
 
+  // ---------- 이메일 중복확인 ----------
+  function handleEmailCheck() {
+    const params1 = new URLSearchParams();
+    params1.set("userEmail", userEmail);
+
+    axios
+      .get("/api/member/check?" + params1)
+      .then(() => {
+        setUserEmailCheck(false);
+        toast({
+          description: "이미 사용중인 Email 입니다.",
+          status: "warning",
+        });
+      })
+      .catch((error) => {
+        if (error.response.status === 404) {
+          setUserEmailCheck(true);
+          toast({
+            description: "사용 가능한 Email 입니다.",
+            status: "success",
+          });
+        }
+      });
+  }
+
   // ---------- 회원가입 Form ----------
   return (
     <Center m={20}>
@@ -270,26 +314,28 @@ export function UserSignup() {
             </Flex>
           </FormControl>
 
-          <FormControl mb={3} isInvalid={userPassword !== userPasswordCheck}>
-            <Flex textAlign={"center"} display={"flex"} alignItems={"center"}>
-              <FormLabel
-                w={138}
-                textAlign={"center"}
-                display={"flex"}
-                alignItems={"center"}
-              >
-                비밀번호 확인
-              </FormLabel>
-              <Input
-                type="password"
-                value={userPasswordCheck}
-                onChange={(e) => {
-                  setUserPasswordCheck(e.target.value);
-                }}
-              />
-            </Flex>
-            <FormErrorMessage>암호가 다릅니다.</FormErrorMessage>
-          </FormControl>
+          {userPassword.length > 0 && (
+            <FormControl mb={3} isInvalid={userPassword !== userPasswordCheck}>
+              <Flex textAlign={"center"} display={"flex"} alignItems={"center"}>
+                <FormLabel
+                  w={138}
+                  textAlign={"center"}
+                  display={"flex"}
+                  alignItems={"center"}
+                >
+                  비밀번호 확인
+                </FormLabel>
+                <Input
+                  type="password"
+                  value={userPasswordCheck}
+                  onChange={(e) => {
+                    setUserPasswordCheck(e.target.value);
+                  }}
+                />
+              </Flex>
+              <FormErrorMessage>암호가 다릅니다.</FormErrorMessage>
+            </FormControl>
+          )}
 
           <FormControl mb={3}>
             <Flex>
@@ -326,23 +372,6 @@ export function UserSignup() {
               />
               <Button onClick={handleDaumPostcode}>주소검색</Button>
             </Flex>
-
-            {/*/!* 주소검색 버튼 눌렀을때 모달창  *!/*/}
-            {/*<Modal isOpen={isOpen} onClose={onClose}>*/}
-            {/*  <ModalOverlay />*/}
-            {/*  <ModalContent>*/}
-            {/*    <ModalHeader>저장 확인</ModalHeader>*/}
-            {/*    <ModalCloseButton />*/}
-            {/*    <ModalBody>저장 하시겠습니까?</ModalBody>*/}
-
-            {/*    <ModalFooter>*/}
-            {/*      <Button onClick={onClose}>닫기</Button>*/}
-            {/*      <Button onClick={handleComplete} colorScheme="blue">*/}
-            {/*        저장*/}
-            {/*      </Button>*/}
-            {/*    </ModalFooter>*/}
-            {/*  </ModalContent>*/}
-            {/*</Modal>*/}
 
             <Flex>
               <FormLabel
@@ -395,6 +424,29 @@ export function UserSignup() {
             </Flex>
           </FormControl>
 
+          {userPhoneNumber && (
+            <FormControl mb={3}>
+              <Flex gap={2}>
+                <FormLabel
+                  w={160}
+                  textAlign={"center"}
+                  display={"flex"}
+                  alignItems={"center"}
+                >
+                  본인인증번호
+                </FormLabel>
+                <Input
+                  type="number"
+                  value={sendSMS}
+                  onChange={(e) => setSendSMS(e.target.value)}
+                />
+                <Button w={95} onClick={handleSMSOk}>
+                  확인
+                </Button>
+              </Flex>
+            </FormControl>
+          )}
+
           <FormControl mb={3}>
             <Flex gap={2}>
               <FormLabel
@@ -403,40 +455,21 @@ export function UserSignup() {
                 display={"flex"}
                 alignItems={"center"}
               >
-                본인인증번호
-              </FormLabel>
-              <Input
-                type="number"
-                value={sendSMS}
-                onChange={(e) => setSendSMS(e.target.value)}
-              />
-              <Button w={95} onClick={handleSMSOk}>
-                확인
-              </Button>
-            </Flex>
-          </FormControl>
-
-          <FormControl mb={3}>
-            <Flex>
-              <FormLabel
-                w={138}
-                textAlign={"center"}
-                display={"flex"}
-                alignItems={"center"}
-              >
                 이메일
               </FormLabel>
               <Input
+                type="email"
                 value={userEmail}
                 onChange={(e) => setUserEmail(e.target.value)}
               />
+              <Button onClick={handleEmailCheck}>중복확인</Button>
             </Flex>
           </FormControl>
         </CardBody>
 
         <CardFooter>
           <Button
-            isDisabled={!submitAvailable}
+            isDisabled={!submitAvailable || isSubmitting}
             colorScheme="blue"
             onClick={handleSubmit}
           >

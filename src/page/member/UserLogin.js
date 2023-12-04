@@ -16,7 +16,7 @@ import {
 import { Link, useNavigate } from "react-router-dom";
 import axios from "axios";
 import { useContext, useState } from "react";
-import { LoginContext } from "../../App";
+import { LoginContext } from "../../component/LoginProvider";
 
 export function UserLogin() {
   // -------------------- 로그인 상태 --------------------
@@ -88,6 +88,7 @@ export function UserLogin() {
 
             <FormControl>
               <Input
+                type="password"
                 value={userPassword}
                 w={"100%"}
                 placeholder="비밀번호 입력"
