@@ -368,7 +368,7 @@ export function UserSignup() {
                 placeholder="우편번호"
                 mb={3}
                 value={userPostCode}
-                onClick={handleDaumPostcode} // 주소검색 버튼 클릭 시 팝업 열도록 설정
+                onChange={(e) => setUserPostCode(e.target.value)} // 주소검색 버튼 클릭 시 팝업 열도록 설정
               />
               <Button onClick={handleDaumPostcode}>주소검색</Button>
             </Flex>

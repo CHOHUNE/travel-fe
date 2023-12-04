@@ -11,16 +11,20 @@ import {
   FormLabel,
   Heading,
   Input,
+  useToast,
 } from "@chakra-ui/react";
 import { useEffect, useState } from "react";
 import axios from "axios";
-import { useSearchParams } from "react-router-dom";
+import { useNavigate, useSearchParams } from "react-router-dom";
 
 export function FindPwChange() {
   const [params] = useSearchParams();
   const [userId, setUserId] = useState("");
   const [userPassword, setUserPassword] = useState("");
   const [userPasswordCheck, setUserPasswordCheck] = useState("");
+
+  const toast = useToast();
+  const navigate = useNavigate();
 
   // useEffect(() => {
   //   axios.get("/api/member?" + params.toString()).then((response) => {
@@ -34,11 +38,20 @@ export function FindPwChange() {
         userPassword,
       })
       .then((response) => {
-        console.log("응답 받음:", response.data);
+        toast({
+          description: "비밀번호 변경하였습니다.",
+          status: "success",
+        });
       })
       .catch((error) => {
-        console.error("에러 발생:", error);
-      });
+        if (error.response.status === 401 || error.response.status === 403) {
+          toast({
+            description: "관리자에게 문의해주시기 바랍니다.",
+            status: "error",
+          });
+        }
+      })
+      .finally(() => navigate("/"));
   }
 
   return (

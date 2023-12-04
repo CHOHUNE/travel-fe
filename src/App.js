@@ -30,6 +30,7 @@ import LoginProvider from "./component/LoginProvider";
 import { FindId } from "./page/member/FindId";
 import { FindPw } from "./page/member/FindPw";
 import { FindPwChange } from "./page/member/FindPwChange";
+import { FindIdView } from "./page/member/FindIdView";
 
 const routes = createBrowserRouter(
   createRoutesFromElements(
@@ -58,6 +59,7 @@ const routes = createBrowserRouter(
       <Route path="findId" element={<FindId />} />
       <Route path="findPw" element={<FindPw />} />
       <Route path="findPwChange" element={<FindPwChange />} />
+      <Route path="findIdView" element={<FindIdView />} />
 
       {/* 호텔관련 */}
       <Route path="hotel" element={<Hotel />} />

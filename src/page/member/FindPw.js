@@ -48,13 +48,12 @@ export function FindPw() {
         userPhoneNumber,
       })
       .then((response) => {
-        // navigate("/findPwChange");
-        console.log("문제없음");
+        navigate("/findPwChange");
       })
       .catch((error) => {
         if (error.response.status === 401 || error.response.status === 403) {
           toast({
-            description: "입력값을 확인해주세요.",
+            description: "회원정보가 없습니다.",
             status: "warning",
           });
         } else {
