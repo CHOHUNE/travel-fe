@@ -1,10 +1,42 @@
-import { Box, Button, Flex, Input } from "@chakra-ui/react";
+import { Box, Button, Flex, Input, useToast } from "@chakra-ui/react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faMagnifyingGlass } from "@fortawesome/free-solid-svg-icons";
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
+import axios from "axios";
+import { useContext, useEffect } from "react";
+import { LoginContext } from "./LoginProvider";
 
 export function NavBar() {
+  const { fetchLogin, login, isAuthenticated, isAdmin } =
+    useContext(LoginContext);
+  const toast = useToast();
   const navigate = useNavigate();
+  const urlParams = new URLSearchParams();
+  const location = useLocation();
+
+  useEffect(() => {
+    fetchLogin();
+  }, [location]);
+
+  if (login !== "") {
+    urlParams.set("userId", login.userId);
+  }
+
+  function handleLogout() {
+    axios
+      .post("/api/member/logout")
+      .then(() => {
+        toast({
+          description: "로그아웃 되었습니다.",
+          status: "info",
+        });
+        navigate("/");
+      })
+      .finally(() => {
+        fetchLogin();
+      });
+  }
+
   return (
     <Box>
       {/* 헤더 네브바1 */}
@@ -29,40 +61,76 @@ export function NavBar() {
 
           {/* 회원정보, 회원가입, 로그인 버튼 */}
           <Flex alignItems={"center"}>
-            <Button
-              w={"50px"}
-              h={"60px"}
-              borderRadius={0}
-              fontSize={"0.8rem"}
-              lineHeight={"80px"}
-              backgroundColor={"#b0daeb"}
-              onClick={() => navigate("userEdit")}
-            >
-              회원수정
-            </Button>
-            <Button
-              w={"50px"}
-              h={"60px"}
-              borderRadius={0}
-              fontSize={"0.8rem"}
-              ml={4}
-              backgroundColor={"#b0daeb"}
-              onClick={() => navigate("signup")}
-            >
-              회원가입
-            </Button>
-            <Button
-              w={"50px"}
-              h={"60px"}
-              borderRadius={0}
-              fontSize={"0.8rem"}
-              ml={4}
-              mr={2}
-              backgroundColor={"#b0daeb"}
-              onClick={() => navigate("login")}
-            >
-              로그인
-            </Button>
+            {isAdmin() && (
+              <Button
+                w={"50px"}
+                h={"60px"}
+                borderRadius={0}
+                fontSize={"0.8rem"}
+                lineHeight={"80px"}
+                backgroundColor={"#b0daeb"}
+                onClick={() => navigate("/user/list")}
+              >
+                회원목록
+              </Button>
+            )}
+
+            {isAuthenticated() && (
+              <Button
+                w={"50px"}
+                h={"60px"}
+                ml={5}
+                borderRadius={0}
+                fontSize={"0.8rem"}
+                lineHeight={"80px"}
+                backgroundColor={"#b0daeb"}
+                onClick={() => navigate("/user?" + urlParams.toString())}
+              >
+                {login.userId}님
+              </Button>
+            )}
+
+            {isAuthenticated() || (
+              <Button
+                w={"50px"}
+                h={"60px"}
+                borderRadius={0}
+                fontSize={"0.8rem"}
+                ml={4}
+                backgroundColor={"#b0daeb"}
+                onClick={() => navigate("signup")}
+              >
+                회원가입
+              </Button>
+            )}
+            {isAuthenticated() || (
+              <Button
+                w={"50px"}
+                h={"60px"}
+                borderRadius={0}
+                fontSize={"0.8rem"}
+                ml={4}
+                mr={2}
+                backgroundColor={"#b0daeb"}
+                onClick={() => navigate("login")}
+              >
+                로그인
+              </Button>
+            )}
+            {isAuthenticated() && (
+              <Button
+                w={"50px"}
+                h={"60px"}
+                borderRadius={0}
+                fontSize={"0.8rem"}
+                ml={4}
+                mr={2}
+                backgroundColor={"#b0daeb"}
+                onClick={handleLogout}
+              >
+                로그아웃
+              </Button>
+            )}
           </Flex>
         </Flex>
       </Box>
@@ -73,7 +141,6 @@ export function NavBar() {
             <Button w={"100px"} h={"40px"}>
               전체메뉴
             </Button>
-
 
             {/* 호텔 */}
             <Button

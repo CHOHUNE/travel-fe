@@ -1,4 +1,4 @@
-import React from "react";
+import React, { createContext, useEffect, useState } from "react";
 import {
     createBrowserRouter,
     createRoutesFromElements,
@@ -18,42 +18,67 @@ import {BoardList} from "./page/board/BoardList";
 import {BoardWrite} from "./page/board/BoardWrite";
 import {BoardView} from "./page/board/BoardView";
 import {BoardEdit} from "./page/board/BoardEdit";
+import { Reserv } from "./page/hotel/Reserv";
 import {HotelView} from "./page/hotel/HotelView";
 import {AuthPage} from "./page/member/AuthPage";
 import {TransPortView} from "./page/transport/TransPortView";
 import {TransPortEdit} from "./page/transport/TransPortEdit";
+import axios from "axios";
 import {HotelWrite} from "./page/hotel/HotelWrite";
+import { UserList } from "./page/member/UserList";
 import {HotelEdit} from "./page/hotel/HotelEdit";
+import { UserView } from "./page/member/UserView";
 import {HotelPay} from "./page/hotel/HotelPay";
+import LoginProvider from "./component/LoginProvider";
+
+
+
 
 const routes = createBrowserRouter(
-    createRoutesFromElements(
-        <Route path="/" element={<HomeLayout/>}>
-            <Route index element={<HomeBody/>}/>
-            <Route path="transport" element={<TransPort/>}/>
-            <Route path="transport/:id" element={<TransPortView/>}/>
-            <Route path="transport/list" element={<TransPortList/>}/>
-            <Route path="transport/write" element={<TransPortWrite/>}/>
-            <Route path="transport/edit/:id" element={<TransPortEdit/>}/>
-            <Route path="hotel" element={<Hotel/>}/>
-            <Route path="boardlist" element={<BoardList/>}/>
-            <Route path="boardwrite" element={<BoardWrite/>}/>
-            <Route path="board/:id" element={<BoardView/>}/>
-            <Route path="edit/:id" element={<BoardEdit/>}/>
-            <Route path="login" element={<UserLogin/>}/>
-            <Route path="auth" element={<AuthPage/>}/>
-            <Route path="signup" element={<UserSignup/>}/>
-            <Route path="userEdit" element={<UserEdit/>}/>
-            <Route path="hotel/reserv/:id" element={<HotelView/>}/>
-            <Route path="hotel/write" element={<HotelWrite/>}/>
-            <Route path="hotel/edit/:id" element={<HotelEdit/>}/>
-            <Route path="hotel/pay/:id" element={<HotelPay/>}/>
-                </Route>,
-                ),
-                );
+  createRoutesFromElements(
+    <Route path="/" element={<HomeLayout />}>
+      <Route index element={<HomeBody />} />
+      {/* 운송관련 */}
+      <Route path="transport" element={<TransPort />} />
+      <Route path="transport/:id" element={<TransPortView />} />
+      <Route path="transport/list" element={<TransPortList />} />
+      <Route path="transport/write" element={<TransPortWrite />} />
+      <Route path="transport/edit/:id" element={<TransPortEdit />} />
 
-                function App() {
-                return <RouterProvider router={routes}/>;
-            }
+      {/* 게시판관련 */}
+      <Route path="boardlist" element={<BoardList />} />
+      <Route path="boardwrite" element={<BoardWrite />} />
+      <Route path="board/:id" element={<BoardView />} />
+      <Route path="edit/:id" element={<BoardEdit />} />
 
-            export default App;
+      {/* 회원관련 */}
+      <Route path="login" element={<UserLogin />} />
+      <Route path="auth" element={<AuthPage />} />
+      <Route path="signup" element={<UserSignup />} />
+      <Route path="user/edit" element={<UserEdit />} />
+      <Route path="user/list" element={<UserList />} />
+      <Route path="user" element={<UserView />} />
+        
+      {/* 호텔관련 */}
+      <Route path="hotel" element={<Hotel />} />
+      <Route path="hotel/reserv/:id" element={<HotelView/>}/>
+      <Route path="hotel/write" element={<HotelWrite/>}/>
+      <Route path="hotel/edit/:id" element={<HotelEdit/>}/>
+      <Route path="hotel/pay/:id" element={<HotelPay/>}/>
+
+      <Route path="hotel/reserv/:id" element={<Reserv />} />
+    </Route>,
+  ),
+);
+
+
+function App() {
+    return (
+      <LoginProvider>
+        <RouterProvider router={routes} />
+      </LoginProvider>
+    );
+}
+
+
+export default App;

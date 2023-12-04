@@ -15,12 +15,14 @@ import {
 } from "@chakra-ui/react";
 import { Link, useNavigate } from "react-router-dom";
 import axios from "axios";
-import { useState } from "react";
+import { useContext, useState } from "react";
+import { LoginContext } from "../../component/LoginProvider";
 
 export function UserLogin() {
   // -------------------- 로그인 상태 --------------------
   const [userId, setUserId] = useState("");
   const [userPassword, setUserPassword] = useState("");
+  const { fetchLogin } = useContext(LoginContext);
 
   // -------------------- toast / navigate --------------------
   const toast = useToast();
@@ -33,8 +35,9 @@ export function UserLogin() {
       .then(() => {
         toast({
           description: "로그인 성공하였습니다.",
-          status: "success",
+          status: "info",
         });
+        // sessionStorage.setItem("userId", userId);
         navigate("/");
       })
       .catch(() => {
@@ -42,18 +45,26 @@ export function UserLogin() {
           description: "아이디와 암호를 다시 확인해주세요.",
           status: "warning",
         });
+      })
+      .finally(() => {
+        fetchLogin();
       });
   }
 
   // -------------------- 카카오 로그인 --------------------
   function handleKakaoLogin() {
     // 프론트에서 서버로 카카오 로그인을 위한 정보 요청
-    axios.get("/api/member/kakaoKey").then((response) => {
-      // response에서 받은 키 정보를 사용하여 카카오 로그인 URL 생성
-      const kakaourl = `https://kauth.kakao.com/oauth/authorize?client_id=${response.data.key}&redirect_uri=${response.data.redirect}&response_type=code`;
-      // 여기서 URL로 리디렉션하면 사용자는 카카오 로그인 페이지로 이동
-      window.location.href = kakaourl;
-    });
+    axios
+      .get("/api/member/kakaoKey")
+      .then((response) => {
+        // response에서 받은 키 정보를 사용하여 카카오 로그인 URL 생성
+        const kakaourl = `https://kauth.kakao.com/oauth/authorize?client_id=${response.data.key}&redirect_uri=${response.data.redirect}&response_type=code&prompt=login`;
+        // 여기서 URL로 리디렉션하면 사용자는 카카오 로그인 페이지로 이동
+        window.location.href = kakaourl;
+      })
+      .catch((error) => {
+        console.error("카카오 키 가져오는 중 오류 발생 : ", error);
+      });
   }
 
   // -------------------- 로그인 폼 --------------------
@@ -77,6 +88,7 @@ export function UserLogin() {
 
             <FormControl>
               <Input
+                type="password"
                 value={userPassword}
                 w={"100%"}
                 placeholder="비밀번호 입력"
