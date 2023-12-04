@@ -105,8 +105,8 @@ export function UserLogin() {
             </Button>
 
             <Center w={"100%"} justifyContent={"space-around"} mt={5}>
-              <Link to={"/"}>아이디 찾기</Link>
-              <Link to={"/"}>비밀번호 찾기</Link>
+              <Link to={"/findId"}>아이디 찾기</Link>
+              <Link to={"/findPw"}>비밀번호 찾기</Link>
               <Link to={"/signup"}>회원가입</Link>
             </Center>
 

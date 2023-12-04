@@ -27,6 +27,9 @@ import { HotelEdit } from "./page/hotel/HotelEdit";
 import { UserView } from "./page/member/UserView";
 import { HotelPay } from "./page/hotel/HotelPay";
 import LoginProvider from "./component/LoginProvider";
+import { FindId } from "./page/member/FindId";
+import { FindPw } from "./page/member/FindPw";
+import { FindPwChange } from "./page/member/FindPwChange";
 
 const routes = createBrowserRouter(
   createRoutesFromElements(
@@ -52,6 +55,9 @@ const routes = createBrowserRouter(
       <Route path="user/edit" element={<UserEdit />} />
       <Route path="user/list" element={<UserList />} />
       <Route path="user" element={<UserView />} />
+      <Route path="findId" element={<FindId />} />
+      <Route path="findPw" element={<FindPw />} />
+      <Route path="findPwChange" element={<FindPwChange />} />
 
       {/* 호텔관련 */}
       <Route path="hotel" element={<Hotel />} />
