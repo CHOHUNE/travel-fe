@@ -31,6 +31,8 @@ import { FindId } from "./page/member/FindId";
 import { FindPw } from "./page/member/FindPw";
 import { FindPwChange } from "./page/member/FindPwChange";
 import { FindIdView } from "./page/member/FindIdView";
+import React from "react";
+import { NaverLogin } from "./page/member/NaverLogin";
 
 const routes = createBrowserRouter(
   createRoutesFromElements(
@@ -60,6 +62,7 @@ const routes = createBrowserRouter(
       <Route path="findPw" element={<FindPw />} />
       <Route path="findPwChange" element={<FindPwChange />} />
       <Route path="findIdView" element={<FindIdView />} />
+      <Route path="NaverLogin" element={<NaverLogin />} />
 
       {/* 호텔관련 */}
       <Route path="hotel" element={<Hotel />} />

@@ -26,6 +26,7 @@ import { useNavigate } from "react-router-dom";
 import axios from "axios";
 
 export function FindId() {
+  const [userId, setUserId] = useState("");
   const [userName, setUserName] = useState("");
   const [userPhoneNumber, setUserPhoneNumber] = useState("");
 
@@ -36,6 +37,8 @@ export function FindId() {
   const navigate = useNavigate();
 
   const [isSubmitting, setIsSubmitting] = useState(false);
+
+  const { onOpen, onClose, isOpen } = useDisclosure();
 
   // ------------- 확인버튼 활성화/비활성화 -------------
   let submitAvailable = true;
@@ -83,6 +86,7 @@ export function FindId() {
           description: "인증번호 확인되었습니다.",
           status: "success",
         });
+        setUserId(response.data.id);
       })
       .catch((error) => {
         if (error.response.status === 401) {
@@ -109,10 +113,15 @@ export function FindId() {
         userPhoneNumber,
       })
       .then(() => {
-        navigate("/findIdView");
+        // navigate("/findIdView");
+        onOpen();
       })
       .catch((error) => {
-        if (error.response.status === 401 || error.response.status === 403) {
+        if (
+          error.response.status === 401 ||
+          error.response.status === 403 ||
+          error.response.status === 400
+        ) {
           toast({
             description: "회원정보가 없습니다.",
             status: "warning",
@@ -128,6 +137,8 @@ export function FindId() {
         setIsSubmitting(false);
       });
   }
+
+  function handleFindId() {}
 
   return (
     <Center m={20}>
@@ -206,6 +217,33 @@ export function FindId() {
             확인
           </Button>
         </CardFooter>
+
+        {/* 아이디 알림 모달 */}
+        <Modal isOpen={isOpen} onClose={onClose}>
+          <ModalOverlay />
+          <ModalContent>
+            <ModalHeader>아이디 확인</ModalHeader>
+            <ModalCloseButton />
+            <ModalBody>당신의 아이디는 {userId} 입니다.</ModalBody>
+
+            <ModalFooter>
+              <Button
+                colorScheme="purple"
+                mr={3}
+                onClick={() => navigate("/findPw")}
+              >
+                비밀번호 찾기
+              </Button>
+              <Button
+                isDisabled={isSubmitting}
+                onClick={() => navigate("/login")}
+                colorScheme="red"
+              >
+                로그인
+              </Button>
+            </ModalFooter>
+          </ModalContent>
+        </Modal>
       </Card>
     </Center>
   );

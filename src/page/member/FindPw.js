@@ -210,12 +210,14 @@ export function FindPw() {
 
         <CardFooter>
           <Button
+            mr={2}
             isDisabled={!submitAvailable || isSubmitting}
             colorScheme="blue"
             onClick={handleSubmit}
           >
             확인
           </Button>
+          <Button onClick={() => navigate("/login")}>닫기</Button>
         </CardFooter>
       </Card>
     </Center>

@@ -128,6 +128,7 @@ export function UserLogin() {
                     cursor: "pointer",
                   }}
                   src="https://image.hanatour.com/usr/static/img2/mobile/com/btn_naver_192x192.png"
+                  onClick={() => navigate("/NaverLogin")}
                 />
               </Flex>
             </Center>

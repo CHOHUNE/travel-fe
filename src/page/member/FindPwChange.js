@@ -8,6 +8,7 @@ import {
   Center,
   Flex,
   FormControl,
+  FormErrorMessage,
   FormLabel,
   Heading,
   Input,
@@ -26,13 +27,20 @@ export function FindPwChange() {
   const toast = useToast();
   const navigate = useNavigate();
 
-  // useEffect(() => {
-  //   axios.get("/api/member?" + params.toString()).then((response) => {
-  //     setUserId(response.data.userId);
-  //   });
-  // }, []);
+  // ------------- 연속 클릭 방지 -------------
+  const [isSubmitting, setIsSubmitting] = useState(false);
+
+  // ------------- 수정 활성화/비활성화 -------------
+  let submitAvailable = true;
+
+  // ------------- 패스워드 일치하지 않으면 가입버튼 비활성화 -------------
+  if (userPassword !== userPasswordCheck) {
+    submitAvailable = false;
+  }
 
   function handleSubmit() {
+    setIsSubmitting(true);
+
     axios
       .put("/api/member/findPwChange", {
         userPassword,
@@ -51,7 +59,10 @@ export function FindPwChange() {
           });
         }
       })
-      .finally(() => navigate("/"));
+      .finally(() => {
+        navigate("/");
+        setIsSubmitting(false);
+      });
   }
 
   return (
@@ -79,7 +90,7 @@ export function FindPwChange() {
             </Flex>
           </FormControl>
 
-          <FormControl mb={3}>
+          <FormControl mb={3} isInvalid={userPassword !== userPasswordCheck}>
             <Flex>
               <FormLabel
                 w={170}
@@ -94,12 +105,17 @@ export function FindPwChange() {
                 onChange={(e) => setUserPasswordCheck(e.target.value)}
               />
             </Flex>
+            <FormErrorMessage>암호가 다릅니다.</FormErrorMessage>
           </FormControl>
         </CardBody>
 
         <CardFooter>
-          <Button colorScheme="blue" onClick={handleSubmit}>
-            확인
+          <Button
+            isDisabled={!submitAvailable || isSubmitting}
+            colorScheme="blue"
+            onClick={handleSubmit}
+          >
+            수정
           </Button>
         </CardFooter>
       </Card>
