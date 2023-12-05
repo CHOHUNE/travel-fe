@@ -5,7 +5,7 @@ import {
     useToast,
     Select,
     PopoverTrigger, Popover, PopoverCloseButton, PopoverContent, PopoverArrow, PopoverHeader, PopoverBody,
-    Portal, IconButton, Container, SimpleGrid, Badge, Center,
+    Portal, IconButton, SimpleGrid, Badge, Center,
 } from '@chakra-ui/react';
 import {useNavigate, useParams} from 'react-router-dom';
 import axios from 'axios';
@@ -46,11 +46,54 @@ export function Hotel() {
     // 위시리스트 토글
     const [wishlist, setWishlist] = useState([])
     const [hotelItem, setHotelItem] = useState('')
+
+    function handleRemoveFromWishlist(hotelId) {
+        axios.delete(`/api/wishlist/${hotelId}`)
+            .then((response) => {
+                toast({
+                    description: "위시 리스트에 제거되었습니다.",
+                    status: 'success'
+                })
+            })
+            .catch((error) => {
+                toast({
+                    description: "위시리스트 삭제 중 에러 발생",
+                    status: 'error'
+                })
+            })
+
+    }
+
+
+    const handleSaveToWishlist = (hotelId) => {
+        axios.post('/api/wishlist', {hotelId})
+            .then((response) => {
+                toast({
+                    description: '위시리시트에 추가 되었습니다.',
+                    status: 'success'
+                })
+            })
+            .catch((error) => {
+                toast({
+                    description: "위시리스트에 저장 중 에러 발생",
+                    status: "error"
+                })
+            })
+
+    };
+
+
     const toggleWishlist = (hotelId) => {
         setWishlist((prev) => {
-            return prev.includes(hotelId)
-                ? prev.filter((id) => id !== hotelId)
-                : [...prev, hotelId];
+            const isAlreadyInWishlist = prev.includes(hotelId);
+
+            if (isAlreadyInWishlist) {
+                handleRemoveFromWishlist(hotelId);
+                return prev.filter((id) => id !== hotelId);
+            } else {
+                handleSaveToWishlist(hotelId);
+                return [...prev, hotelId];
+            }
         });
     };
 
@@ -73,7 +116,6 @@ export function Hotel() {
             setCount((prevCount) => prevCount - 1)
         }
     }
-
 
 
     // 객실, 인원, 체크인, 체크아웃 팝오버 컴포넌트
@@ -211,17 +253,18 @@ export function Hotel() {
 
                         <Box maxW='sm' borderWidth='1px' borderRadius='lg' overflow='hidden'>
                             <Box position='relative'>
-                                <Image src={'https://bit.ly/2Z4KKcF'} alt={hotelItem.name} />
+                                {hotel.mainImg && <Image src={hotel.mainImg} alt={hotelItem.name}/>}
+
                                 <Box
                                     position='absolute'
                                     top='2'
                                     right='2'
-                                    onClick={() => toggleWishlist(hotelItem.id)}
+                                    onClick={() => toggleWishlist(hotel.hid)}
                                     cursor='pointer'
                                 >
                                     <FontAwesomeIcon
                                         icon={faHeart}
-                                        color={wishlist.includes(hotelItem.id) ? 'red' : 'gray'}
+                                        color={wishlist.includes(hotel.hid) ? 'red' : 'gray'}
                                         size={'2xl'}
                                     />
                                 </Box>
