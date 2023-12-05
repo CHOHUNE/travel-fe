@@ -24,8 +24,8 @@ export function TransPortWrite() {
   const [transStartDay, setTransStartDay] = useState(null);
   const [transTitle, setTransTitle] = useState(null);
   const [transPrice, setTransPrice] = useState(null);
-  const [transSubImage, setTransSubImage] = useState(null);
   const [transContent, setTransContent] = useState(null);
+  const [transContentImages, setTransContentImages] = useState(null);
 
   /* --------------------------------------- 출발지 도착지 경로 컬럼 추가 연습중 --------------------------------------- */
 
@@ -49,6 +49,7 @@ export function TransPortWrite() {
         transTitle,
         transPrice,
         transContent,
+        transContentImages,
       })
       .then(() => {
         toast({
@@ -205,10 +206,16 @@ export function TransPortWrite() {
             </Th>
             <Td border={"1px solid gray"}>
               <Input
-                type={"file"}
-                value={transSubImage}
-                onChange={(e) => setTransSubImage(e.target.value)}
+                type="file"
+                accept="image/*"
+                multiple
+                onChange={(e) => setTransContentImages(e.target.files)}
               />
+              <FormControl>
+                <FormHelperText>
+                  한 개 파일은 1MB 이내, 총 용량은 10MB 이내로 첨부하세요.
+                </FormHelperText>
+              </FormControl>
             </Td>
           </Tr>
           <Tr>
