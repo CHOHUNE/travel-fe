@@ -127,9 +127,17 @@ export function TransPortView() {
             </CardBody>
           </Card>
         </Flex>
-        <Box w={"100%"} h={"500px"} bg={"#d9d9d9"} mt={10} mb={20}>
+        <Box w={"100%"} bg={"#d9d9d9"} mt={10} mb={20}>
           상품 상세 이미지 및, 설명
-          <Box> 상품이미지들</Box>
+          {trans.contentImages != null ? (
+            <>
+              {trans.contentImages.map((file) => (
+                <Image src={file.url} key={file.id} />
+              ))}
+            </>
+          ) : (
+            <Box>빈값</Box>
+          )}
           <Box> {trans.transContent}</Box>
         </Box>
       </Box>
