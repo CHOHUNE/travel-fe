@@ -19,8 +19,12 @@ export function HotelView() {
             })
         }, []);
 
-    // 삭제
 
+
+
+
+
+    // 삭제
     function handleHotelDelete(){
         axios
             .delete("/api/hotel/delete/"+id)

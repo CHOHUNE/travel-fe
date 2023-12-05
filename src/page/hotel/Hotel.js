@@ -11,6 +11,8 @@ import {useNavigate, useParams} from 'react-router-dom';
 import axios from 'axios';
 import {AddIcon, MinusIcon, StarIcon} from "@chakra-ui/icons";
 import App from "./App";
+import {faHeart} from "@fortawesome/free-solid-svg-icons";
+import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 
 export function Hotel() {
 
@@ -41,7 +43,18 @@ export function Hotel() {
     const indexOfFirstHotel = indexOfLastHotel - hotelPerPage;
     const currentHotels = hotel.slice(indexOfFirstHotel, indexOfLastHotel);
 
-    // 페이지 번호 클릭 시
+    // 위시리스트 토글
+    const [wishlist, setWishlist] = useState([])
+    const [hotelItem, setHotelItem] = useState('')
+    const toggleWishlist = (hotelId) => {
+        setWishlist((prev) => {
+            return prev.includes(hotelId)
+                ? prev.filter((id) => id !== hotelId)
+                : [...prev, hotelId];
+        });
+    };
+
+    // 페이지 번호 클릭
     const handleClick = (pageNumber) => {
         setCurrentPage(pageNumber);
     };
@@ -52,7 +65,6 @@ export function Hotel() {
         pageNumbers.push(i);
     }
 
-
     const increaseCount = () => {
         setCount((prevCount) => prevCount + 1)
     }
@@ -61,6 +73,7 @@ export function Hotel() {
             setCount((prevCount) => prevCount - 1)
         }
     }
+
 
 
     // 객실, 인원, 체크인, 체크아웃 팝오버 컴포넌트
@@ -81,17 +94,6 @@ export function Hotel() {
             </Popover>
         );
     };
-
-    // 체크인,체크아웃 핸들러
-    // const handleDateChange = (date, type) => {
-    //     if (type === 'checkin') {
-    //         setCheckInDate(date)
-    //     } else if (type === 'checkout') {
-    //         setCheckOutDate(date);
-    //     }
-    //     setShowDatePicker(false)
-    // }
-
 
     useEffect(() => {
         axios
@@ -208,10 +210,25 @@ export function Hotel() {
                     {currentHotels.map((hotel) => (
 
                         <Box maxW='sm' borderWidth='1px' borderRadius='lg' overflow='hidden'>
-                            <Image src={'https://bit.ly/2Z4KKcF'} alt={hotel.name}/>
+                            <Box position='relative'>
+                                <Image src={'https://bit.ly/2Z4KKcF'} alt={hotelItem.name} />
+                                <Box
+                                    position='absolute'
+                                    top='2'
+                                    right='2'
+                                    onClick={() => toggleWishlist(hotelItem.id)}
+                                    cursor='pointer'
+                                >
+                                    <FontAwesomeIcon
+                                        icon={faHeart}
+                                        color={wishlist.includes(hotelItem.id) ? 'red' : 'gray'}
+                                        size={'2xl'}
+                                    />
+                                </Box>
+                            </Box>
 
                             <Box p='6'>
-                                <Box display='flㅈex' alignItems='baseline'>
+                                <Box display='flex' alignItems='baseline'>
                                     <Badge borderRadius='full' px='2' colorScheme='teal'>
                                         New
                                     </Badge>
@@ -294,7 +311,6 @@ export function Hotel() {
                     ))}
                 </Box>
             </Center>
-
         </Box>
     );
 }

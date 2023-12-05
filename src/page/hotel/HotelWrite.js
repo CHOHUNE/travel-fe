@@ -80,6 +80,7 @@ export function HotelWrite() {
                     description: " 호텔 상품 등록이 실패 하였습니다.",
                     status: "error"
                 })
+
             })
             .finally(() => {
                 navigate(-1);
