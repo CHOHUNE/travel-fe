@@ -5,7 +5,10 @@ import {
   Card,
   CardBody,
   CardHeader,
+  Center,
   Flex,
+  FormControl,
+  FormLabel,
   Image,
   Input,
   Modal,
@@ -22,7 +25,10 @@ import {
 import axios from "axios";
 import { useContext, useEffect, useState } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faMagnifyingGlass } from "@fortawesome/free-solid-svg-icons";
+import {
+  faAnglesRight,
+  faMagnifyingGlass,
+} from "@fortawesome/free-solid-svg-icons";
 import { LoginContext } from "../../component/LoginProvider";
 
 export function TransPortList() {
@@ -94,8 +100,8 @@ export function TransPortList() {
           textAlign={"center"}
           fontSize={"2rem"}
         >
-          {params.get("type") === "bus" && <Box>버스 게시글 목록</Box>}
-          {params.get("type") === "air" && <Box>항공 게시글 목록</Box>}
+          {params.get("type") === "bus" && <Box>🚎 국내 버스 여행</Box>}
+          {params.get("type") === "air" && <Box>🛫 국내 항공 여행</Box>}
         </Box>
         {/*{isAdmin() && (*/}
         <Box>
@@ -120,17 +126,48 @@ export function TransPortList() {
                 onClick={() => navigate("/transport/" + transport.tid)}
                 key={transport.tid}
               >
-                <CardHeader>
-                  <Box w={"80%"} ml={"10%"}>
-                    <Image src={transport.url} />
-                  </Box>
-                  {transport.tid}
-                  <br />
-                  제목 : {transport.transTitle}
+                <CardHeader mb={0} pb={0}>
+                  <Center>
+                    <Box w={"90%"}>
+                      <Image src={transport.url} />
+                    </Box>
+                  </Center>
                 </CardHeader>
-                <CardBody>
-                  가격 : {transport.transPrice} 원<br />
-                  출발일 : {transport.transStartDay}
+                <CardBody mt={2} pt={0}>
+                  <Center>
+                    <Box>
+                      <Box textColor={"black"} fontWeight={"bold"}>
+                        [{transport.transStartLocation}] &nbsp;
+                        <FontAwesomeIcon icon={faAnglesRight} />
+                        &nbsp; [{transport.transArriveLocation}] &nbsp;{" "}
+                        {transport.transTitle}
+                      </Box>
+                      <FormControl>
+                        <Flex>
+                          <FormLabel
+                            fontSize={"1.1rem"}
+                            textColor={"#509896"}
+                            fontWeight={"900"}
+                          >
+                            가격 :
+                          </FormLabel>
+                          <Box
+                            fontSize={"1.1rem"}
+                            textColor={"#509896"}
+                            fontWeight={"900"}
+                          >
+                            {transport.transPrice}원
+                          </Box>
+                        </Flex>
+                      </FormControl>
+                      <FormControl>
+                        <Flex>
+                          <FormLabel>출발일 : </FormLabel>{" "}
+                          {transport.transStartDay}
+                        </Flex>
+                      </FormControl>
+                    </Box>
+                  </Center>
                 </CardBody>
               </Card>
             ),

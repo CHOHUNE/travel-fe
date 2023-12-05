@@ -1,16 +1,22 @@
 import {
+  background,
   Box,
   Button,
   Card,
   CardBody,
   CardHeader,
+  Center,
   Flex,
+  FormControl,
+  FormLabel,
   Image,
   Input,
 } from "@chakra-ui/react";
 import { useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
 import axios from "axios";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faAnglesRight } from "@fortawesome/free-solid-svg-icons";
 
 export function TransPort() {
   const navigate = useNavigate();
@@ -43,16 +49,20 @@ export function TransPort() {
         </Flex>
       </Box>
       <Box ml={"12.5%"} mt={"100px"}>
-        <Input
+        <Card
           w={"400px"}
           h={"50px"}
-          readOnly
-          value={"버스 카테고리 게시글"}
           textAlign={"center"}
           mb={10}
           onClick={() => navigate("list?type=bus")}
-          _hover={{ cursor: "pointer", color: "green" }}
-        />
+          _hover={{ cursor: "pointer", color: "#509896" }}
+          lineHeight={"50px"}
+        >
+          <Box fontWeight={900} fontSize={"1.2rem"}>
+            버스 카테고리 게시글
+          </Box>
+        </Card>
+
         <Flex>
           {listBus.map(
             (bus) =>
@@ -60,21 +70,55 @@ export function TransPort() {
                 <Card
                   key={bus.tid}
                   w={"275px"}
-                  h={"275px"}
-                  bg={"#eeecec"}
                   mr={7}
-                  _hover={{ cursor: "pointer" }}
+                  _hover={{
+                    cursor: "pointer",
+                    backgroundColor: "#eeecec",
+                    transition: "background 0.5s ease-in-out",
+                  }}
                   onClick={() => navigate("/transport/" + bus.tid)}
                 >
-                  <CardHeader>
-                    <Box w={"80%"} ml={"10%"}>
-                      <Image src={bus.url} />
-                    </Box>
-                    <Box>{bus.transTitle}</Box>
+                  <CardHeader mb={0} pb={0}>
+                    <Center>
+                      <Box w={"90%"}>
+                        <Image src={bus.url} />
+                      </Box>
+                    </Center>
                   </CardHeader>
-                  <CardBody>
-                    <Box>가격 : {bus.transPrice}원</Box>
-                    <Box>출발일 : {bus.transStartDay}</Box>
+                  <CardBody mt={2} pt={0}>
+                    <Center>
+                      <Box>
+                        <Box textColor={"black"} fontWeight={"bold"}>
+                          [{bus.transStartLocation}] &nbsp;
+                          <FontAwesomeIcon icon={faAnglesRight} />
+                          &nbsp; [{bus.transArriveLocation}] &nbsp;{" "}
+                          {bus.transTitle}
+                        </Box>
+                        <FormControl>
+                          <Flex>
+                            <FormLabel
+                              fontSize={"1.1rem"}
+                              textColor={"#509896"}
+                              fontWeight={"900"}
+                            >
+                              가격 :
+                            </FormLabel>
+                            <Box
+                              fontSize={"1.1rem"}
+                              textColor={"#509896"}
+                              fontWeight={"900"}
+                            >
+                              {bus.transPrice}원
+                            </Box>
+                          </Flex>
+                        </FormControl>
+                        <FormControl>
+                          <Flex>
+                            <FormLabel>출발일 : </FormLabel> {bus.transStartDay}
+                          </Flex>
+                        </FormControl>
+                      </Box>
+                    </Center>
                   </CardBody>
                 </Card>
               ),
@@ -99,21 +143,55 @@ export function TransPort() {
                 <Card
                   key={air.tid}
                   w={"275px"}
-                  h={"275px"}
-                  bg={"#eeecec"}
                   mr={7}
-                  _hover={{ cursor: "pointer" }}
+                  _hover={{
+                    cursor: "pointer",
+                    backgroundColor: "#eeecec",
+                    transition: "background 0.5s ease-in-out",
+                  }}
                   onClick={() => navigate("/transport/" + air.tid)}
                 >
-                  <CardHeader>
-                    <Box w={"80%"} ml={"10%"}>
-                      <Image src={air.url} />
-                    </Box>
-                    <Box>{air.transTitle}</Box>
+                  <CardHeader mb={0} pb={0}>
+                    <Center>
+                      <Box w={"90%"}>
+                        <Image src={air.url} />
+                      </Box>
+                    </Center>
                   </CardHeader>
-                  <CardBody>
-                    <Box>가격 : {air.transPrice}원</Box>
-                    <Box>출발일 : {air.transStartDay}</Box>
+                  <CardBody mt={2} pt={0}>
+                    <Center>
+                      <Box>
+                        <Box textColor={"black"} fontWeight={"bold"}>
+                          [{air.transStartLocation}] &nbsp;
+                          <FontAwesomeIcon icon={faAnglesRight} />
+                          &nbsp; [{air.transArriveLocation}] &nbsp;{" "}
+                          {air.transTitle}
+                        </Box>
+                        <FormControl>
+                          <Flex>
+                            <FormLabel
+                              fontSize={"1.1rem"}
+                              textColor={"#509896"}
+                              fontWeight={"900"}
+                            >
+                              가격 :
+                            </FormLabel>
+                            <Box
+                              fontSize={"1.1rem"}
+                              textColor={"#509896"}
+                              fontWeight={"900"}
+                            >
+                              {air.transPrice}원
+                            </Box>
+                          </Flex>
+                        </FormControl>
+                        <FormControl>
+                          <Flex>
+                            <FormLabel>출발일 : </FormLabel> {air.transStartDay}
+                          </Flex>
+                        </FormControl>
+                      </Box>
+                    </Center>
                   </CardBody>
                 </Card>
               ),
