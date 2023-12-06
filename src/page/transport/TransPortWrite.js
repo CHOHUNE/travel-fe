@@ -23,7 +23,6 @@ import "react-datepicker/dist/react-datepicker.css";
 
 export function TransPortWrite() {
   const [transMainImage, setTransMainImage] = useState("");
-  const [transStartDay, setTransStartDay] = useState("");
   const [transTitle, setTransTitle] = useState("");
   const [transPrice, setTransPrice] = useState("");
   const [transContent, setTransContent] = useState("");
@@ -42,7 +41,6 @@ export function TransPortWrite() {
       .postForm("/api/transport/add", {
         type,
         transMainImage,
-        transStartDay,
         transTitle,
         transPrice,
         transContent,
@@ -91,25 +89,7 @@ export function TransPortWrite() {
               </Box>
             </Flex>
           </FormControl>
-          <FormControl mt={2}>
-            <Flex>
-              <FormLabel
-                w={"50%"}
-                textAlign={"center"}
-                fontSize={"1.1rem"}
-                alignItems={"center"}
-              >
-                출발 일시
-              </FormLabel>
-              <Input
-                value={transStartDay}
-                placeholder="Select Date and Time"
-                size={"md"}
-                type="datetime-local"
-                onChange={(e) => setTransStartDay(e.target.value)}
-              />
-            </Flex>
-          </FormControl>
+
           <FormControl mt={2}>
             <Flex>
               <FormLabel w={"50%"} textAlign={"center"} fontSize={"1.1rem"}>
