@@ -30,7 +30,7 @@ export function TransPortEdit() {
   const [trans, updateTrans] = useImmer([]);
   const [removeMainImageId, setRemoveMainImageId] = useState([]);
   const [mainImageSubmit, setMainImageSubmit] = useState(true);
-  const [uploadMainImage, setUploadMainImage] = useState(null);
+  const [transMainImage, setTransMainImage] = useState("");
 
   const navigate = useNavigate();
 
@@ -50,63 +50,71 @@ export function TransPortEdit() {
 
   function handleSubmitTrans() {
     axios
-      .put("/api/transport/edit", {
-        trans,
+      .putForm("/api/transport/edit", {
+        transStartDay: trans.transStartDay,
+        transTitle: trans.transTitle,
+        transPrice: trans.transPrice,
+        transContent: trans.transContent,
+        transStartLocation: trans.transStartLocation,
+        transArriveLocation: trans.transArriveLocation,
+        tId: trans.tid,
+        removeMainImageId,
+        transMainImage,
       })
       .then(() => {
         toast({
           description: id + " 번 운송 상품 이 수정 되었습니다.",
           status: "success",
         });
+        navigate(-1);
       })
       .catch(() => {
         toast({
           description: "운송 상품 수정중 문제가 발생하였습니다.",
           status: "error",
         });
-      })
-      .then(() => navigate(-1));
+      });
   }
 
   // 제목 수정 기능
   function handleTitleChange(e) {
     updateTrans((draft) => {
-      draft.transTitle = e.target.value();
+      draft.transTitle = e.target.value;
     });
   }
 
   // 가격 수정 기능
   function handlePriceChange(e) {
     updateTrans((draft) => {
-      draft.transPrice = e.target.value();
+      draft.transPrice = e.target.value;
     });
   }
 
   // 출발일 수정 기능
   function handleStartDayChange(e) {
     updateTrans((draft) => {
-      draft.transStartDay = e.target.value();
+      draft.transStartDay = e.target.value;
     });
   }
 
   // 출발 위치 수정 기능
   function handleStartLocationChange(e) {
     updateTrans((draft) => {
-      draft.transStartLocation = e.target.value();
+      draft.transStartLocation = e.target.value;
     });
   }
 
   // 도착 위치 수정 기능
   function handleArriveLocationChange(e) {
     updateTrans((draft) => {
-      draft.transArriveLocation = e.target.value();
+      draft.transArriveLocation = e.target.value;
     });
   }
 
   function handleRemoveMainImageSwitch(e) {
     if (e.target.checked) {
       setMainImageSubmit(false);
-      setRemoveMainImageId([...removeMainImageId, e.target.value]);
+      setRemoveMainImageId(e.target.value);
     } else {
       setMainImageSubmit(true);
       setRemoveMainImageId(
@@ -115,9 +123,10 @@ export function TransPortEdit() {
     }
   }
 
+  // 상품 설명 텍스트 수정
   function handleContentChange(e) {
     updateTrans((draft) => {
-      draft.transContent = e.target.value();
+      draft.transContent = e.target.value;
     });
   }
 
@@ -162,16 +171,19 @@ export function TransPortEdit() {
             </Flex>
           </FormControl>
           <FormControl mt={4}>
-            {mainImageSubmit != true ? (
+            {mainImageSubmit !== true ? (
               <Flex>
                 <FormLabel w={"33%"} textAlign={"center"} lineHeight={"65px"}>
                   수정할 메인 이미지
                 </FormLabel>
-                <Box disabled={mainImageSubmit}>
+                <Box>
                   <Input
                     type="file"
                     accept="image/*"
-                    onChange={(e) => setUploadMainImage(e.target.files)}
+                    onChange={(e) => {
+                      console.log(e.target.files[0]);
+                      setTransMainImage(e.target.files[0]);
+                    }}
                   />
                   <FormHelperText>
                     파일 크기는 1MB 이하로 첨부하세요
