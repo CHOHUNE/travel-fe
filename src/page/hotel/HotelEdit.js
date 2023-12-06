@@ -1,5 +1,7 @@
+
+import React, { useEffect, useState } from "react";
+import axios from "axios";
 import {
-    // ... (다른 import들)
     Input,
     Textarea,
     Select,
@@ -8,97 +10,80 @@ import {
     NumberInputStepper,
     NumberIncrementStepper,
     NumberDecrementStepper,
-    Button, FormLabel, Center, Card, CardHeader, Heading, CardBody, FormControl, Flex, useToast,
-    // ... (다른 Chakra UI 컴포넌트들이 필요하다면 추가하세요)
+    Button,
+    FormLabel,
+    Center,
+    Card,
+    CardHeader,
+    Heading,
+    CardBody,
+    FormControl,
+    Flex,
+    useToast,
 } from "@chakra-ui/react";
-import React, {useEffect, useState} from "react";
-import axios from "axios";
-import {useNavigate, useParams} from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 
 export function HotelEdit() {
+    const [name, setName] = useState("");
+    const [location, setLocation] = useState("");
+    const [description, setDescription] = useState("");
+    const [mainImg, setMainImg] = useState(null);
+    const [numberOfBed, setNumberOfBed] = useState("");
+    const [roomType, setRoomType] = useState("스탠다드");
+    const [subImg1, setSubImg1] = useState(null);
+    const [subImg2, setSubImg2] = useState(null);
+    const [mapImg, setMapImg] = useState(null);
+    const [numberOfBedRooms, setNumberOfBedRooms] = useState("");
+    const [totalPrice, setTotalPrice] = useState("");
 
-    const [name, setName] = useState('');
-    const [location, setLocation] = useState('');
-    const [description, setDescription] = useState('');
-    const [mainImg, setMainImg] = useState(); // 파일 업로드를 다룰 때 사용
-    const [numberOfBed, setNumberOfBed] = useState('');
-    const [roomType, setRoomType] = useState("스탠다드"); // 기본값으로 설정
-    const [subImg1, setSubImg1] = useState(); // 부가 이미지 1 파일 업로드를 다룰 때 사용
-    const [subImg2, setSubImg2] = useState(); // 부가 이미지 2 파일 업로드를 다룰 때 사용
-    const [mapImg, setMapImg] = useState(); // 지도 이미지 파일 업로드를 다룰 때 사용
-    const [numberOfBedRooms, setNumberOfBedRooms] = useState('');
-    const [totalPrice, setTotalPrice] = useState('');
+    const [hotel, setHotel] = useState([]);
+    const { id } = useParams();
 
-    const [hotel, setHotel] = useState([])
-    const {id} = useParams()
-
-
-    const toast = useToast()
-    const navigate = useNavigate()
-
+    const toast = useToast();
+    const navigate = useNavigate();
 
     useEffect(() => {
-        axios
-            .get('/api/hotel/edit/id/' + id)
-            .then((response) => {
-                setHotel(response.data)
-                setName(response.data.name)
-                setLocation(response.data.location)
-                setDescription(response.data.description)
-                setMainImg(response.data.mainImg)
-                setNumberOfBed(response.data.numberOfBed)
-                setRoomType(response.data.roomType)
-                setSubImg1(response.data.subImg1)
-                setSubImg2(response.data.subImg2)
-                setMapImg(response.data.mainImg)
-                setTotalPrice(response.data.totalPrice)
-                setNumberOfBedRooms(response.data.numberOfBedRooms)
+        axios.get(`/api/hotel/edit/id/${id}`).then((response) => {
+            setHotel(response.data);
+            setName(response.data.name);
+            setDescription(response.data.description);
+            setMainImg(response.data.mainImg);
+            setNumberOfBed(response.data.numberOfBed);
+            setRoomType(response.data.roomType);
+            setSubImg1(response.data.subImg1);
+            setSubImg2(response.data.subImg2);
+            setMapImg(response.data.mapImg);
+            setTotalPrice(response.data.totalPrice);
+            setNumberOfBedRooms(response.data.numberOfBedRooms);
+        });
+    }, []);
 
-            })
-
-    }, [])
-
-    // 수정 요청
     function handleChange() {
-        axios
-            .put("/api/hotel/edit", {
-                hid: id,
-                name,
-                location,
-                description,
-                mainImg,
-                numberOfBed,
-                roomType,
-                subImg1,
-                subImg2,
-                mapImg,
-                totalPrice,
-                numberOfBedRooms
+        const formData = new FormData();
+        formData.append("mainImg", mainImg);
+        formData.append("subImg1", subImg1);
+        formData.append("subImg2", subImg2);
+        formData.append("mapImg", mapImg);
+        formData.append("hotel", JSON.stringify(hotel));
 
+        axios
+            .put("/api/hotel/edit", formData, {
+                headers: { "Content-Type": "multipart/form-data" },
             })
             .then(() => {
                 toast({
-                    hId: id,
-                    description: id+"번"+ name + " 상품 수정 완료 되었습니다",
-                    status: "success"
+                    description: `${id}번 ${name} 상품 수정 완료되었습니다`,
+                    status: "success",
                 });
             })
             .catch(() => {
                 toast({
-                    description: id + "호텔 상품 수정 중 문제가 발생 하였습니다",
-                    status: "error"
-                })
+                    description: `${id}호텔 상품 수정 중 문제가 발생했습니다`,
+                    status: "error",
+                });
             })
-            .then(
-                ()=>navigate(-1)
-            )
+            .then(() => navigate(-1));
     }
-
-    // 파일 업로드를 처리하는 함수
-    const handleFileUpload = (event, setterFunction) => {
-        const file = event.target.files[0];
-        setterFunction(file);
-    };
 
     // 확인 버튼 클릭 시 처리하는 함수
 
@@ -214,47 +199,74 @@ export function HotelEdit() {
                         </Flex>
 
                         <Flex>
-                            <FormLabel my={'15px'} w={100} textAlign='center' display='flex' alignItems={'center'}> 대표
-                                이미지 </FormLabel>
+                            <FormLabel
+                                my={"15px"}
+                                w={100}
+                                textAlign="center"
+                                display="flex"
+                                alignItems={"center"}
+                            >
+                                대표 이미지
+                            </FormLabel>
                             <Input
                                 type="file"
                                 accept="image/*"
-                                onChange={(e) => handleFileUpload(e, setMainImg)}
-                            />
-                        </Flex>
-
-                        <Flex>
-                            <FormLabel my={'15px'} w={100} textAlign='center' display='flex' alignItems={'center'}> 부가
-                                이미지
-                                1 </FormLabel>
-                            <Input
-                                type="file"
-                                accept="image/*"
-                                onChange={(e) => handleFileUpload(e, setSubImg1)}
+                                onChange={(e) => setMainImg(e.target.files[0])}
                             />
                         </Flex>
                         <Flex>
-                            <FormLabel my={'15px'} w={100} textAlign='center' display='flex' alignItems={'center'}> 부가
-                                이미지
-                                2 </FormLabel>
+                            <FormLabel
+                                my={"15px"}
+                                w={100}
+                                textAlign="center"
+                                display="flex"
+                                alignItems={"center"}
+                            >
+                                부가 이미지 1
+                            </FormLabel>
                             <Input
                                 type="file"
                                 accept="image/*"
-                                onChange={(e) => handleFileUpload(e, setSubImg2)}
+                                onChange={(e) => setSubImg1(e.target.files[0])}
                             />
                         </Flex>
                         <Flex>
-                            <FormLabel my={'15px'} w={100} textAlign='center' display='flex' alignItems={'center'}> 지도
-                                이미지 </FormLabel>
+                            <FormLabel
+                                my={"15px"}
+                                w={100}
+                                textAlign="center"
+                                display="flex"
+                                alignItems={"center"}
+                            >
+                                부가 이미지 2
+                            </FormLabel>
                             <Input
                                 type="file"
                                 accept="image/*"
-                                onChange={(e) => handleFileUpload(e, setMapImg)}
+                                onChange={(e) => setSubImg2(e.target.files[0])}
                             />
                         </Flex>
-
-                        <Flex justifyContent={'flex-end'} mt={'30px'}>
-                            <Button colorScheme="teal" onClick={handleChange}>확인</Button>
+                        <Flex>
+                            <FormLabel
+                                my={"15px"}
+                                w={100}
+                                textAlign="center"
+                                display="flex"
+                                alignItems={"center"}
+                            >
+                                지도 이미지
+                            </FormLabel>
+                            <Input
+                                type="file"
+                                accept="image/*"
+                                onChange={(e) => setMapImg(e.target.files[0])}
+                            />
+                        </Flex>
+                        {/* 위에서 변경이 필요한 부분에 대해 적용이 되어야 합니다 */}
+                        <Flex justifyContent={"flex-end"} mt={"30px"}>
+                            <Button colorScheme="teal" onClick={handleChange}>
+                                확인
+                            </Button>
                         </Flex>
                     </FormControl>
                 </CardBody>

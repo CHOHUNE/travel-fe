@@ -24,11 +24,6 @@ export function Hotel() {
     // 호텔
     const [hotel, setHotel] = useState([]);
 
-    // 체크인,체크아웃 데이트 피커
-    // const [checkInDate, setCheckInDate] = useState(null)
-    // const [checkOutDate, setCheckOutDate] = useState(null)
-    // const [showDatePicker, setShowDatePicker] = useState(false)
-
     const [selectedRoom, setSelectedRoom] = useState("")
 
     // 인원 카운트
@@ -64,7 +59,6 @@ export function Hotel() {
 
     }
 
-
     const handleSaveToWishlist = (hotelId) => {
         axios.post('/api/wishlist', {hotelId})
             .then((response) => {
@@ -81,7 +75,6 @@ export function Hotel() {
             })
 
     };
-
 
     const toggleWishlist = (hotelId) => {
         setWishlist((prev) => {
@@ -252,8 +245,8 @@ export function Hotel() {
                     {currentHotels.map((hotel) => (
 
                         <Box maxW='sm' borderWidth='1px' borderRadius='lg' overflow='hidden'>
-                            <Box position='relative'>
-                                {hotel.mainImg && <Image src={hotel.mainImg} alt={hotelItem.name}/>}
+                            <Box position='relative' >
+                                <Image src={hotel.mainImgUrl} alt={hotelItem.name}/>
 
                                 <Box
                                     position='absolute'

@@ -19,11 +19,6 @@ export function HotelView() {
             })
         }, []);
 
-
-
-
-
-
     // 삭제
     function handleHotelDelete(){
         axios
