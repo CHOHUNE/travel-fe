@@ -4,6 +4,8 @@ import {
   Button,
   Card,
   Center,
+  ChakraProvider,
+  extendTheme,
   Heading,
   Spinner,
   Table,
@@ -11,6 +13,7 @@ import {
   Td,
   Th,
   Thead,
+  theme,
   Tr,
 } from "@chakra-ui/react";
 import axios from "axios";
@@ -54,6 +57,16 @@ export function UserList() {
   const navigate = useNavigate();
   const location = useLocation();
 
+  const theme = extendTheme({
+    styles: {
+      global: {
+        th: {
+          textAlign: "center",
+        },
+      },
+    },
+  });
+
   useEffect(() => {
     axios.get("/api/member/list?" + params.toString()).then((response) => {
       setList(response.data.memberList);
@@ -72,44 +85,46 @@ export function UserList() {
   }
 
   return (
-    <Center m={20}>
-      <Card w={"80%"}>
-        <Heading textAlign={"center"} m={10}>
-          회원 목록
-        </Heading>
-        <Table>
-          <Thead>
-            <Tr>
-              <Th>id</Th>
-              <Th>name</Th>
-              <Th>password</Th>
-              <Th>email</Th>
-              <Th>PhoneNumber</Th>
-              <Th>가입일시</Th>
-            </Tr>
-          </Thead>
-          <Tbody>
-            {list.map((member) => (
-              <Tr
-                _hover={{ cursor: "pointer" }}
-                onClick={() => handleTableRowClick(member.userId)}
-                key={member.userId}
-              >
-                <Td>{member.userId}</Td>
-                <Td>{member.userName}</Td>
-                <Td>{member.userPassword}</Td>
-                <Td>{member.userEmail}</Td>
-                <Td>{member.userPhoneNumber}</Td>
-                <Td>{member.ago}</Td>
+    <ChakraProvider theme={theme}>
+      <Center m={20}>
+        <Card w={"80%"}>
+          <Heading textAlign={"center"} m={10}>
+            회원 목록
+          </Heading>
+          <Table>
+            <Thead>
+              <Tr>
+                <Th>id</Th>
+                <Th>name</Th>
+                <Th>password</Th>
+                <Th>email</Th>
+                <Th>PhoneNumber</Th>
+                <Th>가입일시</Th>
               </Tr>
-            ))}
-          </Tbody>
-        </Table>
+            </Thead>
+            <Tbody>
+              {list.map((member) => (
+                <Tr
+                  _hover={{ cursor: "pointer" }}
+                  onClick={() => handleTableRowClick(member.userId)}
+                  key={member.userId}
+                >
+                  <Td>{member.userId}</Td>
+                  <Td>{member.userName}</Td>
+                  <Td>{member.userPassword}</Td>
+                  <Td>{member.userEmail}</Td>
+                  <Td>{member.userPhoneNumber}</Td>
+                  <Td>{member.ago}</Td>
+                </Tr>
+              ))}
+            </Tbody>
+          </Table>
 
-        <Box>
-          <Pagination pageInfo={pageInfo} />
-        </Box>
-      </Card>
-    </Center>
+          <Box>
+            <Pagination pageInfo={pageInfo} />
+          </Box>
+        </Card>
+      </Center>
+    </ChakraProvider>
   );
 }

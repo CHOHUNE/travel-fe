@@ -24,7 +24,7 @@ import { TransPortEdit } from "./page/transport/TransPortEdit";
 import { HotelWrite } from "./page/hotel/HotelWrite";
 import { UserList } from "./page/member/UserList";
 import { HotelEdit } from "./page/hotel/HotelEdit";
-import { UserView } from "./page/member/UserView";
+import { UserView } from "./page/member/MyPage/UserView";
 import { HotelPay } from "./page/hotel/HotelPay";
 import LoginProvider from "./component/LoginProvider";
 import { FindId } from "./page/member/FindId";
@@ -33,6 +33,9 @@ import { FindPwChange } from "./page/member/FindPwChange";
 import { FindIdView } from "./page/member/FindIdView";
 import React from "react";
 import { NaverLogin } from "./page/member/NaverLogin";
+import { Bucket } from "./page/member/MyPage/Bucket";
+import UserLayOut from "./page/member/layout/UserLayOut";
+import { ReservationList } from "./page/member/MyPage/ReservationList";
 
 const routes = createBrowserRouter(
   createRoutesFromElements(
@@ -57,11 +60,16 @@ const routes = createBrowserRouter(
       <Route path="signup" element={<UserSignup />} />
       <Route path="user/edit" element={<UserEdit />} />
       <Route path="user/list" element={<UserList />} />
-      <Route path="user" element={<UserView />} />
+      <Route path="user" element={<UserLayOut />}>
+        <Route index element={<UserView />} />
+        <Route path="/user/bucket" element={<Bucket />} />
+        <Route path="/user/reservationList" element={<ReservationList />} />
+      </Route>
+      <Route path="findIdView" element={<FindIdView />} />
+      <Route path="user/bucket" element={<Bucket />} />
       <Route path="findId" element={<FindId />} />
       <Route path="findPw" element={<FindPw />} />
       <Route path="findPwChange" element={<FindPwChange />} />
-      <Route path="findIdView" element={<FindIdView />} />
       <Route path="NaverLogin" element={<NaverLogin />} />
 
       {/* 호텔관련 */}
@@ -70,6 +78,8 @@ const routes = createBrowserRouter(
       <Route path="hotel/write" element={<HotelWrite />} />
       <Route path="hotel/edit/:id" element={<HotelEdit />} />
       <Route path="hotel/pay/:id" element={<HotelPay />} />
+
+      {/* 장바구니 관련 */}
     </Route>,
   ),
 );
