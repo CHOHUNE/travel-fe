@@ -23,13 +23,12 @@ import {
   useDisclosure,
 } from "@chakra-ui/react";
 import axios from "axios";
-import { useContext, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
   faAnglesRight,
   faMagnifyingGlass,
 } from "@fortawesome/free-solid-svg-icons";
-import { LoginContext } from "../../component/LoginProvider";
 
 export function TransPortList() {
   const [list, setList] = useState([]);
@@ -37,8 +36,6 @@ export function TransPortList() {
   const { isOpen, onClose, onOpen } = useDisclosure();
 
   const navigate = useNavigate();
-
-  const { isAdmin } = useContext(LoginContext);
 
   const [params] = useSearchParams();
   console.log(params.get("type"));
