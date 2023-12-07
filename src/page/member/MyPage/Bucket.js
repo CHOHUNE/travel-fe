@@ -11,13 +11,24 @@ import {
   Thead,
   Tr,
 } from "@chakra-ui/react";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import axios from "axios";
+import { useSearchParams } from "react-router-dom";
 
 export function Bucket() {
-  // useEffect(() => {
-  //   axios.get("/api/transport/bucket");
-  // }, []);
+  // 승원 수정 start ---------------------------------------
+  const [transBucket, setTransBucket] = useState(null);
+  const [params] = useSearchParams();
+  console.log(params.get("userId"));
+  useEffect(() => {
+    axios
+      .get("/api/transport/bucket/id/" + params.get("userId"))
+      .then((response) => {
+        setTransBucket(response.data);
+      });
+  }, []);
+  // 승원 수정 end ---------------------------------------
+
   //
   // useEffect(() => {
   //   axios.get("/api/hotel/bucket");
