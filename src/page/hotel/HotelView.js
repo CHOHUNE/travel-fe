@@ -51,17 +51,17 @@ export function HotelView() {
                     <Box w={"80%"} ml={"10%"} display={"flex"} gap={"10px"} >
                         <Box border={"1px solid black"} h={"420px"} w={"100%"} my={"10px"} borderRadius={'lg'}>
                             {/* 호텔 이미지1 */}
-                            <Image src={hotel.mainImg} alt={"숙소 이미지1"} w={"100%"} h={"100%"} />
+                            <Image src={hotel.mainImgUrl} alt={"숙소 이미지1"} w={"100%"} h={"100%"} />
                         </Box>
 
                         <Box w={"100%"} display={"flex"} flexDirection={"column"} gap={"10px"}>
                             <Box border={"1px solid black"} my={"10px"} h={"195px"} w={"100%"} borderRadius={'lg'}>
                                 {/* 호텔 이미지2 */}
-                                <Image src={hotel.subImg1} alt={"숙소 이미지2"} w={"100"} h={"100%"} />
+                                <Image src={hotel.subImgUrl} alt={"숙소 이미지2"} w={"100"} h={"100%"} />
                             </Box>
                             <Box border={"1px solid black"} my={"10px"} h={"195px"} w={"100%"} borderRadius={'lg'} >
                                 {/* 호텔 이미지3 */}
-                                <Image src={hotel.subImg2} alt={"숙소 이미지3"} w={"100"} h={"100%"} />
+                                <Image src={hotel.subImgUrl} alt={"숙소 이미지3"} w={"100"} h={"100%"} />
                             </Box>
                         </Box>
                     </Box>

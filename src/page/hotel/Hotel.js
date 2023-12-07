@@ -42,6 +42,7 @@ export function Hotel() {
     const [wishlist, setWishlist] = useState([])
     const [hotelItem, setHotelItem] = useState('')
 
+
     function handleRemoveFromWishlist(hotelId) {
         axios.delete(`/api/wishlist/${hotelId}`)
             .then((response) => {
@@ -60,20 +61,37 @@ export function Hotel() {
     }
 
     const handleSaveToWishlist = (hotelId) => {
-        axios.post('/api/wishlist', {hotelId})
+        // 기존 호텔 데이터 가져오기
+        axios.get(`/api/hotel/reserv/id/${hotelId}`)
             .then((response) => {
-                toast({
-                    description: '위시리시트에 추가 되었습니다.',
-                    status: 'success'
-                })
-            })
-            .catch((error) => {
-                toast({
-                    description: "위시리스트에 저장 중 에러 발생",
-                    status: "error"
-                })
-            })
+                const hotelData = response.data;
 
+                // 위시리스트에 추가
+                axios.post('/api/wishlist', {
+                    hotelId,
+                    name: hotelData.name,
+                    mainImgUrl: hotelData.mainImgUrl,
+                    location: hotelData.location
+                })
+                    .then(() => {
+                        toast({
+                            description: '위시리시트에 추가 되었습니다.',
+                            status: 'success'
+                        });
+                    })
+                    .catch(() => {
+                        toast({
+                            description: '위시리스트에 저장 중 에러 발생',
+                            status: 'error'
+                        });
+                    });
+            })
+            .catch(() => {
+                toast({
+                    description: '호텔 데이터를 가져오는 중 에러 발생',
+                    status: 'error'
+                });
+            });
     };
 
     const toggleWishlist = (hotelId) => {
