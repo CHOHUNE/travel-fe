@@ -71,7 +71,8 @@ export function Hotel() {
                     hotelId,
                     name: hotelData.name,
                     mainImgUrl: hotelData.mainImgUrl,
-                    location: hotelData.location
+                    location: hotelData.location,
+                    roomType:hotelData.roomType
                 })
                     .then(() => {
                         toast({
