@@ -29,6 +29,8 @@ export function TransPortWrite() {
   const [transContentImages, setTransContentImages] = useState("");
   const [transStartLocation, setTransStartLocation] = useState("");
   const [transArriveLocation, setTransArriveLocation] = useState("");
+  const [transAddress, setTransAddress] = useState("");
+
 
   const navigate = useNavigate();
 
@@ -47,6 +49,7 @@ export function TransPortWrite() {
         transContentImages,
         transStartLocation,
         transArriveLocation,
+        transAddress,
       })
       .then(() => {
         toast({
@@ -62,6 +65,15 @@ export function TransPortWrite() {
           status: "error",
         });
       });
+  }
+
+  // 주소 검색 버튼 클릭시 작동 기능
+  function handleAddressClick() {
+    new window.daum.Postcode({
+      oncomplete: function (data) {
+        setTransAddress(data.address);
+      },
+    }).open();
   }
 
   return (
@@ -102,7 +114,23 @@ export function TransPortWrite() {
               />
             </Flex>
           </FormControl>
-          {/* --------------------------------------- 출발지 도착지 경로 컬럼 추가 연습중 (시작) --------------------------------------- */}
+          <FormControl mt={2}>
+            <Flex>
+              <FormLabel w={"33%"} textAlign={"center"} fontSize={"1.1rem"}>
+                상품 주소
+              </FormLabel>
+              <Flex>
+                <Input
+                  w={"450px"}
+                  placeholder="상품 출발 주소"
+                  value={transAddress}
+                  onChange={(e) => setTransAddress(e.target.value)}
+                />
+                <Button onClick={handleAddressClick}>주소검색</Button>
+              </Flex>
+            </Flex>
+          </FormControl>
+          {/* --------------------------------------- 출발지 도착지 경로(시작) --------------------------------------- */}
           <FormControl mt={2}>
             <Flex>
               <FormLabel w={"50%"} textAlign={"center"} fontSize={"1.1rem"}>
@@ -237,7 +265,7 @@ export function TransPortWrite() {
               </Select>
             </Flex>
           </FormControl>
-          {/* --------------------------------------- 출발지 도착지 경로 컬럼 추가 연습중 (끝)--------------------------------------- */}
+          {/* --------------------------------------- 출발지 도착지 경로(끝)--------------------------------------- */}
           <FormControl mt={2}>
             <Flex>
               <FormLabel w={"50%"} textAlign={"center"} fontSize={"1.1rem"}>
