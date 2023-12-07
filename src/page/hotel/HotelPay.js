@@ -50,6 +50,8 @@ export function HotelPay() {
   const { id } = useParams();
   const toast = useToast();
 
+  const [member, setMember] = useState(null);
+
   useEffect(() => {
     axios
       .get(`/api/hotel/pay/${id}`)
@@ -297,6 +299,27 @@ export function HotelPay() {
               <FormLabel fontSize={"20px"} fontWeight={"bold"}>
                 이용자 정보
               </FormLabel>
+            </FormControl>
+
+            <FormControl
+              borderTop={"1px solid black"}
+              borderBottom={"1px solid black"}
+            >
+              <Flex borderBottom={"1px solid #ededed"}>
+                <FormLabel
+                  m={0}
+                  background={"#f5f6f6"}
+                  h={"60px"}
+                  w={"100px"}
+                  justifyContent="center"
+                  display={"flex"}
+                  alignItems={"center"}
+                  fontSize={"13px"}
+                >
+                  예약자명
+                </FormLabel>
+                <Input ml={5} mt={2} w={400} />
+              </Flex>
             </FormControl>
           </CardBody>
         </Card>
