@@ -157,12 +157,6 @@ export function TransPortList() {
                           </Box>
                         </Flex>
                       </FormControl>
-                      <FormControl>
-                        <Flex>
-                          <FormLabel>출발일 : </FormLabel>{" "}
-                          {transport.transStartDay}
-                        </Flex>
-                      </FormControl>
                     </Box>
                   </Center>
                 </CardBody>

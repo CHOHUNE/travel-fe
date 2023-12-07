@@ -7,26 +7,35 @@ import {
   Flex,
   FormControl,
   FormLabel,
+  Heading,
   Image,
+  Input,
   NumberDecrementStepper,
   NumberIncrementStepper,
   NumberInput,
   NumberInputField,
   NumberInputStepper,
   Spinner,
+  Tooltip,
   useToast,
 } from "@chakra-ui/react";
-import { useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import axios from "axios";
 import { useNavigate, useParams } from "react-router-dom";
+import { LoginContext } from "../../component/LoginProvider";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faHeart } from "@fortawesome/free-regular-svg-icons";
 
 export function TransPortView() {
   const [value, setValue] = useState(0);
   const [trans, setTrans] = useState("");
+  const [like, setLike] = useState(null);
 
   const navigate = useNavigate();
 
   const toast = useToast();
+
+  const { isAuthenticated, isAdmin } = useContext(LoginContext);
 
   const handleChange = (value) => setValue(value);
 
@@ -61,6 +70,24 @@ export function TransPortView() {
       });
   }
   // 운송 상품 삭제 기능 끝 ----------------------------------------------------
+
+  // 찜하기 버튼 클릭시
+  function handleLikeClick() {
+    axios
+      .post("/api/transLike", { transId: trans.tid })
+      .then(() => {
+        toast({
+          description: "찜 목록에 추가가 되었습니다.",
+          status: "success",
+        });
+      })
+      .catch(() => {
+        toast({
+          description: "좋아요 기능이 실패했습니다.",
+          status: "error",
+        });
+      });
+  }
 
   return (
     <Center>
@@ -115,14 +142,24 @@ export function TransPortView() {
               </FormControl>
 
               <Box w={"200px"} h={"80px"} bg={"#f3eeee"} mt={4}>
-                출발일자 : {trans.transStartDay}
+                <Flex>
+                  <Box>출발일자 : </Box>
+                  <Input
+                    placeholder="Select Date and Time"
+                    size="md"
+                    type="date"
+                  />
+                </Flex>
               </Box>
               <Flex justifyContent={"space-between"} mt={4}>
                 <Button w={"165px"}>바로결제</Button>
                 <Button w={"165px"}>장바구니</Button>
               </Flex>
-              <Button w={"165px"} mt={4}>
-                ❤️ 찜하기
+              <Button variant={"ghost"} onClick={handleLikeClick}>
+                <Flex gap={2}>
+                  <Box>찜하기</Box>
+                  <FontAwesomeIcon icon={faHeart} size={"xl"} />
+                </Flex>
               </Button>
             </CardBody>
           </Card>

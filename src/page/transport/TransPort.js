@@ -111,11 +111,6 @@ export function TransPort() {
                             </Box>
                           </Flex>
                         </FormControl>
-                        <FormControl>
-                          <Flex>
-                            <FormLabel>출발일 : </FormLabel> {bus.transStartDay}
-                          </Flex>
-                        </FormControl>
                       </Box>
                     </Center>
                   </CardBody>
@@ -182,11 +177,6 @@ export function TransPort() {
                             >
                               {air.transPrice}원
                             </Box>
-                          </Flex>
-                        </FormControl>
-                        <FormControl>
-                          <Flex>
-                            <FormLabel>출발일 : </FormLabel> {air.transStartDay}
                           </Flex>
                         </FormControl>
                       </Box>
