@@ -80,6 +80,13 @@ export function UserSignup() {
     submitAvailable = false;
   }
 
+  // ------------- 본인인증 버튼 한번 클릭 시 버튼 막기 -------------
+  if (!userPhoneNumber) {
+    submitAvailable = false;
+  }
+
+  // ------------- 본인인증 버튼 input 값 바뀌면 다시 클릭 가능하도록 -------------
+
   // ------------- 패스워드 일치하지 않으면 가입버튼 비활성화 -------------
   if (userPassword !== userPasswordCheck) {
     submitAvailable = false;
@@ -140,7 +147,13 @@ export function UserSignup() {
       })
       .catch((error) => {
         setUserIdCheck(true);
-        if (error.response.status === 404) {
+
+        if (error.response.status === 400) {
+          toast({
+            description: "아이디를 입력해주시기 바랍니다.",
+            status: "warning",
+          });
+        } else if (error.response.status === 404) {
           toast({
             description: "사용 가능한 ID 입니다.",
             status: "success",
@@ -151,6 +164,8 @@ export function UserSignup() {
 
   // ------------- SMS 인증 로직 -------------
   function handleSMSButton() {
+    setIsSubmitting(true);
+
     axios
       .post("/api/member/sendSMS", {
         userPhoneNumber,
@@ -173,11 +188,14 @@ export function UserSignup() {
             status: "error",
           });
         }
+      })
+      .finally(() => {
+        setIsSubmitting(false);
       });
   }
   function handleSMSOk() {
     axios
-      .post("/api/member/sendSmsOk", {
+      .post("/api/member/sendSmsOk2", {
         verificationCode: sendSMS,
         userPhoneNumber,
       })
@@ -216,7 +234,7 @@ export function UserSignup() {
     let extraAddress = "";
     let address = data.address;
 
-    if (data.addressType === "R") {
+    if (data.addressType === "R" || data.addressType === "J") {
       if (data.bname !== "") {
         extraAddress += data.bname;
       }
@@ -368,7 +386,7 @@ export function UserSignup() {
                 placeholder="우편번호"
                 mb={3}
                 value={userPostCode}
-                onClick={handleDaumPostcode} // 주소검색 버튼 클릭 시 팝업 열도록 설정
+                onChange={(e) => setUserPostCode(e.target.value)} // 주소검색 버튼 클릭 시 팝업 열도록 설정
               />
               <Button onClick={handleDaumPostcode}>주소검색</Button>
             </Flex>
@@ -420,7 +438,9 @@ export function UserSignup() {
                 value={userPhoneNumber}
                 onChange={(e) => setUserPhoneNumber(e.target.value)}
               />
-              <Button onClick={handleSMSButton}>본인인증</Button>
+              <Button isDisabled={isSubmitting} onClick={handleSMSButton}>
+                본인인증
+              </Button>
             </Flex>
           </FormControl>
 

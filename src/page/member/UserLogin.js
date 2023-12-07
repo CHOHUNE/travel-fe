@@ -105,8 +105,8 @@ export function UserLogin() {
             </Button>
 
             <Center w={"100%"} justifyContent={"space-around"} mt={5}>
-              <Link to={"/"}>아이디 찾기</Link>
-              <Link to={"/"}>비밀번호 찾기</Link>
+              <Link to={"/findId"}>아이디 찾기</Link>
+              <Link to={"/findPw"}>비밀번호 찾기</Link>
               <Link to={"/signup"}>회원가입</Link>
             </Center>
 
@@ -128,6 +128,7 @@ export function UserLogin() {
                     cursor: "pointer",
                   }}
                   src="https://image.hanatour.com/usr/static/img2/mobile/com/btn_naver_192x192.png"
+                  onClick={() => navigate("/NaverLogin")}
                 />
               </Flex>
             </Center>

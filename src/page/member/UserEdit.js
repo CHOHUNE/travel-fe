@@ -41,17 +41,26 @@ export function UserEdit() {
       setUserEmail(response.data.userEmail);
       setUserName(response.data.userName);
       setUserPhoneNumber(response.data.userPhoneNumber);
+      setUserPostCode(response.data.userPostCode);
+      setUserAddress(response.data.userAddress);
+      setUserDetailAddress(response.data.userDetailAddress);
     });
   }, []);
 
   const [userId, setUserId] = useState("");
   const [userPassword, setUserPassword] = useState("");
   const [userName, setUserName] = useState("");
+  const [userPostCode, setUserPostCode] = useState(""); // 우편번호
+  const [userAddress, setUserAddress] = useState(""); // 도로명 주소
+  const [userDetailAddress, setUserDetailAddress] = useState(""); // 상세주소
   const [userPhoneNumber, setUserPhoneNumber] = useState("");
   const [userEmail, setUserEmail] = useState("");
 
   const [emailAvailable, setEmailAvailable] = useState(false);
   const [phoneNumberAvailable, setPhoneNumberAvailable] = useState(false);
+  const [postCodeAvailable, setPostCodeAvailable] = useState(false);
+  const [addressAvailable, setAddressAvailable] = useState(false);
+  const [detailAddressAvailable, setDetailAddressAvailable] = useState(false);
 
   const [isSubmitting, setIsSubmitting] = useState(false);
 
@@ -69,12 +78,26 @@ export function UserEdit() {
   }
   let emailChecked = sameOriginEmail || emailAvailable;
 
-  // 기존 번호와 같은지 다른지
+  // 기존 핸드폰번호와 같은지 다른지
   let sameOriginPhoneNumber = false;
   if (user !== null) {
     sameOriginPhoneNumber = user.userPhoneNumber === userPhoneNumber;
   }
   let phoneNumberChecked = sameOriginPhoneNumber || phoneNumberAvailable;
+
+  // 기존 주소와 같은지 다른지
+  let sameOriginPostCode = false;
+  if (user !== null) {
+    sameOriginPostCode = user.userPostCode || postCodeAvailable;
+  }
+  let sameOriginAddress = false;
+  if (user !== null) {
+    sameOriginAddress = user.userAddress || addressAvailable;
+  }
+  let sameOriginDetailAddress = false;
+  if (user !== null) {
+    sameOriginDetailAddress = user.userDetailAddress || detailAddressAvailable;
+  }
 
   // 암호가 없으면 기존암호
   // 암호를 작성하면 새 암호, 암호확인 체크
@@ -106,6 +129,9 @@ export function UserEdit() {
         userPassword,
         userPhoneNumber,
         userEmail,
+        userPostCode,
+        userAddress,
+        userDetailAddress,
       })
       .then(() => {
         toast({
@@ -154,6 +180,40 @@ export function UserEdit() {
       });
   }
 
+  // ---------- 카카오 우편번호 API 로직 ----------
+  const handleDaumPostcode = () => {
+    new window.daum.Postcode({
+      oncomplete: function (data) {
+        handleAddressComplete(data);
+      },
+    }).open();
+  };
+  const handleComplete = (data) => {
+    let extraAddress = "";
+    let address = data.address;
+
+    if (data.addressType === "R") {
+      if (data.bname !== "") {
+        extraAddress += data.bname;
+      }
+      if (data.buildingName !== "") {
+        extraAddress +=
+          extraAddress !== "" ? `, ${data.buildingName}` : data.buildingName;
+      }
+      address += extraAddress !== "" ? ` (${extraAddress})` : "";
+    }
+
+    handleAddressComplete({
+      zonecode: data.zonecode,
+      address: address,
+    });
+  };
+  const handleAddressComplete = (data) => {
+    setUserPostCode(data.zonecode);
+    setUserAddress(data.address);
+    setUserDetailAddress(""); // 주소를 클릭할 때 상세주소를 초기화하거나 필요한 처리 수행
+  };
+
   // ------------- SMS 인증 로직 -------------
   function handleSMSButton() {
     axios
@@ -182,7 +242,7 @@ export function UserEdit() {
   }
   function handleSMSOk() {
     axios
-      .post("/api/member/sendSmsOk", {
+      .post("/api/member/sendSmsOk2", {
         verificationCode: sendSMS,
         userPhoneNumber,
       })
@@ -297,6 +357,57 @@ export function UserEdit() {
                 value={userName}
                 readOnly
                 onChange={(e) => setUserName(e.target.value)}
+              />
+            </Flex>
+          </FormControl>
+
+          <FormControl mb={3}>
+            <Flex gap={2}>
+              <FormLabel
+                w={160}
+                textAlign={"center"}
+                display={"flex"}
+                alignItems={"center"}
+              >
+                우편번호
+              </FormLabel>
+              <Input
+                placeholder="우편번호"
+                mb={3}
+                value={userPostCode}
+                onChange={(e) => setUserPostCode(e.target.value)} // 주소검색 버튼 클릭 시 팝업 열도록 설정
+              />
+              <Button onClick={handleDaumPostcode}>주소검색</Button>
+            </Flex>
+
+            <Flex>
+              <FormLabel
+                w={138}
+                textAlign={"center"}
+                display={"flex"}
+                alignItems={"center"}
+              >
+                상세주소
+              </FormLabel>
+              <Input
+                mb={3}
+                value={userAddress}
+                onChange={(e) => setUserAddress(e.target.value)}
+              />
+            </Flex>
+
+            <Flex>
+              <FormLabel
+                w={138}
+                textAlign={"center"}
+                display={"flex"}
+                alignItems={"center"}
+              >
+                나머지주소
+              </FormLabel>
+              <Input
+                value={userDetailAddress}
+                onChange={(e) => setUserDetailAddress(e.target.value)}
               />
             </Flex>
           </FormControl>

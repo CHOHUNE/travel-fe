@@ -1,4 +1,17 @@
-import {createBrowserRouter, createRoutesFromElements, Route, RouterProvider,} from "react-router-dom";
+import {
+  createBrowserRouter,
+  createRoutesFromElements,
+  Route,
+  RouterProvider,
+} from "react-router-dom";
+import { FindId } from "./page/member/FindId";
+import { FindPw } from "./page/member/FindPw";
+import { FindPwChange } from "./page/member/FindPwChange";
+import React from "react";
+import { NaverLogin } from "./page/member/NaverLogin";
+import { Bucket } from "./page/member/MyPage/Bucket";
+import UserLayOut from "./page/member/layout/UserLayOut";
+import { ReservationList } from "./page/member/MyPage/ReservationList";
 import {HomeLayout} from "./layout/HomeLayout";
 import {HomeBody} from "./component/HomeBody";
 import {TransPort} from "./page/transport/TransPort";
@@ -48,7 +61,16 @@ const routes = createBrowserRouter(
       <Route path="signup" element={<UserSignup />} />
       <Route path="user/edit" element={<UserEdit />} />
       <Route path="user/list" element={<UserList />} />
-      <Route path="user" element={<UserView />} />
+      <Route path="user" element={<UserLayOut />}>
+        <Route index element={<UserView />} />
+        <Route path="/user/bucket" element={<Bucket />} />
+        <Route path="/user/reservationList" element={<ReservationList />} />
+      </Route>
+      <Route path="user/bucket" element={<Bucket />} />
+      <Route path="findId" element={<FindId />} />
+      <Route path="findPw" element={<FindPw />} />
+      <Route path="findPwChange" element={<FindPwChange />} />
+      <Route path="NaverLogin" element={<NaverLogin />} />
 
       {/* 호텔관련 */}
       <Route path="hotel" element={<Hotel />} />
@@ -56,6 +78,8 @@ const routes = createBrowserRouter(
       <Route path="hotel/write" element={<HotelWrite />} />
       <Route path="hotel/edit/:id" element={<HotelEdit />} />
       <Route path="hotel/pay/:id" element={<HotelPay />} />
+
+      {/* 장바구니 관련 */}
     </Route>,
   ),
 );

@@ -5,15 +5,9 @@ import React from "react";
 export function HomeBody() {
   return (
     <Box>
-      <Box w={"100%"} h={"600px"} backgroundColor={"#f5f8ec"}>
+      <Box w={"100%"} h={"700px"}>
         <Flex justifyContent={"space-around"} alignItems={"center"}>
-          <Box
-            border={"1px solid black"}
-            borderRadius={"10px"}
-            w={"80%"}
-            h={"500px"}
-            mt={"20px"}
-          >
+          <Box borderRadius={"10px"} w={"100%"} h={"500px"} mt={"20px"}>
             <App />
           </Box>
         </Flex>
