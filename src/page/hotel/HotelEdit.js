@@ -8,8 +8,19 @@ import {
     NumberInputStepper,
     NumberIncrementStepper,
     NumberDecrementStepper,
-    Button, FormLabel, Center, Card, CardHeader, Heading, CardBody, FormControl, Flex, useToast,
-    // ... (다른 Chakra UI 컴포넌트들이 필요하다면 추가하세요)
+    Button,
+    FormLabel,
+    Center,
+    Card,
+    CardHeader,
+    Heading,
+    CardBody,
+    FormControl,
+    Flex,
+    useToast,
+    Checkbox,
+    CheckboxGroup,
+
 } from "@chakra-ui/react";
 import React, {useEffect, useState} from "react";
 import axios from "axios";
@@ -20,14 +31,19 @@ export function HotelEdit() {
     const [name, setName] = useState('');
     const [location, setLocation] = useState('');
     const [description, setDescription] = useState('');
-    const [mainImg, setMainImg] = useState(); // 파일 업로드를 다룰 때 사용
     const [numberOfBed, setNumberOfBed] = useState('');
-    const [roomType, setRoomType] = useState("스탠다드"); // 기본값으로 설정
-    const [subImg1, setSubImg1] = useState(); // 부가 이미지 1 파일 업로드를 다룰 때 사용
-    const [subImg2, setSubImg2] = useState(); // 부가 이미지 2 파일 업로드를 다룰 때 사용
-    const [mapImg, setMapImg] = useState(); // 지도 이미지 파일 업로드를 다룰 때 사용
+    const [roomType, setRoomType] = useState("스탠다드");
+
+    const [mainImg, setMainImg] = useState();
+    const [subImg1, setSubImg1] = useState();
+    const [subImg2, setSubImg2] = useState();
+    const [mapImg, setMapImg] = useState();
+
     const [numberOfBedRooms, setNumberOfBedRooms] = useState('');
     const [totalPrice, setTotalPrice] = useState('');
+
+    const [removeFileId, setRemoveFileId] = useState([])
+    const [uploadFiles, setUploadFiles] = useState(null)
 
     const [hotel, setHotel] = useState([])
     const {id} = useParams()
@@ -61,7 +77,7 @@ export function HotelEdit() {
     // 수정 요청
     function handleChange() {
         axios
-            .put("/api/hotel/edit", {
+            .putForm("/api/hotel/edit", {
                 hid: id,
                 name,
                 location,
@@ -73,7 +89,10 @@ export function HotelEdit() {
                 subImg2,
                 mapImg,
                 totalPrice,
-                numberOfBedRooms
+                numberOfBedRooms,
+                removeFileId,
+                uploadFiles
+
 
             })
             .then(() => {
@@ -94,13 +113,6 @@ export function HotelEdit() {
             )
     }
 
-    // 파일 업로드를 처리하는 함수
-    const handleFileUpload = (event, setterFunction) => {
-        const file = event.target.files[0];
-        setterFunction(file);
-    };
-
-    // 확인 버튼 클릭 시 처리하는 함수
 
 
     return (
@@ -109,6 +121,8 @@ export function HotelEdit() {
                 <CardHeader>
                     <Heading textAlign={"center"}> 호텔 수정 </Heading>
                 </CardHeader>
+
+
 
                 <CardBody>
                     <FormControl>
@@ -183,20 +197,20 @@ export function HotelEdit() {
                         <Flex>
                             <FormLabel my={'15px'} w={100} textAlign='center' display='flex' alignItems={'center'}> 방 수 </FormLabel>
 
-                                <NumberInput
-                                    value={numberOfBedRooms}
-                                    onChange={(e) => {
-                                        setNumberOfBedRooms(e);
-                                    }}
-                                    min={1}
-                                    max={20}
-                                >
-                                    <NumberInputField/>
-                                    <NumberInputStepper>
-                                        <NumberIncrementStepper/>
-                                        <NumberDecrementStepper/>
-                                    </NumberInputStepper>
-                                </NumberInput>
+                            <NumberInput
+                                value={numberOfBedRooms}
+                                onChange={(e) => {
+                                    setNumberOfBedRooms(e);
+                                }}
+                                min={1}
+                                max={20}
+                            >
+                                <NumberInputField/>
+                                <NumberInputStepper>
+                                    <NumberIncrementStepper/>
+                                    <NumberDecrementStepper/>
+                                </NumberInputStepper>
+                            </NumberInput>
 
                         </Flex>
 
@@ -219,7 +233,7 @@ export function HotelEdit() {
                             <Input
                                 type="file"
                                 accept="image/*"
-                                onChange={(e) => handleFileUpload(e, setMainImg)}
+                                onChange={(e) =>setMainImg(e.target.files)}
                             />
                         </Flex>
 
@@ -230,7 +244,7 @@ export function HotelEdit() {
                             <Input
                                 type="file"
                                 accept="image/*"
-                                onChange={(e) => handleFileUpload(e, setSubImg1)}
+                                onChange={(e) => setSubImg1(e.target.files)}
                             />
                         </Flex>
                         <Flex>
@@ -240,7 +254,7 @@ export function HotelEdit() {
                             <Input
                                 type="file"
                                 accept="image/*"
-                                onChange={(e) => handleFileUpload(e, setSubImg2)}
+                                onChange={(e) =>setSubImg2(e.target.files)}
                             />
                         </Flex>
                         <Flex>
@@ -249,7 +263,7 @@ export function HotelEdit() {
                             <Input
                                 type="file"
                                 accept="image/*"
-                                onChange={(e) => handleFileUpload(e, setMapImg)}
+                                onChange={(e) => setMapImg(e.target.files)}
                             />
                         </Flex>
 

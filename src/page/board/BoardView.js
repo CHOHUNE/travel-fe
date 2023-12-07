@@ -1,5 +1,5 @@
-import React, { useEffect, useState } from "react";
-import { useNavigate, useParams } from "react-router-dom";
+import React, {useEffect, useState} from "react";
+import {useNavigate, useParams} from "react-router-dom";
 import axios from "axios";
 import {
   Box,
@@ -7,11 +7,18 @@ import {
   Flex,
   FormControl,
   FormLabel,
+  Heading,
   Input,
+  Card,
+  Image,
   Spinner,
   Textarea,
-  useToast,
+  useToast, CardBody,
 } from "@chakra-ui/react";
+import { CommentContainer } from "../../page/comment/CommentContainer";
+import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
+import {faHeart} from "@fortawesome/free-solid-svg-icons";
+
 
 export function BoardView() {
   const [board, setBoard] = useState(null);
@@ -36,9 +43,22 @@ export function BoardView() {
     });
   }
 
+
+  function handleLike() {
+    axios
+      .post("/api/boardLike", { boardId: board.id })
+      .then(() => console.log("good"))
+      .catch(() => console.log("bad"))
+      .finally(() => console.log("done"));
+  }
   return (
     <Box>
-      <h1>{board.id}번 글 보기</h1>
+      <Flex justifyContent="space-between">
+        <Heading size="xl">{board.id}번 글 보기</Heading>
+        <Button variant="ghost" size="xl" onClick={handleLike}>
+          <FontAwesomeIcon icon={faHeart} size="xl" />
+        </Button>
+      </Flex>
       <FormControl>
         <FormLabel>제목</FormLabel>
         <Input value={board.title} readOnly />
@@ -47,6 +67,15 @@ export function BoardView() {
         <FormLabel>본문</FormLabel>
         <Textarea value={board.content} readOnly />
       </FormControl>
+
+      {board.files.map((file) => (
+        <Card key={file.id} my={5}>
+          <CardBody>
+            <Image width="100%" src={file.url} alt={file.name} />
+          </CardBody>
+        </Card>
+      ))}
+
       <FormControl>
         <FormLabel>작성자</FormLabel>
         <Input value={board.writer} readOnly />
@@ -66,6 +95,8 @@ export function BoardView() {
           삭제
         </Button>
       </Flex>
+
+      <CommentContainer boardId={id}/>
     </Box>
   );
 }
