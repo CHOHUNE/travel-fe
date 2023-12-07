@@ -57,11 +57,11 @@ export function HotelView() {
                         <Box w={"100%"} display={"flex"} flexDirection={"column"} gap={"10px"}>
                             <Box border={"1px solid black"} my={"10px"} h={"195px"} w={"100%"} borderRadius={'lg'}>
                                 {/* 호텔 이미지2 */}
-                                <Image src={hotel.subImgUrl} alt={"숙소 이미지2"} w={"100"} h={"100%"} />
+                                <Image src={hotel.subImgUrl1} alt={"숙소 이미지2"} w={"100"} h={"100%"} />
                             </Box>
                             <Box border={"1px solid black"} my={"10px"} h={"195px"} w={"100%"} borderRadius={'lg'} >
                                 {/* 호텔 이미지3 */}
-                                <Image src={hotel.subImgUrl} alt={"숙소 이미지3"} w={"100"} h={"100%"} />
+                                <Image src={hotel.subImgUrl2} alt={"숙소 이미지3"} w={"100"} h={"100%"} />
                             </Box>
                         </Box>
                     </Box>
@@ -102,7 +102,7 @@ export function HotelView() {
                         </Box>
                     </Box>
                     <Box w={"80%"} ml={"10%"} border={"1px solid black"} h={"400px"} mb={"15px"} display={"flex"} justifyContent={"center"} alignItems={"center"} borderRadius={'lg'}>
-                        <Image src={hotel.mapImg} alt={"지도 이미지"} w={"100%"} h={"100%"} />
+                        <Image src={hotel.mapImgUrl} alt={"지도 이미지"} w={"100%"} h={"100%"} />
 
 
                     </Box>

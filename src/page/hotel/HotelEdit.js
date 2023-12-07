@@ -31,12 +31,14 @@ export function HotelEdit() {
     const [name, setName] = useState('');
     const [location, setLocation] = useState('');
     const [description, setDescription] = useState('');
-    const [mainImg, setMainImg] = useState();
     const [numberOfBed, setNumberOfBed] = useState('');
     const [roomType, setRoomType] = useState("스탠다드");
+
+    const [mainImg, setMainImg] = useState();
     const [subImg1, setSubImg1] = useState();
     const [subImg2, setSubImg2] = useState();
     const [mapImg, setMapImg] = useState();
+
     const [numberOfBedRooms, setNumberOfBedRooms] = useState('');
     const [totalPrice, setTotalPrice] = useState('');
 
@@ -89,6 +91,7 @@ export function HotelEdit() {
                 totalPrice,
                 numberOfBedRooms,
                 removeFileId,
+                uploadFiles
 
 
             })

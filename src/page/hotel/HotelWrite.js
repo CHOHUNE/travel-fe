@@ -44,17 +44,17 @@ export function HotelWrite() {
 
         axios
             .postForm("/api/hotel/write",{
-            name,
-            location,
-            description,
-            mainImg,
-            numberOfBed,
-            roomType,
-            subImg1,
-            subImg2,
-            mapImg,
-            numberOfBedRooms,
-            totalPrice
+                name,
+                location,
+                description,
+                mainImg,
+                numberOfBed,
+                roomType,
+                subImg1,
+                subImg2,
+                mapImg,
+                numberOfBedRooms,
+                totalPrice
             })
             .then(() => {
                 toast({
@@ -62,16 +62,16 @@ export function HotelWrite() {
                     status: "success",
                 });
 
-                })
-                .catch(() => {
-                    toast({
-                        description: "운송 상품 등록에 실패 했습니다.",
-                        status: "error",
-                    });
-                })
-                .finally(() => {
-                    navigate(-1);
-                })
+            })
+            .catch(() => {
+                toast({
+                    description: "운송 상품 등록에 실패 했습니다.",
+                    status: "error",
+                });
+            })
+            .finally(() => {
+                navigate(-1);
+            })
     }
 
     return (
