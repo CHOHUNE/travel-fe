@@ -9,9 +9,11 @@ import {
   FormLabel,
   Heading,
   Input,
+  Card,
+  Image,
   Spinner,
   Textarea,
-  useToast,
+  useToast, CardBody,
 } from "@chakra-ui/react";
 import { CommentContainer } from "../../page/comment/CommentContainer";
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
@@ -65,6 +67,15 @@ export function BoardView() {
         <FormLabel>본문</FormLabel>
         <Textarea value={board.content} readOnly />
       </FormControl>
+
+      {board.files.map((file) => (
+        <Card key={file.id} my={5}>
+          <CardBody>
+            <Image width="100%" src={file.url} alt={file.name} />
+          </CardBody>
+        </Card>
+      ))}
+
       <FormControl>
         <FormLabel>작성자</FormLabel>
         <Input value={board.writer} readOnly />

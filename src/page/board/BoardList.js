@@ -20,6 +20,23 @@ import {
   faAngleRight,
 } from "@fortawesome/free-solid-svg-icons";
 
+import * as PropTypes from "prop-types";
+
+function PageButton({ variant, pageNumber, children }) {
+  const [params] = useSearchParams();
+  const navigate = useNavigate();
+
+  function handleClick() {
+    params.set("p", pageNumber);
+    navigate("/boardList?" + params);
+  }
+
+  return (
+    <Button variant={variant} onClick={handleClick}>
+      {children}
+    </Button>
+  );
+}
 function Pagination({ pageInfo }) {
   const pageNumbers = [];
 
@@ -32,38 +49,31 @@ function Pagination({ pageInfo }) {
   return (
     <Box>
       {pageInfo.prevPageNumber && (
-        <Button
-          variant="ghost"
-          onClick={() => navigate("/boardlist?p=" + pageInfo.prevPageNumber)}
-        >
+        <PageButton variant="ghost" pageNumber={pageInfo.prevPageNumber}>
           <FontAwesomeIcon icon={faAngleLeft} />
-        </Button>
+        </PageButton>
       )}
 
       {pageNumbers.map((pageNumber) => (
-        <Button
+        <PageButton
           key={pageNumber}
           variant={
             pageNumber === pageInfo.currentPageNumber ? "solid" : "ghost"
           }
-          onClick={() => navigate("/boardlist?p=" + pageNumber)}
+          pageNumber={pageNumber}
         >
           {pageNumber}
-        </Button>
+        </PageButton>
       ))}
 
       {pageInfo.nextPageNumber && (
-        <Button
-          variant="ghost"
-          onClick={() => navigate("/boardlist?p=" + pageInfo.nextPageNumber)}
-        >
+        <PageButton variant="ghost" pageNumber={pageInfo.nextPageNumber}>
           <FontAwesomeIcon icon={faAngleRight} />
-        </Button>
+        </PageButton>
       )}
     </Box>
   );
 }
-
 
 function SearchComponent() {
   const [keyword, setKeyword] = useState("");
@@ -118,9 +128,13 @@ const [params] = useSearchParams();
   return (
 
 <Box>
+
+
+
   <Flex>
     <Button onClick={() => navigate("/boardlist")}>게시판 목록</Button>
     <Button onClick={() => navigate("/boardwrite")}>게시판 작성</Button>
+    <Button onClick={() => navigate("/Notice")}>공지사항</Button>
   </Flex>
   <SearchComponent />
       <Table>
