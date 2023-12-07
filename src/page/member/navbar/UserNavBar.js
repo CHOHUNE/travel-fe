@@ -37,7 +37,9 @@ export function UserNavBar(props) {
         navigate("/user?" + urlParams.toString());
         break;
       case "bucket":
-        navigate("/user/bucket");
+        // 승원 수정 start ----------------------------------------
+        navigate("/user/bucket?" + urlParams.toString());
+        // 승원 수정 end ----------------------------------------
         break;
       default:
         break;
