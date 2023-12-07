@@ -326,8 +326,7 @@ export function Hotel() {
                                             />
                                         ))}
                                     <Box as='span' ml='2' color='gray.600' fontSize='sm'>
-                                        {/*{hotel.reviewCount}*/}
-                                        34 reviews
+                                        {hotel.rating}
                                     </Box>
 
                                     <ButtonGroup spacing="2" size={'sm'} variant={'outline'} ml={'30px'}>
