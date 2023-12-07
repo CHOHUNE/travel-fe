@@ -4,7 +4,7 @@ import {
   Button,
   Flex,
   flexbox,
-  FormControl,
+  FormControl, FormHelperText,
   FormLabel,
   Input,
   Textarea,
@@ -18,6 +18,7 @@ export function BoardWrite() {
   const [title, setTitle] = useState("");
   const [content, setContent] = useState("");
   const [writer, setWriter] = useState("");
+  const [uploadFiles, setUploadFiles] = useState(null);
 
   const navigate = useNavigate();
   const toast = useToast();
@@ -26,7 +27,7 @@ export function BoardWrite() {
   function handleSubmit() {
     setIsSubmitting(true);
     axios
-      .post("/api/board/add", { title, content, writer })
+      .postForm("/api/board/add", { title, content, writer,uploadFiles })
       .then((response) => {
         console.log(response.data);
         toast({ description: "글이 작성되었습니다.", status: "success" });
@@ -62,6 +63,13 @@ export function BoardWrite() {
             value={content}
             onChange={(e) => setContent(e.target.value)}
           ></Textarea>
+        </FormControl>
+        <FormControl>
+          <FormLabel> 이미지</FormLabel>
+          <Input type="file" accept="image/*"  multiple  onChange={(e)=>setUploadFiles(e.target.files)}/>
+          <FormHelperText>
+            한 개 파일은 1MB 이내 총 용량은 10MB 이내로 첨부하세요
+          </FormHelperText>
         </FormControl>
         <FormControl>
           <FormLabel>작성자</FormLabel>
