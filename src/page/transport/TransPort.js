@@ -1,6 +1,5 @@
 import {
   Box,
-  Button,
   Card,
   CardBody,
   CardHeader,
@@ -16,6 +15,7 @@ import { useEffect, useState } from "react";
 import axios from "axios";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faAnglesRight } from "@fortawesome/free-solid-svg-icons";
+import "./Font.css";
 
 export function TransPort() {
   const navigate = useNavigate();
@@ -37,17 +37,50 @@ export function TransPort() {
 
   return (
     <Box mt={4}>
-      <Box w={"100%"} h={"500px"} backgroundColor={"#f5f8ec"}>
-        <Box w="85%" ml="12.5%">
-          운송 추천 광고
+      <Card h={"500px"}>
+        <Center>
+          <video style={{ height: "500px", zIndex: 2 }} autoPlay loop muted>
+            <source
+              src={
+                "https://study1993garbi.s3.ap-northeast-2.amazonaws.com/travel/trans/video/plan.mp4"
+              }
+              type="video/mp4"
+            />
+          </video>
+        </Center>
+        <Box
+          style={{
+            position: "absolute",
+            marginTop: "0px",
+            width: "100%",
+            height: "400px",
+            backgroundColor: "#f4e8cd",
+            zIndex: 1,
+          }}
+        ></Box>
+        <Box
+          style={{
+            position: "absolute",
+            marginTop: "80px",
+            marginLeft: "68%",
+            width: "100%",
+            height: "400px",
+            zIndex: 3,
+            fontFamily: "YEONGJUPunggiGinsengTTF",
+            fontSize: "2rem",
+          }}
+        >
+          <p>같이 여행 갈래요?</p>
+          <p style={{ color: "#064b69" }}>지금 가면 항공권 40% 할인</p>
+
+          <br />
+          <br />
+          <p style={{ fontSize: "1.1rem" }}>생각만해도 설레는 특가</p>
+          <p style={{ fontSize: "1.1rem" }}>놓치기는 너무 아쉬운데</p>
         </Box>
-        <Flex justifyContent={"space-around"}>
-          <Button>광고1</Button>
-          <Button>광고2</Button>
-          <Button>광고3</Button>
-        </Flex>
-      </Box>
-      <Box ml={"12.5%"} mt={"100px"}>
+      </Card>
+
+      <Box ml={"12.5%"} mt={"50px"}>
         <Card
           w={"400px"}
           h={"50px"}
