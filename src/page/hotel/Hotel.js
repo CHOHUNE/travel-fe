@@ -5,12 +5,14 @@ import {
     useToast,
     Select,
     PopoverTrigger, Popover, PopoverCloseButton, PopoverContent, PopoverArrow, PopoverHeader, PopoverBody,
-    Portal, IconButton, Container, SimpleGrid, Badge, Center,
+    Portal, IconButton, SimpleGrid, Badge, Center,
 } from '@chakra-ui/react';
 import {useNavigate, useParams} from 'react-router-dom';
 import axios from 'axios';
 import {AddIcon, MinusIcon, StarIcon} from "@chakra-ui/icons";
 import App from "./App";
+import {faHeart} from "@fortawesome/free-solid-svg-icons";
+import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 
 export function Hotel() {
 
@@ -21,11 +23,6 @@ export function Hotel() {
 
     // 호텔
     const [hotel, setHotel] = useState([]);
-
-    // 체크인,체크아웃 데이트 피커
-    // const [checkInDate, setCheckInDate] = useState(null)
-    // const [checkOutDate, setCheckOutDate] = useState(null)
-    // const [showDatePicker, setShowDatePicker] = useState(false)
 
     const [selectedRoom, setSelectedRoom] = useState("")
 
@@ -41,7 +38,77 @@ export function Hotel() {
     const indexOfFirstHotel = indexOfLastHotel - hotelPerPage;
     const currentHotels = hotel.slice(indexOfFirstHotel, indexOfLastHotel);
 
-    // 페이지 번호 클릭 시
+    // 위시리스트 토글
+    const [wishlist, setWishlist] = useState([])
+    const [hotelItem, setHotelItem] = useState('')
+
+
+    function handleRemoveFromWishlist(hotelId) {
+        axios.delete(`/api/wishlist/${hotelId}`)
+            .then((response) => {
+                toast({
+                    description: "위시 리스트에 제거되었습니다.",
+                    status: 'success'
+                })
+            })
+            .catch((error) => {
+                toast({
+                    description: "위시리스트 삭제 중 에러 발생",
+                    status: 'error'
+                })
+            })
+
+    }
+
+    const handleSaveToWishlist = (hotelId) => {
+        // 기존 호텔 데이터 가져오기
+        axios.get(`/api/hotel/reserv/id/${hotelId}`)
+            .then((response) => {
+                const hotelData = response.data;
+
+                // 위시리스트에 추가
+                axios.post('/api/wishlist', {
+                    hotelId,
+                    name: hotelData.name,
+                    mainImgUrl: hotelData.mainImgUrl,
+                    location: hotelData.location
+                })
+                    .then(() => {
+                        toast({
+                            description: '위시리시트에 추가 되었습니다.',
+                            status: 'success'
+                        });
+                    })
+                    .catch(() => {
+                        toast({
+                            description: '위시리스트에 저장 중 에러 발생',
+                            status: 'error'
+                        });
+                    });
+            })
+            .catch(() => {
+                toast({
+                    description: '호텔 데이터를 가져오는 중 에러 발생',
+                    status: 'error'
+                });
+            });
+    };
+
+    const toggleWishlist = (hotelId) => {
+        setWishlist((prev) => {
+            const isAlreadyInWishlist = prev.includes(hotelId);
+
+            if (isAlreadyInWishlist) {
+                handleRemoveFromWishlist(hotelId);
+                return prev.filter((id) => id !== hotelId);
+            } else {
+                handleSaveToWishlist(hotelId);
+                return [...prev, hotelId];
+            }
+        });
+    };
+
+    // 페이지 번호 클릭
     const handleClick = (pageNumber) => {
         setCurrentPage(pageNumber);
     };
@@ -51,7 +118,6 @@ export function Hotel() {
     for (let i = 1; i <= Math.ceil(hotel.length / hotelPerPage); i++) {
         pageNumbers.push(i);
     }
-
 
     const increaseCount = () => {
         setCount((prevCount) => prevCount + 1)
@@ -81,17 +147,6 @@ export function Hotel() {
             </Popover>
         );
     };
-
-    // 체크인,체크아웃 핸들러
-    // const handleDateChange = (date, type) => {
-    //     if (type === 'checkin') {
-    //         setCheckInDate(date)
-    //     } else if (type === 'checkout') {
-    //         setCheckOutDate(date);
-    //     }
-    //     setShowDatePicker(false)
-    // }
-
 
     useEffect(() => {
         axios
@@ -208,10 +263,26 @@ export function Hotel() {
                     {currentHotels.map((hotel) => (
 
                         <Box maxW='sm' borderWidth='1px' borderRadius='lg' overflow='hidden'>
-                            <Image src={'https://bit.ly/2Z4KKcF'} alt={hotel.name}/>
+                            <Box position='relative' >
+                                <Image src={hotel.mainImgUrl} alt={hotelItem.name}/>
+
+                                <Box
+                                    position='absolute'
+                                    top='2'
+                                    right='2'
+                                    onClick={() => toggleWishlist(hotel.hid)}
+                                    cursor='pointer'
+                                >
+                                    <FontAwesomeIcon
+                                        icon={faHeart}
+                                        color={wishlist.includes(hotel.hid) ? 'red' : 'gray'}
+                                        size={'2xl'}
+                                    />
+                                </Box>
+                            </Box>
 
                             <Box p='6'>
-                                <Box display='flㅈex' alignItems='baseline'>
+                                <Box display='flex' alignItems='baseline'>
                                     <Badge borderRadius='full' px='2' colorScheme='teal'>
                                         New
                                     </Badge>
@@ -294,7 +365,6 @@ export function Hotel() {
                     ))}
                 </Box>
             </Center>
-
         </Box>
     );
 }
