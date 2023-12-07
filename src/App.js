@@ -30,7 +30,6 @@ import LoginProvider from "./component/LoginProvider";
 import { FindId } from "./page/member/FindId";
 import { FindPw } from "./page/member/FindPw";
 import { FindPwChange } from "./page/member/FindPwChange";
-import { FindIdView } from "./page/member/FindIdView";
 import React from "react";
 import { NaverLogin } from "./page/member/NaverLogin";
 import { Bucket } from "./page/member/MyPage/Bucket";
@@ -65,7 +64,6 @@ const routes = createBrowserRouter(
         <Route path="/user/bucket" element={<Bucket />} />
         <Route path="/user/reservationList" element={<ReservationList />} />
       </Route>
-      <Route path="findIdView" element={<FindIdView />} />
       <Route path="user/bucket" element={<Bucket />} />
       <Route path="findId" element={<FindId />} />
       <Route path="findPw" element={<FindPw />} />

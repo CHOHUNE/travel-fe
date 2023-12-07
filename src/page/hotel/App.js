@@ -22,13 +22,14 @@ export default function App() {
         spaceBetween={30}
         loop={true}
         autoplay={{
-          delay: 2500,
+          delay: 3000,
           disableOnInteraction: false,
         }}
         pagination={{
           clickable: true,
         }}
         navigation={true}
+        speed={650}
         modules={[Pagination, Navigation, Autoplay]}
         className="mySwiper"
         autoHeight
