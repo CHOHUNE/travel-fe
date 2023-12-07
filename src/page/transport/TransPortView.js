@@ -26,11 +26,24 @@ import { LoginContext } from "../../component/LoginProvider";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faHeart } from "@fortawesome/free-regular-svg-icons";
 
+function TransLikeContainer({ transLikeState, onClick }) {
+  if (transLikeState === null) {
+    <Spinner />;
+  }
+  return (
+    <Button variant={"ghost"} onClick={onClick}>
+      <Flex gap={2}>
+        <Box>찜하기</Box>
+        <FontAwesomeIcon icon={faHeart} size={"xl"} />
+      </Flex>
+    </Button>
+  );
+}
+
 export function TransPortView() {
   const [value, setValue] = useState(0);
   const [trans, setTrans] = useState("");
-  const [like, setLike] = useState(null);
-
+  const [transLikeState, setTransLikeState] = useState(null);
   const navigate = useNavigate();
 
   const toast = useToast();
@@ -45,6 +58,12 @@ export function TransPortView() {
     axios
       .get("/api/transport/id/" + id)
       .then((response) => setTrans(response.data));
+  }, []);
+
+  useEffect(() => {
+    axios
+      .get("/api/transLike/transport/" + id)
+      .then((response) => setTransLikeState(response.data));
   }, []);
 
   if (trans === null) {
@@ -75,7 +94,8 @@ export function TransPortView() {
   function handleLikeClick() {
     axios
       .post("/api/transLike", { transId: trans.tid })
-      .then(() => {
+      .then((response) => {
+        setTransLikeState(response.data);
         toast({
           description: "찜 목록에 추가가 되었습니다.",
           status: "success",
@@ -155,12 +175,10 @@ export function TransPortView() {
                 <Button w={"165px"}>바로결제</Button>
                 <Button w={"165px"}>장바구니</Button>
               </Flex>
-              <Button variant={"ghost"} onClick={handleLikeClick}>
-                <Flex gap={2}>
-                  <Box>찜하기</Box>
-                  <FontAwesomeIcon icon={faHeart} size={"xl"} />
-                </Flex>
-              </Button>
+              <TransLikeContainer
+                transLikeState={transLikeState}
+                onClick={handleLikeClick}
+              />
             </CardBody>
           </Card>
         </Flex>
