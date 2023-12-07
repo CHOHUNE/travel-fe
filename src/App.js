@@ -32,10 +32,10 @@ import {TransPortEdit} from "./page/transport/TransPortEdit";
 import {HotelWrite} from "./page/hotel/HotelWrite";
 import {UserList} from "./page/member/UserList";
 import {HotelEdit} from "./page/hotel/HotelEdit";
-import {UserView} from "./page/member/UserView";
 import {HotelPay} from "./page/hotel/HotelPay";
 import LoginProvider from "./component/LoginProvider";
 import {Notice} from "./page/board/Notice";
+import {UserView} from "./page/member/MyPage/UserView";
 
 const routes = createBrowserRouter(
   createRoutesFromElements(

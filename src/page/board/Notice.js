@@ -4,19 +4,79 @@
   AccordionIcon,
   AccordionItem,
   AccordionPanel,
-  Box,Text,
+  Box, Text,
   Card, CardBody, CardHeader,
-  Flex, Heading, Stack, StackDivider
+  Flex, Heading, Stack, StackDivider, Spacer, ButtonGroup, Button, Center, SimpleGrid, Input
 } from "@chakra-ui/react";
+  import React, {useEffect, useState} from "react";
+  import {useNavigate} from "react-router-dom";
+  import axios from "axios";
 export function Notice() {
 
+  const navigate = useNavigate();
+
+
+  function handleSwitch() {
+
+    useEffect(() => {
+      axios.get
+
+
+    }, []);
 
 
 
-    return(
-      <Box>
-        <Flex justifyContent={"space-between"}>
-        <Accordion allowToggle>
+  }
+
+  return(
+      <Box w="80%" ml="10%">
+
+        <Flex minWidth='max-content' alignItems='center' gap='1 '>
+          <Box p='2'>
+            <Heading size='md' colorScheme="green">자주 찾는 질문</Heading>
+          </Box>
+          <Spacer />
+          <ButtonGroup gap='2'>
+            <Button colorScheme='green' onClick={() => navigate("/boardlist")}>게시판 목록</Button>
+            <Button colorScheme='green'onClick={() => navigate("/boardwrite")}>게시판 작성</Button>
+            <Button colorScheme='green'onClick={() => navigate("/Notice")}>자주 찾는 질문</Button>
+          </ButtonGroup>
+        </Flex>
+        <br/>
+        <br/>
+        <Flex textAlign={"center"} >
+          <Box w="20%" padding={"10px"}>
+            <Card >
+            <CardHeader>
+              <Heading size='md'> travel 투어 고객센터</Heading>
+            </CardHeader>
+
+            <CardBody>
+              <Stack divider={<StackDivider />} spacing='4'>
+                <Box>
+                  <Text _hover={"poiner"} onClick={()=>navigate("/notice")}>
+                    자주 찾는 질문
+                  </Text>
+                  <Text _hover={"poiner"} onClick={()=>navigate("/boardList")}>
+                    게시판 목록
+                  </Text>
+                </Box>
+              </Stack>
+            </CardBody>
+            </Card>
+          </Box>
+          <Box  w="60%" padding={"10px"}>
+          <Accordion defaultIndex={[0]} allowMultiple>
+            <Heading size='md'> 자주 찾는 질문</Heading>
+            <br></br>
+
+            <Button size={"sm"} variant='outline' color={"green"}  onClick={handleSwitch}> 급상승 질문  </Button>
+            <Button size={"sm"} variant='outline' color={"green"}> 패키지 여행  </Button>
+            <Button size={"sm"} variant='outline' color={"green"}> 자유 여행 </Button>
+            <Button size={"sm"} variant='outline' color={"green"}>  항 공 </Button>
+            <Button size={"sm"} variant='outline' color={"green"}>  호 텔  </Button>
+          <br></br>
+          <br></br>
         <AccordionItem>
           <h2>
             <AccordionButton>
@@ -32,7 +92,6 @@ export function Notice() {
 
           </AccordionPanel>
         </AccordionItem>
-
         <AccordionItem>
           <h2>
             <AccordionButton>
@@ -46,9 +105,6 @@ export function Notice() {
             예약과 동시에 가능 여부 체크 진행이 되며 해당되는 좌석으로 실시간으로 항공 가격이 책정되어, 좌석 상황에 따라 항공료는 변동될 수 있습니다.
           </AccordionPanel>
         </AccordionItem>
-
-
-
         <AccordionItem>
           <h2>
             <AccordionButton>
@@ -79,7 +135,6 @@ export function Notice() {
 
           </AccordionPanel>
         </AccordionItem>
-
         <AccordionItem>
           <h2>
             <AccordionButton>
@@ -95,8 +150,6 @@ export function Notice() {
 
           </AccordionPanel>
         </AccordionItem>
-
-
         <AccordionItem>
           <h2>
             <AccordionButton>
@@ -110,10 +163,6 @@ export function Notice() {
             아시아나 항공 이용하는 패키지 상품만 가능하며, 단품(항공, 호텔) 만은 이용 불가합니다.
           </AccordionPanel>
         </AccordionItem>
-
-
-
-
         <AccordionItem>
           <h2>
             <AccordionButton>
@@ -128,10 +177,6 @@ export function Notice() {
             최대한 게시판을 이용해 주시길 부탁드립니다.
           </AccordionPanel>
         </AccordionItem>
-
-
-
-
         <AccordionItem>
           <h2>
             <AccordionButton>
@@ -145,10 +190,6 @@ export function Notice() {
             아시아나 항공 이용하는 패키지 상품만 가능하며, 단품(항공, 호텔) 만은 이용 불가합니다.
           </AccordionPanel>
         </AccordionItem>
-
-
-
-
         <AccordionItem>
           <h2>
             <AccordionButton>
@@ -163,11 +204,9 @@ export function Notice() {
             모두투어 여행상품권은 모두투어 여행상품과 교환하실 수 있습니다. (단, 항공권 및 각종 티켓과는 교환되지 않습니다.)
           </AccordionPanel>
         </AccordionItem>
-
-
-
-
       </Accordion>
+          </Box>
+          <Box w={"20%" }padding={"10px"}>
           <Card>
             <CardHeader>
               <Heading size='md'> travel 투어 고객센터</Heading>
@@ -212,6 +251,7 @@ export function Notice() {
               </Stack>
             </CardBody>
           </Card>
+        </Box>
 
         </Flex>
       </Box>

@@ -266,7 +266,7 @@ export function NavBar() {
             fontSize={"0.8rem"}
             onClick={() => navigate("boardlist")}
           >
-            게시판 / 커뮤니티
+            게시판 / 공지사항
           </Button>
         </Flex>
       </Box>
