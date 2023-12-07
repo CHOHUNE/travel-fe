@@ -12,7 +12,7 @@ import "./style.css";
 
 // import required modules
 import { Pagination, Navigation, Autoplay } from "swiper/modules";
-import { Img } from "@chakra-ui/react";
+import { Box, Img } from "@chakra-ui/react";
 
 export default function App() {
   return (
