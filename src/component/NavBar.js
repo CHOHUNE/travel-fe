@@ -5,6 +5,10 @@ import {
   Heading,
   Img,
   Input,
+  Menu,
+  MenuButton,
+  MenuItem,
+  MenuList,
   useToast,
 } from "@chakra-ui/react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -41,7 +45,7 @@ export function NavBar() {
   const VerticalSwiper = () => {
     return (
       <>
-        <Box style={{ border: "1px solid black" }}>
+        <Box>
           <Swiper
             direction={"vertical"}
             slidesPerView={1}
@@ -56,7 +60,7 @@ export function NavBar() {
               disableOnInteraction: false,
             }}
             className="mySwiper"
-            style={{ width: "300px", height: "50px" }}
+            style={{ width: "80px", height: "20px" }}
           >
             <SwiperSlide style={{ fontSize: "15px" }}>Slide 1</SwiperSlide>
             <SwiperSlide style={{ fontSize: "15px" }}>Slide 2</SwiperSlide>
@@ -112,16 +116,20 @@ export function NavBar() {
           </Box>
 
           {/* 검색창 */}
-          <Flex alignItems={"center"} gap={2} mr={"-200px"}>
-            <Input _hover={{ color: "teal", cursor: "pointer" }} w={"400px"} />
+          <Flex alignItems={"center"} gap={3} mr={"-10px"}>
+            <Input
+              _hover={{ color: "teal" }}
+              w={"400px"}
+              borderRadius={"30px"}
+              background={"#f5f6f6"}
+              placeholder="검색어를 입력해 주세요."
+              fontSize={"13px"}
+            />
             <FontAwesomeIcon icon={faMagnifyingGlass} />
           </Flex>
 
-          <Flex alignItems={"center"} gap={2}>
-            <p>인기검색어</p>
-          </Flex>
-
-          <Flex alignItems={"center"} gap={2}>
+          <Flex alignItems={"center"}>
+            <p style={{ color: "gray" }}>인기검색어 </p>
             <VerticalSwiper />
           </Flex>
 
@@ -129,12 +137,14 @@ export function NavBar() {
           <Flex alignItems={"center"}>
             {isAdmin() && (
               <Button
-                w={"50px"}
-                h={"60px"}
+                w={"80px"}
+                h={"30px"}
                 borderRadius={0}
                 fontSize={"0.8rem"}
+                mr={4}
                 lineHeight={"80px"}
                 background={"white"}
+                style={{ borderRadius: "30px" }}
                 onClick={() => navigate("/user/list")}
               >
                 회원목록
@@ -142,28 +152,45 @@ export function NavBar() {
             )}
 
             {isAuthenticated() && (
-              <Button
-                w={"50px"}
-                h={"60px"}
-                ml={5}
-                borderRadius={0}
-                fontSize={"0.8rem"}
-                lineHeight={"80px"}
-                background={"white"}
-                onClick={() => navigate("/user?" + urlParams.toString())}
-              >
-                {login.userId}님
-              </Button>
+              <Menu>
+                <MenuButton
+                  as={Button}
+                  w={"70px"}
+                  h={"30px"}
+                  borderRadius={0}
+                  fontSize={"0.8rem"}
+                  lineHeight={"80px"}
+                  background={"white"}
+                  style={{ borderRadius: "30px" }}
+                  // onClick={() => navigate("/user?" + urlParams.toString())}
+                >
+                  {login.userId}님
+                </MenuButton>
+                <MenuList>
+                  <MenuItem
+                    onClick={() => navigate("/user?" + urlParams.toString())}
+                  >
+                    회원정보수정
+                  </MenuItem>
+                  <MenuItem onClick={() => navigate("/user/reservationList")}>
+                    예약내역
+                  </MenuItem>
+                  <MenuItem onClick={() => navigate("/user/bucket")}>
+                    찜한상품
+                  </MenuItem>
+                </MenuList>
+              </Menu>
             )}
 
             {isAuthenticated() || (
               <Button
-                w={"50px"}
-                h={"60px"}
+                w={"80px"}
+                h={"30px"}
                 borderRadius={0}
                 fontSize={"0.8rem"}
                 ml={4}
                 background={"white"}
+                style={{ borderRadius: "30px" }}
                 onClick={() => navigate("signup")}
               >
                 회원가입
@@ -172,12 +199,13 @@ export function NavBar() {
             {isAuthenticated() || (
               <Button
                 w={"50px"}
-                h={"60px"}
+                h={"30px"}
                 borderRadius={0}
                 fontSize={"0.8rem"}
                 ml={4}
                 mr={2}
                 background={"white"}
+                style={{ borderRadius: "30px" }}
                 onClick={() => navigate("login")}
               >
                 로그인
@@ -185,13 +213,14 @@ export function NavBar() {
             )}
             {isAuthenticated() && (
               <Button
-                w={"50px"}
-                h={"60px"}
+                w={"80px"}
+                h={"30px"}
                 borderRadius={0}
                 fontSize={"0.8rem"}
                 ml={4}
                 mr={2}
                 backgroundColor={"white"}
+                style={{ borderRadius: "30px" }}
                 onClick={handleLogout}
               >
                 로그아웃
@@ -230,7 +259,7 @@ export function NavBar() {
             </Button>
           </Flex>
           <Button
-            w={"100px"}
+            w={"150px"}
             h={"40px"}
             mr={2}
             mt={"10px"}

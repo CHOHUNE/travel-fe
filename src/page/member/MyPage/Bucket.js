@@ -11,13 +11,23 @@ import {
   Thead,
   Tr,
 } from "@chakra-ui/react";
+import { useEffect } from "react";
+import axios from "axios";
 
 export function Bucket() {
+  // useEffect(() => {
+  //   axios.get("/api/transport/bucket");
+  // }, []);
+  //
+  // useEffect(() => {
+  //   axios.get("/api/hotel/bucket");
+  // }, []);
+
   return (
     <Center m={10}>
       <Card w={"80%"}>
         <CardHeader textAlign={"center"} m={10}>
-          <Heading>장바구니</Heading>
+          <Heading>찜하기</Heading>
         </CardHeader>
 
         <CardBody>

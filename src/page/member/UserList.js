@@ -88,7 +88,7 @@ export function UserList() {
     <ChakraProvider theme={theme}>
       <Center m={20}>
         <Card w={"80%"}>
-          <Heading textAlign={"center"} m={10}>
+          <Heading textAlign={"center"} m={3}>
             회원 목록
           </Heading>
           <Table>

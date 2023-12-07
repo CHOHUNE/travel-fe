@@ -234,7 +234,7 @@ export function UserSignup() {
     let extraAddress = "";
     let address = data.address;
 
-    if (data.addressType === "R") {
+    if (data.addressType === "R" || data.addressType === "J") {
       if (data.bname !== "") {
         extraAddress += data.bname;
       }
