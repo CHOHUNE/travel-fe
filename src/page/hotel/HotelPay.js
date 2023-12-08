@@ -55,6 +55,7 @@ export function HotelPay() {
       .get(`/api/hotel/pay/${id}`)
       .then((response) => {
         setHotel(response.data);
+        setMember(response.data.member);
       })
       .catch(() => {
         toast({
@@ -62,7 +63,7 @@ export function HotelPay() {
           status: "error",
         });
       });
-  }, []);
+  }, [id]);
 
   const theme = extendTheme({
     styles: {
@@ -179,7 +180,12 @@ export function HotelPay() {
                 >
                   예약자명
                 </FormLabel>
-                <Input ml={5} mt={2} w={400} />
+                <Input
+                  ml={5}
+                  mt={2}
+                  w={400}
+                  value={member ? member.name : ""}
+                ></Input>
               </Flex>
 
               {/* 이메일 정보 */}
