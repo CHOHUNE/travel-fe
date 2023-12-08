@@ -12,7 +12,7 @@ import "./style.css";
 
 // import required modules
 import { Pagination, Navigation, Autoplay } from "swiper/modules";
-import { Img } from "@chakra-ui/react";
+import { Box, Img } from "@chakra-ui/react";
 
 export default function App() {
   return (
@@ -22,13 +22,14 @@ export default function App() {
         spaceBetween={30}
         loop={true}
         autoplay={{
-          delay: 2500,
+          delay: 3000,
           disableOnInteraction: false,
         }}
         pagination={{
           clickable: true,
         }}
         navigation={true}
+        speed={650}
         modules={[Pagination, Navigation, Autoplay]}
         className="mySwiper"
         autoHeight

@@ -1,66 +1,81 @@
-import React, {useEffect, useState} from 'react';
-import 'react-datepicker/dist/react-datepicker.css';
+import React, { useEffect, useState } from "react";
+import "react-datepicker/dist/react-datepicker.css";
 import {
-    Box, Button, ButtonGroup, Image, Input, Flex,
-    useToast,
-    Select,
-    PopoverTrigger, Popover, PopoverCloseButton, PopoverContent, PopoverArrow, PopoverHeader, PopoverBody,
-    Portal, IconButton, SimpleGrid, Badge, Center,
-} from '@chakra-ui/react';
-import {useNavigate, useParams} from 'react-router-dom';
-import axios from 'axios';
-import {AddIcon, MinusIcon, StarIcon} from "@chakra-ui/icons";
+  Box,
+  Button,
+  ButtonGroup,
+  Image,
+  Input,
+  Flex,
+  useToast,
+  Select,
+  PopoverTrigger,
+  Popover,
+  PopoverCloseButton,
+  PopoverContent,
+  PopoverArrow,
+  PopoverHeader,
+  PopoverBody,
+  Portal,
+  IconButton,
+  SimpleGrid,
+  Badge,
+  Center,
+} from "@chakra-ui/react";
+import { useNavigate, useParams } from "react-router-dom";
+import axios from "axios";
+import { AddIcon, MinusIcon, StarIcon } from "@chakra-ui/icons";
 import App from "./App";
-import {faHeart} from "@fortawesome/free-solid-svg-icons";
-import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
+import { faHeart } from "@fortawesome/free-solid-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
 export function Hotel() {
+  const toast = useToast();
+  const navigate = useNavigate();
+  const { id } = useParams();
 
-    const toast = useToast();
-    const navigate = useNavigate();
-    const {id} = useParams();
+  // 호텔
+  const [hotel, setHotel] = useState([]);
 
+  const [selectedRoom, setSelectedRoom] = useState("");
 
-    // 호텔
-    const [hotel, setHotel] = useState([]);
+  // 인원 카운트
+  const [count, setCount] = useState(1);
 
-    const [selectedRoom, setSelectedRoom] = useState("")
+  // 페이지네이션
+  const [currentPage, setCurrentPage] = useState(1);
+  const [hotelPerPage] = useState(9); // 한 페이지에 보일 호텔 수
 
-    // 인원 카운트
-    const [count, setCount] = useState(1)
+  // 현재 페이지의 호텔 목록 계산
+  const indexOfLastHotel = currentPage * hotelPerPage;
+  const indexOfFirstHotel = indexOfLastHotel - hotelPerPage;
+  const currentHotels = hotel.slice(indexOfFirstHotel, indexOfLastHotel);
 
-    // 페이지네이션
-    const [currentPage, setCurrentPage] = useState(1)
-    const [hotelPerPage] = useState(9)  // 한 페이지에 보일 호텔 수
+  // 위시리스트 토글
+  const [wishlist, setWishlist] = useState([]);
+  const [hotelItem, setHotelItem] = useState("");
 
-    // 현재 페이지의 호텔 목록 계산
-    const indexOfLastHotel = currentPage * hotelPerPage;
-    const indexOfFirstHotel = indexOfLastHotel - hotelPerPage;
-    const currentHotels = hotel.slice(indexOfFirstHotel, indexOfLastHotel);
+    // function handleRemoveFromWishlist(hotelId) {
+    //     axios.delete(`/api/wishlist/${hotelId}`,{
+    //         hotelId,
+    //
+    //     })
+    //         .then((response) => {
+    //             toast({
+    //                 description: "위시 리스트에 제거되었습니다.",
+    //                 status: 'success'
+    //             })
+    //         })
+    //         .catch((error) => {
+    //             toast({
+    //                 description: "위시리스트 삭제 중 에러 발생",
+    //                 status: 'error'
+    //             })
+    //         })
+    //
+    // }
 
-    // 위시리스트 토글
-    const [wishlist, setWishlist] = useState([])
-    const [hotelItem, setHotelItem] = useState('')
-
-
-    function handleRemoveFromWishlist(hotelId) {
-        axios.delete(`/api/wishlist/${hotelId}`)
-            .then((response) => {
-                toast({
-                    description: "위시 리스트에 제거되었습니다.",
-                    status: 'success'
-                })
-            })
-            .catch((error) => {
-                toast({
-                    description: "위시리스트 삭제 중 에러 발생",
-                    status: 'error'
-                })
-            })
-
-    }
-
-    const handleSaveToWishlist = (hotelId) => {
+    const handleUpdateToWishlist = (hotelId) => {
         // 기존 호텔 데이터 가져오기
         axios.get(`/api/hotel/reserv/id/${hotelId}`)
             .then((response) => {
@@ -71,7 +86,8 @@ export function Hotel() {
                     hotelId,
                     name: hotelData.name,
                     mainImgUrl: hotelData.mainImgUrl,
-                    location: hotelData.location
+                    location: hotelData.location,
+                    roomType:hotelData.roomType
                 })
                     .then(() => {
                         toast({
@@ -95,17 +111,18 @@ export function Hotel() {
     };
 
     const toggleWishlist = (hotelId) => {
-        setWishlist((prev) => {
-            const isAlreadyInWishlist = prev.includes(hotelId);
 
-            if (isAlreadyInWishlist) {
-                handleRemoveFromWishlist(hotelId);
-                return prev.filter((id) => id !== hotelId);
-            } else {
-                handleSaveToWishlist(hotelId);
-                return [...prev, hotelId];
-            }
-        });
+        // 이미 있다면 제거하고, 없다면 추가
+        if (wishlist.includes(hotelId)) {
+            // 이미 빨간색이므로 제거만 처리
+            setWishlist((prev) => prev.filter((id) => id !== hotelId));
+            handleUpdateToWishlist(hotelId);
+
+        } else {
+            // 추가하고 빨간색으로 표시
+            handleUpdateToWishlist(hotelId);
+            setWishlist((prev) => [...prev, hotelId]);
+        }
     };
 
     // 페이지 번호 클릭
@@ -326,8 +343,7 @@ export function Hotel() {
                                             />
                                         ))}
                                     <Box as='span' ml='2' color='gray.600' fontSize='sm'>
-                                        {/*{hotel.reviewCount}*/}
-                                        34 reviews
+                                        {hotel.rating}
                                     </Box>
 
                                     <ButtonGroup spacing="2" size={'sm'} variant={'outline'} ml={'30px'}>

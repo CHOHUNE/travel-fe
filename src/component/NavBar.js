@@ -62,15 +62,15 @@ export function NavBar() {
             className="mySwiper"
             style={{ width: "80px", height: "20px" }}
           >
-            <SwiperSlide style={{ fontSize: "15px" }}>Slide 1</SwiperSlide>
-            <SwiperSlide style={{ fontSize: "15px" }}>Slide 2</SwiperSlide>
-            <SwiperSlide style={{ fontSize: "15px" }}>Slide 3</SwiperSlide>
-            <SwiperSlide style={{ fontSize: "15px" }}>Slide 4</SwiperSlide>
-            <SwiperSlide style={{ fontSize: "15px" }}>Slide 5</SwiperSlide>
-            <SwiperSlide style={{ fontSize: "15px" }}>Slide 6</SwiperSlide>
-            <SwiperSlide style={{ fontSize: "15px" }}>Slide 7</SwiperSlide>
-            <SwiperSlide style={{ fontSize: "15px" }}>Slide 8</SwiperSlide>
-            <SwiperSlide style={{ fontSize: "15px" }}>Slide 9</SwiperSlide>
+            <SwiperSlide style={{ fontSize: "12px" }}>Slide 1</SwiperSlide>
+            <SwiperSlide style={{ fontSize: "12px" }}>Slide 2</SwiperSlide>
+            <SwiperSlide style={{ fontSize: "12px" }}>Slide 3</SwiperSlide>
+            <SwiperSlide style={{ fontSize: "12px" }}>Slide 4</SwiperSlide>
+            <SwiperSlide style={{ fontSize: "12px" }}>Slide 5</SwiperSlide>
+            <SwiperSlide style={{ fontSize: "12px" }}>Slide 6</SwiperSlide>
+            <SwiperSlide style={{ fontSize: "12px" }}>Slide 7</SwiperSlide>
+            <SwiperSlide style={{ fontSize: "12px" }}>Slide 8</SwiperSlide>
+            <SwiperSlide style={{ fontSize: "12px" }}>Slide 9</SwiperSlide>
           </Swiper>
         </Box>
       </>
@@ -129,7 +129,7 @@ export function NavBar() {
           </Flex>
 
           <Flex alignItems={"center"}>
-            <p style={{ color: "gray" }}>인기검색어 </p>
+            <p style={{ color: "gray", fontSize: "12px" }}>인기검색어 </p>
             <VerticalSwiper />
           </Flex>
 
@@ -175,7 +175,7 @@ export function NavBar() {
                   <MenuItem onClick={() => navigate("/user/reservationList")}>
                     예약내역
                   </MenuItem>
-                  <MenuItem onClick={() => navigate("/user/bucket")}>
+                  <MenuItem onClick={() => navigate("/user/bucket?"+urlParams.toString())}>
                     찜한상품
                   </MenuItem>
                 </MenuList>
