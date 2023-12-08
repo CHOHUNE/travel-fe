@@ -15,7 +15,7 @@ import { useEffect, useState } from "react";
 import axios from "axios";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faAnglesRight } from "@fortawesome/free-solid-svg-icons";
-import "./Font.css";
+import "./TransFont.css";
 
 export function TransPort() {
   const navigate = useNavigate();
@@ -91,7 +91,7 @@ export function TransPort() {
           lineHeight={"50px"}
         >
           <Box fontWeight={900} fontSize={"1.2rem"}>
-            버스 카테고리 게시글
+            🚎 버스 카테고리 게시글
           </Box>
         </Card>
 
@@ -153,16 +153,19 @@ export function TransPort() {
         </Flex>
       </Box>
       <Box ml={"12.5%"} mt={10} mb={20}>
-        <Input
+        <Card
           w={"400px"}
           h={"50px"}
-          readOnly
-          value={"항공 카테고리 게시글"}
           textAlign={"center"}
           mb={10}
           onClick={() => navigate("list?type=air")}
-          _hover={{ cursor: "pointer", color: "green" }}
-        />
+          _hover={{ cursor: "pointer", color: "#509896" }}
+          lineHeight={"50px"}
+        >
+          <Box fontWeight={900} fontSize={"1.2rem"}>
+            🛫 항공 카테고리 게시글
+          </Box>
+        </Card>
         <Flex>
           {listAir.map(
             (air) =>
