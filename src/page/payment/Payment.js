@@ -14,7 +14,7 @@ import {
   useQuery,
 } from "@chakra-ui/react";
 
-const clientKey = //"클라이언트 키 넣어줘야함";
+const clientKey = // "클라이언트 키 넣어야함";
 const customerKey = nanoid();
 const selector = "#payment-widget";
 
@@ -22,7 +22,7 @@ export function Payment() {
   const paymentWidget = usePaymentWidget(clientKey, customerKey);
   const paymentWidgetRef = useRef(null);
   const paymentMethodsWidgetRef = useRef(null);
-  const [price, setPrice] = useState(5000);
+  const [price, setPrice] = useState(50);
 
   useEffect(() => {
     (async () => {

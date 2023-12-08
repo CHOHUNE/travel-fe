@@ -49,7 +49,7 @@ import {
 import { useNavigate, useParams } from "react-router-dom";
 import axios from "axios";
 import { ChevronDownIcon } from "@chakra-ui/icons";
-import { Payment } from "../../Payment";
+import { Payment } from "../payment/Payment";
 
 export function HotelPay() {
   const [hotel, setHotel] = useState({});
