@@ -48,7 +48,7 @@ export function HotelPay() {
   const { id } = useParams();
   const toast = useToast();
 
-  const [member, setMember] = useState(null);
+  const [member, setMember] = useState("");
 
   useEffect(() => {
     axios
@@ -64,6 +64,11 @@ export function HotelPay() {
         });
       });
   }, [id]);
+
+  // ---------- 이메일 @ 기준으로 나누기 ---------
+  let receiveEmail = member.email ? member.email.split("@") : ["", ""];
+  let emailInput1 = receiveEmail[0];
+  let emailInput2 = receiveEmail[1];
 
   const theme = extendTheme({
     styles: {
@@ -203,7 +208,12 @@ export function HotelPay() {
                   이메일
                 </FormLabel>
                 <Flex>
-                  <Input ml={5} mt={2} w={200} />
+                  <Input
+                    ml={5}
+                    mt={2}
+                    w={200}
+                    value={member ? emailInput1 : ""}
+                  />
                   <span
                     style={{
                       justifyContent: "center",
@@ -222,7 +232,12 @@ export function HotelPay() {
                       @
                     </Box>
                   </span>
-                  <Input mt={2} w={200} value={emailDomain} />
+                  <Input
+                    mt={2}
+                    w={200}
+                    value={emailDomain}
+                    value={member ? emailInput2 : ""}
+                  />
                   <Menu>
                     <MenuButton
                       as={Button}
@@ -267,7 +282,12 @@ export function HotelPay() {
                   휴대폰번호
                 </FormLabel>
                 <Flex>
-                  <Input ml={5} mt={2} w={100} />
+                  <Input
+                    ml={5}
+                    mt={2}
+                    w={100}
+                    value={member ? member.phoneNumber : ""}
+                  />
                   <span
                     style={{
                       justifyContent: "center",
@@ -286,7 +306,11 @@ export function HotelPay() {
                       -
                     </Box>
                   </span>
-                  <Input mt={2} w={100} />
+                  <Input
+                    mt={2}
+                    w={100}
+                    value={member ? member.phoneNumber : ""}
+                  />
                   <span
                     style={{
                       justifyContent: "center",
@@ -305,7 +329,11 @@ export function HotelPay() {
                       -
                     </Box>
                   </span>
-                  <Input mt={2} w={100} />
+                  <Input
+                    mt={2}
+                    w={100}
+                    value={member ? member.phoneNumber : ""}
+                  />
                 </Flex>
               </Flex>
             </FormControl>
