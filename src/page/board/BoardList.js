@@ -1,9 +1,9 @@
 import React, { useEffect, useState } from "react";
 import {
   Box,
-  Button,
-  Flex,
-  Input,
+  Button, ButtonGroup,
+  Flex, Heading,
+  Input, Spacer,
   Spinner,
   Table,
   Tbody,
@@ -47,7 +47,8 @@ function Pagination({ pageInfo }) {
   }
 
   return (
-    <Box>
+    <Box w="80%" ml="10%"  display="flex" justifyContent="center" alignItems="center">
+      <br/>
       {pageInfo.prevPageNumber && (
         <PageButton variant="ghost" pageNumber={pageInfo.prevPageNumber}>
           <FontAwesomeIcon icon={faAngleLeft} />
@@ -87,10 +88,10 @@ function SearchComponent() {
     navigate("/boardList?" + params);
   }
   return     (
-    <Box>
 
 
-    <h1> 게시물 목록</h1>
+    <Box w="80%" h={"60px"} ml="10%">
+
     <Flex justifyContent={"space-between"}>
       <select>
         <option value="Option1">전 체</option>
@@ -126,20 +127,31 @@ const [params] = useSearchParams();
 
 
   return (
+    <Box>
+      <br/>
+      <Box w="80%" h={"60px"} ml="10%">
+        <Flex ml={2} lineHeight={"60px"} alignItems={"center"} mt={"3px"}>
+          <Box p='2'>
+            <Heading size='md' colorScheme="green">게시판 목록</Heading>
+          </Box>
+          <Spacer />
+          <ButtonGroup gap='2'>
+            <Button colorScheme='teal' onClick={() => navigate("/boardlist")}>게시판 목록</Button>
+            <Button colorScheme='teal'onClick={() => navigate("/boardwrite")}>게시판 작성</Button>
+            <Button colorScheme='teal'onClick={() => navigate("/Notice")}>공지사항</Button>
+          </ButtonGroup>
+        </Flex>
+      </Box>
+      <br/>
+      <br/>
 
-<Box>
-
-
-
-  <Flex>
-    <Button onClick={() => navigate("/boardlist")}>게시판 목록</Button>
-    <Button onClick={() => navigate("/boardwrite")}>게시판 작성</Button>
-    <Button onClick={() => navigate("/Notice")}>공지사항</Button>
-  </Flex>
   <SearchComponent />
-      <Table>
+  <br/>
+
+  <Table  w="80%" h={"60px"}   ml="10%">
         <Thead>
           <Tr>
+            <Th>글 순서</Th>
             <Th>타이틀</Th>
             <Th>컨텐츠</Th>
             <Th>작성자</Th>
@@ -151,8 +163,10 @@ const [params] = useSearchParams();
               <Tr
                 key={board.id}
                 _hover={{ cursor: "pointer" }}
+
                 onClick={() => navigate("/board/" + board.id)}
               >
+                <Td>{board.id}</Td>
                 <Td>{board.title}</Td>
                 <Td>{board.content}</Td>
                 <Td>{board.writer}</Td>
@@ -162,7 +176,7 @@ const [params] = useSearchParams();
           )}
         </Tbody>
       </Table>
-      <Pagination pageInfo={pageInfo} />
+      <Pagination  pageInfo={pageInfo} />
     </Box>
   );
 }

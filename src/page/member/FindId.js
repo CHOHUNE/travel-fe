@@ -138,8 +138,6 @@ export function FindId() {
       });
   }
 
-  function handleFindId() {}
-
   return (
     <Center m={20}>
       <Card w={"lg"}>

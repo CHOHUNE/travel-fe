@@ -11,15 +11,15 @@ import {
   Thead,
   Tr,
 } from "@chakra-ui/react";
-import { useEffect, useState } from "react";
+import { useEffect, useState} from "react";
 import axios from "axios";
+import {useLocation} from "react-router-dom";
 import { useSearchParams } from "react-router-dom";
 
 export function Bucket() {
   // 승원 수정 start ---------------------------------------
   const [transBucket, setTransBucket] = useState(null);
   const [params] = useSearchParams();
-  console.log(params.get("userId"));
   useEffect(() => {
     axios
       .get("/api/transport/bucket/id/" + params.get("userId"))
@@ -29,10 +29,19 @@ export function Bucket() {
   }, []);
   // 승원 수정 end ---------------------------------------
 
-  //
-  // useEffect(() => {
-  //   axios.get("/api/hotel/bucket");
-  // }, []);
+  const [hotelBucket, setHotelBucket] = useState(null)
+  const location = useLocation();
+  const searchParams = new URLSearchParams(location.search);
+
+  // 대훈이형 정보
+  useEffect(() => {
+
+
+    axios.get(`/api/hotel/bucket/id/${searchParams.get("userId")}`)
+        .then((response)=>{
+          setHotelBucket(response.data);
+        })
+  }, []);
 
   return (
     <Center m={10}>
