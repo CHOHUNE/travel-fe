@@ -15,6 +15,7 @@ import {
   NumberInputField,
   NumberInputStepper,
   Spinner,
+  Text,
   useToast,
 } from "@chakra-ui/react";
 import React, { useContext, useEffect, useState } from "react";
@@ -22,19 +23,27 @@ import axios from "axios";
 import { useNavigate, useParams } from "react-router-dom";
 import { LoginContext } from "../../component/LoginProvider";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faHeart } from "@fortawesome/free-regular-svg-icons";
+import { faHeart } from "@fortawesome/free-solid-svg-icons";
 
 function TransLikeContainer({ transLikeState, onClick }) {
   if (transLikeState === null) {
-    <Spinner />;
+    return <Spinner />;
   }
   return (
-    <Button variant={"ghost"} onClick={onClick}>
-      <Flex gap={2}>
-        <Box>찜하기</Box>
-        <FontAwesomeIcon icon={faHeart} size={"xl"} />
-      </Flex>
-    </Button>
+    <Flex gap={2}>
+      <Box>찜하기</Box>
+      <Button variant={"ghost"} onClick={onClick}>
+        {transLikeState.transLikeState && (
+          <Box>
+            <FontAwesomeIcon icon={faHeart} style={{ color: "#f05656" }} />
+          </Box>
+        )}
+        {transLikeState.transLikeState || (
+          <FontAwesomeIcon icon={faHeart} color={"gray"} />
+        )}
+        <Text>{transLikeState.transLikeCount}</Text>
+      </Button>
+    </Flex>
   );
 }
 
@@ -101,8 +110,8 @@ export function TransPortView() {
       })
       .catch(() => {
         toast({
-          description: "좋아요 기능이 실패했습니다.",
-          status: "error",
+          description: "로그인 해주세요 ",
+          colorScheme: "orange",
         });
       });
   }
