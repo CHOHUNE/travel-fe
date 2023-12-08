@@ -37,10 +37,19 @@ import {
   Img,
   CardFooter,
   Textarea,
+  Modal,
+  ModalOverlay,
+  ModalContent,
+  ModalHeader,
+  ModalCloseButton,
+  ModalBody,
+  ModalFooter,
+  useDisclosure,
 } from "@chakra-ui/react";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import axios from "axios";
 import { ChevronDownIcon } from "@chakra-ui/icons";
+import { Payment } from "../../Payment";
 
 export function HotelPay() {
   const [hotel, setHotel] = useState({});
@@ -48,7 +57,13 @@ export function HotelPay() {
   const { id } = useParams();
   const toast = useToast();
 
+  const navigate = useNavigate();
+
   const [member, setMember] = useState("");
+
+  const [isChecked, setIsChecked] = useState(false);
+
+  const { onOpen, isOpen, onClose } = useDisclosure();
 
   useEffect(() => {
     axios
@@ -69,6 +84,11 @@ export function HotelPay() {
   let receiveEmail = member.email ? member.email.split("@") : ["", ""];
   let emailInput1 = receiveEmail[0];
   let emailInput2 = receiveEmail[1];
+
+  // ---------- 핸드폰번호 수 기준으로 나누기 ---------
+  let a = member.phoneNumber ? member.phoneNumber.slice(0, 3) : "";
+  let b = member.phoneNumber ? member.phoneNumber.slice(3, 7) : "";
+  let c = member.phoneNumber ? member.phoneNumber.slice(7) : "";
 
   const theme = extendTheme({
     styles: {
@@ -99,6 +119,10 @@ export function HotelPay() {
   const handlePersonnelChildClick = (child) => {
     setPersonChild(child);
   };
+
+  function handlePayment() {
+    axios.post("/");
+  }
 
   return (
     <ChakraProvider theme={theme}>
@@ -282,12 +306,7 @@ export function HotelPay() {
                   휴대폰번호
                 </FormLabel>
                 <Flex>
-                  <Input
-                    ml={5}
-                    mt={2}
-                    w={100}
-                    value={member ? member.phoneNumber : ""}
-                  />
+                  <Input ml={5} mt={2} w={100} value={a} />
                   <span
                     style={{
                       justifyContent: "center",
@@ -306,11 +325,7 @@ export function HotelPay() {
                       -
                     </Box>
                   </span>
-                  <Input
-                    mt={2}
-                    w={100}
-                    value={member ? member.phoneNumber : ""}
-                  />
+                  <Input mt={2} w={100} value={b} />
                   <span
                     style={{
                       justifyContent: "center",
@@ -329,11 +344,7 @@ export function HotelPay() {
                       -
                     </Box>
                   </span>
-                  <Input
-                    mt={2}
-                    w={100}
-                    value={member ? member.phoneNumber : ""}
-                  />
+                  <Input mt={2} w={100} value={c} />
                 </Flex>
               </Flex>
             </FormControl>
@@ -362,8 +373,17 @@ export function HotelPay() {
                 >
                   이용자명
                 </FormLabel>
-                <Input ml={5} mt={2} w={400} />
-                <Checkbox ml={3} />
+                <Input
+                  ml={5}
+                  mt={2}
+                  w={400}
+                  value={isChecked ? (member ? member.name : "") : ""}
+                />
+                <Checkbox
+                  ml={3}
+                  value={isChecked}
+                  onChange={() => setIsChecked(!isChecked)}
+                />
                 <span
                   style={{
                     justifyContent: "center",
@@ -398,7 +418,7 @@ export function HotelPay() {
                   휴대폰번호
                 </FormLabel>
                 <Flex>
-                  <Input ml={5} mt={2} w={100} />
+                  <Input ml={5} mt={2} w={100} value={isChecked ? a : ""} />
                   <span
                     style={{
                       justifyContent: "center",
@@ -417,7 +437,7 @@ export function HotelPay() {
                       -
                     </Box>
                   </span>
-                  <Input mt={2} w={100} />
+                  <Input mt={2} w={100} value={isChecked ? b : ""} />
                   <span
                     style={{
                       justifyContent: "center",
@@ -436,7 +456,7 @@ export function HotelPay() {
                       -
                     </Box>
                   </span>
-                  <Input mt={2} w={100} />
+                  <Input mt={2} w={100} value={isChecked ? c : ""} />
                 </Flex>
               </Flex>
 
@@ -631,72 +651,72 @@ export function HotelPay() {
 
             {/* 결제정보 */}
 
-            <FormControl mt={20}>
-              <FormLabel fontSize={"20px"} fontWeight={"bold"}>
-                결제 정보
-              </FormLabel>
-            </FormControl>
+            {/*<FormControl mt={20}>*/}
+            {/*  <FormLabel fontSize={"20px"} fontWeight={"bold"}>*/}
+            {/*    결제 정보*/}
+            {/*  </FormLabel>*/}
+            {/*</FormControl>*/}
 
-            <FormControl
-              borderTop={"1px solid black"}
-              borderBottom={"1px solid #ededed"}
-            >
-              <Flex borderBottom={"1px solid #ededed"}>
-                <FormLabel
-                  m={0}
-                  background={"#f5f6f6"}
-                  h={"60px"}
-                  w={"100px"}
-                  justifyContent="center"
-                  display={"flex"}
-                  alignItems={"center"}
-                  fontSize={"13px"}
-                >
-                  결제수단
-                </FormLabel>
-                <Flex>
-                  {/* 신용카드 */}
-                  <Button
-                    border={"1px solid #c3c3c3"}
-                    fontSize={"13px"}
-                    background={"white"}
-                    ml={5}
-                    mt={4}
-                    w={"130px"}
-                    h={"30px"}
-                  >
-                    신용카드
-                  </Button>
+            {/*<FormControl*/}
+            {/*  borderTop={"1px solid black"}*/}
+            {/*  borderBottom={"1px solid #ededed"}*/}
+            {/*>*/}
+            {/*  <Flex borderBottom={"1px solid #ededed"}>*/}
+            {/*    <FormLabel*/}
+            {/*      m={0}*/}
+            {/*      background={"#f5f6f6"}*/}
+            {/*      h={"60px"}*/}
+            {/*      w={"100px"}*/}
+            {/*      justifyContent="center"*/}
+            {/*      display={"flex"}*/}
+            {/*      alignItems={"center"}*/}
+            {/*      fontSize={"13px"}*/}
+            {/*    >*/}
+            {/*      결제수단*/}
+            {/*    </FormLabel>*/}
+            {/*    <Flex>*/}
+            {/*      /!* 신용카드 *!/*/}
+            {/*      <Button*/}
+            {/*        border={"1px solid #c3c3c3"}*/}
+            {/*        fontSize={"13px"}*/}
+            {/*        background={"white"}*/}
+            {/*        ml={5}*/}
+            {/*        mt={4}*/}
+            {/*        w={"130px"}*/}
+            {/*        h={"30px"}*/}
+            {/*      >*/}
+            {/*        신용카드*/}
+            {/*      </Button>*/}
 
-                  {/* 네이버페이 */}
-                  <Button
-                    border={"1px solid #c3c3c3"}
-                    background={"white"}
-                    ml={5}
-                    mt={4}
-                    w={"130px"}
-                    h={"30px"}
-                  >
-                    <Img src="https://www.gagopatour.com/img/ico-default-naverpay.png" />
-                  </Button>
+            {/*      /!* 네이버페이 *!/*/}
+            {/*      <Button*/}
+            {/*        border={"1px solid #c3c3c3"}*/}
+            {/*        background={"white"}*/}
+            {/*        ml={5}*/}
+            {/*        mt={4}*/}
+            {/*        w={"130px"}*/}
+            {/*        h={"30px"}*/}
+            {/*      >*/}
+            {/*        <Img src="https://www.gagopatour.com/img/ico-default-naverpay.png" />*/}
+            {/*      </Button>*/}
 
-                  {/* 카카오페이 */}
-                  <Button
-                    border={"1px solid #c3c3c3"}
-                    background={"white"}
-                    ml={5}
-                    mt={4}
-                    w={"130px"}
-                    h={"30px"}
-                  >
-                    <Img
-                      src="https://www.gagopatour.com/img/kakao.png"
-                      h={"20px"}
-                    />
-                  </Button>
-                </Flex>
-              </Flex>
-            </FormControl>
+            {/*      /!* 카카오페이 *!/*/}
+            {/*      <Button*/}
+            {/*        border={"1px solid #c3c3c3"}*/}
+            {/*        background={"white"}*/}
+            {/*        ml={5}*/}
+            {/*        mt={4}*/}
+            {/*        w={"130px"}*/}
+            {/*        h={"30px"}*/}
+            {/*      >*/}
+            {/*        <Img*/}
+            {/*          src="https://www.gagopatour.com/img/kakao.png"*/}
+            {/*          h={"20px"}*/}
+            {/*        />*/}
+            {/*      </Button>*/}
+            {/*    </Flex>*/}
+            {/*  </Flex>*/}
+            {/*</FormControl>*/}
 
             <FormControl mt={20}>
               <Flex>
@@ -711,6 +731,7 @@ export function HotelPay() {
                     mt={"20px"}
                     background={"#4095D9"}
                     color={"white"}
+                    onClick={() => onOpen()}
                   >
                     결제하기
                   </Button>
@@ -718,6 +739,21 @@ export function HotelPay() {
               </Flex>
             </FormControl>
           </CardBody>
+
+          {/* 결제 모달 */}
+          <Modal isOpen={isOpen} onClose={onClose} size={"xl"}>
+            <ModalOverlay />
+            <ModalContent>
+              <ModalCloseButton />
+              <ModalBody>
+                <Payment />
+              </ModalBody>
+
+              <ModalFooter>
+                <Button onClick={onClose}>닫기</Button>
+              </ModalFooter>
+            </ModalContent>
+          </Modal>
         </Card>
       </Center>
     </ChakraProvider>
