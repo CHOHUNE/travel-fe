@@ -1,17 +1,12 @@
-import {
-  createBrowserRouter,
-  createRoutesFromElements,
-  Route,
-  RouterProvider,
-} from "react-router-dom";
-import { FindId } from "./page/member/FindId";
-import { FindPw } from "./page/member/FindPw";
-import { FindPwChange } from "./page/member/FindPwChange";
+import {createBrowserRouter, createRoutesFromElements, Route, RouterProvider,} from "react-router-dom";
+import {FindId} from "./page/member/FindId";
+import {FindPw} from "./page/member/FindPw";
+import {FindPwChange} from "./page/member/FindPwChange";
 import React from "react";
-import { NaverLogin } from "./page/member/NaverLogin";
-import { Bucket } from "./page/member/MyPage/Bucket";
+import {NaverLogin} from "./page/member/NaverLogin";
+import {Bucket} from "./page/member/MyPage/Bucket";
 import UserLayOut from "./page/member/layout/UserLayOut";
-import { ReservationList } from "./page/member/MyPage/ReservationList";
+import {ReservationList} from "./page/member/MyPage/ReservationList";
 import {HomeLayout} from "./layout/HomeLayout";
 import {HomeBody} from "./component/HomeBody";
 import {TransPort} from "./page/transport/TransPort";
@@ -36,6 +31,7 @@ import {HotelPay} from "./page/hotel/HotelPay";
 import LoginProvider from "./component/LoginProvider";
 import {Notice} from "./page/board/Notice";
 import {UserView} from "./page/member/MyPage/UserView";
+import {NoticeSound} from "./page/board/NoticeSound";
 
 const routes = createBrowserRouter(
   createRoutesFromElements(
@@ -54,6 +50,8 @@ const routes = createBrowserRouter(
       <Route path="board/:id" element={<BoardView />} />
       <Route path="edit/:id" element={<BoardEdit />} />
       <Route path="notice" element={<Notice />} />
+      <Route path="noticeSound" element={<NoticeSound />} />
+
 
       {/* 회원관련 */}
       <Route path="login" element={<UserLogin />} />

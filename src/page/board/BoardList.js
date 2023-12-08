@@ -1,13 +1,14 @@
 import React, { useEffect, useState } from "react";
 import {
+  Accordion, AccordionButton, AccordionIcon, AccordionItem, AccordionPanel,
   Box,
-  Button, ButtonGroup,
-  Flex, Heading,
+  Button, ButtonGroup, Card, CardBody, CardHeader, Divider,
+  Flex, Heading, Icon,
   Input, Spacer,
-  Spinner,
+  Spinner, Stack, StackDivider,
   Table,
   Tbody,
-  Td,
+  Td, Text,
   Th,
   Thead,
   Tr,
@@ -21,6 +22,7 @@ import {
 } from "@fortawesome/free-solid-svg-icons";
 
 import * as PropTypes from "prop-types";
+import {InfoOutlineIcon, PhoneIcon} from "@chakra-ui/icons";
 
 function PageButton({ variant, pageNumber, children }) {
   const [params] = useSearchParams();
@@ -127,56 +129,170 @@ const [params] = useSearchParams();
 
 
   return (
-    <Box>
-      <br/>
-      <Box w="80%" h={"60px"} ml="10%">
-        <Flex ml={2} lineHeight={"60px"} alignItems={"center"} mt={"3px"}>
-          <Box p='2'>
-            <Heading size='md' colorScheme="green">게시판 목록</Heading>
-          </Box>
-          <Spacer />
-          <ButtonGroup gap='2'>
-            <Button colorScheme='teal' onClick={() => navigate("/boardlist")}>게시판 목록</Button>
-            <Button colorScheme='teal'onClick={() => navigate("/boardwrite")}>게시판 작성</Button>
-            <Button colorScheme='teal'onClick={() => navigate("/Notice")}>공지사항</Button>
-          </ButtonGroup>
-        </Flex>
-      </Box>
+    <Box w="80%" ml="10%">
+
       <br/>
       <br/>
+      <Flex textAlign={"center"} >
+        <Box w="20%" padding={"10px"}>
 
-  <SearchComponent />
-  <br/>
+          <Card>
+            <CardHeader>
+              <Heading size='md'>투어 고객센터</Heading>
+            </CardHeader>
 
-  <Table  w="80%" h={"60px"}   ml="10%">
-        <Thead>
-          <Tr>
-            <Th>글 순서</Th>
-            <Th>타이틀</Th>
-            <Th>컨텐츠</Th>
-            <Th>작성자</Th>
-            <Th>작성일</Th>
-          </Tr>
-        </Thead>
-        <Tbody>
-          {boardList.map((board) => (
-              <Tr
-                key={board.id}
-                _hover={{ cursor: "pointer" }}
 
-                onClick={() => navigate("/board/" + board.id)}
-              >
-                <Td>{board.id}</Td>
-                <Td>{board.title}</Td>
-                <Td>{board.content}</Td>
-                <Td>{board.writer}</Td>
-                <Td>{board.inserted}</Td>
-              </Tr>
-            )
-          )}
-        </Tbody>
-      </Table>
-      <Pagination  pageInfo={pageInfo} />
+            <CardBody textAlign={"left"}>
+              <Box>
+                <Divider my="2" />
+                <Box>
+                  <Text  fontSize='md' _hover={{ cursor: 'pointer', color: 'green'  }} onClick={() => navigate("/notice")}>
+                    자주 찾는 질문
+                  </Text>
+                </Box>
+
+                <Divider my="4" />
+                <Box>
+                  <Text fontSize='md' _hover={{ cursor: 'pointer', color: 'green'  }} onClick={() => navigate("/boardList")}>
+                    게 시 판
+                  </Text>
+                </Box>
+                {/* 구분선 추가 */}
+                <Divider my="4" />
+                <Box>
+                  <Text fontSize='md'  _hover={{cursor: 'pointer', color: 'green' }} onClick={() => navigate("/boardwrite")}>
+                    고객의 소리
+                  </Text>
+                </Box>
+
+                <Divider my="4" />
+                <Box>
+                  <Text fontSize='md' _hover={{ cursor: 'pointer', color: 'green'  }} onClick={() => navigate("/NoticeSound")}>
+                    소비자 중심 경영
+                  </Text>
+                </Box>
+              </Box>
+            </CardBody>
+          </Card>
+        </Box>
+
+
+
+        <Box  w="60%" padding={"10px"}>
+            <br/>
+                  <Heading textAlign={"center"} size='md' colorScheme="green">게시판 목록</Heading>
+            <br/>
+            <SearchComponent />
+            <br/>
+
+            <Table  w="80%" h={"60px"}   ml="10%">
+              <Thead>
+                <Tr>
+                  <Th>글 순서</Th>
+                  <Th>타이틀</Th>
+                  <Th>컨텐츠</Th>
+                  <Th>작성자</Th>
+                  <Th>작성일</Th>
+                </Tr>
+              </Thead>
+              <Tbody>
+                {boardList.map((board) => (
+                    <Tr
+                      key={board.id}
+                      _hover={{ cursor: "pointer" }}
+
+                      onClick={() => navigate("/board/" + board.id)}
+                    >
+                      <Td>{board.id}</Td>
+                      <Td>{board.title}</Td>
+                      <Td>{board.content}</Td>
+                      <Td>{board.writer}</Td>
+                      <Td>{board.inserted}</Td>
+                    </Tr>
+                  )
+                )}
+              </Tbody>
+            </Table>
+            <Pagination  pageInfo={pageInfo} />
+        </Box>
+
+
+        <Box w={"20%" }padding={"10px"}>
+          <Card>
+            <CardHeader>
+              <Heading size='md'>투어 고객센터</Heading>
+            </CardHeader>
+
+            <CardBody>
+              <Stack divider={<StackDivider />} spacing='4'>
+                <Box>
+                  <Heading size='xs' textTransform='uppercase'>
+                    <Icon as={PhoneIcon}/> 해외/국내 여행상담
+                  </Heading>
+                  <Text pt='2' fontSize='md' fontWeight="bold" color={"green"}>
+                    1544-5252
+                  </Text>
+                </Box>
+                <Box>
+                  <Heading size='xs' textTransform='uppercase'>
+                    <Icon as={PhoneIcon}/>  해외/국내 항공상담
+                  </Heading>
+                  <Text  pt='2' fontSize='md' fontWeight="bold" color={"green"}>
+                    1544-5353
+                  </Text>
+                </Box>
+                <Box>
+                  <Heading size='xs' textTransform='uppercase'>
+                    <Icon as={PhoneIcon}/>  부산/대구출발 여행상담
+                  </Heading>
+                  <Text pt='2' fontSize='md' fontWeight="bold" color={"green"}>
+                    1544-6722
+                  </Text>
+                </Box>
+                <Box>
+                  <Heading size='xs' textTransform='uppercase'>
+                    <Icon as={PhoneIcon}/>  기업행사/출장문의
+                  </Heading>
+                  <Text  pt='2' fontSize='md' fontWeight="bold" color={"green"} >
+                    1661-4873
+                  </Text>
+                  <Text  pt='2' fontSize='sm'  color={"gray"} >
+                    https://biz.tour.com
+                  </Text>
+                </Box>
+                <Box textAlign={"left"}>
+                  <Heading size='xs'  textTransform='uppercase'  p='2'>
+                    <Icon as={InfoOutlineIcon}/> 상담시간 안내
+                  </Heading>
+
+                  <Text  pt='2' fontSize='11px'  >
+                    *해외/국내 여행 및 항공상담
+                    평일 9:00 ~ 18:00 (토/일요일 및 공휴일 휴무)
+                  </Text>
+                  <Text  pt='2' fontSize='11px'  >
+                    *항공권은 전화상담 예약 시 항공료 외 별도의 취급 수수료가 발생합니다.
+                  </Text>
+                  <Text  pt='2' fontSize='11px'  >
+                    *항공 시스템 결제요청, 환불/변경 문의
+                    평일 9:00 ~ 17:00 (토/일요일 및 공휴일 휴무)
+                  </Text>
+
+                </Box>
+              </Stack>
+            </CardBody>
+          </Card>
+        </Box>
+
+      </Flex>
     </Box>
+
+
+
+
+
+
+
+
+
   );
 }

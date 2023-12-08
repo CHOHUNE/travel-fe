@@ -1,64 +1,31 @@
 import {
-  Alert,
-  Box,
-  Button, Card, CardBody, CardHeader, Divider,
-  Flex,
-  flexbox,
-  FormControl, FormHelperText,
-  FormLabel, Heading, Icon, Image,
-  Input, Stack, StackDivider, Text,
-  Textarea,
-  useToast,
+  Box, Button,
+  Card,
+  CardBody,
+  CardHeader,
+  Divider, Flex, FormControl, FormHelperText, FormLabel,
+  Heading, Icon, Image, Img, Input, Stack, StackDivider,
+  Tab,
+  TabList,
+  TabPanel,
+  TabPanels,
+  Tabs, Text, Textarea
 } from "@chakra-ui/react";
-import React, { useState } from "react";
-import axios from "axios";
-import { useNavigate } from "react-router-dom";
-import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
-import {faHeart} from "@fortawesome/free-solid-svg-icons";
-import {CommentContainer} from "../comment/CommentContainer";
+import * as PropTypes from "prop-types";
 import {InfoOutlineIcon, PhoneIcon} from "@chakra-ui/icons";
+import React from "react";
+import {useNavigate} from "react-router-dom";
 
-export function BoardWrite() {
-  const [title, setTitle] = useState("");
-  const [content, setContent] = useState("");
-  const [writer, setWriter] = useState("");
-  const [uploadFiles, setUploadFiles] = useState(null);
 
+
+export function NoticeSound() {
   const navigate = useNavigate();
-  const toast = useToast();
-  const [isSubmitting, setIsSubmitting] = useState(false);
 
-  function handleSubmit() {
-    setIsSubmitting(true);
-    axios
-      .postForm("/api/board/add", { title, content, writer,uploadFiles })
-      .then((response) => {
-        console.log(response.data);
-        toast({ description: "글이 작성되었습니다.", status: "success" });
-        navigate("/boardList");
-      })
-      .catch(() => {
-        toast({ description: "글이 작성 안됬습니다.", status: "error" });
-      })
-      .finally(() => {
-        console.log("done");
-        setIsSubmitting(false);
-      });
-  }
-
-  let selectedOption;
-
-  function handleOptionChange() {}
-
-  return (
-
+  return(
 
 
     <Box w="80%" ml="10%">
-
-      <br/>
-      <br/>
-      <Flex textAlign={"center"} >
+  <Flex>
         <Box w="20%" padding={"10px"}>
 
           <Card>
@@ -93,7 +60,7 @@ export function BoardWrite() {
                 <Divider my="4" />
                 <Box>
                   <Text fontSize='md' _hover={{ cursor: 'pointer', color: 'green'  }} onClick={() => navigate("/NoticeSound")}>
-                    소비자 중심 경영
+                소비자 중심 경영
                   </Text>
                 </Box>
               </Box>
@@ -103,53 +70,24 @@ export function BoardWrite() {
 
 
 
-        <Box  w="60%" padding={"10px"}>
+        <Box  w="60%" padding={"10px"} style={{ display: 'flex', justifyContent: 'center' }}>
 
-          <br />
-          <Heading size='md'>게시글 작성</Heading>
-          <br />
+          <Tabs isFitted variant='enclosed'>
+            <TabList mb='1em'>
+              <Tab _selected={{ color: "black" , fontWeight:"bold" }} _focus={{ boxShadow: "none"  }}>소비자 중심 경영</Tab>
+              <Tab _selected={{ color: "black" , fontWeight:"bold" }} _focus={{ boxShadow: "none" }}>고객 헌장</Tab>
+            </TabList>
+            <TabPanels>
+              <TabPanel>
+                <Img src={"https://study1993garbi.s3.ap-northeast-2.amazonaws.com/travel/board/%EC%86%8C%EB%B9%84%EC%9E%90+%EC%A4%91%EC%8B%AC+%EA%B2%BD%EC%98%81.jpg"} alt="소비자 중심 경영" />
+              </TabPanel>
+              <TabPanel>
+                <Img src={"https://study1993garbi.s3.ap-northeast-2.amazonaws.com/travel/board/%EA%B3%A0%EA%B0%9D+%ED%97%8C%EC%9E%A5.jpg"} alt="고객 헌장" />
+              </TabPanel>
+            </TabPanels>
+          </Tabs>
 
-          <Box>
-            <FormControl>
-              <FormLabel>제목</FormLabel>
-              <Input value={title} onChange={(e) => setTitle(e.target.value)} />
-              <br />
-            </FormControl>
 
-            <FormControl>
-              <FormLabel>본문</FormLabel>
-              <Textarea
-                value={content}
-                onChange={(e) => setContent(e.target.value)}
-              ></Textarea>
-              <br />
-            </FormControl>
-            <FormControl>
-              <FormLabel> 이미지</FormLabel>
-              <Input type="file" accept="image/*"  multiple  onChange={(e)=>setUploadFiles(e.target.files)}/>
-              <FormHelperText>
-                한 개 파일은 1MB 이내 총 용량은 10MB 이내로 첨부하세요
-              </FormHelperText>
-              <br />
-            </FormControl>
-            <FormControl>
-              <FormLabel>작성자</FormLabel>
-              <Input
-                value={writer}
-                onChange={(e) => setWriter(e.target.value)}
-              ></Input>
-              <br />
-            </FormControl>
-            <br />
-            <Button
-              isDisabled={isSubmitting}
-              onClick={handleSubmit}
-              colorScheme="green"
-            >
-              {" "}
-              저장{" "}
-            </Button>
-          </Box>
         </Box>
 
 
@@ -219,10 +157,9 @@ export function BoardWrite() {
           </Card>
         </Box>
 
-      </Flex>
+
+</Flex>
     </Box>
-
-
 
   );
 }
