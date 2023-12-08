@@ -11,26 +11,29 @@ import {
   Thead,
   Tr,
 } from "@chakra-ui/react";
-import {useContext, useEffect, useState} from "react";
+import { useEffect, useState} from "react";
 import axios from "axios";
-import {useLocation, useParams} from "react-router-dom";
-import {LoginContext} from "../../../component/LoginProvider";
+import {useLocation} from "react-router-dom";
+import { useSearchParams } from "react-router-dom";
 
 export function Bucket() {
-
+  // 승원 수정 start ---------------------------------------
+  const [transBucket, setTransBucket] = useState(null);
+  const [params] = useSearchParams();
+  useEffect(() => {
+    axios
+      .get("/api/transport/bucket/id/" + params.get("userId"))
+      .then((response) => {
+        setTransBucket(response.data);
+      });
+  }, []);
+  // 승원 수정 end ---------------------------------------
 
   const [hotelBucket, setHotelBucket] = useState(null)
   const location = useLocation();
   const searchParams = new URLSearchParams(location.search);
 
-  // useEffect(() => {
-  //   axios.get("/api/transport/bucket");
-  // }, []);
-  //
-  // 내가 전달해줄 정보
-  //
-
-
+  // 대훈이형 정보
   useEffect(() => {
 
 
