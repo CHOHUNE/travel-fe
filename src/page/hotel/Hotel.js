@@ -43,24 +43,27 @@ export function Hotel() {
     const [hotelItem, setHotelItem] = useState('')
 
 
-    function handleRemoveFromWishlist(hotelId) {
-        axios.delete(`/api/wishlist/${hotelId}`)
-            .then((response) => {
-                toast({
-                    description: "위시 리스트에 제거되었습니다.",
-                    status: 'success'
-                })
-            })
-            .catch((error) => {
-                toast({
-                    description: "위시리스트 삭제 중 에러 발생",
-                    status: 'error'
-                })
-            })
+    // function handleRemoveFromWishlist(hotelId) {
+    //     axios.delete(`/api/wishlist/${hotelId}`,{
+    //         hotelId,
+    //
+    //     })
+    //         .then((response) => {
+    //             toast({
+    //                 description: "위시 리스트에 제거되었습니다.",
+    //                 status: 'success'
+    //             })
+    //         })
+    //         .catch((error) => {
+    //             toast({
+    //                 description: "위시리스트 삭제 중 에러 발생",
+    //                 status: 'error'
+    //             })
+    //         })
+    //
+    // }
 
-    }
-
-    const handleSaveToWishlist = (hotelId) => {
+    const handleUpdateToWishlist = (hotelId) => {
         // 기존 호텔 데이터 가져오기
         axios.get(`/api/hotel/reserv/id/${hotelId}`)
             .then((response) => {
@@ -96,17 +99,18 @@ export function Hotel() {
     };
 
     const toggleWishlist = (hotelId) => {
-        setWishlist((prev) => {
-            const isAlreadyInWishlist = prev.includes(hotelId);
 
-            if (isAlreadyInWishlist) {
-                handleRemoveFromWishlist(hotelId);
-                return prev.filter((id) => id !== hotelId);
-            } else {
-                handleSaveToWishlist(hotelId);
-                return [...prev, hotelId];
-            }
-        });
+        // 이미 있다면 제거하고, 없다면 추가
+        if (wishlist.includes(hotelId)) {
+            // 이미 빨간색이므로 제거만 처리
+            setWishlist((prev) => prev.filter((id) => id !== hotelId));
+            handleUpdateToWishlist(hotelId);
+
+        } else {
+            // 추가하고 빨간색으로 표시
+            handleUpdateToWishlist(hotelId);
+            setWishlist((prev) => [...prev, hotelId]);
+        }
     };
 
     // 페이지 번호 클릭

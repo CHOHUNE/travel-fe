@@ -22,7 +22,7 @@ export function Bucket() {
   const [hotelBucket, setHotelBucket] = useState(null)
   const location = useLocation();
   const searchParams = new URLSearchParams(location.search);
-  const userId = searchParams.get("userId");
+
   // useEffect(() => {
   //   axios.get("/api/transport/bucket");
   // }, []);
@@ -34,7 +34,7 @@ export function Bucket() {
   useEffect(() => {
 
 
-    axios.get(`/api/hotel/bucket/id/${userId}`)
+    axios.get(`/api/hotel/bucket/id/${searchParams.get("userId")}`)
         .then((response)=>{
           setHotelBucket(response.data);
         })
