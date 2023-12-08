@@ -11,17 +11,34 @@ import {
   Thead,
   Tr,
 } from "@chakra-ui/react";
-import { useEffect } from "react";
+import {useContext, useEffect, useState} from "react";
 import axios from "axios";
+import {useLocation, useParams} from "react-router-dom";
+import {LoginContext} from "../../../component/LoginProvider";
 
 export function Bucket() {
+
+
+  const [hotelBucket, setHotelBucket] = useState(null)
+  const location = useLocation();
+  const searchParams = new URLSearchParams(location.search);
+
   // useEffect(() => {
   //   axios.get("/api/transport/bucket");
   // }, []);
   //
-  // useEffect(() => {
-  //   axios.get("/api/hotel/bucket");
-  // }, []);
+  // 내가 전달해줄 정보
+  //
+
+
+  useEffect(() => {
+
+
+    axios.get(`/api/hotel/bucket/id/${searchParams.get("userId")}`)
+        .then((response)=>{
+          setHotelBucket(response.data);
+        })
+  }, []);
 
   return (
     <Center m={10}>

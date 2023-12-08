@@ -19,7 +19,7 @@ import {
     Flex,
     useToast,
     Checkbox,
-    CheckboxGroup,
+    CheckboxGroup, Switch,
 
 } from "@chakra-ui/react";
 import React, {useEffect, useState} from "react";
@@ -28,30 +28,26 @@ import {useNavigate, useParams} from "react-router-dom";
 
 export function HotelEdit() {
 
+    const [hotel, setHotel] = useState([])
+
+    const toast = useToast()
+    const navigate = useNavigate()
+    const {id} = useParams()
+
     const [name, setName] = useState('');
     const [location, setLocation] = useState('');
     const [description, setDescription] = useState('');
     const [numberOfBed, setNumberOfBed] = useState('');
     const [roomType, setRoomType] = useState("스탠다드");
-
     const [mainImg, setMainImg] = useState();
     const [subImg1, setSubImg1] = useState();
     const [subImg2, setSubImg2] = useState();
     const [mapImg, setMapImg] = useState();
-
     const [numberOfBedRooms, setNumberOfBedRooms] = useState('');
     const [totalPrice, setTotalPrice] = useState('');
 
     const [removeFileId, setRemoveFileId] = useState([])
     const [uploadFiles, setUploadFiles] = useState(null)
-
-    const [hotel, setHotel] = useState([])
-    const {id} = useParams()
-
-
-    const toast = useToast()
-    const navigate = useNavigate()
-
 
     useEffect(() => {
         axios
@@ -109,9 +105,11 @@ export function HotelEdit() {
                 })
             })
             .then(
-                ()=>navigate(-1)
+                ()=>navigate(-2)
             )
     }
+
+
 
 
 
