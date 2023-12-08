@@ -7,7 +7,6 @@ import {
   Flex,
   FormControl,
   FormLabel,
-  Heading,
   Image,
   Input,
   NumberDecrementStepper,
@@ -16,7 +15,6 @@ import {
   NumberInputField,
   NumberInputStepper,
   Spinner,
-  Tooltip,
   useToast,
 } from "@chakra-ui/react";
 import React, { useContext, useEffect, useState } from "react";
@@ -169,6 +167,15 @@ export function TransPortView() {
                     size="md"
                     type="date"
                   />
+                </Flex>
+              </Box>
+              <Box w={"200px"} h={"80px"} bg={"#f3eeee"} mt={4}>
+                <Flex>
+                  {trans.transAddress != null ? (
+                    <Box>출발지 : {trans.transAddress}</Box>
+                  ) : (
+                    <Box>주소가 없는 데이터 입니다.</Box>
+                  )}
                 </Flex>
               </Box>
               <Flex justifyContent={"space-between"} mt={4}>
