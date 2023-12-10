@@ -26,7 +26,7 @@ import axios from "axios";
 import { useNavigate, useParams } from "react-router-dom";
 import { LoginContext } from "../../component/LoginProvider";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faHeart } from "@fortawesome/free-solid-svg-icons";
+import { faAnglesRight, faHeart } from "@fortawesome/free-solid-svg-icons";
 
 function TransLikeContainer({ transLikeState, onClick }) {
   if (transLikeState === null) {
@@ -175,7 +175,11 @@ export function TransPortView() {
                 border={"1px solid #ced8de"}
                 borderRadius={10}
               >
-                <FormLabel ml={2}>{trans.transTitle}</FormLabel>
+                <FormLabel ml={2}>
+                  [{trans.transStartLocation}]&nbsp;
+                  <FontAwesomeIcon icon={faAnglesRight} />
+                  &nbsp; [{trans.transArriveLocation}] &nbsp;{trans.transTitle}
+                </FormLabel>
               </FormControl>
               <FormControl
                 w={"90%"}
