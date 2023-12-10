@@ -14,7 +14,7 @@ import {
   useQuery,
 } from "@chakra-ui/react";
 
-const clientKey = // "클라이언트 키 넣어야함";
+const clientKey = "test_ck_pP2YxJ4K87zREjvyqDLprRGZwXLO";
 const customerKey = nanoid();
 const selector = "#payment-widget";
 

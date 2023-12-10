@@ -15,6 +15,7 @@ import {
   Thead,
   theme,
   Tr,
+  useToast,
 } from "@chakra-ui/react";
 import axios from "axios";
 import { useLocation, useNavigate, useSearchParams } from "react-router-dom";
@@ -57,6 +58,8 @@ export function UserList() {
   const navigate = useNavigate();
   const location = useLocation();
 
+  const toast = useToast();
+
   const theme = extendTheme({
     styles: {
       global: {
@@ -68,10 +71,19 @@ export function UserList() {
   });
 
   useEffect(() => {
-    axios.get("/api/member/list?" + params.toString()).then((response) => {
-      setList(response.data.memberList);
-      setPageInfo(response.data.pageInfo);
-    });
+    axios
+      .get("/api/member/list?" + params.toString())
+      .then((response) => {
+        setList(response.data.memberList);
+        setPageInfo(response.data.pageInfo);
+      })
+      .catch((error) => {
+        navigate("/login");
+        toast({
+          description: "권한이 없습니다.",
+          status: "error",
+        });
+      });
   }, [location]);
 
   if (list === null) {

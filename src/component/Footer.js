@@ -21,7 +21,7 @@ export function Footer() {
         <Box paddingTop={10}>
           <Flex gap={6}>
             <Box paddingTop={4}>
-              본 페이지는 졸업 프로젝트로 어떻한 영리적
+              본 페이지는 졸업 프로젝트로 어떠한 영리적
               <br />
               활동도 하지 않는 사이트임을 알립니다.
             </Box>

@@ -5,43 +5,45 @@ import {
   CardHeader,
   Center,
   Heading,
+  Img,
   Table,
   Tbody,
   Th,
   Thead,
   Tr,
 } from "@chakra-ui/react";
-import { useEffect, useState} from "react";
+import { useEffect, useState } from "react";
 import axios from "axios";
-import {useLocation} from "react-router-dom";
+import { useLocation } from "react-router-dom";
 import { useSearchParams } from "react-router-dom";
 
 export function Bucket() {
   // 승원 수정 start ---------------------------------------
-  const [transBucket, setTransBucket] = useState(null);
+  const [transBucket, setTransBucket] = useState([]);
   const [params] = useSearchParams();
+  const location = useLocation();
+
   useEffect(() => {
     axios
       .get("/api/transport/bucket/id/" + params.get("userId"))
       .then((response) => {
         setTransBucket(response.data);
       });
-  }, []);
+  }, [location]);
   // 승원 수정 end ---------------------------------------
 
-  const [hotelBucket, setHotelBucket] = useState(null)
-  const location = useLocation();
-  const searchParams = new URLSearchParams(location.search);
+  const [hotelBucket, setHotelBucket] = useState([]);
 
   // 대훈이형 정보
   useEffect(() => {
+    axios
+      .get("/api/hotel/bucket/id/" + params.get("userId"))
+      .then((response) => {
+        setHotelBucket(response.data);
+      });
+  }, [location]);
 
-
-    axios.get(`/api/hotel/bucket/id/${searchParams.get("userId")}`)
-        .then((response)=>{
-          setHotelBucket(response.data);
-        })
-  }, []);
+  let number = 0;
 
   return (
     <Center m={10}>
@@ -62,7 +64,36 @@ export function Bucket() {
                 <Th>등록일</Th>
               </Tr>
             </Thead>
-            <Tbody></Tbody>
+            <Tbody>
+              {transBucket.map((bucket) => (
+                <Tr _hover={{ cursor: "pointer" }} key={bucket.userId}>
+                  <Th></Th>
+                  <Th>{bucket.typeName}</Th>
+                  <Th>
+                    <Box w={"150px"}>
+                      <Img src={bucket.url} />
+                    </Box>
+                  </Th>
+                  <Th>{bucket.transTitle}</Th>
+                  <Th>{bucket.transStartLocation}</Th>
+                  <Th>{bucket.ago}</Th>
+                </Tr>
+              ))}
+              {hotelBucket.map((bucket) => (
+                <Tr _hover={{ cursor: "pointer" }} key={bucket.id}>
+                  <Th></Th>
+                  <Th>호텔</Th>
+                  <Th>
+                    <Box w={"150px"}>
+                      <Img src={bucket.mainImgUrl} />
+                    </Box>
+                  </Th>
+                  <Th>{bucket.name}</Th>
+                  <Th>{bucket.location}</Th>
+                  <Th>{bucket.ago}</Th>
+                </Tr>
+              ))}
+            </Tbody>
           </Table>
         </CardBody>
       </Card>
