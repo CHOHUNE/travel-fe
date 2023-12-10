@@ -8,71 +8,144 @@ import {
   Input,
   Flex,
   useToast,
-  Select,
-  PopoverTrigger,
-  Popover,
-  PopoverCloseButton,
-  PopoverContent,
-  PopoverArrow,
-  PopoverHeader,
-  PopoverBody,
-  Portal,
-  IconButton,
   SimpleGrid,
   Badge,
-  Center,
   Spacer,
+  Spinner,
+  Center,
 } from "@chakra-ui/react";
-import { useNavigate, useParams, useSearchParams } from "react-router-dom";
+import {
+  useLocation,
+  useNavigate,
+  useParams,
+  useSearchParams,
+} from "react-router-dom";
 import axios from "axios";
-import { AddIcon, MinusIcon, StarIcon } from "@chakra-ui/icons";
+import { StarIcon } from "@chakra-ui/icons";
 import App from "./App";
-import { faHeart } from "@fortawesome/free-solid-svg-icons";
+import {
+  faAngleLeft,
+  faAngleRight,
+  faHeart,
+} from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+
+function PageButton({ variant, pageNumber, children }) {
+  const [params] = useSearchParams();
+  const navigate = useNavigate();
+
+  function handleClick() {
+    params.set("p", pageNumber);
+    const queryString = params.toString();
+    navigate(`/hotel/?${queryString}`);
+    // navigate("/?" + params);
+  }
+
+  return (
+    <Button variant={variant} onClick={handleClick}>
+      {children}
+    </Button>
+  );
+}
+
+function Pagination({ pageInfo }) {
+  const pageNumbers = [];
+
+  const navigate = useNavigate();
+
+  for (let i = pageInfo.startPageNumber; i <= pageInfo.endPageNumber; i++) {
+    pageNumbers.push(i);
+  }
+
+  return (
+    <Box mt={5}>
+      <Center>
+        {pageInfo.prevPageNumber && (
+          <PageButton variant="ghost" pageNumber={pageInfo.prevPageNumber}>
+            <FontAwesomeIcon icon={faAngleLeft} />
+          </PageButton>
+        )}
+
+        {pageNumbers.map((pageNumber) => (
+          <PageButton
+            key={pageNumber}
+            variant={
+              pageNumber === pageInfo.currentPageNumber ? "solid" : "ghost"
+            }
+            pageNumber={pageNumber}
+          >
+            {pageNumber}
+          </PageButton>
+        ))}
+
+        {pageInfo.nextPageNumber && (
+          <PageButton variant="ghost" pageNumber={pageInfo.nextPageNumber}>
+            <FontAwesomeIcon icon={faAngleRight} />
+          </PageButton>
+        )}
+      </Center>
+    </Box>
+  );
+}
+
+function SearchComponent() {
+  const [keyword, setKeyword] = useState("");
+  const navigate = useNavigate();
+
+  function handleSearch() {
+    // /?k=keyword
+    const params = new URLSearchParams();
+    params.set("k", keyword);
+
+    const queryString = params.toString();
+    navigate(`/hotel/?${queryString}`);
+    // navigate("/?" + params);
+  }
+
+  return (
+    <Center mt={5}>
+      <Flex>
+        <Input value={keyword} onChange={(e) => setKeyword(e.target.value)} />
+        <Button onClick={handleSearch}>검색</Button>
+      </Flex>
+    </Center>
+  );
+}
 
 export function Hotel() {
   const toast = useToast();
   const navigate = useNavigate();
   const { id } = useParams();
 
-  // 호텔
-  const [hotel, setHotel] = useState([]);
-
-  const [selectedRoom, setSelectedRoom] = useState("");
-
-  // 인원 카운트
-  const [count, setCount] = useState(1);
-
-  // 페이지네이션
-  const [currentPage, setCurrentPage] = useState(1);
-  const [hotelPerPage] = useState(9); // 한 페이지에 보일 호텔 수
-
-  // 현재 페이지의 호텔 목록 계산
-  const indexOfLastHotel = currentPage * hotelPerPage;
-  const indexOfFirstHotel = indexOfLastHotel - hotelPerPage;
-  const currentHotels = hotel.slice(indexOfFirstHotel, indexOfLastHotel);
-
-  // 위시리스트 토글
-  const [wishlist, setWishlist] = useState([]);
-  const [hotelItem, setHotelItem] = useState("");
+  const location = useLocation();
   const [params] = useSearchParams();
+  const [hotelList, setHotelList] = useState(null);
+  const [pageInfo, setPageInfo] = useState(null);
+
+  const [wishlist, setWishlist] = useState([]);
 
   useEffect(() => {
-    axios
-      .get(`/api/hotel/wishList/` + params.get("userId"))
-      .then((resoponse) => {
-        setWishlist(resoponse.data);
-      });
-  }, []);
+    axios.get("/api/hotel/list?" + params).then((response) => {
+      setHotelList(response.data.hotelList);
+      setPageInfo(response.data.pageInfo);
+    });
+  }, [location]);
+
+  // TODO : Login 하고 Hotel 페이지 접속시 userId 정보 얻기
+  // useEffect(() => {
+  //   axios
+  //     .get(`/api/hotel/wishList/` + params.get("userId"))
+  //     .then((response) => {
+  //       setWishlist(response.data);
+  //     });
+  // }, []);
 
   const handleUpdateToWishlist = (hotelId) => {
-    // 기존 호텔 데이터 가져오기
     axios
       .get(`/api/hotel/reserv/id/${hotelId}`)
       .then((response) => {
         const hotelData = response.data;
 
-        // 위시리스트에 추가
         axios
           .post("/api/wishlist", {
             hotelId,
@@ -97,85 +170,26 @@ export function Hotel() {
   };
 
   const toggleWishlist = (hotelId) => {
-    // 이미 있다면 제거하고, 없다면 추가
     if (wishlist.includes(hotelId)) {
-      // 이미 빨간색이므로 제거만 처리
       setWishlist((prev) => prev.filter((id) => id !== hotelId));
       handleUpdateToWishlist(hotelId);
-      toast({
-        description: "찜 추가 완료.",
-        status: "success",
-      });
-    } else {
-      // 추가하고 빨간색으로 표시
-      handleUpdateToWishlist(hotelId);
-      setWishlist((prev) => [...prev, hotelId]);
       toast({
         description: "찜 삭제 완료.",
         colorScheme: "orange",
       });
-    }
-  };
-
-  // 페이지 번호 클릭
-  const handleClick = (pageNumber) => {
-    setCurrentPage(pageNumber);
-  };
-
-  // 페이지네이션 UI 렌더링
-  const pageNumbers = [];
-  for (let i = 1; i <= Math.ceil(hotel.length / hotelPerPage); i++) {
-    pageNumbers.push(i);
-  }
-
-  const increaseCount = () => {
-    setCount((prevCount) => prevCount + 1);
-  };
-  const decreaseCount = () => {
-    if (count > 1) {
-      setCount((prevCount) => prevCount - 1);
-    }
-  };
-
-  // 객실, 인원, 체크인, 체크아웃 팝오버 컴포넌트
-
-  useEffect(() => {
-    axios
-      .get("/api/hotel")
-      .then((response) => {
-        setHotel(response.data);
-      })
-      .catch((error) => {
-        console.error("호텔 정보 불러오는 중 에러 발생", error);
-        toast({
-          description: "호텔 정보를 불러오는 중 에러 발생",
-          title: "에러",
-          status: "error",
-          duration: 5000,
-          isClosable: true,
-        });
+    } else {
+      handleUpdateToWishlist(hotelId);
+      setWishlist((prev) => [...prev, hotelId]);
+      toast({
+        description: "찜 추가 완료.",
+        status: "success",
       });
-  }, []);
-
-  const CustomPopover = ({ buttonText, headerText, children }) => {
-    return (
-      <Popover>
-        <PopoverTrigger>
-          <Button colorScheme="blue" mx={"10px"}>
-            {buttonText}
-          </Button>
-        </PopoverTrigger>
-        <Portal>
-          <PopoverContent>
-            <PopoverArrow />
-            <PopoverHeader>{headerText}</PopoverHeader>
-            <PopoverCloseButton />
-            <PopoverBody>{children}</PopoverBody>
-          </PopoverContent>
-        </Portal>
-      </Popover>
-    );
+    }
   };
+
+  if (hotelList == null) {
+    return <Spinner />;
+  }
 
   return (
     <Box>
@@ -187,14 +201,13 @@ export function Hotel() {
         ml={"10%"}
         mt={"20px"}
       >
+        {/* 여기에 App 컴포넌트 내용 */}
         <App />
       </Box>
       <Box
         w={"80%"}
         h={"100px"}
         lineHeight={"100px"}
-        justifyItems={"center"}
-        justifyContent={"center"}
         borderRadius={"10px"}
         border={"1px solid black"}
         ml={"10%"}
@@ -203,19 +216,16 @@ export function Hotel() {
         display={"flex"}
         gap={"20px"}
       >
-        <Box lineHeight={"80px"}>
-          {/* 검색 버튼 */}
-          <Input ml={"100px"} w={"200px"} backgroundColor={"ivory"}></Input>
-
-          <Center>
-            <Button
-              variant={"solid"}
-              color={"green"}
-              onClick={() => navigate("/reserv/" + id)}
-            >
-              검색하기
-            </Button>
-          </Center>
+        {/* 검색 버튼 */}
+        <Flex justifyContent={"center"} alignItems={"center"}>
+          <Input ml={"100px"} w={"200px"} backgroundColor={"ivory"} />
+          <Button
+            variant={"solid"}
+            color={"green"}
+            onClick={() => navigate("/reserv/" + id)}
+          >
+            검색하기
+          </Button>
           <Spacer />
           <Button
             ml={"300px"}
@@ -225,7 +235,6 @@ export function Hotel() {
           >
             호텔 추가
           </Button>
-
           <Button
             ml={"20px"}
             variant={"solid"}
@@ -234,13 +243,13 @@ export function Hotel() {
           >
             호텔 삭제
           </Button>
-        </Box>
+        </Flex>
+        <Spacer />
       </Box>
-
       {/* 호텔 정보 렌더링 */}
       <Flex justifyContent={"center"} flexWrap="wrap">
         <SimpleGrid columns={3} spacing={10} my={"20px"}>
-          {currentHotels.map((hotel) => (
+          {hotelList.map((hotel) => (
             <Box
               maxW="sm"
               borderWidth="1px"
@@ -248,8 +257,7 @@ export function Hotel() {
               overflow="hidden"
             >
               <Box position="relative">
-                <Image src={hotel.mainImgUrl} alt={hotelItem.name} />
-
+                <Image src={hotel.mainImgUrl} alt={hotel.name} />
                 <Box
                   position="absolute"
                   top="2"
@@ -264,7 +272,6 @@ export function Hotel() {
                   />
                 </Box>
               </Box>
-
               <Box p="6">
                 <Box display="flex" alignItems="baseline">
                   <Badge borderRadius="full" px="2" colorScheme="teal">
@@ -281,7 +288,6 @@ export function Hotel() {
                     {hotel.numberOfBed} beds &bull;
                   </Box>
                 </Box>
-
                 <Box
                   mt="1"
                   fontWeight="semibold"
@@ -291,14 +297,12 @@ export function Hotel() {
                 >
                   {hotel.description}
                 </Box>
-
                 <Box>
                   {hotel.totalPrice}
                   <Box as="span" color="gray.600" fontSize="sm">
                     원 / 1박
                   </Box>
                 </Box>
-
                 <Box display="flex" mt="2" alignItems="center">
                   {Array(5)
                     .fill("")
@@ -311,7 +315,6 @@ export function Hotel() {
                   <Box as="span" ml="2" color="gray.600" fontSize="sm">
                     {hotel.rating}
                   </Box>
-
                   <ButtonGroup
                     spacing="2"
                     size={"sm"}
@@ -333,21 +336,8 @@ export function Hotel() {
         </SimpleGrid>
       </Flex>
 
-      {/* 페이지네이션 UI */}
-      <Center>
-        <Box my={5}>
-          {pageNumbers.map((number) => (
-            <Button
-              key={number}
-              colorScheme={number === currentPage ? "green" : "gray"}
-              onClick={() => handleClick(number)}
-              mx={1}
-            >
-              {number}
-            </Button>
-          ))}
-        </Box>
-      </Center>
+      <SearchComponent />
+      <Pagination pageInfo={pageInfo} />
     </Box>
   );
 }
