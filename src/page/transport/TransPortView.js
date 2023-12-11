@@ -3,6 +3,7 @@ import {
   Button,
   Card,
   CardBody,
+  CardFooter,
   Center,
   Flex,
   FormControl,
@@ -15,6 +16,7 @@ import {
   NumberInputField,
   NumberInputStepper,
   Spinner,
+  Text,
   useToast,
 } from "@chakra-ui/react";
 import React, { useContext, useEffect, useState } from "react";
@@ -22,19 +24,25 @@ import axios from "axios";
 import { useNavigate, useParams } from "react-router-dom";
 import { LoginContext } from "../../component/LoginProvider";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faHeart } from "@fortawesome/free-regular-svg-icons";
+import { faAnglesRight, faHeart } from "@fortawesome/free-solid-svg-icons";
 
 function TransLikeContainer({ transLikeState, onClick }) {
   if (transLikeState === null) {
-    <Spinner />;
+    return <Spinner />;
   }
   return (
-    <Button variant={"ghost"} onClick={onClick}>
-      <Flex gap={2}>
-        <Box>찜하기</Box>
-        <FontAwesomeIcon icon={faHeart} size={"xl"} />
-      </Flex>
-    </Button>
+    <Flex gap={2}>
+      <Button onClick={onClick}>찜하기</Button>
+      <Button variant={"ghost"} onClick={onClick}>
+        {transLikeState.transLikeState && (
+          <FontAwesomeIcon icon={faHeart} style={{ color: "#f05656" }} />
+        )}
+        {transLikeState.transLikeState || (
+          <FontAwesomeIcon icon={faHeart} color={"gray"} />
+        )}
+        <Text ml={1}>{transLikeState.transLikeCount}</Text>
+      </Button>
+    </Flex>
   );
 }
 
@@ -101,48 +109,100 @@ export function TransPortView() {
       })
       .catch(() => {
         toast({
-          description: "좋아요 기능이 실패했습니다.",
-          status: "error",
+          description: "로그인 해주세요 ",
+          colorScheme: "orange",
         });
       });
   }
 
   return (
     <Center>
-      <Box mt={10} w={"80%"} key={trans.tid}>
-        <Flex alignItems="center" gap={"10px"}>
-          <Button
-            w={"100px"}
-            h={"50px"}
-            ml={"80%"}
-            onClick={() => navigate("/transport/edit/" + trans.tid)}
-          >
-            수송 상품 수정
-          </Button>
-          <Button w={"100px"} h={"50px"} onClick={handleTransDelete}>
-            수송 상품 삭제
-          </Button>
-        </Flex>
-        <Flex justifyContent={"space-between"} mt={10}>
-          <FormControl w={"750px"} h={"500px"} bg={"#d9d9d9"}>
-            <FormLabel>메인 이미지</FormLabel>
+      <Box mt={2} w={"80%"} key={trans.tid}>
+        <Box alignItems="center">
+          <Flex justifyContent={"flex-end"} gap={2}>
+            <Button
+              w={"130px"}
+              h={"30px"}
+              onClick={() => navigate("/transport/edit/" + trans.tid)}
+            >
+              수송 상품 수정
+            </Button>
+            <Button w={"130px"} h={"30px"} onClick={handleTransDelete}>
+              수송 상품 삭제
+            </Button>
+          </Flex>
+        </Box>
+
+        {/**/}
+        <Card
+          direction={{ base: "column" }}
+          overflow="hidden"
+          variant="outline"
+          // mt={2}
+          w={"95%"}
+          ml={"2.5%"}
+        >
+          <Flex gap={3} mt={2}>
             {trans.mainImage != null ? (
-              <Image src={trans.mainImage.url} />
+              <Image
+                src={trans.mainImage.url}
+                objectFit="cover"
+                h={"100%"}
+                w={"65%"}
+                ml={2}
+                mb={2}
+                borderRadius={10}
+              />
             ) : (
               <Box>빈값</Box>
             )}
-          </FormControl>
-          <Card w={"400px"} h={"500px"} bg={"#d9d9d9"}>
-            <CardBody w={"80%"} bg={"#eeeccc"} ml={"10%"}>
-              <Box bg={"#f3eeee"} w={"200px"} h={"100px"}>
-                {trans.transTitle}
-              </Box>
-              <Box w={"80%"} h={"50px"} bg={"#f3eeee"}>
-                가격 : {trans.transPrice}원
-              </Box>
-              <FormControl maxW="200px" bg={"white"} mt={4}>
+
+            <CardBody
+              w={"25%"}
+              mr={2}
+              mb={2}
+              borderRadius={10}
+              border={"1px solid #ced8de"}
+            >
+              <FormControl
+                // bg={"#f3eeee"}
+                w={"90%"}
+                ml={"5%"}
+                h={"100px"}
+                lineHeight={"100px"}
+                border={"1px solid #ced8de"}
+                borderRadius={10}
+              >
+                <FormLabel ml={2}>
+                  [{trans.transStartLocation}]&nbsp;
+                  <FontAwesomeIcon icon={faAnglesRight} />
+                  &nbsp; [{trans.transArriveLocation}] &nbsp;{trans.transTitle}
+                </FormLabel>
+              </FormControl>
+              <FormControl
+                w={"90%"}
+                h={"50px"}
+                // bg={"#f3eeee"}
+                ml={"5%"}
+                mt={2}
+                lineHeight={"50px"}
+                border={"1px solid #ced8de"}
+                borderRadius={10}
+              >
+                <FormLabel ml={2}>가격 : {trans.transPrice}원</FormLabel>
+              </FormControl>
+              <FormControl
+                w={"90%"}
+                h="40px"
+                bg={"white"}
+                mt={4}
+                ml="5%"
+                lineHeight={"40px"}
+              >
                 <Flex>
-                  <FormLabel fontSize={"1rem"}>인원 : </FormLabel>
+                  <FormLabel fontSize={"1rem"} ml={2}>
+                    인원 :{" "}
+                  </FormLabel>
                   <NumberInput
                     w={"150px"}
                     max={50}
@@ -159,49 +219,103 @@ export function TransPortView() {
                 </Flex>
               </FormControl>
 
-              <Box w={"200px"} h={"80px"} bg={"#f3eeee"} mt={4}>
+              <FormControl
+                w={"90%"}
+                h="40px"
+                bg={"white"}
+                mt={4}
+                ml="5%"
+                lineHeight={"40px"}
+                border={"1px solid #ced8de"}
+                borderRadius={10}
+              >
                 <Flex>
-                  <Box>출발일자 : </Box>
+                  <FormLabel w={"40%"} ml={2}>
+                    출발일자 :
+                  </FormLabel>
                   <Input
                     placeholder="Select Date and Time"
                     size="md"
                     type="date"
                   />
                 </Flex>
-              </Box>
-              <Box w={"200px"} h={"80px"} bg={"#f3eeee"} mt={4}>
+              </FormControl>
+              <FormControl
+                w={"90%"}
+                h="40px"
+                bg={"white"}
+                mt={4}
+                ml="5%"
+                lineHeight={"40px"}
+                border={"1px solid #ced8de"}
+                borderRadius={10}
+              >
                 <Flex>
+                  <FormLabel ml={2}>위치 : </FormLabel>
                   {trans.transAddress != null ? (
-                    <Box>출발지 : {trans.transAddress}</Box>
+                    <Box>{trans.transAddress}</Box>
                   ) : (
                     <Box>주소가 없는 데이터 입니다.</Box>
                   )}
                 </Flex>
-              </Box>
-              <Flex justifyContent={"space-between"} mt={4}>
-                <Button w={"165px"}>바로결제</Button>
-                <Button w={"165px"}>장바구니</Button>
-              </Flex>
-              <TransLikeContainer
-                transLikeState={transLikeState}
-                onClick={handleLikeClick}
-              />
+              </FormControl>
+              <FormControl
+                w={"90%"}
+                h="40px"
+                bg={"white"}
+                mt={4}
+                ml="5%"
+                lineHeight={"40px"}
+              >
+                <Flex justifyContent={"space-between"} mt={4} gap={"2%"}>
+                  <Button w={"39%"}>바로결제</Button>
+                  <TransLikeContainer
+                    w={"49%"}
+                    transLikeState={transLikeState}
+                    onClick={handleLikeClick}
+                  />
+                </Flex>
+              </FormControl>
             </CardBody>
-          </Card>
-        </Flex>
-        <Box w={"100%"} bg={"#d9d9d9"} mt={10} mb={20}>
-          상품 상세 이미지 및, 설명
-          {trans.contentImages != null ? (
-            <>
-              {trans.contentImages.map((file) => (
-                <Image src={file.url} key={file.id} />
-              ))}
-            </>
-          ) : (
-            <Box>빈값</Box>
-          )}
-          <Box> {trans.transContent}</Box>
-        </Box>
+          </Flex>
+        </Card>
+        {/**/}
+        <Card w={"90%"} mt={3} mb={20} ml="5%">
+          <CardBody>
+            {trans.contentImages != null ? (
+              <>
+                {trans.contentImages.map((file) => (
+                  <Image
+                    src={file.url}
+                    key={file.id}
+                    w={"90%"}
+                    ml={"5%"}
+                    mt={2}
+                  />
+                ))}
+              </>
+            ) : (
+              <Box>빈값</Box>
+            )}
+          </CardBody>
+          <CardFooter>
+            <FormControl
+              w={"90%"}
+              mt={5}
+              mb={10}
+              ml="5%"
+              border={"1px solid #ced8de"}
+              borderRadius={10}
+            >
+              <FormLabel ml={2} mt={2}>
+                상품 설명
+              </FormLabel>
+              <Box ml={2} mt={2} mb={2}>
+                {trans.transContent}
+              </Box>
+            </FormControl>
+          </CardFooter>
+        </Card>
       </Box>
     </Center>
   );
