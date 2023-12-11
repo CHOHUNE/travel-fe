@@ -90,7 +90,11 @@ export function TransPort() {
           _hover={{ cursor: "pointer", color: "#509896" }}
           lineHeight={"50px"}
         >
-          <Box fontWeight={900} fontSize={"1.2rem"}>
+          <Box
+            fontWeight={900}
+            fontSize={"1.2rem"}
+            style={{ fontFamily: "Pretendard-Regular" }}
+          >
             🚎 버스 카테고리 게시글
           </Box>
         </Card>

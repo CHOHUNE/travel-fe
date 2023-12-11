@@ -167,7 +167,7 @@ export function HotelPay() {
             <FormControl mt={20}>
               <FormLabel
                 border={"1px solid #f5f6f6"}
-                background={"#f5f6f8"}
+                background={"#ffffff"}
                 h={"100px"}
                 display="flex"
                 alignItems="center"

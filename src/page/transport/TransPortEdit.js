@@ -55,6 +55,7 @@ export function TransPortEdit() {
         transTitle: trans.transTitle,
         transPrice: trans.transPrice,
         transContent: trans.transContent,
+        transAddress: trans.transAddress,
         transStartLocation: trans.transStartLocation,
         transArriveLocation: trans.transArriveLocation,
         tId: trans.tid,
@@ -117,9 +118,12 @@ export function TransPortEdit() {
       setRemoveMainImageId(e.target.value);
     } else {
       setMainImageSubmit(true);
-      setRemoveMainImageId(
-        removeMainImageId.filter((item) => item !== e.target.value),
-      );
+      setRemoveMainImageId((prevRemoveMainImageId) => {
+        // 이전 상태를 기반으로 새로운 객체를 생성하여 특정 속성 제거
+        const { [e.target.value]: removedProperty, ...newRemoveMainImageId } =
+          prevRemoveMainImageId;
+        return newRemoveMainImageId;
+      });
     }
   }
 
@@ -128,6 +132,21 @@ export function TransPortEdit() {
     updateTrans((draft) => {
       draft.transContent = e.target.value;
     });
+  }
+
+  function handleAddressChange(e) {
+    updateTrans((draft) => {
+      draft.transAddress = e.target.value;
+    });
+  }
+  function handleAddressClick() {
+    new window.daum.Postcode({
+      oncomplete: function (data) {
+        updateTrans((draft) => {
+          draft.transAddress = data.address;
+        });
+      },
+    }).open();
   }
 
   return (
@@ -223,6 +242,22 @@ export function TransPortEdit() {
                 제목
               </FormLabel>
               <Input value={trans.transTitle} onChange={handleTitleChange} />
+            </Flex>
+          </FormControl>
+          <FormControl mt={4}>
+            <Flex>
+              <FormLabel w={"33%"} textAlign={"center"} fontSize={"1.1rem"}>
+                상품 주소
+              </FormLabel>
+              <Flex>
+                <Input
+                  w={"450px"}
+                  placeholder="상품 출발 주소"
+                  value={trans.transAddress}
+                  onChange={handleAddressChange}
+                />
+                <Button onClick={handleAddressClick}>주소검색</Button>
+              </Flex>
             </Flex>
           </FormControl>
           <FormControl mt={4}>
