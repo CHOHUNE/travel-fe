@@ -36,10 +36,10 @@ function TransLikeContainer({ transLikeState, onClick }) {
     <Flex gap={2}>
       <Button onClick={onClick}>찜하기</Button>
       <Button variant={"ghost"}>
-        {transLikeState.transLikeState && (
+        {transLikeState.like && (
           <FontAwesomeIcon icon={faHeart} style={{ color: "#f05656" }} />
         )}
-        {transLikeState.transLikeState || (
+        {transLikeState.like || (
           <FontAwesomeIcon icon={faHeart} color={"gray"} />
         )}
         <Text ml={1}>{transLikeState.transLikeCount}</Text>
@@ -102,7 +102,7 @@ export function TransPortView() {
   function handleLikeClick() {
     console.log("handle like click");
     console.log(transLikeState);
-    if (transLikeState.transLikeState === true) {
+    if (transLikeState.like === true) {
       axios
         .post("/api/transLike", { transId: trans.tid })
         .then((response) => {
@@ -118,7 +118,7 @@ export function TransPortView() {
             colorScheme: "orange",
           });
         });
-    } else if (transLikeState.transLikeState === false) {
+    } else if (transLikeState.like === false) {
       axios
         .post("/api/transLike", { transId: trans.tid })
         .then((response) => {
