@@ -44,7 +44,7 @@ export function TransPortList() {
     axios.get("/api/transport/list").then((response) => {
       setList(response.data);
     });
-  }, []);
+  }, [params]);
 
   if (list === null) {
     <Spinner />;
@@ -166,7 +166,9 @@ export function TransPortList() {
       </SimpleGrid>
 
       <Flex w={"80%"} ml={"10%"} mt={10} justifyContent={"center"}>
-        <Button>1</Button>
+        <Button onClick={() => navigate("/transport/list?type=bus&p=1")}>
+          1
+        </Button>
         <Button>2</Button>
         <Button>3</Button>
         <Button>4</Button>
