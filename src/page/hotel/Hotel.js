@@ -156,7 +156,7 @@ export function Hotel() {
             name: hotelData.name,
             mainImgUrl: hotelData.mainImgUrl,
             location: hotelData.location,
-            roomType: hotelData.roomType,
+            lodgingType: hotelData.lodgingType,
           })
           .catch(() => {
             toast({

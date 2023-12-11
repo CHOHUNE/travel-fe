@@ -82,7 +82,7 @@ export function Bucket() {
               {hotelBucket.map((bucket) => (
                 <Tr _hover={{ cursor: "pointer" }} key={bucket.id}>
                   <Th></Th>
-                  <Th>호텔</Th>
+                  <Th>{bucket.lodgingType}</Th>
                   <Th>
                     <Box w={"150px"}>
                       <Img src={bucket.mainImgUrl} />

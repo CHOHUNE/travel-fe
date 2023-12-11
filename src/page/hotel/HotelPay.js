@@ -151,7 +151,7 @@ export function HotelPay() {
                       </Box>
                     </Th>
                     <Th>{hotel.name}</Th>
-                    <Th>{hotel.roomType}</Th>
+                    <Th>{hotel.lodgingType}</Th>
                     <Th>RoomOnly</Th>
                     <Th>
                       체크인 : 23년 12월 07일 (목) 체크아웃 : 23년 12월 08일
