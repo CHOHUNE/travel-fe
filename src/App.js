@@ -8,8 +8,8 @@ import { FindId } from "./page/member/FindId";
 import { FindPw } from "./page/member/FindPw";
 import { FindPwChange } from "./page/member/FindPwChange";
 import React from "react";
-import {NaverLogin} from "./page/member/NaverLogin";
-import {Bucket} from "./page/member/MyPage/Bucket";
+import { NaverLogin } from "./page/member/NaverLogin";
+import { Bucket } from "./page/member/MyPage/Bucket";
 import UserLayOut from "./page/member/layout/UserLayOut";
 import { ReservationList } from "./page/member/MyPage/ReservationList";
 import { HomeLayout } from "./layout/HomeLayout";
@@ -36,10 +36,10 @@ import { HotelPay } from "./page/hotel/HotelPay";
 import LoginProvider from "./component/LoginProvider";
 import { Notice } from "./page/board/Notice";
 import { UserView } from "./page/member/MyPage/UserView";
-import { Payment } from "./page/payment/Payment";
-import { Success } from "./page/payment/Success";
-import { Fail } from "./page/payment/Fail";
-import {NoticeSound} from "./page/board/NoticeSound";
+import { NoticeSound } from "./page/board/NoticeSound";
+import { FailPage } from "./FailPage";
+import { SuccessPage } from "./SuccessPage";
+import { Checkout } from "./Checkout";
 
 const routes = createBrowserRouter(
   createRoutesFromElements(
@@ -59,7 +59,6 @@ const routes = createBrowserRouter(
       <Route path="edit/:id" element={<BoardEdit />} />
       <Route path="notice" element={<Notice />} />
       <Route path="noticeSound" element={<NoticeSound />} />
-
 
       {/* 회원관련 */}
       <Route path="login" element={<UserLogin />} />
@@ -86,9 +85,13 @@ const routes = createBrowserRouter(
       <Route path="hotel/pay/:id" element={<HotelPay />} />
 
       {/* 결제관련 */}
-      <Route path="/payment" element={<Payment />} />
-      <Route path="/success" element={<Success />} />
-      <Route path="/fail" element={<Fail />} />
+      {/*<Route path="/fail" element={<FailPage />} />*/}
+      {/*<Route path="/success" element={<SuccessPage />} />*/}
+      {/*<Route path="/checkout" element={<Checkout />} />*/}
+
+      <Route path="/jh/fail" element={<FailPage />} />
+      <Route path="/jh/success" element={<SuccessPage />} />
+      <Route path="/jh/checkout" element={<Checkout />} />
     </Route>,
   ),
 );
