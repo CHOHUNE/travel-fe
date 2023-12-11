@@ -290,7 +290,12 @@ export function TransPortView() {
                 lineHeight={"40px"}
               >
                 <Flex justifyContent={"space-between"} mt={4} gap={"2%"}>
-                  <Button w={"39%"}>바로결제</Button>
+                  <Button
+                    w={"39%"}
+                    onClick={() => navigate("/transport/pay/" + id)}
+                  >
+                    바로결제
+                  </Button>
                   <TransLikeContainer
                     w={"49%"}
                     transLikeState={transLikeState}
