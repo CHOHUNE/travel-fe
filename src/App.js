@@ -8,8 +8,8 @@ import { FindId } from "./page/member/FindId";
 import { FindPw } from "./page/member/FindPw";
 import { FindPwChange } from "./page/member/FindPwChange";
 import React from "react";
-import {NaverLogin} from "./page/member/NaverLogin";
-import {Bucket} from "./page/member/MyPage/Bucket";
+import { NaverLogin } from "./page/member/NaverLogin";
+import { Bucket } from "./page/member/MyPage/Bucket";
 import UserLayOut from "./page/member/layout/UserLayOut";
 import { ReservationList } from "./page/member/MyPage/ReservationList";
 import { HomeLayout } from "./layout/HomeLayout";
@@ -39,7 +39,8 @@ import { UserView } from "./page/member/MyPage/UserView";
 import { Payment } from "./page/payment/Payment";
 import { Success } from "./page/payment/Success";
 import { Fail } from "./page/payment/Fail";
-import {NoticeSound} from "./page/board/NoticeSound";
+import { NoticeSound } from "./page/board/NoticeSound";
+import { TransPay } from "./page/transport/TransPay";
 
 const routes = createBrowserRouter(
   createRoutesFromElements(
@@ -51,6 +52,7 @@ const routes = createBrowserRouter(
       <Route path="transport/list" element={<TransPortList />} />
       <Route path="transport/write" element={<TransPortWrite />} />
       <Route path="transport/edit/:id" element={<TransPortEdit />} />
+      <Route path="transport/pay/:id" element={<TransPay />} />
 
       {/* 게시판관련 */}
       <Route path="boardlist" element={<BoardList />} />
@@ -59,7 +61,6 @@ const routes = createBrowserRouter(
       <Route path="edit/:id" element={<BoardEdit />} />
       <Route path="notice" element={<Notice />} />
       <Route path="noticeSound" element={<NoticeSound />} />
-
 
       {/* 회원관련 */}
       <Route path="login" element={<UserLogin />} />
