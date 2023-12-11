@@ -1,4 +1,4 @@
-import { useNavigate, useSearchParams } from "react-router-dom";
+import { useLocation, useNavigate, useSearchParams } from "react-router-dom";
 import {
   Box,
   Button,
@@ -26,27 +26,87 @@ import axios from "axios";
 import { useEffect, useState } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
+  faAnglesLeft,
   faAnglesRight,
   faMagnifyingGlass,
 } from "@fortawesome/free-solid-svg-icons";
 
+function TransPage({ pageInfo, params }) {
+  const navigate = useNavigate();
+  const pageNumbers = [];
+  for (let i = pageInfo.startPageNumber; i <= pageInfo.endPageNumber; i++) {
+    pageNumbers.push(i);
+  }
+
+  return (
+    <Box>
+      {pageInfo.prevPageNumber && (
+        <Button
+          onClick={() =>
+            navigate(
+              "/transport/list?type=" +
+                params +
+                "&p=" +
+                pageInfo.prevPageNumber,
+            )
+          }
+        >
+          <FontAwesomeIcon icon={faAnglesLeft} />
+        </Button>
+      )}
+
+      {pageNumbers.map((pageNumber) => (
+        <Button
+          key={pageNumber}
+          onClick={() =>
+            navigate("/transport/list?type=" + params + "&p=" + pageNumber)
+          }
+        >
+          {pageNumber}
+        </Button>
+      ))}
+
+      {pageInfo.nextPageNumber && (
+        <Button
+          onClick={() =>
+            navigate(
+              "/transport/list?type=" +
+                params +
+                "&p=" +
+                pageInfo.nextPageNumber,
+            )
+          }
+        >
+          <FontAwesomeIcon icon={faAnglesRight} />
+        </Button>
+      )}
+    </Box>
+  );
+}
+
 export function TransPortList() {
-  const [list, setList] = useState([]);
+  const [transList, setTransList] = useState([]);
+  const [pageInfo, setPageInfo] = useState([]);
 
   const { isOpen, onClose, onOpen } = useDisclosure();
 
   const navigate = useNavigate();
 
   const [params] = useSearchParams();
-  console.log(params.get("type"));
+  const location = useLocation();
+  // 파람의 p 가 처음 에 null 이면 1을 전달하는 page 변수 선언
+  const page = params.get("p") ? parseInt(params.get("p"), 10) : 1;
 
   useEffect(() => {
-    axios.get("/api/transport/list").then((response) => {
-      setList(response.data);
-    });
-  }, [params]);
+    axios
+      .get("/api/transport/list?type=" + params.get("type") + "&p=" + page)
+      .then((response) => {
+        setTransList(response.data.transList);
+        setPageInfo(response.data.pageInfo);
+      });
+  }, [location]);
 
-  if (list === null) {
+  if (transList === null) {
     <Spinner />;
   }
 
@@ -113,7 +173,7 @@ export function TransPortList() {
         {/*)}*/}
       </Flex>
       <SimpleGrid columns={4} w={"85%"} ml={"8.5%"} mt={4} spacing={"25px"}>
-        {list.map(
+        {transList.map(
           (transport) =>
             params.get("type") === transport.typeName && (
               <Card
@@ -166,12 +226,7 @@ export function TransPortList() {
       </SimpleGrid>
 
       <Flex w={"80%"} ml={"10%"} mt={10} justifyContent={"center"}>
-        <Button onClick={() => navigate("/transport/list?type=bus&p=1")}>
-          1
-        </Button>
-        <Button>2</Button>
-        <Button>3</Button>
-        <Button>4</Button>
+        <TransPage params={params.get("type")} pageInfo={pageInfo} />
       </Flex>
 
       <Modal isOpen={isOpen} onClose={onClose}>
