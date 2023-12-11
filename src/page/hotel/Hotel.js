@@ -8,11 +8,13 @@ import {
   Input,
   Flex,
   useToast,
+  Text,
   SimpleGrid,
   Badge,
   Spacer,
   Spinner,
   Center,
+  Stack,
 } from "@chakra-ui/react";
 import {
   useLocation,
@@ -29,6 +31,8 @@ import {
   faHeart,
 } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faMap } from "@fortawesome/free-regular-svg-icons";
+import { faBed } from "@fortawesome/free-solid-svg-icons/faBed";
 
 function PageButton({ variant, pageNumber, children }) {
   const [params] = useSearchParams();
@@ -193,17 +197,12 @@ export function Hotel() {
 
   return (
     <Box>
-      <Box
-        border={"1px solid black"}
-        borderRadius={"10px"}
-        w={"80%"}
-        h={"500px"}
-        ml={"10%"}
-        mt={"20px"}
-      >
+      <Box w={"100%"} h={"500px"} mt={"20px"}>
         {/* 여기에 App 컴포넌트 내용 */}
         <App />
       </Box>
+
+      {/* 미들 바 */}
       <Box
         w={"80%"}
         h={"100px"}
@@ -215,36 +214,48 @@ export function Hotel() {
         mb={"20px"}
         display={"flex"}
         gap={"20px"}
+        alignItems={"center"}
       >
         {/* 검색 버튼 */}
-        <Flex justifyContent={"center"} alignItems={"center"}>
-          <Input ml={"100px"} w={"200px"} backgroundColor={"ivory"} />
-          <Button
-            variant={"solid"}
-            color={"green"}
-            onClick={() => navigate("/reserv/" + id)}
-          >
-            검색하기
-          </Button>
-          <Spacer />
-          <Button
-            ml={"300px"}
-            variant={"solid"}
-            color={"green"}
-            onClick={() => navigate("/hotel/write/")}
-          >
-            호텔 추가
-          </Button>
-          <Button
-            ml={"20px"}
-            variant={"solid"}
-            color={"green"}
-            onClick={() => navigate("/reserv/" + id)}
-          >
-            호텔 삭제
-          </Button>
-        </Flex>
-        <Spacer />
+        <Box
+          w={"80px"}
+          h={"80px"}
+          border={"1px solid black"}
+          borderRadius={"10px"}
+          cursor={"pointer"}
+          ml={"5px"}
+        >
+          <Stack align={"stretch"}>
+            <FontAwesomeIcon icon={faMap} size={"2xl"} />
+          </Stack>
+        </Box>
+        <Box
+          w={"80px"}
+          h={"80px"}
+          border={"1px solid black"}
+          borderRadius={"10px"}
+          cursor={"pointer"}
+          ml={"5px"}
+        >
+          <FontAwesomeIcon icon={faBed} size={"2xl"} />
+        </Box>
+        <SearchComponent />
+        <Button
+          ml={"300px"}
+          variant={"solid"}
+          color={"green"}
+          onClick={() => navigate("/hotel/write/")}
+        >
+          호텔 추가
+        </Button>
+        <Button
+          ml={"20px"}
+          variant={"solid"}
+          color={"green"}
+          onClick={() => navigate("/reserv/" + id)}
+        >
+          호텔 삭제
+        </Button>
       </Box>
       {/* 호텔 정보 렌더링 */}
       <Flex justifyContent={"center"} flexWrap="wrap">
@@ -336,7 +347,6 @@ export function Hotel() {
         </SimpleGrid>
       </Flex>
 
-      <SearchComponent />
       <Pagination pageInfo={pageInfo} />
     </Box>
   );
