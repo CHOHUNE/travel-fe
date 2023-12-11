@@ -13,10 +13,14 @@
   import axios from "axios";
   import { Icon } from '@chakra-ui/react';
   import {InfoOutlineIcon, PhoneIcon} from "@chakra-ui/icons";
+  import {type} from "@testing-library/user-event/dist/type";
 export function Notice() {
   const [noticeList, setNoticeList] = useState([]); //map이 안된 이유 초기값이 없어서 []
   const navigate = useNavigate();
 
+  useEffect(() => {
+    handleSwitch(1)
+  }, []);
 
   function handleSwitch(type) {
 
@@ -45,28 +49,28 @@ export function Notice() {
                 <Box>
                   <Divider my="2" />
                   <Box>
-                    <Text  fontSize='md' _hover={"pointer"} onClick={() => navigate("/notice")}>
+                    <Text  fontSize='md' _hover={{ cursor: 'pointer', color: 'green'  }} onClick={() => navigate("/notice")}>
                       자주 찾는 질문
                     </Text>
                   </Box>
 
                   <Divider my="4" />
                   <Box>
-                    <Text fontSize='md' _hover={"pointer"} onClick={() => navigate("/boardList")}>
+                    <Text fontSize='md' _hover={{ cursor: 'pointer', color: 'green'  }} onClick={() => navigate("/boardList")}>
                       게 시 판
                     </Text>
                   </Box>
                   {/* 구분선 추가 */}
                   <Divider my="4" />
                   <Box>
-                    <Text fontSize='md'>
+                    <Text fontSize='md'  _hover={{ cursor: 'pointer', color: 'green' }} onClick={() => navigate("/boardwrite")}>
                       고객의 소리
                     </Text>
                   </Box>
 
                   <Divider my="4" />
                   <Box>
-                    <Text  fontSize='md'>
+                    <Text fontSize='md' _hover={{ cursor: 'pointer', color: 'green'  }} onClick={() => navigate("/NoticeSound")}>
                       소비자 중심 경영
                     </Text>
                   </Box>
@@ -84,6 +88,7 @@ export function Notice() {
             <Button size={"sm"} variant='outline' color={"green"} onClick={()=>handleSwitch(3)}> 자유 여행 </Button>
             <Button size={"sm"} variant='outline' color={"green"} onClick={()=>handleSwitch(4)}>  항 공 </Button>
             <Button size={"sm"} variant='outline' color={"green"} onClick={()=>handleSwitch(5)}>  호 텔  </Button>
+            <Button size={"sm"} variant='outline' color={"green"} onClick={()=>handleSwitch(6)}>  예 약 / 결 재  </Button>
             </Stack>
           <br></br>
 
