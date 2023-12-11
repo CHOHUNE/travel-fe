@@ -118,7 +118,7 @@ export function HotelPay() {
   return (
     <ChakraProvider theme={theme}>
       <Center m={20}>
-        <Card w={"75%"}>
+        <Card w={"85%"}>
           <CardHeader borderBottom={"1px solid #f5f6f6"}>
             <Heading>예약/결제</Heading>
           </CardHeader>
@@ -171,12 +171,20 @@ export function HotelPay() {
                 h={"100px"}
                 display="flex"
                 alignItems="center"
-                justifyContent="center"
+                justifyContent="left"
+                textIndent={"20px"}
               >
-                ·영업시간 종료 후, 또는 토 · 일 법정공휴일은 휴무로 예약이
-                불가능 할 수 있습니다.
-                <br />
-                ·당일예약이 불가할 수 있으며 담당자가 확인 후 연락 드리겠습니다.
+                <Box>
+                  <Box>
+                    ·영업시간 종료 후, 또는 토 · 일 법정공휴일은 휴무로 예약이
+                    불가능 할 수 있습니다.
+                  </Box>
+                  <br />
+                  <Box mt={-5}>
+                    ·당일예약이 불가할 수 있으며 담당자가 확인 후 연락
+                    드리겠습니다.
+                  </Box>
+                </Box>
               </FormLabel>
             </FormControl>
 
@@ -332,7 +340,7 @@ export function HotelPay() {
                     m={0}
                     background={"#f5f6f6"}
                     h={"60px"}
-                    w={"100px"}
+                    w={"102px"}
                     justifyContent="center"
                     display={"flex"}
                     alignItems={"center"}
@@ -361,7 +369,7 @@ export function HotelPay() {
                   >
                     <Box
                       style={{
-                        fontSize: "12px",
+                        fontSize: "10px",
                         verticalAlign: "middle",
                         margin: "0 4px",
                       }}
@@ -605,7 +613,7 @@ export function HotelPay() {
                     m={0}
                     background={"#f5f6f6"}
                     h={"88px"}
-                    w={"100px"}
+                    w={"113px"}
                     justifyContent="center"
                     display={"flex"}
                     alignItems={"center"}
