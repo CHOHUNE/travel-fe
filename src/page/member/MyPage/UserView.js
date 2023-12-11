@@ -42,7 +42,14 @@ export function UserView() {
   useEffect(() => {
     axios
       .get("/api/member?" + params.toString())
-      .then((response) => setUser(response.data));
+      .then((response) => setUser(response.data))
+      .catch((error) => {
+        navigate("/login");
+        toast({
+          description: "권한이 없습니다.",
+          status: "warning",
+        });
+      });
   }, []);
 
   if (user === null) {
@@ -59,7 +66,7 @@ export function UserView() {
           description: "회원 탈퇴하였습니다.",
           status: "success",
         });
-        navigate("/");
+        navigate("/login");
       })
       .catch((error) => {
         if (error.response.status === 401 || error.response.status === 403) {

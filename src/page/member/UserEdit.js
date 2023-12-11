@@ -142,6 +142,7 @@ export function UserEdit() {
       })
       .catch((error) => {
         if (error.response.status === 401 || error.response.status === 403) {
+          navigate("/");
           toast({
             description: "수정 권한이 없습니다.",
             status: "error",
