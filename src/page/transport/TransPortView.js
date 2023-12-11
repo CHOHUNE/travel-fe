@@ -8,7 +8,6 @@ import {
   Flex,
   FormControl,
   FormLabel,
-  Heading,
   Image,
   Input,
   NumberDecrementStepper,
@@ -17,7 +16,6 @@ import {
   NumberInputField,
   NumberInputStepper,
   Spinner,
-  Stack,
   Text,
   useToast,
 } from "@chakra-ui/react";
