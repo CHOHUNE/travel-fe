@@ -13,10 +13,11 @@ import {
   Td,
   Th,
   Tr,
+  useToast,
 } from "@chakra-ui/react";
 import React, { useState } from "react";
 import axios from "axios";
-import { useParams, useSearchParams } from "react-router-dom";
+import { useNavigate, useParams, useSearchParams } from "react-router-dom";
 
 export default function HotelTypeWrite() {
   const [roomtype, setRoomtype] = useState("");
@@ -27,17 +28,33 @@ export default function HotelTypeWrite() {
   const [roomImg, setRoomImg] = useState(null);
 
   const { id } = useParams();
+  const navigate = useNavigate();
+  const toast = useToast();
 
   function handleConfirmation() {
-    axios.postForm("/api/hotel/write/type", {
-      roomtype,
-      originalPriceWeekday,
-      salePriceWeekday,
-      originalPriceWeekend,
-      salePriceWeekend,
-      roomImg,
-      hid: id,
-    });
+    axios
+      .postForm("/api/hotel/write/type", {
+        roomtype,
+        originalPriceWeekday,
+        salePriceWeekday,
+        originalPriceWeekend,
+        salePriceWeekend,
+        roomImg,
+        hid: id,
+      })
+      .then(() => {
+        toast({
+          description: "객실 추가 완료",
+          status: "success",
+        });
+        navigate(-1);
+      })
+      .catch(() => {
+        toast({
+          description: "객실 추가 실패",
+          status: "error",
+        });
+      });
   }
 
   return (
@@ -76,7 +93,7 @@ export default function HotelTypeWrite() {
                   type="number"
                   placeholder="일~ 목"
                   value={salePriceWeekday}
-                  onChange={(e) => setOriginalPriceWeekday(e.target.value)}
+                  onChange={(e) => setSalePriceWeekday(e.target.value)}
                 />
               </Td>
               <Td>

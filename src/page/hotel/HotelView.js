@@ -4,38 +4,25 @@ import "react-datepicker/dist/react-datepicker.css";
 import {
   Box,
   Button,
-  ButtonGroup,
   Text,
   Image,
   Flex,
-  AspectRatio,
   useToast,
-  Select,
-  Heading,
   Stack,
-  Icon,
   Spacer,
-  Popover,
-  PopoverTrigger,
-  Portal,
-  PopoverContent,
-  PopoverArrow,
-  PopoverHeader,
-  PopoverCloseButton,
-  PopoverBody,
   IconButton,
   Center,
   Input,
-  position, SimpleGrid,
+  SimpleGrid,
 } from "@chakra-ui/react";
 import { useNavigate, useParams } from "react-router-dom";
 import axios from "axios";
 import { AddIcon, MinusIcon, StarIcon } from "@chakra-ui/icons";
 
-
 export function HotelView() {
   const { id } = useParams();
   const [hotel, setHotel] = useState([]);
+  const [roomtypeList, setRoomtypeList] = useState(null);
   const navigate = useNavigate();
   const toast = useToast();
   const [count, setCount] = useState(0);
@@ -47,8 +34,13 @@ export function HotelView() {
 
   useEffect(() => {
     axios.get("/api/hotel/reserv/id/" + id).then((response) => {
-      setHotel(response.data.hotel);
+      setHotel(response.data);
+    });
+  }, []);
 
+  useEffect(() => {
+    axios.get("/api/hotel/reserv/type/" + id).then((response) => {
+      setRoomtypeList(response.data);
     });
   }, []);
 
@@ -296,11 +288,35 @@ export function HotelView() {
               <Input placeholder="Select Date and Time" size="md" type="date" />
             </Box>
           )}
-          <SimpleGrid columns={1} spacing{5} my={"20px"}>
-            {roomtypeList}
+          <SimpleGrid
+            columns={1}
+            spacing={5}
+            my="20px"
+            ml="10%"
+            w="80%"
+            border="1px solid black"
+          >
+            {roomtypeList &&
+              roomtypeList.map((roomtype) => (
+                <Box
+                  key={roomtype.hrtid}
+                  borderRadius="lg"
+                  border="1px solid black"
+                  p="20px"
+                  display="flex"
+                >
+                  <Text fontSize="xl" fontWeight="bold">
+                    room type:{roomtype.roomtype}
+                  </Text>
+                  <Spacer />
 
+                  <Text>Sale Price (Weekday): {roomtype.salePriceWeekday}</Text>
+                  <Spacer />
+
+                  <Text>Sale Price (Weekend): {roomtype.salePriceWeekend}</Text>
+                </Box>
+              ))}
           </SimpleGrid>
-
           <Box
             w={"80%"}
             ml={"10%"}
