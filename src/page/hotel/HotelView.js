@@ -26,11 +26,12 @@ import {
   IconButton,
   Center,
   Input,
-  position,
+  position, SimpleGrid,
 } from "@chakra-ui/react";
 import { useNavigate, useParams } from "react-router-dom";
 import axios from "axios";
 import { AddIcon, MinusIcon, StarIcon } from "@chakra-ui/icons";
+
 
 export function HotelView() {
   const { id } = useParams();
@@ -46,7 +47,8 @@ export function HotelView() {
 
   useEffect(() => {
     axios.get("/api/hotel/reserv/id/" + id).then((response) => {
-      setHotel(response.data);
+      setHotel(response.data.hotel);
+
     });
   }, []);
 
@@ -90,6 +92,14 @@ export function HotelView() {
             mt={"10px"}
           >
             <Flex justifyContent={"flex-end"}>
+              <Button
+                onClick={() => navigate("/hotel/write/type/" + hotel.hid)}
+                mr={"20px"}
+              >
+                {" "}
+                객실 추가{" "}
+              </Button>
+
               <Button onClick={() => navigate("/hotel/edit/" + hotel.hid)}>
                 {" "}
                 호텔 수정{" "}
@@ -286,6 +296,10 @@ export function HotelView() {
               <Input placeholder="Select Date and Time" size="md" type="date" />
             </Box>
           )}
+          <SimpleGrid columns={1} spacing{5} my={"20px"}>
+            {roomtypeList}
+
+          </SimpleGrid>
 
           <Box
             w={"80%"}

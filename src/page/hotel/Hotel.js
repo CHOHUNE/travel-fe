@@ -212,50 +212,30 @@ export function Hotel() {
         ml={"10%"}
         mt={"10px"}
         mb={"20px"}
-        display={"flex"}
-        gap={"20px"}
         alignItems={"center"}
       >
         {/* 검색 버튼 */}
-        <Box
-          w={"80px"}
-          h={"80px"}
-          border={"1px solid black"}
-          borderRadius={"10px"}
-          cursor={"pointer"}
-          ml={"5px"}
-        >
-          <Stack align={"stretch"}>
-            <FontAwesomeIcon icon={faMap} size={"2xl"} />
-          </Stack>
-        </Box>
-        <Box
-          w={"80px"}
-          h={"80px"}
-          border={"1px solid black"}
-          borderRadius={"10px"}
-          cursor={"pointer"}
-          ml={"5px"}
-        >
-          <FontAwesomeIcon icon={faBed} size={"2xl"} />
-        </Box>
         <SearchComponent />
-        <Button
-          ml={"300px"}
-          variant={"solid"}
-          color={"green"}
-          onClick={() => navigate("/hotel/write/")}
-        >
-          호텔 추가
-        </Button>
-        <Button
-          ml={"20px"}
-          variant={"solid"}
-          color={"green"}
-          onClick={() => navigate("/reserv/" + id)}
-        >
-          호텔 삭제
-        </Button>
+
+        <Flex>
+          <Spacer />
+          <Button
+            ml={"300px"}
+            variant={"solid"}
+            color={"green"}
+            onClick={() => navigate("/hotel/write/")}
+          >
+            호텔 추가
+          </Button>
+          <Button
+            ml={"20px"}
+            variant={"solid"}
+            color={"green"}
+            onClick={() => navigate("/reserv/" + id)}
+          >
+            호텔 삭제
+          </Button>
+        </Flex>
       </Box>
       {/* 호텔 정보 렌더링 */}
       <Flex justifyContent={"center"} flexWrap="wrap">
