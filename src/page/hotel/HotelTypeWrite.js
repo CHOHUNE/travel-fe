@@ -17,31 +17,47 @@ import {
 } from "@chakra-ui/react";
 import React, { useState } from "react";
 import axios from "axios";
-import { useNavigate, useParams, useSearchParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 
 export default function HotelTypeWrite() {
-  const [roomtype, setRoomtype] = useState("");
-  const [originalPriceWeekday, setOriginalPriceWeekday] = useState(0);
-  const [salePriceWeekday, setSalePriceWeekday] = useState(0);
-  const [originalPriceWeekend, setOriginalPriceWeekend] = useState(0);
-  const [salePriceWeekend, setSalePriceWeekend] = useState(0);
-  const [roomImg, setRoomImg] = useState(null);
+  const [roomtypes, setRoomtypes] = useState([
+    {
+      roomtype: "",
+      originalPriceWeekday: 0,
+      salePriceWeekday: 0,
+      originalPriceWeekend: 0,
+      salePriceWeekend: 0,
+      roomImg: null,
+    },
+  ]);
 
   const { id } = useParams();
   const navigate = useNavigate();
   const toast = useToast();
 
-  function handleConfirmation() {
-    axios
-      .postForm("/api/hotel/write/type", {
-        roomtype,
-        originalPriceWeekday,
-        salePriceWeekday,
-        originalPriceWeekend,
-        salePriceWeekend,
-        roomImg,
+  const handleAddRow = () => {
+    setRoomtypes((prevRoomtypes) => [
+      ...prevRoomtypes,
+      {
+        roomtype: "",
+        originalPriceWeekday: 0,
+        salePriceWeekday: 0,
+        originalPriceWeekend: 0,
+        salePriceWeekend: 0,
+        roomImg: null,
+      },
+    ]);
+  };
+
+  const handleConfirmation = () => {
+    const promises = roomtypes.map((room) => {
+      return axios.postForm("/api/hotel/write/type", {
+        ...room,
         hid: id,
-      })
+      });
+    });
+
+    Promise.all(promises)
       .then(() => {
         toast({
           description: "객실 추가 완료",
@@ -55,7 +71,7 @@ export default function HotelTypeWrite() {
           status: "error",
         });
       });
-  }
+  };
 
   return (
     <Center>
@@ -72,57 +88,104 @@ export default function HotelTypeWrite() {
           <Th>주말 판매가</Th>
           <Th>객실 이미지</Th>
           <Tbody>
-            <Tr>
-              <Td>
-                <Input
-                  placeholder="타입"
-                  value={roomtype}
-                  onChange={(e) => setRoomtype(e.target.value)}
-                />
-              </Td>
-              <Td>
-                <Input
-                  type="number"
-                  placeholder="일 ~목"
-                  value={originalPriceWeekday}
-                  onChange={(e) => setOriginalPriceWeekday(e.target.value)}
-                />
-              </Td>
-              <Td>
-                <Input
-                  type="number"
-                  placeholder="일~ 목"
-                  value={salePriceWeekday}
-                  onChange={(e) => setSalePriceWeekday(e.target.value)}
-                />
-              </Td>
-              <Td>
-                <Input
-                  type="number"
-                  placeholder="금, 토"
-                  value={originalPriceWeekend}
-                  onChange={(e) => setOriginalPriceWeekend(e.target.value)}
-                />
-              </Td>
-              <Td>
-                <Input
-                  type="number"
-                  placeholder="금, 토"
-                  value={salePriceWeekend}
-                  onChange={(e) => setSalePriceWeekend(e.target.value)}
-                />
-              </Td>
-              <Td>
-                <Input
-                  type="file"
-                  accept="image/*"
-                  onChange={(e) => setRoomImg(e.target.files)}
-                />
-              </Td>
-            </Tr>
+            {roomtypes.map((room, index) => (
+              <Tr key={index}>
+                <Td>
+                  <Input
+                    placeholder="타입"
+                    value={room.roomtype}
+                    onChange={(e) => {
+                      const value = e.target.value;
+                      setRoomtypes((prevRoomtypes) => {
+                        const updatedRoomtypes = [...prevRoomtypes];
+                        updatedRoomtypes[index].roomtype = value;
+                        return updatedRoomtypes;
+                      });
+                    }}
+                  />
+                </Td>
+                <Td>
+                  <Input
+                    type="number"
+                    placeholder="일 ~목"
+                    value={room.originalPriceWeekday}
+                    onChange={(e) => {
+                      const value = e.target.value;
+                      setRoomtypes((prevRoomtypes) => {
+                        const updatedRoomtypes = [...prevRoomtypes];
+                        updatedRoomtypes[index].originalPriceWeekday = value;
+                        return updatedRoomtypes;
+                      });
+                    }}
+                  />
+                </Td>
+                <Td>
+                  <Input
+                    type="number"
+                    placeholder="일~ 목"
+                    value={room.salePriceWeekday}
+                    onChange={(e) => {
+                      const value = e.target.value;
+                      setRoomtypes((prevRoomtypes) => {
+                        const updatedRoomtypes = [...prevRoomtypes];
+                        updatedRoomtypes[index].salePriceWeekday = value;
+                        return updatedRoomtypes;
+                      });
+                    }}
+                  />
+                </Td>
+                <Td>
+                  <Input
+                    type="number"
+                    placeholder="금, 토"
+                    value={room.originalPriceWeekend}
+                    onChange={(e) => {
+                      const value = e.target.value;
+                      setRoomtypes((prevRoomtypes) => {
+                        const updatedRoomtypes = [...prevRoomtypes];
+                        updatedRoomtypes[index].originalPriceWeekend = value;
+                        return updatedRoomtypes;
+                      });
+                    }}
+                  />
+                </Td>
+                <Td>
+                  <Input
+                    type="number"
+                    placeholder="금, 토"
+                    value={room.salePriceWeekend}
+                    onChange={(e) => {
+                      const value = e.target.value;
+                      setRoomtypes((prevRoomtypes) => {
+                        const updatedRoomtypes = [...prevRoomtypes];
+                        updatedRoomtypes[index].salePriceWeekend = value;
+                        return updatedRoomtypes;
+                      });
+                    }}
+                  />
+                </Td>
+                <Td>
+                  <Input
+                    type="file"
+                    accept="image/*"
+                    onChange={(e) => {
+                      const files = e.target.files;
+                      setRoomtypes((prevRoomtypes) => {
+                        const updatedRoomtypes = [...prevRoomtypes];
+                        updatedRoomtypes[index].roomImg = files;
+                        return updatedRoomtypes;
+                      });
+                    }}
+                  />
+                </Td>
+              </Tr>
+            ))}
           </Tbody>
         </Table>
         <Flex justifyContent={"flex-end"} mt={"30px"}>
+          <Button colorScheme="teal" onClick={handleAddRow} mr={4}>
+            +
+          </Button>
           <Button colorScheme="teal" onClick={handleConfirmation}>
             확인
           </Button>
