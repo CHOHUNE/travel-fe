@@ -27,17 +27,19 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faAnglesRight, faHeart } from "@fortawesome/free-solid-svg-icons";
 
 function TransLikeContainer({ transLikeState, onClick }) {
+  const toast = useToast();
   if (transLikeState === null) {
     return <Spinner />;
   }
+
   return (
     <Flex gap={2}>
       <Button onClick={onClick}>찜하기</Button>
-      <Button variant={"ghost"} onClick={onClick}>
-        {transLikeState.transLikeState && (
+      <Button variant={"ghost"}>
+        {transLikeState.like && (
           <FontAwesomeIcon icon={faHeart} style={{ color: "#f05656" }} />
         )}
-        {transLikeState.transLikeState || (
+        {transLikeState.like || (
           <FontAwesomeIcon icon={faHeart} color={"gray"} />
         )}
         <Text ml={1}>{transLikeState.transLikeCount}</Text>
@@ -98,21 +100,41 @@ export function TransPortView() {
 
   // 찜하기 버튼 클릭시
   function handleLikeClick() {
-    axios
-      .post("/api/transLike", { transId: trans.tid })
-      .then((response) => {
-        setTransLikeState(response.data);
-        toast({
-          description: "찜 목록에 추가가 되었습니다.",
-          status: "success",
+    console.log("handle like click");
+    console.log(transLikeState);
+    if (transLikeState.like === true) {
+      axios
+        .post("/api/transLike", { transId: trans.tid })
+        .then((response) => {
+          setTransLikeState(response.data);
+          toast({
+            description: "찜 목록에서 삭제가 되었습니다.",
+            status: "error",
+          });
+        })
+        .catch(() => {
+          toast({
+            description: "로그인 해주세요 ",
+            colorScheme: "orange",
+          });
         });
-      })
-      .catch(() => {
-        toast({
-          description: "로그인 해주세요 ",
-          colorScheme: "orange",
+    } else if (transLikeState.like === false) {
+      axios
+        .post("/api/transLike", { transId: trans.tid })
+        .then((response) => {
+          setTransLikeState(response.data);
+          toast({
+            description: "찜 목록에 추가 되었습니다.",
+            status: "success",
+          });
+        })
+        .catch(() => {
+          toast({
+            description: "로그인 해주세요 ",
+            colorScheme: "orange",
+          });
         });
-      });
+    }
   }
 
   return (
@@ -268,7 +290,12 @@ export function TransPortView() {
                 lineHeight={"40px"}
               >
                 <Flex justifyContent={"space-between"} mt={4} gap={"2%"}>
-                  <Button w={"39%"}>바로결제</Button>
+                  <Button
+                    w={"39%"}
+                    onClick={() => navigate("/transport/pay/" + id)}
+                  >
+                    바로결제
+                  </Button>
                   <TransLikeContainer
                     w={"49%"}
                     transLikeState={transLikeState}

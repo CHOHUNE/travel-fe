@@ -43,6 +43,7 @@ import { NoticeSound } from "./page/board/NoticeSound";
 import { FailPage } from "./page/payment/jh/FailPage";
 import { SuccessPage } from "./page/payment/jh/SuccessPage";
 import { PaymentPage } from "./page/payment/jh/PaymentPage";
+import { TransPay } from "./page/transport/TransPay";
 
 const routes = createBrowserRouter(
   createRoutesFromElements(
@@ -54,6 +55,7 @@ const routes = createBrowserRouter(
       <Route path="transport/list" element={<TransPortList />} />
       <Route path="transport/write" element={<TransPortWrite />} />
       <Route path="transport/edit/:id" element={<TransPortEdit />} />
+      <Route path="transport/pay/:id" element={<TransPay />} />
 
       {/* 게시판관련 */}
       <Route path="boardlist" element={<BoardList />} />
