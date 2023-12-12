@@ -37,9 +37,9 @@ import LoginProvider from "./component/LoginProvider";
 import { Notice } from "./page/board/Notice";
 import { UserView } from "./page/member/MyPage/UserView";
 import { NoticeSound } from "./page/board/NoticeSound";
-import { FailPage } from "./FailPage";
-import { SuccessPage } from "./SuccessPage";
-import { Checkout } from "./Checkout";
+import { FailPage } from "./page/payment/FailPage";
+import { SuccessPage } from "./page/payment/SuccessPage";
+import { PaymentPage } from "./page/payment/PaymentPage";
 
 const routes = createBrowserRouter(
   createRoutesFromElements(
@@ -85,13 +85,9 @@ const routes = createBrowserRouter(
       <Route path="hotel/pay/:id" element={<HotelPay />} />
 
       {/* 결제관련 */}
-      {/*<Route path="/fail" element={<FailPage />} />*/}
-      {/*<Route path="/success" element={<SuccessPage />} />*/}
-      {/*<Route path="/checkout" element={<Checkout />} />*/}
-
-      <Route path="/jh/fail" element={<FailPage />} />
-      <Route path="/jh/success" element={<SuccessPage />} />
-      <Route path="/jh/checkout" element={<Checkout />} />
+      <Route path="/fail" element={<FailPage />} />
+      <Route path="/successpage" element={<SuccessPage />} />
+      <Route path="/PaymentPage/:id" element={<PaymentPage />} />
     </Route>,
   ),
 );

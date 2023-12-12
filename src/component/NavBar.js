@@ -175,7 +175,11 @@ export function NavBar() {
                   <MenuItem onClick={() => navigate("/user/reservationList")}>
                     예약내역
                   </MenuItem>
-                  <MenuItem onClick={() => navigate("/user/bucket?"+urlParams.toString())}>
+                  <MenuItem
+                    onClick={() =>
+                      navigate("/user/bucket?" + urlParams.toString())
+                    }
+                  >
                     찜한상품
                   </MenuItem>
                 </MenuList>

@@ -49,7 +49,7 @@ import {
 import { useNavigate, useParams } from "react-router-dom";
 import axios from "axios";
 import { ChevronDownIcon } from "@chakra-ui/icons";
-import { Checkout, Payment } from "../payment/Checkout";
+import { PaymentPage } from "../payment/PaymentPage";
 
 export function HotelPay() {
   const [hotel, setHotel] = useState({});
@@ -732,7 +732,7 @@ export function HotelPay() {
                           mt={"20px"}
                           background={"#4095D9"}
                           color={"white"}
-                          onClick={() => onOpen()}
+                          onClick={() => navigate(`/PaymentPage/${id}`)}
                         >
                           결제하기
                         </Button>
@@ -743,21 +743,6 @@ export function HotelPay() {
               </Box>
             </Flex>
           </CardBody>
-
-          {/* 결제 모달 */}
-          <Modal isOpen={isOpen} onClose={onClose} size={"lg"}>
-            <ModalOverlay />
-            <ModalContent>
-              <ModalCloseButton />
-              <ModalBody>
-                <Checkout />
-              </ModalBody>
-
-              <ModalFooter>
-                <Button onClick={onClose}>닫기</Button>
-              </ModalFooter>
-            </ModalContent>
-          </Modal>
         </Card>
       </Center>
     </ChakraProvider>
