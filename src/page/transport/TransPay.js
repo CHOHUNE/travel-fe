@@ -38,7 +38,6 @@ import {
   useToast,
 } from "@chakra-ui/react";
 import { ChevronDownIcon } from "@chakra-ui/icons";
-import { Payment } from "../payment/Payment";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faAnglesRight } from "@fortawesome/free-solid-svg-icons";
 
@@ -709,7 +708,7 @@ export function TransPay() {
                         mt={"20px"}
                         background={"#4095D9"}
                         color={"white"}
-                        onClick={() => onOpen()}
+                        onClick={() => navigate(`/PaymentPage/${id}`)}
                       >
                         결제하기
                       </Button>
@@ -719,21 +718,6 @@ export function TransPay() {
               </FormControl>
             </Box>
           </CardBody>
-
-          {/* 결제 모달 */}
-          <Modal isOpen={isOpen} onClose={onClose} size={"lg"}>
-            <ModalOverlay />
-            <ModalContent>
-              <ModalCloseButton />
-              <ModalBody>
-                <Payment />
-              </ModalBody>
-
-              <ModalFooter>
-                <Button onClick={onClose}>닫기</Button>
-              </ModalFooter>
-            </ModalContent>
-          </Modal>
         </Card>
       </Center>
     </ChakraProvider>
