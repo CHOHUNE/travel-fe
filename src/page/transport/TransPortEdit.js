@@ -20,17 +20,22 @@ import {
   Textarea,
   useToast,
 } from "@chakra-ui/react";
-import { useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import axios from "axios";
 import { useImmer } from "use-immer";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faTrash } from "@fortawesome/free-solid-svg-icons";
 
 export function TransPortEdit() {
+  // 운송 상품 관련
   const [trans, updateTrans] = useImmer([]);
-  const [removeMainImageId, setRemoveMainImageId] = useState([]);
+  // 운송 상품 메인 이미지 관련
   const [mainImageSubmit, setMainImageSubmit] = useState(true);
+  const [removeMainImageId, setRemoveMainImageId] = useState([]);
   const [transMainImage, setTransMainImage] = useState("");
+  // 운송 상품 서브 이미지 관련
+  const [removeContentImageIds, setRemoveContentImageIds] = useState([]);
+  const [transContentImages, setTransContentImages] = useState([]);
 
   const navigate = useNavigate();
 
@@ -61,6 +66,8 @@ export function TransPortEdit() {
         tId: trans.tid,
         removeMainImageId,
         transMainImage,
+        removeContentImageIds,
+        transContentImages,
       })
       .then(() => {
         toast({
@@ -112,6 +119,7 @@ export function TransPortEdit() {
     });
   }
 
+  // 해당 메인 이미지 삭제 스위치 기능
   function handleRemoveMainImageSwitch(e) {
     if (e.target.checked) {
       setMainImageSubmit(false);
@@ -147,6 +155,18 @@ export function TransPortEdit() {
         });
       },
     }).open();
+  }
+
+  // 선택한 상품 설명 이미지 삭제 스위치
+  function handleRemoveContentImageSwitch(e) {
+    console.log(e.target.value);
+    if (e.target.checked) {
+      setRemoveContentImageIds([...removeContentImageIds, e.target.value]);
+    } else {
+      setRemoveContentImageIds(
+        removeContentImageIds.filter((item) => item !== e.target.value),
+      );
+    }
   }
 
   return (
@@ -411,6 +431,70 @@ export function TransPortEdit() {
                 value={trans.transContent}
                 onChange={handleContentChange}
               />
+            </Flex>
+          </FormControl>
+          <FormControl>
+            <Flex>
+              <FormLabel w={"33%"} textAlign={"center"} fontSize={"1.1rem"}>
+                기존 상품 설명 이미지
+              </FormLabel>
+              <Box w={"50%"}>
+                {trans.contentImages != null ? (
+                  <>
+                    {trans.contentImages.map((file) => (
+                      <Card>
+                        <CardBody>
+                          <Image
+                            src={file.url}
+                            key={file.id}
+                            w={"90%"}
+                            ml={"5%"}
+                            mt={2}
+                          />
+                        </CardBody>
+                        <CardFooter>
+                          <FormControl
+                            display="flex"
+                            alignItems="center"
+                            gap={2}
+                          >
+                            <FormLabel m={0} p={0}>
+                              <FontAwesomeIcon icon={faTrash} color="red" />
+                            </FormLabel>
+                            <Switch
+                              value={file.id}
+                              colorScheme="red"
+                              onChange={handleRemoveContentImageSwitch}
+                            />
+                          </FormControl>
+                        </CardFooter>
+                      </Card>
+                    ))}
+                  </>
+                ) : (
+                  <Box>빈값</Box>
+                )}
+              </Box>
+            </Flex>
+          </FormControl>
+          <FormControl mt={4}>
+            <Flex>
+              <FormLabel w={"33%"} textAlign={"center"} lineHeight={"65px"}>
+                추가할 상품 설명 이미지
+              </FormLabel>
+              <Box>
+                <Input
+                  type="file"
+                  accept="image/*"
+                  multiple
+                  onChange={(e) => {
+                    setTransContentImages(e.target.files);
+                  }}
+                />
+                <FormHelperText>
+                  한 개 파일은 1MB 이내, 총 용량은 10MB 이내로 첨부하세요.
+                </FormHelperText>
+              </Box>
             </Flex>
           </FormControl>
         </CardBody>
