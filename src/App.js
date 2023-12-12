@@ -40,6 +40,9 @@ import { Payment } from "./page/payment/Payment";
 import { Success } from "./page/payment/Success";
 import { Fail } from "./page/payment/Fail";
 import { NoticeSound } from "./page/board/NoticeSound";
+import { FailPage } from "./page/payment/jh/FailPage";
+import { SuccessPage } from "./page/payment/jh/SuccessPage";
+import { PaymentPage } from "./page/payment/jh/PaymentPage";
 import { TransPay } from "./page/transport/TransPay";
 
 const routes = createBrowserRouter(
@@ -90,6 +93,10 @@ const routes = createBrowserRouter(
       <Route path="/payment" element={<Payment />} />
       <Route path="/success" element={<Success />} />
       <Route path="/fail" element={<Fail />} />
+
+      <Route path="/jh/fail" element={<FailPage />} />
+      <Route path="/jh/successpage" element={<SuccessPage />} />
+      <Route path="/jh/PaymentPage" element={<PaymentPage />} />
     </Route>,
   ),
 );

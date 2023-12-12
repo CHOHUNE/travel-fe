@@ -235,6 +235,9 @@ export function BoardList() {
             <Button onClick={onOpen} borderRadius="50%">
               <FontAwesomeIcon icon={faLocationDot} />
             </Button>
+            <Text fontSize={"10px"} fontWeight={"bold"}>
+              대리점 찾기
+            </Text>
 
             <Modal isOpen={isOpen} onClose={onClose}>
               <ModalOverlay />
