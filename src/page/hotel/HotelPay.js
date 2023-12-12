@@ -49,7 +49,7 @@ import {
 import { useNavigate, useParams } from "react-router-dom";
 import axios from "axios";
 import { ChevronDownIcon } from "@chakra-ui/icons";
-import { Payment } from "../payment/Payment";
+import { PaymentPage } from "../payment/PaymentPage";
 
 export function HotelPay() {
   const [hotel, setHotel] = useState({});
@@ -119,7 +119,7 @@ export function HotelPay() {
     <ChakraProvider theme={theme}>
       <Center m={20}>
         <Card w={"85%"}>
-          <CardHeader borderBottom={"1px solid #f5f6f6"}>
+          <CardHeader mb={10} borderBottom={"1px solid #f5f6f6"}>
             <Heading>예약/결제</Heading>
           </CardHeader>
 
@@ -167,7 +167,7 @@ export function HotelPay() {
             <FormControl mt={20}>
               <FormLabel
                 border={"1px solid #f5f6f6"}
-                background={"#ffffff"}
+                background={"#F5F6F8"}
                 h={"100px"}
                 display="flex"
                 alignItems="center"
@@ -189,558 +189,560 @@ export function HotelPay() {
             </FormControl>
 
             {/* 예약자 정보 */}
-            <Box w={"60%"}>
-              <FormControl mt={20}>
-                <FormLabel fontSize={"20px"} fontWeight={"bold"}>
-                  예약자 정보
-                </FormLabel>
-              </FormControl>
-
-              <FormControl
-                borderTop={"1px solid black"}
-                borderBottom={"2px solid #ededed"}
-              >
-                <Flex borderBottom={"1px solid #ededed"}>
-                  <FormLabel
-                    m={0}
-                    background={"#f5f6f6"}
-                    h={"60px"}
-                    w={"100px"}
-                    justifyContent="center"
-                    display={"flex"}
-                    alignItems={"center"}
-                    fontSize={"14px"}
-                  >
-                    예약자명
-                  </FormLabel>
-                  <Input
-                    ml={5}
-                    mt={2}
-                    w={400}
-                    value={member ? member.name : ""}
-                  ></Input>
-                </Flex>
-
-                {/* 이메일 정보 */}
-                <Flex borderBottom={"1px solid #ededed"}>
-                  <FormLabel
-                    m={0}
-                    background={"#f5f6f6"}
-                    h={"60px"}
-                    w={"100px"}
-                    justifyContent="center"
-                    display={"flex"}
-                    alignItems={"center"}
-                    fontSize={"14px"}
-                  >
-                    이메일
-                  </FormLabel>
-                  <Flex>
-                    <Input
-                      ml={5}
-                      mt={2}
-                      w={200}
-                      value={member ? emailInput1 : ""}
-                    />
-                    <span
-                      style={{
-                        justifyContent: "center",
-                        display: "flex",
-                        alignItems: "center",
-                        fontSize: "13px",
-                      }}
-                    >
-                      <Box
-                        style={{
-                          fontSize: "16px",
-                          verticalAlign: "middle",
-                          margin: "0 8px",
-                        }}
-                      >
-                        @
-                      </Box>
-                    </span>
-                    <Input mt={2} w={200} value={member ? emailInput2 : ""} />
-                  </Flex>
-                </Flex>
-
-                {/* 휴대폰 정보 */}
-                <Flex>
-                  <FormLabel
-                    m={0}
-                    background={"#f5f6f6"}
-                    h={"60px"}
-                    w={"100px"}
-                    justifyContent="center"
-                    display={"flex"}
-                    alignItems={"center"}
-                    fontSize={"14px"}
-                  >
-                    휴대폰번호
-                  </FormLabel>
-                  <Flex>
-                    <Input ml={5} mt={2} w={100} value={a} />
-                    <span
-                      style={{
-                        justifyContent: "center",
-                        display: "flex",
-                        alignItems: "center",
-                        fontSize: "13px",
-                      }}
-                    >
-                      <Box
-                        style={{
-                          fontSize: "16px",
-                          verticalAlign: "middle",
-                          margin: "0 8px",
-                        }}
-                      >
-                        -
-                      </Box>
-                    </span>
-                    <Input mt={2} w={100} value={b} />
-                    <span
-                      style={{
-                        justifyContent: "center",
-                        display: "flex",
-                        alignItems: "center",
-                        fontSize: "13px",
-                      }}
-                    >
-                      <Box
-                        style={{
-                          fontSize: "16px",
-                          verticalAlign: "middle",
-                          margin: "0 8px",
-                        }}
-                      >
-                        -
-                      </Box>
-                    </span>
-                    <Input mt={2} w={100} value={c} />
-                  </Flex>
-                </Flex>
-              </FormControl>
-            </Box>
-
-            {/* 이용자 정보 */}
-            <Box w={"60%"}>
-              <FormControl mt={20}>
-                <FormLabel fontSize={"20px"} fontWeight={"bold"}>
-                  이용자 정보
-                </FormLabel>
-              </FormControl>
-
-              <FormControl
-                borderTop={"1px solid black"}
-                borderBottom={"2px solid #ededed"}
-              >
-                <Flex borderBottom={"1px solid #ededed"}>
-                  <FormLabel
-                    m={0}
-                    background={"#f5f6f6"}
-                    h={"60px"}
-                    w={"102px"}
-                    justifyContent="center"
-                    display={"flex"}
-                    alignItems={"center"}
-                    fontSize={"14px"}
-                  >
-                    이용자명
-                  </FormLabel>
-                  <Input
-                    ml={5}
-                    mt={2}
-                    w={400}
-                    value={isChecked ? (member ? member.name : "") : ""}
-                    onChange={(e) => setPersonName(e.target.value)}
-                  />
-                  <Checkbox
-                    ml={3}
-                    value={isChecked}
-                    onChange={() => setIsChecked(!isChecked)}
-                  />
-                  <span
-                    style={{
-                      justifyContent: "center",
-                      display: "flex",
-                      alignItems: "center",
-                    }}
-                  >
-                    <Box
-                      style={{
-                        fontSize: "10px",
-                        verticalAlign: "middle",
-                        margin: "0 4px",
-                      }}
-                    >
-                      구매자와 이용자명이 동일합니다.
-                    </Box>
-                  </span>
-                </Flex>
-
-                {/* 휴대폰번호 정보 */}
-                <Flex>
-                  <FormLabel
-                    m={0}
-                    background={"#f5f6f6"}
-                    h={"60px"}
-                    w={"100px"}
-                    justifyContent="center"
-                    display={"flex"}
-                    alignItems={"center"}
-                    fontSize={"14px"}
-                  >
-                    휴대폰번호
-                  </FormLabel>
-                  <Flex>
-                    <Input ml={5} mt={2} w={100} value={isChecked ? a : ""} />
-                    <span
-                      style={{
-                        justifyContent: "center",
-                        display: "flex",
-                        alignItems: "center",
-                        fontSize: "13px",
-                      }}
-                    >
-                      <Box
-                        style={{
-                          fontSize: "16px",
-                          verticalAlign: "middle",
-                          margin: "0 8px",
-                        }}
-                      >
-                        -
-                      </Box>
-                    </span>
-                    <Input mt={2} w={100} value={isChecked ? b : ""} />
-                    <span
-                      style={{
-                        justifyContent: "center",
-                        display: "flex",
-                        alignItems: "center",
-                        fontSize: "13px",
-                      }}
-                    >
-                      <Box
-                        style={{
-                          fontSize: "16px",
-                          verticalAlign: "middle",
-                          margin: "0 8px",
-                        }}
-                      >
-                        -
-                      </Box>
-                    </span>
-                    <Input mt={2} w={100} value={isChecked ? c : ""} />
-                  </Flex>
-                </Flex>
-
-                <Flex>
-                  {/* 성인 인원 선택 */}
-                  <Flex>
-                    <FormLabel
-                      m={0}
-                      background={"#f5f6f6"}
-                      h={"60px"}
-                      w={"100px"}
-                      justifyContent="center"
-                      display={"flex"}
-                      alignItems={"center"}
-                      fontSize={"14px"}
-                    >
-                      이용인원
+            <Flex>
+              <Box w={"70%"}>
+                <Box w={"90%"}>
+                  <FormControl mt={20}>
+                    <FormLabel fontSize={"20px"} fontWeight={"bold"}>
+                      예약자 정보
                     </FormLabel>
-                    <span
-                      style={{
-                        marginLeft: "12px",
-                        justifyContent: "center",
-                        display: "flex",
-                        alignItems: "center",
-                        fontSize: "13px",
-                      }}
-                    >
-                      <Box
-                        style={{
-                          fontSize: "16px",
-                          verticalAlign: "middle",
-                          margin: "0 8px",
-                        }}
-                      >
-                        성인
-                      </Box>
-                    </span>
-                    <Menu>
-                      <MenuButton
-                        as={Button}
-                        rightIcon={<ChevronDownIcon />}
-                        background={"white"}
-                        border={"1px solid #ededed"}
-                        mt={"8px"}
-                        fontSize={"13px"}
-                      >
-                        {personAdult ? personAdult : "1명"}
-                      </MenuButton>
+                  </FormControl>
 
-                      <MenuList>
-                        <MenuItem
-                          onClick={() => handlePersonnelAdultClick("1명")}
-                        >
-                          1명
-                        </MenuItem>
-                        <MenuItem
-                          onClick={() => handlePersonnelAdultClick("2명")}
-                        >
-                          2명
-                        </MenuItem>
-                        <MenuItem
-                          onClick={() => handlePersonnelAdultClick("3명")}
-                        >
-                          3명
-                        </MenuItem>
-                        <MenuItem
-                          onClick={() => handlePersonnelAdultClick("4명")}
-                        >
-                          4명
-                        </MenuItem>
-                      </MenuList>
-                    </Menu>
-                  </Flex>
-
-                  {/* 소인 인원 선택 */}
-                  <Flex>
-                    <span
-                      style={{
-                        marginLeft: "12px",
-                        justifyContent: "center",
-                        display: "flex",
-                        alignItems: "center",
-                        fontSize: "13px",
-                      }}
-                    >
-                      <Box
-                        style={{
-                          fontSize: "16px",
-                          verticalAlign: "middle",
-                          margin: "0 8px",
-                        }}
-                      >
-                        소인
-                      </Box>
-                    </span>
-                    <Menu>
-                      <MenuButton
-                        as={Button}
-                        rightIcon={<ChevronDownIcon />}
-                        background={"white"}
-                        border={"1px solid #ededed"}
-                        mt={"8px"}
-                        fontSize={"13px"}
-                      >
-                        {personChild ? personChild : "1명"}
-                      </MenuButton>
-
-                      <MenuList>
-                        <MenuItem
-                          onClick={() => handlePersonnelChildClick("1명")}
-                        >
-                          1명
-                        </MenuItem>
-                        <MenuItem
-                          onClick={() => handlePersonnelChildClick("2명")}
-                        >
-                          2명
-                        </MenuItem>
-                        <MenuItem
-                          onClick={() => handlePersonnelChildClick("3명")}
-                        >
-                          3명
-                        </MenuItem>
-                        <MenuItem
-                          onClick={() => handlePersonnelChildClick("4명")}
-                        >
-                          4명
-                        </MenuItem>
-                      </MenuList>
-                    </Menu>
-
-                    {/* 기준인원/최대인원 관련 */}
-                    <span
-                      style={{
-                        marginLeft: "3px",
-                        justifyContent: "center",
-                        display: "flex",
-                        alignItems: "center",
-                      }}
-                    >
-                      <Box
-                        style={{
-                          fontSize: "13px",
-                          verticalAlign: "middle",
-                          margin: "0 8px",
-                          color: "blue",
-                        }}
-                      >
-                        기준 2인 / 최대 3인
-                      </Box>
-                    </span>
-
-                    {/* 해당 인원 초과시 추가요금 안내 */}
-                    <span
-                      style={{
-                        marginLeft: "3px",
-                        justifyContent: "center",
-                        display: "flex",
-                        alignItems: "center",
-                      }}
-                    >
-                      <Box
-                        style={{
-                          fontSize: "13px",
-                          verticalAlign: "middle",
-                          margin: "0 8px",
-                          color: "#737182",
-                        }}
-                      >
-                        기준인원 초과 시 추가 비용 발생
-                      </Box>
-                    </span>
-                  </Flex>
-                </Flex>
-
-                <Flex borderBottom={"1px solid #ededed"}>
-                  <FormLabel
-                    m={0}
-                    background={"#f5f6f6"}
-                    h={"88px"}
-                    w={"113px"}
-                    justifyContent="center"
-                    display={"flex"}
-                    alignItems={"center"}
-                    fontSize={"14px"}
+                  <FormControl
+                    borderTop={"1px solid black"}
+                    borderBottom={"2px solid #ededed"}
                   >
-                    요청사항
-                  </FormLabel>
-                  <Textarea ml={5} mt={2} w={680} />
-                </Flex>
-              </FormControl>
-            </Box>
-
-            {/* 결제정보 */}
-
-            <Box w={"30%"}>
-              <FormControl
-                borderTop={"1px solid black"}
-                borderBottom={"2px solid #ededed"}
-                background={"#F2F3F6"}
-                mt={20}
-              >
-                <Box h={"400px"}>
-                  <Box
-                    w={"80%"}
-                    h={"130px"}
-                    ml={"10%"}
-                    mt={"10%"}
-                    background={"white"}
-                    textIndent={"10px"}
-                  >
-                    <Flex>
-                      <FormLabel style={{ marginTop: "15px" }}>
-                        · 예약자명 :
-                      </FormLabel>
-                      <Text
-                        mt={"9px"}
-                        ml={"-16px"}
+                    <Flex borderBottom={"1px solid #ededed"}>
+                      <FormLabel
+                        m={0}
+                        background={"#f5f6f6"}
+                        h={"60px"}
+                        w={"100px"}
                         justifyContent="center"
                         display={"flex"}
                         alignItems={"center"}
-                        fontSize={"16px"}
+                        fontSize={"14px"}
                       >
-                        {member ? member.name : ""}
-                      </Text>
+                        예약자명
+                      </FormLabel>
+                      <Input
+                        ml={5}
+                        mt={2}
+                        w={400}
+                        value={member ? member.name : ""}
+                      ></Input>
                     </Flex>
 
-                    <Flex>
-                      <FormLabel style={{ marginTop: "7px" }}>
-                        · 이용자명 :
-                      </FormLabel>
-                      <Text
-                        ml={"-16px"}
+                    {/* 이메일 정보 */}
+                    <Flex borderBottom={"1px solid #ededed"}>
+                      <FormLabel
+                        m={0}
+                        background={"#f5f6f6"}
+                        h={"60px"}
+                        w={"100px"}
                         justifyContent="center"
                         display={"flex"}
                         alignItems={"center"}
-                        fontSize={"16px"}
+                        fontSize={"14px"}
                       >
-                        {isChecked ? (member ? member.name : "") : ""}
-                      </Text>
+                        이메일
+                      </FormLabel>
+                      <Flex>
+                        <Input
+                          ml={5}
+                          mt={2}
+                          w={200}
+                          value={member ? emailInput1 : ""}
+                        />
+                        <span
+                          style={{
+                            justifyContent: "center",
+                            display: "flex",
+                            alignItems: "center",
+                            fontSize: "13px",
+                          }}
+                        >
+                          <Box
+                            style={{
+                              fontSize: "16px",
+                              verticalAlign: "middle",
+                              margin: "0 8px",
+                            }}
+                          >
+                            @
+                          </Box>
+                        </span>
+                        <Input
+                          mt={2}
+                          w={200}
+                          value={member ? emailInput2 : ""}
+                        />
+                      </Flex>
                     </Flex>
 
+                    {/* 휴대폰 정보 */}
                     <Flex>
                       <FormLabel
-                        style={{ marginTop: "7px", marginBottom: "10px" }}
-                      >
-                        · 이용자 휴대폰번호 :{" "}
-                      </FormLabel>
-                      <Text
-                        ml={"-16px"}
-                        mt={"-3px"}
+                        m={0}
+                        background={"#f5f6f6"}
+                        h={"60px"}
+                        w={"100px"}
                         justifyContent="center"
                         display={"flex"}
                         alignItems={"center"}
-                        fontSize={"16px"}
+                        fontSize={"14px"}
                       >
-                        {isChecked ? member.phoneNumber : ""}
-                      </Text>
+                        휴대폰번호
+                      </FormLabel>
+                      <Flex>
+                        <Input ml={5} mt={2} w={100} value={a} />
+                        <span
+                          style={{
+                            justifyContent: "center",
+                            display: "flex",
+                            alignItems: "center",
+                            fontSize: "13px",
+                          }}
+                        >
+                          <Box
+                            style={{
+                              fontSize: "16px",
+                              verticalAlign: "middle",
+                              margin: "0 8px",
+                            }}
+                          >
+                            -
+                          </Box>
+                        </span>
+                        <Input mt={2} w={100} value={b} />
+                        <span
+                          style={{
+                            justifyContent: "center",
+                            display: "flex",
+                            alignItems: "center",
+                            fontSize: "13px",
+                          }}
+                        >
+                          <Box
+                            style={{
+                              fontSize: "16px",
+                              verticalAlign: "middle",
+                              margin: "0 8px",
+                            }}
+                          >
+                            -
+                          </Box>
+                        </span>
+                        <Input mt={2} w={100} value={c} />
+                      </Flex>
                     </Flex>
-                  </Box>
-                  <Box
-                    w={"80%"}
-                    ml={"10%"}
-                    mt={10}
-                    borderTop={"1px solid #DDDDDD"}
+                  </FormControl>
+                </Box>
+
+                {/* 이용자 정보 */}
+                <Box w={"90%"}>
+                  <FormControl mt={20}>
+                    <FormLabel fontSize={"20px"} fontWeight={"bold"}>
+                      이용자 정보
+                    </FormLabel>
+                  </FormControl>
+
+                  <FormControl
+                    borderTop={"1px solid black"}
+                    borderBottom={"2px solid #ededed"}
                   >
-                    <FormLabel mt={10} fontSize={"20px"} fontWeight={"bold"}>
-                      최종 결제 금액
+                    <Flex borderBottom={"1px solid #ededed"}>
+                      <FormLabel
+                        m={0}
+                        background={"#f5f6f6"}
+                        h={"60px"}
+                        w={"100px"}
+                        justifyContent="center"
+                        display={"flex"}
+                        alignItems={"center"}
+                        fontSize={"14px"}
+                      >
+                        이용자명
+                      </FormLabel>
+                      <Input
+                        ml={5}
+                        mt={2}
+                        w={400}
+                        value={isChecked ? (member ? member.name : "") : ""}
+                        onChange={(e) => setPersonName(e.target.value)}
+                      />
+                      <Checkbox
+                        ml={3}
+                        isChecked={isChecked}
+                        value={isChecked}
+                        onChange={(e) => setIsChecked(e.target.checked)}
+                      />
                       <span
                         style={{
-                          marginTop: "10px",
-                          marginLeft: "5px",
-                          color: "#3e71da",
+                          justifyContent: "center",
+                          display: "flex",
+                          alignItems: "center",
                         }}
                       >
-                        <Box textAlign={"right"}>{hotel.totalPrice}원</Box>
+                        <Box
+                          style={{
+                            fontSize: "10px",
+                            verticalAlign: "middle",
+                            margin: "0 4px",
+                          }}
+                          onClick={() => setIsChecked(!isChecked)}
+                        >
+                          구매자와 이용자명이 동일합니다.
+                        </Box>
                       </span>
-                      <Button
-                        w={"100%"}
-                        h={"70px"}
-                        mt={"20px"}
-                        background={"#4095D9"}
-                        color={"white"}
-                        onClick={() => onOpen()}
+                    </Flex>
+
+                    {/* 휴대폰번호 정보 */}
+                    <Flex borderBottom={"1px solid #ededed"}>
+                      <FormLabel
+                        m={0}
+                        background={"#f5f6f6"}
+                        h={"60px"}
+                        w={"100px"}
+                        justifyContent="center"
+                        display={"flex"}
+                        alignItems={"center"}
+                        fontSize={"14px"}
                       >
-                        결제하기
-                      </Button>
-                    </FormLabel>
-                  </Box>
+                        휴대폰번호
+                      </FormLabel>
+                      <Flex>
+                        <Input
+                          ml={5}
+                          mt={2}
+                          w={100}
+                          value={isChecked ? a : ""}
+                        />
+                        <span
+                          style={{
+                            justifyContent: "center",
+                            display: "flex",
+                            alignItems: "center",
+                            fontSize: "13px",
+                          }}
+                        >
+                          <Box
+                            style={{
+                              fontSize: "16px",
+                              verticalAlign: "middle",
+                              margin: "0 8px",
+                            }}
+                          >
+                            -
+                          </Box>
+                        </span>
+                        <Input mt={2} w={100} value={isChecked ? b : ""} />
+                        <span
+                          style={{
+                            justifyContent: "center",
+                            display: "flex",
+                            alignItems: "center",
+                            fontSize: "13px",
+                          }}
+                        >
+                          <Box
+                            style={{
+                              fontSize: "16px",
+                              verticalAlign: "middle",
+                              margin: "0 8px",
+                            }}
+                          >
+                            -
+                          </Box>
+                        </span>
+                        <Input mt={2} w={100} value={isChecked ? c : ""} />
+                      </Flex>
+                    </Flex>
+
+                    <Flex>
+                      {/* 성인 인원 선택 */}
+                      <Flex>
+                        <FormLabel
+                          m={0}
+                          background={"#f5f6f6"}
+                          h={"60px"}
+                          w={"100px"}
+                          justifyContent="center"
+                          display={"flex"}
+                          alignItems={"center"}
+                          fontSize={"14px"}
+                        >
+                          이용인원
+                        </FormLabel>
+                        <span
+                          style={{
+                            marginLeft: "12px",
+                            justifyContent: "center",
+                            display: "flex",
+                            alignItems: "center",
+                            fontSize: "13px",
+                          }}
+                        >
+                          <Box
+                            style={{
+                              fontSize: "16px",
+                              verticalAlign: "middle",
+                              margin: "0 8px",
+                            }}
+                          >
+                            성인
+                          </Box>
+                        </span>
+                        <Menu>
+                          <MenuButton
+                            as={Button}
+                            rightIcon={<ChevronDownIcon />}
+                            background={"white"}
+                            border={"1px solid #ededed"}
+                            mt={"8px"}
+                            fontSize={"13px"}
+                          >
+                            {personAdult ? personAdult : "1명"}
+                          </MenuButton>
+
+                          <MenuList>
+                            <MenuItem
+                              onClick={() => handlePersonnelAdultClick("1명")}
+                            >
+                              1명
+                            </MenuItem>
+                            <MenuItem
+                              onClick={() => handlePersonnelAdultClick("2명")}
+                            >
+                              2명
+                            </MenuItem>
+                            <MenuItem
+                              onClick={() => handlePersonnelAdultClick("3명")}
+                            >
+                              3명
+                            </MenuItem>
+                            <MenuItem
+                              onClick={() => handlePersonnelAdultClick("4명")}
+                            >
+                              4명
+                            </MenuItem>
+                          </MenuList>
+                        </Menu>
+                      </Flex>
+
+                      {/* 소인 인원 선택 */}
+                      <Flex>
+                        <span
+                          style={{
+                            marginLeft: "12px",
+                            justifyContent: "center",
+                            display: "flex",
+                            alignItems: "center",
+                            fontSize: "13px",
+                          }}
+                        >
+                          <Box
+                            style={{
+                              fontSize: "16px",
+                              verticalAlign: "middle",
+                              margin: "0 8px",
+                            }}
+                          >
+                            소인
+                          </Box>
+                        </span>
+                        <Menu>
+                          <MenuButton
+                            as={Button}
+                            rightIcon={<ChevronDownIcon />}
+                            background={"white"}
+                            border={"1px solid #ededed"}
+                            mt={"8px"}
+                            fontSize={"13px"}
+                          >
+                            {personChild ? personChild : "1명"}
+                          </MenuButton>
+
+                          <MenuList>
+                            <MenuItem
+                              onClick={() => handlePersonnelChildClick("1명")}
+                            >
+                              1명
+                            </MenuItem>
+                            <MenuItem
+                              onClick={() => handlePersonnelChildClick("2명")}
+                            >
+                              2명
+                            </MenuItem>
+                            <MenuItem
+                              onClick={() => handlePersonnelChildClick("3명")}
+                            >
+                              3명
+                            </MenuItem>
+                            <MenuItem
+                              onClick={() => handlePersonnelChildClick("4명")}
+                            >
+                              4명
+                            </MenuItem>
+                          </MenuList>
+                        </Menu>
+
+                        {/* 기준인원/최대인원 관련 */}
+                        <span
+                          style={{
+                            marginLeft: "3px",
+                            justifyContent: "center",
+                            display: "flex",
+                            alignItems: "center",
+                          }}
+                        >
+                          <Box
+                            style={{
+                              fontSize: "13px",
+                              verticalAlign: "middle",
+                              margin: "0 8px",
+                              color: "blue",
+                            }}
+                          >
+                            기준 2인 / 최대 3인
+                          </Box>
+                        </span>
+
+                        {/* 해당 인원 초과시 추가요금 안내 */}
+                        <span
+                          style={{
+                            marginLeft: "3px",
+                            justifyContent: "center",
+                            display: "flex",
+                            alignItems: "center",
+                          }}
+                        >
+                          <Box
+                            style={{
+                              fontSize: "13px",
+                              verticalAlign: "middle",
+                              margin: "0 8px",
+                              color: "#737182",
+                            }}
+                          >
+                            기준인원 초과 시 추가 비용 발생
+                          </Box>
+                        </span>
+                      </Flex>
+                    </Flex>
+
+                    <Flex
+                      borderTop={"1px solid #ededed"}
+                      borderBottom={"1px solid #ededed"}
+                    >
+                      <FormLabel
+                        m={0}
+                        background={"#f5f6f6"}
+                        h={"95px"}
+                        w={"107px"}
+                        justifyContent="center"
+                        display={"flex"}
+                        alignItems={"center"}
+                        fontSize={"14px"}
+                      >
+                        요청사항
+                      </FormLabel>
+                      <Textarea ml={5} mt={2} w={680} mb={2} />
+                    </Flex>
+                  </FormControl>
                 </Box>
-              </FormControl>
-            </Box>
+              </Box>
+
+              {/* 결제정보 */}
+              <Box w={"30%"} mt={10}>
+                <FormControl
+                  borderTop={"1px solid black"}
+                  borderBottom={"2px solid #ededed"}
+                  background={"#F2F3F6"}
+                  mt={20}
+                >
+                  <Box h={"400px"}>
+                    <Box
+                      w={"80%"}
+                      h={"130px"}
+                      ml={"10%"}
+                      mt={"10%"}
+                      background={"white"}
+                      textIndent={"10px"}
+                    >
+                      <Flex>
+                        <FormLabel style={{ marginTop: "15px" }}>
+                          · 예약자명 :
+                        </FormLabel>
+                        <Text
+                          mt={"9px"}
+                          ml={"-16px"}
+                          justifyContent="center"
+                          display={"flex"}
+                          alignItems={"center"}
+                          fontSize={"16px"}
+                        >
+                          {member ? member.name : ""}
+                        </Text>
+                      </Flex>
+
+                      <Flex>
+                        <FormLabel style={{ marginTop: "7px" }}>
+                          · 이용자명 :
+                        </FormLabel>
+                        <Text
+                          ml={"-16px"}
+                          justifyContent="center"
+                          display={"flex"}
+                          alignItems={"center"}
+                          fontSize={"16px"}
+                        >
+                          {isChecked ? (member ? member.name : "") : ""}
+                        </Text>
+                      </Flex>
+
+                      <Flex>
+                        <FormLabel
+                          style={{ marginTop: "7px", marginBottom: "10px" }}
+                        >
+                          · 이용자 휴대폰번호 :{" "}
+                        </FormLabel>
+                        <Text
+                          ml={"-16px"}
+                          mt={"-3px"}
+                          justifyContent="center"
+                          display={"flex"}
+                          alignItems={"center"}
+                          fontSize={"16px"}
+                        >
+                          {isChecked ? member.phoneNumber : ""}
+                        </Text>
+                      </Flex>
+                    </Box>
+                    <Box
+                      w={"80%"}
+                      ml={"10%"}
+                      mt={10}
+                      borderTop={"1px solid #DDDDDD"}
+                    >
+                      <FormLabel mt={10} fontSize={"20px"} fontWeight={"bold"}>
+                        최종 결제 금액
+                        <span
+                          style={{
+                            marginTop: "10px",
+                            marginLeft: "5px",
+                            color: "#3e71da",
+                          }}
+                        >
+                          <Box textAlign={"right"}>{hotel.totalPrice}원</Box>
+                        </span>
+                        <Button
+                          w={"100%"}
+                          h={"70px"}
+                          mt={"20px"}
+                          background={"#4095D9"}
+                          color={"white"}
+                          onClick={() => navigate(`/PaymentPage/${id}`)}
+                        >
+                          결제하기
+                        </Button>
+                      </FormLabel>
+                    </Box>
+                  </Box>
+                </FormControl>
+              </Box>
+            </Flex>
           </CardBody>
-
-          {/* 결제 모달 */}
-          <Modal isOpen={isOpen} onClose={onClose} size={"lg"}>
-            <ModalOverlay />
-            <ModalContent>
-              <ModalCloseButton />
-              <ModalBody>
-                <Payment />
-              </ModalBody>
-
-              <ModalFooter>
-                <Button onClick={onClose}>닫기</Button>
-              </ModalFooter>
-            </ModalContent>
-          </Modal>
         </Card>
       </Center>
     </ChakraProvider>

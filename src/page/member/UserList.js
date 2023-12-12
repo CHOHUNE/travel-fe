@@ -19,32 +19,60 @@ import {
 } from "@chakra-ui/react";
 import axios from "axios";
 import { useLocation, useNavigate, useSearchParams } from "react-router-dom";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faAngleLeft, faAngleRight } from "@fortawesome/free-solid-svg-icons";
+
+function PageButton({ variant, pageNumber, children }) {
+  const [params] = useSearchParams();
+  const navigate = useNavigate();
+
+  function handleClick() {
+    params.set("p", pageNumber);
+    navigate("?" + params);
+  }
+
+  return (
+    <Button variant={variant} onClick={handleClick}>
+      {children}
+    </Button>
+  );
+}
 
 function Pagination({ pageInfo }) {
   const pageNumbers = [];
 
   const navigate = useNavigate();
 
-  if (!pageInfo) {
-    return null;
-  }
-
-  for (let i = pageInfo.startPageNumber; i <= pageInfo.lastPageNumber; i++) {
+  for (let i = pageInfo.startPageNumber; i <= pageInfo.endPageNumber; i++) {
     pageNumbers.push(i);
   }
 
   return (
     <Center mt={5}>
       <Box>
+        {pageInfo.prevPageNumber && (
+          <PageButton variant="ghost" pageNumber={pageInfo.prevPageNumber}>
+            <FontAwesomeIcon icon={faAngleLeft} />
+          </PageButton>
+        )}
+
         {pageNumbers.map((pageNumber) => (
-          <Button
-            mr={2}
+          <PageButton
             key={pageNumber}
-            onClick={() => navigate("?p=" + pageNumber)}
+            variant={
+              pageNumber === pageInfo.currentPageNumber ? "solid" : "ghost"
+            }
+            pageNumber={pageNumber}
           >
             {pageNumber}
-          </Button>
+          </PageButton>
         ))}
+
+        {pageInfo.nextPageNumber && (
+          <PageButton variant="ghost" pageNumber={pageInfo.nextPageNumber}>
+            <FontAwesomeIcon icon={faAngleRight} />
+          </PageButton>
+        )}
       </Box>
     </Center>
   );
