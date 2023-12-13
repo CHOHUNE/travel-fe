@@ -105,6 +105,18 @@ export function TransPay() {
     setPersonChild(child);
   };
 
+  function handlePaymentClick() {
+    //id는 ttoss , transprice= transport에 있음
+    axios
+      .post("/api/toss/save", { id, amount: trans.transPrice })
+      .then((response) => {
+        console.log(response.data);
+        navigate(`/PaymentPage/${id}`, {
+          state: { id, amount: trans.transPrice },
+        });
+      });
+  }
+
   return (
     <ChakraProvider theme={theme}>
       <Center m={20}>
@@ -708,7 +720,7 @@ export function TransPay() {
                         mt={"20px"}
                         background={"#4095D9"}
                         color={"white"}
-                        onClick={() => navigate(`/PaymentPage/${id}`)}
+                        onClick={handlePaymentClick}
                       >
                         결제하기
                       </Button>
