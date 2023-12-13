@@ -66,7 +66,7 @@ export function HotelView() {
 
   function handleRoomtypeDelete(hrtId) {
     axios
-      .delete("/api/hotel/type/delete/" + hrtId)
+      .delete("/api/hotel/delete/" + id + "/type/" + hrtId)
       .then(() => {
         toast({
           description: "삭제가 완료 되었습니다.",
@@ -102,7 +102,7 @@ export function HotelView() {
                 mr={"20px"}
               >
                 {" "}
-                객실 추가{" "}
+                객실 관리{" "}
               </Button>
 
               <Button onClick={() => navigate("/hotel/edit/" + hotel.hid)}>
@@ -180,6 +180,7 @@ export function HotelView() {
             border={"1px solid black"}
             my={"10px"}
             textAlign={"center"}
+            borderRadius={"lg"}
           >
             <Stack>
               <Text fontSize="2xl">{hotel.name}</Text>
@@ -194,14 +195,7 @@ export function HotelView() {
           </Box>
 
           {/* 객실 및 인원 선택 창 */}
-          <Box
-            my={"10px"}
-            border={"1px solid black"}
-            borderRadius={"l"}
-            h={"80px"}
-            w={"80%"}
-            mx={"10%"}
-          >
+          <Box my={"10px"} h={"80px"} w={"80%"} mx={"10%"}>
             <Flex>
               <Box
                 border={"1px solid black"}
@@ -265,14 +259,7 @@ export function HotelView() {
               <Input placeholder="Select Date and Time" size="md" type="date" />
             </Box>
           )}
-          <SimpleGrid
-            columns={1}
-            spacing={5}
-            my="20px"
-            ml="10%"
-            w="80%"
-            border="1px solid black"
-          >
+          <SimpleGrid columns={1} spacing={5} my="20px" ml="10%" w="80%">
             {roomtypeList &&
               roomtypeList.map((roomtype) => (
                 <Box

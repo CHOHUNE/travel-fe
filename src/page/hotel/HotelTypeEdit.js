@@ -15,23 +15,12 @@ import {
   Tr,
   useToast,
 } from "@chakra-ui/react";
-import React, { useEffect, useState } from "react";
+import React, { useState, useEffect } from "react";
 import axios from "axios";
 import { useNavigate, useParams } from "react-router-dom";
 
-export function HotelTypeWrite() {
-  const [roomtypes, setRoomtypes] = useState([
-    {
-      roomtype: "",
-      originalPriceWeekday: 0,
-      salePriceWeekday: 0,
-      originalPriceWeekend: 0,
-      salePriceWeekend: 0,
-      // roomImg: null,
-      hrtId: null,
-    },
-  ]);
-
+export function HotelTypeEdit() {
+  const [roomtypes, setRoomtypes] = useState([]);
   const { id } = useParams();
   const navigate = useNavigate();
   const toast = useToast();
@@ -52,35 +41,31 @@ export function HotelTypeWrite() {
         salePriceWeekday: 0,
         originalPriceWeekend: 0,
         salePriceWeekend: 0,
-        // roomImg: null,
-        hrtId: null,
+        roomImg: null,
       },
     ]);
   };
 
   const handleConfirmation = () => {
     const promises = roomtypes.map((room) => {
-      if (room.hrtId) {
-        return axios.putForm(`/api/hotel/edit/type`, room);
-      } else {
-        return axios.postForm("/api/hotel/write/type", {
-          ...room,
-          hid: id,
-        });
-      }
+      // 호텔객실 수정 API 호출
+      return axios.put(`/api/hotel/edit/type/${room.hrtId}`, {
+        ...room,
+        hid: id,
+      });
     });
 
     Promise.all(promises)
       .then(() => {
         toast({
-          description: "객실 추가 완료",
+          description: "객실 수정 완료",
           status: "success",
         });
         navigate(-1);
       })
       .catch(() => {
         toast({
-          description: "객실 추가 실패",
+          description: "객실 수정 실패",
           status: "error",
         });
       });
@@ -90,7 +75,7 @@ export function HotelTypeWrite() {
     <Center>
       <Card w={"4xl"} p={"30px"} my={"30px"}>
         <CardHeader>
-          <Heading textAlign={"center"}>객실 추가</Heading>
+          <Heading textAlign={"center"}>객실 수정</Heading>
         </CardHeader>
         <Divider />
         <Table variant="simple" mt={4} maxW="100%">

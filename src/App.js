@@ -40,7 +40,7 @@ import { Payment } from "./page/payment/Payment";
 import { Success } from "./page/payment/Success";
 import { Fail } from "./page/payment/Fail";
 import { NoticeSound } from "./page/board/NoticeSound";
-import HotelTypeWrite from "./page/hotel/HotelTypeWrite";
+import { HotelTypeWrite } from "./page/hotel/HotelTypeWrite";
 
 const routes = createBrowserRouter(
   createRoutesFromElements(
