@@ -16,10 +16,12 @@ import {
   Textarea,
   useToast,
 } from "@chakra-ui/react";
-import { useState } from "react";
+import React, { useState } from "react";
 import { useNavigate, useSearchParams } from "react-router-dom";
 import axios from "axios";
 import "react-datepicker/dist/react-datepicker.css";
+import DatePicker from "react-datepicker";
+import "./CustomDatePicker.css";
 
 export function TransPortWrite() {
   const [transMainImage, setTransMainImage] = useState("");
@@ -31,6 +33,10 @@ export function TransPortWrite() {
   const [transArriveLocation, setTransArriveLocation] = useState("");
   const [transAddress, setTransAddress] = useState("");
 
+  // 시작일 마감일 test
+  const [transStartDate, setTransStartDate] = useState("");
+  const [transEndDate, setTransEndDate] = useState("");
+  // 시작일 마감일 test
 
   const navigate = useNavigate();
 
@@ -112,6 +118,49 @@ export function TransPortWrite() {
                 value={transTitle}
                 onChange={(e) => setTransTitle(e.target.value)}
               />
+            </Flex>
+          </FormControl>
+
+          <FormControl
+            mt={2}
+            // border={"2px solid black"}
+            h={"60px"}
+          >
+            <Flex>
+              <FormLabel
+                w={"33%"}
+                textAlign={"center"}
+                fontSize={"1.1rem"}
+                lineHeight={"60px"}
+              >
+                날짜선택
+              </FormLabel>
+              <Flex className="date-range-picker-container">
+                <DatePicker
+                  className="date-picker"
+                  selected={transStartDate}
+                  onChange={(date) => setTransStartDate(date)}
+                  selectsStart
+                  startDate={transStartDate}
+                  endDate={transEndDate}
+                  isClearable={true}
+                  placeholderText="시작일"
+                  dateFormat="yyyy년 MM월 dd일"
+                  minDate={new Date()}
+                />
+                <DatePicker
+                  className="date-picker"
+                  selected={transEndDate}
+                  onChange={(date) => setTransEndDate(date)}
+                  selectsEnd
+                  startDate={transStartDate}
+                  endDate={transEndDate}
+                  isClearable={true}
+                  placeholderText="마감일"
+                  dateFormat="yyyy년 MM월 dd일"
+                  minDate={transStartDate}
+                />
+              </Flex>
             </Flex>
           </FormControl>
           <FormControl mt={2}>
