@@ -56,6 +56,8 @@ export function TransPortWrite() {
         transStartLocation,
         transArriveLocation,
         transAddress,
+        transStartDate,
+        transEndDate,
       })
       .then(() => {
         toast({
@@ -137,6 +139,7 @@ export function TransPortWrite() {
               </FormLabel>
               <Flex className="date-range-picker-container">
                 <DatePicker
+                  value={transStartDate}
                   className="date-picker"
                   selected={transStartDate}
                   onChange={(date) => setTransStartDate(date)}
@@ -149,6 +152,7 @@ export function TransPortWrite() {
                   minDate={new Date()}
                 />
                 <DatePicker
+                  value={transEndDate}
                   className="date-picker"
                   selected={transEndDate}
                   onChange={(date) => setTransEndDate(date)}
