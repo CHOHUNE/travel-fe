@@ -1,6 +1,7 @@
 import { useEffect } from "react";
 import { useNavigate, useSearchParams } from "react-router-dom";
 import { Link } from "react-router-dom";
+import axios from "axios";
 
 const apiSecretKey = process.env.REACT_APP_SECRET_KEY;
 export function SuccessPage() {
@@ -13,6 +14,17 @@ export function SuccessPage() {
       amount: searchParams.get("amount"),
       paymentKey: searchParams.get("paymentKey"),
     };
+    axios
+      .post("/payment/toss", {
+        paymentUid: requestData.paymentUid,
+        paymentName: "paymentName",
+        customerName: "test",
+        email: "gns14585@naver.com",
+        successUrl: `${window.location.origin}/successpage`,
+        failUrl: `${window.location.origin}/fail`,
+        amount: searchParams.get("amount"),
+      })
+      .then(() => confirm());
 
     // TODO: 개발자센터에 로그인해서 내 결제위젯 연동 키 > 시크릿 키를 입력하세요. 시크릿 키는 외부에 공개되면 안돼요.
     // @docs https://docs.tosspayments.com/reference/using-api/api-keys
