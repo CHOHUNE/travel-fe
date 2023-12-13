@@ -44,11 +44,26 @@ export function TransPortEdit() {
 
   const { id } = useParams();
 
+  // useEffect(() => {
+  //   axios.get("/api/transport/id/" + id).then((response) => {
+  //     updateTrans(response.data);
+  //   });
+  // }, []);
+
   useEffect(() => {
     axios.get("/api/transport/id/" + id).then((response) => {
-      updateTrans(response.data);
+      const data = response.data;
+      // 서버로부터 받은 날짜 문자열을 Date 객체로 변환
+      data.transStartDate = data.transStartDate
+        ? new Date(data.transStartDate)
+        : null;
+      data.transEndDate = data.transEndDate
+        ? new Date(data.transEndDate)
+        : null;
+      // 이제 변환된 데이터를 상태로 설정
+      updateTrans(data);
     });
-  }, []);
+  }, [id]);
 
   if (trans === null) {
     <Spinner />;
