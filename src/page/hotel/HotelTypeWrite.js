@@ -28,6 +28,7 @@ export default function HotelTypeWrite() {
       originalPriceWeekend: 0,
       salePriceWeekend: 0,
       roomImg: null,
+      // hrtId: null,
     },
   ]);
 
@@ -45,6 +46,7 @@ export default function HotelTypeWrite() {
         originalPriceWeekend: 0,
         salePriceWeekend: 0,
         roomImg: null,
+        // hrtId: null,
       },
     ]);
   };
