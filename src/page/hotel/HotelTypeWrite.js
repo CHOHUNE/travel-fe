@@ -8,6 +8,11 @@ import {
   Flex,
   Heading,
   Input,
+  Modal,
+  ModalCloseButton,
+  ModalContent,
+  ModalHeader,
+  ModalOverlay,
   Table,
   Tbody,
   Td,
@@ -58,6 +63,16 @@ export function HotelTypeWrite() {
     ]);
   };
 
+  const handleRemoveRow = (index) => {
+    setRoomtypes((prevRoomtypes) => {
+      const updatedRoomtypes = [...prevRoomtypes];
+      updatedRoomtypes.splice(index, 1);
+      return updatedRoomtypes;
+    });
+  };
+
+  // ... (이전 코드)
+
   const handleConfirmation = () => {
     const promises = roomtypes.map((room) => {
       if (room.hrtId) {
@@ -73,14 +88,35 @@ export function HotelTypeWrite() {
     Promise.all(promises)
       .then(() => {
         toast({
-          description: "객실 추가 완료",
+          description: "객실 수정 완료",
           status: "success",
         });
         navigate(-1);
       })
       .catch(() => {
         toast({
-          description: "객실 추가 실패",
+          description: "객실 수정 실패",
+          status: "error",
+        });
+      });
+  };
+
+  const handleRoomtypeDelete = (hrtId) => {
+    axios
+      .delete(`/api/hotel/delete/${id}/type/${hrtId}`)
+      .then(() => {
+        toast({
+          description: "삭제가 완료 되었습니다.",
+          colorScheme: "orange",
+        });
+
+        axios.get(`/api/hotel/reserv/type/${id}`).then((response) => {
+          setRoomtypes(response.data);
+        });
+      })
+      .catch(() => {
+        toast({
+          description: "객실 삭제가 실패 하였습니다",
           status: "error",
         });
       });
@@ -90,7 +126,7 @@ export function HotelTypeWrite() {
     <Center>
       <Card w={"4xl"} p={"30px"} my={"30px"}>
         <CardHeader>
-          <Heading textAlign={"center"}>객실 추가</Heading>
+          <Heading textAlign={"center"}>객실 관리</Heading>
         </CardHeader>
         <Divider />
         <Table variant="simple" mt={4} maxW="100%">
@@ -100,6 +136,7 @@ export function HotelTypeWrite() {
           <Th>주말 입금가</Th>
           <Th>주말 판매가</Th>
           <Th>객실 이미지</Th>
+          <Th>동작</Th>
           <Tbody>
             {roomtypes.map((room, index) => (
               <Tr key={index}>
@@ -191,14 +228,27 @@ export function HotelTypeWrite() {
                     }}
                   />
                 </Td>
+                <Td>
+                  <Button
+                    colorScheme="red"
+                    size="sm"
+                    onClick={() => handleRoomtypeDelete(room.hrtId)}
+                  >
+                    삭제
+                  </Button>
+                </Td>
               </Tr>
             ))}
           </Tbody>
         </Table>
         <Flex justifyContent={"flex-end"} mt={"30px"}>
+          <Button colorScheme="orange" onClick={handleRemoveRow} mr={4}>
+            -
+          </Button>
           <Button colorScheme="teal" onClick={handleAddRow} mr={4}>
             +
           </Button>
+
           <Button colorScheme="teal" onClick={handleConfirmation}>
             확인
           </Button>

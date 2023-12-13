@@ -69,15 +69,6 @@ export function HotelWrite() {
         lodgingType,
       });
 
-      // // Step 2: 호텔 정보에서 생성된 hId 얻기
-      // const hId = hotelResponse.data.hId;
-      //
-      // // Step 3: 객실 정보 삽입
-      // await axios.postForm("/api/hotel/writeType", {
-      //   hId,
-      //   additionalRooms,
-      // });
-
       // 성공적으로 처리된 경우
       toast({
         description: "호텔 상품 및 객실 정보 등록이 완료되었습니다.",
@@ -95,44 +86,6 @@ export function HotelWrite() {
       });
     }
   }
-
-  // const [additionalRooms, setAdditionalRooms] = useState([
-  //   {
-  //     roomtype: "",
-  //     originalPriceWeekday: "",
-  //     salePriceWeekday: "",
-  //     originalPriceWeekend: "",
-  //     salePriceWeekend: "",
-  //     roomImg: null,
-  //     hId: null,
-  //   },
-  // ]);
-
-  // function handleAddRoom() {
-  //   setAdditionalRooms((prevRooms) => [
-  //     ...prevRooms,
-  //     {
-  //       roomtype: "",
-  //       originalPriceWeekday: "",
-  //       salePriceWeekday: "",
-  //       originalPriceWeekend: "",
-  //       salePriceWeekend: "",
-  //       roomImg: null,
-  //       hId: null,
-  //     },
-  //   ]);
-  // }
-
-  // function handleAdditionalRoomChange(index, key, value) {
-  //   setAdditionalRooms((prevRooms) => {
-  //     const updatedRooms = [...prevRooms];
-  //     updatedRooms[index] = {
-  //       ...updatedRooms[index],
-  //       [key]: value,
-  //     };
-  //     return updatedRooms;
-  //   });
-  // }
 
   return (
     <Center>
@@ -296,113 +249,6 @@ export function HotelWrite() {
                 onChange={(e) => setMapImg(e.target.files)}
               />
             </Flex>
-
-            {/*<Heading textAlign={"center"} my={"15px"}>*/}
-            {/*  객실 추가*/}
-            {/*</Heading>*/}
-
-            {/*<Table variant="simple" mt={4} maxW="100%">*/}
-            {/*  /!* ... (unchanged code) *!/*/}
-            {/*  <Th>객실 타입 </Th>*/}
-            {/*  <Th>주중 입금가</Th>*/}
-            {/*  <Th>주중 판매가</Th>*/}
-            {/*  <Th>주말 입금가</Th>*/}
-            {/*  <Th>주말 판매가</Th>*/}
-            {/*  <Th>객실 이미지</Th>*/}
-            {/*  <Tbody>*/}
-            {/*    {additionalRooms.map((room, index) => (*/}
-            {/*      <Tr key={index}>*/}
-            {/*        <Td>*/}
-            {/*          <Input*/}
-            {/*            placeholder="타입"*/}
-            {/*            value={room.roomtype}*/}
-            {/*            onChange={(e) =>*/}
-            {/*              handleAdditionalRoomChange(*/}
-            {/*                index,*/}
-            {/*                "roomtype",*/}
-            {/*                e.target.value,*/}
-            {/*              )*/}
-            {/*            }*/}
-            {/*          />*/}
-            {/*        </Td>*/}
-            {/*        <Td>*/}
-            {/*          <Input*/}
-            {/*            type="number"*/}
-            {/*            placeholder="일 ~목"*/}
-            {/*            value={room.originalPriceWeekday}*/}
-            {/*            onChange={(e) =>*/}
-            {/*              handleAdditionalRoomChange(*/}
-            {/*                index,*/}
-            {/*                "originalPriceWeekday",*/}
-            {/*                e.target.value,*/}
-            {/*              )*/}
-            {/*            }*/}
-            {/*          />*/}
-            {/*        </Td>*/}
-            {/*        <Td>*/}
-            {/*          <Input*/}
-            {/*            type="number"*/}
-            {/*            placeholder="일~ 목"*/}
-            {/*            value={room.salePriceWeekday}*/}
-            {/*            onChange={(e) =>*/}
-            {/*              handleAdditionalRoomChange(*/}
-            {/*                index,*/}
-            {/*                "salePriceWeekday",*/}
-            {/*                e.target.value,*/}
-            {/*              )*/}
-            {/*            }*/}
-            {/*          />*/}
-            {/*        </Td>*/}
-            {/*        <Td>*/}
-            {/*          <Input*/}
-            {/*            type="number"*/}
-            {/*            placeholder="금, 토"*/}
-            {/*            value={room.originalPriceWeekend}*/}
-            {/*            onChange={(e) =>*/}
-            {/*              handleAdditionalRoomChange(*/}
-            {/*                index,*/}
-            {/*                "originalPriceWeekend",*/}
-            {/*                e.target.value,*/}
-            {/*              )*/}
-            {/*            }*/}
-            {/*          />*/}
-            {/*        </Td>*/}
-            {/*        <Td>*/}
-            {/*          <Input*/}
-            {/*            type="number"*/}
-            {/*            placeholder="금, 토"*/}
-            {/*            value={room.salePriceWeekend}*/}
-            {/*            onChange={(e) =>*/}
-            {/*              handleAdditionalRoomChange(*/}
-            {/*                index,*/}
-            {/*                "salePriceWeekend",*/}
-            {/*                e.target.value,*/}
-            {/*              )*/}
-            {/*            }*/}
-            {/*          />*/}
-            {/*        </Td>*/}
-            {/*        <Td>*/}
-            {/*          <Input*/}
-            {/*            type="file"*/}
-            {/*            accept="image/*"*/}
-            {/*            onChange={(e) =>*/}
-            {/*              handleAdditionalRoomChange(*/}
-            {/*                index,*/}
-            {/*                "roomImg",*/}
-            {/*                e.target.files[0],*/}
-            {/*              )*/}
-            {/*            }*/}
-            {/*          />*/}
-            {/*        </Td>*/}
-            {/*      </Tr>*/}
-            {/*    ))}*/}
-            {/*  </Tbody>*/}
-            {/*</Table>*/}
-
-            {/*<Button colorScheme="teal" mt={4} onClick={handleAddRoom}>*/}
-            {/*  +*/}
-            {/*</Button>*/}
-
             <Flex justifyContent={"flex-end"} mt={"30px"}>
               <Button colorScheme="teal" onClick={handleConfirmation}>
                 확인
