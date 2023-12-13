@@ -191,11 +191,10 @@ export function TransPortView() {
                 w={"90%"}
                 ml={"5%"}
                 h={"100px"}
-                lineHeight={"100px"}
                 border={"1px solid #ced8de"}
                 borderRadius={10}
               >
-                <FormLabel ml={2}>
+                <FormLabel ml={2} pt={"25"}>
                   [{trans.transStartLocation}]&nbsp;
                   <FontAwesomeIcon icon={faAnglesRight} />
                   &nbsp; [{trans.transArriveLocation}] &nbsp;{trans.transTitle}
