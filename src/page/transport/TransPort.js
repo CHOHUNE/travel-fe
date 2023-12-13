@@ -11,11 +11,12 @@ import {
   Input,
 } from "@chakra-ui/react";
 import { useNavigate } from "react-router-dom";
-import { useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import axios from "axios";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faAnglesRight } from "@fortawesome/free-solid-svg-icons";
 import "./TransFont.css";
+import { RecentViewed } from "../../component/RecentViewed";
 
 export function TransPort() {
   const navigate = useNavigate();
@@ -219,6 +220,19 @@ export function TransPort() {
                             </Box>
                           </Flex>
                         </FormControl>
+                      </Box>
+                      <Box
+                        position="fixed" // 절대 위치를 사용해 오버레이 설정
+                        top="300" // 배너의 상단에서 시작
+                        right="10" // 배너의 우측에서 시작
+                        zIndex="10" // 다른 요소보다 위에 오도록 z-index 설정
+                        p="4" // 패딩 값
+                        bg="rgba(255, 255, 255, 0.3)" // 배경색
+                        boxShadow="lg" // 그림자 효과
+                        maxW="sm" // 최대 너비 설정
+                        overflow="hidden" // 내용이 넘치면 숨김
+                      >
+                        <RecentViewed />
                       </Box>
                     </Center>
                   </CardBody>

@@ -44,11 +44,20 @@ export function HotelView() {
 
   const [showCheckInInput, setShowCheckInInput] = useState(false);
 
+  // ---------------------- 최근 본 상품 ----------------------
+  const saveToRecentViewed = (hotelData) => {
+    const recentViewed = JSON.parse(localStorage.getItem("recentViewed")) || [];
+    const updatedRecentViewed = [hotelData, ...recentViewed].slice(0, 5); // 최대 5개만 저장
+    localStorage.setItem("recentViewed", JSON.stringify(updatedRecentViewed));
+  };
+
   useEffect(() => {
     axios.get("/api/hotel/reserv/id/" + id).then((response) => {
       setHotel(response.data);
+      // --------------------- 최근 본 상품 ----------------------
+      saveToRecentViewed(response.data);
     });
-  }, []);
+  }, [id]);
 
   // 삭제
   function handleHotelDelete() {

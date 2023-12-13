@@ -9,6 +9,7 @@ import {
   Flex,
   FormControl,
   FormErrorMessage,
+  FormHelperText,
   FormLabel,
   Heading,
   Input,
@@ -22,7 +23,7 @@ import {
   useDisclosure,
   useToast,
 } from "@chakra-ui/react";
-import { useState } from "react";
+import React, { useState } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import DaumPostcodeEmbed, { useDaumPostcodePopup } from "react-daum-postcode";
@@ -36,8 +37,11 @@ export function UserSignup() {
   const [userPostCode, setUserPostCode] = useState(""); // 우편번호
   const [userAddress, setUserAddress] = useState(""); // 도로명 주소
   const [userDetailAddress, setUserDetailAddress] = useState(""); // 상세주소
-  const [userPhoneNumber, setUserPhoneNumber] = useState("");
-  const [userEmail, setUserEmail] = useState("");
+  const [phonePart1, setPhonePart1] = useState("");
+  const [phonePart2, setPhonePart2] = useState("");
+  const [phonePart3, setPhonePart3] = useState("");
+  const [emailId, setEmailId] = useState("");
+  const [emailDomain, setEmailDomain] = useState("");
 
   // ------------- SMS 정보 -------------
   const [sendSMS, setSendSMS] = useState("");
@@ -81,7 +85,7 @@ export function UserSignup() {
   }
 
   // ------------- 본인인증 버튼 한번 클릭 시 버튼 막기 -------------
-  if (!userPhoneNumber) {
+  if (!phonePart1 || !phonePart2 || !phonePart3) {
     submitAvailable = false;
   }
 
@@ -93,6 +97,8 @@ export function UserSignup() {
   }
 
   function handleSubmit() {
+    const combinedEmail = `${emailId}@${emailDomain}`;
+    const combinedPhoneNumber = `${phonePart1}-${phonePart2}-${phonePart3}`;
     setIsSubmitting(true);
 
     axios
@@ -103,8 +109,8 @@ export function UserSignup() {
         userPostCode,
         userAddress,
         userDetailAddress,
-        userPhoneNumber,
-        userEmail,
+        userPhoneNumber: combinedPhoneNumber,
+        userEmail: combinedEmail,
       })
       .then(() => {
         toast({
@@ -164,11 +170,12 @@ export function UserSignup() {
 
   // ------------- SMS 인증 로직 -------------
   function handleSMSButton() {
+    const combinedPhoneNumber = `${phonePart1}-${phonePart2}-${phonePart3}`;
     setIsSubmitting(true);
 
     axios
       .post("/api/member/sendSMS", {
-        userPhoneNumber,
+        userPhoneNumber: combinedPhoneNumber,
       })
       .then(() => {
         toast({
@@ -193,11 +200,13 @@ export function UserSignup() {
         setIsSubmitting(false);
       });
   }
+
   function handleSMSOk() {
+    const combinedPhoneNumber = `${phonePart1}-${phonePart2}-${phonePart3}`;
     axios
       .post("/api/member/sendSmsOk2", {
         verificationCode: sendSMS,
-        userPhoneNumber,
+        userPhoneNumber: combinedPhoneNumber,
       })
       .then((response) => {
         setSendSmsOk(true);
@@ -258,8 +267,9 @@ export function UserSignup() {
 
   // ---------- 이메일 중복확인 ----------
   function handleEmailCheck() {
+    const combinedEmail = `${emailId}@${emailDomain}`;
     const params1 = new URLSearchParams();
-    params1.set("userEmail", userEmail);
+    params1.set("userEmail", combinedEmail);
 
     axios
       .get("/api/member/check?" + params1)
@@ -309,7 +319,7 @@ export function UserSignup() {
               />
               <Button onClick={handleIdCheck}>중복확인</Button>
             </Flex>
-            <FormErrorMessage textAlign={"center"}>
+            <FormErrorMessage w={"63%"} ml={120}>
               ID 중복체크 해주세요.
             </FormErrorMessage>
           </FormControl>
@@ -351,7 +361,9 @@ export function UserSignup() {
                   }}
                 />
               </Flex>
-              <FormErrorMessage>암호가 다릅니다.</FormErrorMessage>
+              <FormErrorMessage w={"63%"} ml={120}>
+                암호가 다릅니다.
+              </FormErrorMessage>
             </FormControl>
           )}
 
@@ -426,25 +438,80 @@ export function UserSignup() {
           <FormControl mb={3}>
             <Flex gap={2}>
               <FormLabel
-                w={160}
+                w={320}
                 textAlign={"center"}
                 display={"flex"}
                 alignItems={"center"}
               >
                 휴대전화
               </FormLabel>
+
               <Input
                 type="number"
-                value={userPhoneNumber}
-                onChange={(e) => setUserPhoneNumber(e.target.value)}
+                value={phonePart1}
+                w={200}
+                onChange={(e) => setPhonePart1(e.target.value)}
               />
-              <Button isDisabled={isSubmitting} onClick={handleSMSButton}>
+              <span
+                style={{
+                  justifyContent: "center",
+                  display: "flex",
+                  alignItems: "center",
+                  fontSize: "13px",
+                }}
+              >
+                <Box
+                  style={{
+                    fontSize: "16px",
+                    verticalAlign: "middle",
+                    margin: "0 8px",
+                  }}
+                >
+                  -
+                </Box>
+              </span>
+
+              <Input
+                type="number"
+                value={phonePart2}
+                w={205}
+                onChange={(e) => setPhonePart2(e.target.value)}
+              />
+              <span
+                style={{
+                  justifyContent: "center",
+                  display: "flex",
+                  alignItems: "center",
+                  fontSize: "13px",
+                }}
+              >
+                <Box
+                  style={{
+                    fontSize: "16px",
+                    verticalAlign: "middle",
+                    margin: "0 8px",
+                  }}
+                >
+                  -
+                </Box>
+              </span>
+              <Input
+                type="number"
+                value={phonePart3}
+                w={205}
+                onChange={(e) => setPhonePart3(e.target.value)}
+              />
+              <Button
+                w={"170px"}
+                isDisabled={isSubmitting}
+                onClick={handleSMSButton}
+              >
                 본인인증
               </Button>
             </Flex>
           </FormControl>
 
-          {userPhoneNumber && (
+          {phonePart1 && phonePart2 && phonePart3 && (
             <FormControl mb={3}>
               <Flex gap={2}>
                 <FormLabel
@@ -467,7 +534,7 @@ export function UserSignup() {
             </FormControl>
           )}
 
-          <FormControl mb={3}>
+          <FormControl mb={3} isInvalid={!userEmailCheck}>
             <Flex gap={2}>
               <FormLabel
                 w={160}
@@ -479,11 +546,39 @@ export function UserSignup() {
               </FormLabel>
               <Input
                 type="email"
-                value={userEmail}
-                onChange={(e) => setUserEmail(e.target.value)}
+                value={emailId}
+                w={230}
+                onChange={(e) => setEmailId(e.target.value)}
+              />
+              <span
+                style={{
+                  justifyContent: "center",
+                  display: "flex",
+                  alignItems: "center",
+                  fontSize: "13px",
+                }}
+              >
+                <Box
+                  style={{
+                    fontSize: "16px",
+                    verticalAlign: "middle",
+                    margin: "0 8px",
+                  }}
+                >
+                  @
+                </Box>
+              </span>
+              <Input
+                type="email"
+                value={emailDomain}
+                w={200}
+                onChange={(e) => setEmailDomain(e.target.value)}
               />
               <Button onClick={handleEmailCheck}>중복확인</Button>
             </Flex>
+            <FormErrorMessage w={"63%"} ml={120}>
+              이메일 중복확인 해주세요.
+            </FormErrorMessage>
           </FormControl>
         </CardBody>
 
