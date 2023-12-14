@@ -45,7 +45,7 @@ export function NavBar() {
   const VerticalSwiper = () => {
     return (
       <>
-        <Box>
+        <Box position="relative">
           <Swiper
             direction={"vertical"}
             slidesPerView={1}
@@ -152,38 +152,40 @@ export function NavBar() {
             )}
 
             {isAuthenticated() && (
-              <Menu>
-                <MenuButton
-                  as={Button}
-                  w={"70px"}
-                  h={"30px"}
-                  borderRadius={0}
-                  fontSize={"0.8rem"}
-                  lineHeight={"80px"}
-                  background={"white"}
-                  style={{ borderRadius: "30px" }}
-                  // onClick={() => navigate("/user?" + urlParams.toString())}
-                >
-                  {login.userId}님
-                </MenuButton>
-                <MenuList>
-                  <MenuItem
-                    onClick={() => navigate("/user?" + urlParams.toString())}
+              <Box position="relative" zIndex="10">
+                <Menu>
+                  <MenuButton
+                    as={Button}
+                    w={"70px"}
+                    h={"30px"}
+                    borderRadius={0}
+                    fontSize={"0.8rem"}
+                    lineHeight={"80px"}
+                    background={"white"}
+                    style={{ borderRadius: "30px" }}
+                    // onClick={() => navigate("/user?" + urlParams.toString())}
                   >
-                    회원정보수정
-                  </MenuItem>
-                  <MenuItem onClick={() => navigate("/user/reservationList")}>
-                    예약내역
-                  </MenuItem>
-                  <MenuItem
-                    onClick={() =>
-                      navigate("/user/bucket?" + urlParams.toString())
-                    }
-                  >
-                    찜한상품
-                  </MenuItem>
-                </MenuList>
-              </Menu>
+                    {login.userId}님
+                  </MenuButton>
+                  <MenuList>
+                    <MenuItem
+                      onClick={() => navigate("/user?" + urlParams.toString())}
+                    >
+                      회원정보수정
+                    </MenuItem>
+                    <MenuItem onClick={() => navigate("/user/reservationList")}>
+                      예약내역
+                    </MenuItem>
+                    <MenuItem
+                      onClick={() =>
+                        navigate("/user/bucket?" + urlParams.toString())
+                      }
+                    >
+                      찜한상품
+                    </MenuItem>
+                  </MenuList>
+                </Menu>
+              </Box>
             )}
 
             {isAuthenticated() || (
