@@ -41,7 +41,7 @@ import { TransPay } from "./page/transport/TransPay";
 import { FailPage } from "./page/payment/FailPage";
 import { SuccessPage } from "./page/payment/SuccessPage";
 import { PaymentPage } from "./page/payment/PaymentPage";
-import { }
+import { HotelTypeWrite } from "./page/hotel/HotelTypeWrite";
 const routes = createBrowserRouter(
   createRoutesFromElements(
     <Route path="/" element={<HomeLayout />}>
@@ -61,7 +61,6 @@ const routes = createBrowserRouter(
       <Route path="edit/:id" element={<BoardEdit />} />
       <Route path="notice" element={<Notice />} />
       <Route path="noticeSound" element={<NoticeSound />} />
-
 
       {/* 회원관련 */}
       <Route path="login" element={<UserLogin />} />
