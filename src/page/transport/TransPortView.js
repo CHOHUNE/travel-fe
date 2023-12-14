@@ -7,6 +7,7 @@ import {
   Center,
   Flex,
   FormControl,
+  FormHelperText,
   FormLabel,
   Image,
   Input,
@@ -25,6 +26,7 @@ import { useNavigate, useParams } from "react-router-dom";
 import { LoginContext } from "../../component/LoginProvider";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faAnglesRight, faHeart } from "@fortawesome/free-solid-svg-icons";
+import DatePicker from "react-datepicker";
 
 function TransLikeContainer({ transLikeState, onClick }) {
   const toast = useToast();
@@ -52,6 +54,7 @@ export function TransPortView() {
   const [value, setValue] = useState(0);
   const [trans, setTrans] = useState("");
   const [transLikeState, setTransLikeState] = useState(null);
+  const [transReservDay, setTransReservDay] = useState("");
   const navigate = useNavigate();
 
   const toast = useToast();
@@ -66,17 +69,33 @@ export function TransPortView() {
     axios
       .get("/api/transport/id/" + id)
       .then((response) => setTrans(response.data));
-  }, []);
+  }, [id]);
 
   useEffect(() => {
     axios
       .get("/api/transLike/transport/" + id)
       .then((response) => setTransLikeState(response.data));
-  }, []);
+  }, [id]);
 
   if (trans === null) {
     return <Spinner />;
   }
+
+  // 시작일 연월일로 보이게 설정 ------------------------------------------------
+  const transStartDate = trans.transStartDate;
+  const startDate = new Date(transStartDate);
+  const startYear = startDate.getFullYear();
+  const startMonth = (startDate.getMonth() + 1).toString().padStart(2, "0");
+  const startDay = startDate.getDate().toString().padStart(2, "0");
+  const startFormat = startYear + "년 " + startMonth + "월 " + startDay + "일";
+
+  // 마감일 연월일로 보이게 설정 ------------------------------------------------
+  const transEndDate = trans.transEndDate;
+  const endDate = new Date(transEndDate);
+  const endYear = endDate.getFullYear();
+  const endMonth = (endDate.getMonth() + 1).toString().padStart(2, "0");
+  const EndDay = endDate.getDate().toString().padStart(2, "0");
+  const endFormat = endYear + "년 " + endMonth + "월 " + EndDay + "일";
 
   // 운송 상품 삭제 기능 시작 ----------------------------------------------------
   function handleTransDelete() {
@@ -239,28 +258,52 @@ export function TransPortView() {
                   </NumberInput>
                 </Flex>
               </FormControl>
-
               <FormControl
                 w={"90%"}
-                h="40px"
+                h="60px"
                 bg={"white"}
                 mt={4}
                 ml="5%"
-                lineHeight={"40px"}
                 border={"1px solid #ced8de"}
                 borderRadius={10}
               >
-                <Flex>
-                  <FormLabel w={"40%"} ml={2}>
-                    출발일자 :
-                  </FormLabel>
-                  <Input
-                    placeholder="Select Date and Time"
-                    size="md"
-                    type="date"
-                  />
-                </Flex>
+                <Box ml={2}>
+                  시작일 : {startFormat}
+                  <br />
+                  마감일 : {endFormat}
+                </Box>
               </FormControl>
+
+              {/*<FormControl*/}
+              {/*  w={"90%"}*/}
+              {/*  h="40px"*/}
+              {/*  bg={"white"}*/}
+              {/*  mt={4}*/}
+              {/*  ml="5%"*/}
+              {/*  lineHeight={"40px"}*/}
+              {/*  border={"1px solid #ced8de"}*/}
+              {/*  borderRadius={10}*/}
+              {/*  overflow={"visible"}*/}
+              {/*>*/}
+              {/*  <Flex overflow={"visible"}>*/}
+              {/*    <FormLabel w={"40%"} ml={2}>*/}
+              {/*      출발일자 :*/}
+              {/*    </FormLabel>*/}
+              {/*    <DatePicker*/}
+              {/*      value={null}*/}
+              {/*      className="date-picker"*/}
+              {/*      selected={null}*/}
+              {/*      // onChange={handleStartDateChange}*/}
+              {/*      selectsStart*/}
+              {/*      startDate={null}*/}
+              {/*      endDate={null}*/}
+              {/*      isClearable={true}*/}
+              {/*      placeholderText="출발일을 선택해 주세요"*/}
+              {/*      dateFormat="yyyy년 MM월 dd일"*/}
+              {/*      minDate={new Date()}*/}
+              {/*    />*/}
+              {/*  </Flex>*/}
+              {/*</FormControl>*/}
               <FormControl
                 w={"90%"}
                 h="40px"
@@ -305,8 +348,54 @@ export function TransPortView() {
             </CardBody>
           </Flex>
         </Card>
-        {/**/}
-        <Card w={"90%"} mt={3} mb={20} ml="5%">
+        {/*  */}
+        <Card w={"95%"} ml={"2.5%"} h={"100px"} mt={4}>
+          <Flex alignItems={"center"} height={"100%"} gap={2}>
+            <Flex
+              w={"20%"}
+              h={"90%"}
+              ml={5}
+              alignItems={"center"}
+              border={"1px solid #ced8de"}
+              borderRadius={10}
+            >
+              <Box fontSize={14} fontWeight={"bold"} ml={2}>
+                <Box fontSize={20}>상품 선택 기간</Box>
+                {startFormat} 00시 부터
+                <br />
+                {endFormat} 00시 까지
+              </Box>
+            </Flex>
+
+            <Flex
+              w={"20%"}
+              h={"90%"}
+              ml={2}
+              border={"1px solid #ced8de"}
+              borderRadius={10}
+            >
+              <Box w={"20%"} alignItems={"center"} h={"100%"}>
+                출발일자 :
+              </Box>
+              <DatePicker
+                value={null}
+                className="date-picker"
+                selected={null}
+                // onChange={handleStartDateChange}
+                selectsStart
+                startDate={null}
+                endDate={null}
+                isClearable={true}
+                placeholderText="출발일을 선택해 주세요"
+                dateFormat="yyyy년 MM월 dd일"
+                minDate={new Date()}
+              />
+            </Flex>
+          </Flex>
+          <Box></Box>
+        </Card>
+        {/*  */}
+        <Card w={"95%"} mt={3} mb={20} ml="2.5%">
           <CardBody>
             {trans.contentImages != null ? (
               <>
