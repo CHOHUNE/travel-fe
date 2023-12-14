@@ -25,11 +25,8 @@ export default function App() {
           delay: 3000,
           disableOnInteraction: false,
         }}
-        pagination={{
-          clickable: true,
-        }}
         speed={650}
-        modules={[Pagination, Autoplay]}
+        modules={[Autoplay]}
         className="mySwiper"
         autoHeight
       >

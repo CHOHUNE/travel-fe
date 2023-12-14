@@ -97,7 +97,7 @@ export function NavBar() {
   return (
     <Box mt={2} justifyContent={"center"} w={"90%"} ml={"40px"}>
       {/* 헤더 네브바1 */}
-      <Box w="80%" h={"80px"} ml="10%">
+      <Box mb={"5px"} w="80%" h={"80px"} ml="10%">
         <Flex justifyContent={"space-between"} textAlign={"center"}>
           {/* 프로젝트 로고 */}
           <Box
@@ -131,7 +131,7 @@ export function NavBar() {
           </Flex>
 
           <Flex alignItems={"center"}>
-            <p style={{ color: "gray", fontSize: "12px" }}>인기검색어 </p>
+            <p style={{ color: "gray", fontSize: "12px" }}>인기검색어</p>
             <VerticalSwiper />
           </Flex>
 
@@ -141,11 +141,13 @@ export function NavBar() {
               <Button
                 w={"80px"}
                 h={"30px"}
+                bg={"white"}
+                color="black"
+                _hover={{ color: "blue.600" }}
                 borderRadius={0}
                 fontSize={"0.8rem"}
                 mr={4}
                 lineHeight={"80px"}
-                background={"white"}
                 style={{ borderRadius: "30px" }}
                 onClick={() => navigate("/user/list")}
               >
@@ -162,8 +164,10 @@ export function NavBar() {
                     borderRadius={0}
                     fontSize={"0.8rem"}
                     lineHeight={"80px"}
-                    background={"white"}
                     border={"0px solid"}
+                    bg={"white"}
+                    color="black"
+                    _hover={{ color: "blue.600", background: "white" }}
                     style={{ borderRadius: "30px", padding: "0 15px" }}
                     onMouseEnter={() => setShowMenu(true)}
                     onClick={() => navigate("/user/reservationList")}
@@ -201,7 +205,9 @@ export function NavBar() {
                 borderRadius={0}
                 fontSize={"0.8rem"}
                 ml={4}
-                background={"white"}
+                bg={"white"}
+                color="black"
+                _hover={{ color: "blue.600" }}
                 style={{ borderRadius: "30px" }}
                 onClick={() => navigate("signup")}
               >
@@ -216,7 +222,9 @@ export function NavBar() {
                 fontSize={"0.8rem"}
                 ml={4}
                 mr={2}
-                background={"white"}
+                bg={"white"}
+                color="black"
+                _hover={{ color: "blue.600" }}
                 style={{ borderRadius: "30px" }}
                 onClick={() => navigate("login")}
               >
@@ -229,9 +237,11 @@ export function NavBar() {
                 h={"30px"}
                 borderRadius={0}
                 fontSize={"0.8rem"}
+                bg={"white"}
+                color="black"
+                _hover={{ color: "blue.600" }}
                 ml={4}
                 mr={2}
-                backgroundColor={"white"}
                 style={{ borderRadius: "30px" }}
                 onClick={handleLogout}
               >
@@ -246,15 +256,23 @@ export function NavBar() {
       <Box w="80%" h={"60px"} ml="10%">
         <Flex justifyContent={"space-between"} textAlign={"center"}>
           <Flex ml={2} lineHeight={"60px"} alignItems={"center"} mt={"10px"}>
-            <Button w={"100px"} h={"40px"}>
+            <Button
+              bg={"white"}
+              color="black"
+              _hover={{ color: "blue.600" }}
+              w={"100px"}
+              h={"40px"}
+            >
               전체메뉴
             </Button>
 
             {/* 호텔 */}
             <Button
+              bg={"white"}
+              color="black"
+              _hover={{ color: "blue.600" }}
               w={"100px"}
               h={"40px"}
-              ml={1}
               onClick={() => navigate("hotel")}
             >
               호텔 / 숙박
@@ -262,9 +280,11 @@ export function NavBar() {
 
             {/* 운송 */}
             <Button
+              bg={"white"}
+              color="black"
+              _hover={{ color: "blue.600" }}
               w={"100px"}
               h={"40px"}
-              ml={1}
               onClick={() => navigate("transport")}
             >
               항공 / 운송
@@ -275,6 +295,9 @@ export function NavBar() {
             h={"40px"}
             mr={2}
             mt={"10px"}
+            bg={"white"}
+            color="black"
+            _hover={{ color: "blue.600" }}
             fontSize={"0.8rem"}
             onClick={() => navigate("boardlist")}
           >

@@ -39,9 +39,9 @@ export function HomeBody() {
   return (
     <Box>
       {/* ---------- 배너이미지  */}
-      <Box w={"100%"} h={"700px"}>
+      <Box boxShadow={"5px 5px 5px 5px gray"} w={"100%"} h={"700px"}>
         <Flex justifyContent={"space-around"} alignItems={"center"}>
-          <Box w={"100%"} h={"500px"} mt={"20px"}>
+          <Box w={"100%"} h={"700px"} mt={"20px"}>
             <App />
           </Box>
           <Box
@@ -60,7 +60,7 @@ export function HomeBody() {
         </Flex>
       </Box>
 
-      <Box border={"1px solid red"} ml={"12.5%"} mt={"-100px"}>
+      <Box ml={"12.5%"} mt={"30px"}>
         <Heading mb={"50px"}>카테고리별 상품</Heading>
         <Card
           w={"400px"}
