@@ -142,13 +142,14 @@ export function Hotel() {
   }, [location]);
 
   // TODO : Login 하고 Hotel 페이지 접속시 userId 정보 얻기
-  // useEffect(() => {
-  //   axios
-  //     .get(`/api/hotel/wishList/` + params.get("userId"))
-  //     .then((response) => {
-  //       setWishlist(response.data);
-  //     });
-  // }, []);
+  useEffect(() => {
+    axios
+      .get(`/api/hotel/wishList/` + params.get("userId"))
+      .then((response) => {
+        setWishlist(response.data);
+        console.log(response.data);
+      });
+  }, []);
 
   const handleUpdateToWishlist = (hotelId) => {
     axios
@@ -178,6 +179,49 @@ export function Hotel() {
         });
       });
   };
+  // 메인 화면에서 유저가 좋아요한 목록 불러오기 ------------------------------------------------------
+  // useEffect(() => {
+  //   axios.get("/api/hotel/list?" + params).then((response) => {
+  //     setHotelList(response.data.hotelList);
+  //     setPageInfo(response.data.pageInfo);
+  //     // 새로운 배열 생성
+  //     const newHotelIdArray = response.data.hotelList.map((hotel) => hotel.hid);
+  //
+  //     // 새로운 배열을 상태로 설정
+  //     setHotelIdArray(newHotelIdArray);
+  //   });
+  // }, [location]);
+
+  // useEffect(() => {
+  //     // 위시리스트를 저장할 임시 배열
+  //     let newWishlist = [];
+  //
+  //     // 모든 호텔 ID에 대해 위시리스트 정보를 가져옴
+  //     const fetchWishList = async () => {
+  //       for (const hotelId of hotelIdArray) {
+  //         try {
+  //           const response = await axios.get(`/api/hotel/wishList/${hotelId}`);
+  //           // 각 요청의 결과를 임시 배열에 추가
+  //           newWishlist = [...newWishlist, ...response.data];
+  //         } catch (error) {
+  //           console.error(
+  //             "Error fetching wishlist for hotel ID:",
+  //             hotelId,
+  //             error,
+  //           );
+  //         }
+  //       }
+  //
+  //       // 위시리스트 상태 업데이트
+  //       setWishlist(newWishlist);
+  //     };
+  //
+  //     // hotelIdArray가 비어있지 않으면 위시리스트 정보를 가져옴
+  //     if (hotelIdArray.length > 0) {
+  //       fetchWishList();
+  //     }
+  //   }, [hotelIdArray]); // hotelIdArray가 변경될 때마다 이 useEffect를 다시 실행
+  // ------------------------------------------------------------------------------------------
 
   const toggleWishlist = (hotelId) => {
     if (wishlist.includes(hotelId)) {

@@ -27,8 +27,10 @@ import {
   Th,
   Tbody,
   Td,
+  Box,
 } from "@chakra-ui/react";
 import { useNavigate } from "react-router-dom";
+import DatePicker from "react-datepicker";
 
 export function HotelWrite() {
   // 호텔 추가
@@ -41,6 +43,10 @@ export function HotelWrite() {
   const [mapImg, setMapImg] = useState(null);
   const [mainImg, setMainImg] = useState(null);
   const [lodgingType, setLodgingType] = useState();
+  const [salesFrom, setSalesFrom] = useState(null);
+  const [salesTo, setSalesTo] = useState(null);
+  const [rating, setRating] = useState(null);
+  const [cautionMessage, setCautionMessage] = useState(null);
 
   const toast = useToast();
   const navigate = useNavigate();
@@ -67,6 +73,10 @@ export function HotelWrite() {
         subImg2,
         mapImg,
         lodgingType,
+        salesFrom,
+        salesTo,
+        rating,
+        cautionMessage,
       });
 
       // 성공적으로 처리된 경우
@@ -89,7 +99,7 @@ export function HotelWrite() {
 
   return (
     <Center>
-      <Card w={"4xl"} p={"30px"} my={"30px"}>
+      <Card w={"800px"} p={"30px"} my={"30px"}>
         <CardHeader>
           <Heading textAlign={"center"}> 호텔 추가 </Heading>
         </CardHeader>
@@ -139,26 +149,7 @@ export function HotelWrite() {
             <Flex>
               <FormLabel
                 my={"15px"}
-                w={100}
-                textAlign="center"
-                display="flex"
-                alignItems={"center"}
-              >
-                {" "}
-                상세 주소 및 설명{" "}
-              </FormLabel>
-              <Textarea
-                value={description}
-                onChange={(e) => {
-                  setDescription(e.target.value);
-                }}
-              />
-            </Flex>
-
-            <Flex>
-              <FormLabel
-                my={"15px"}
-                w={100}
+                w={"15%"}
                 textAlign="center"
                 display="flex"
                 alignItems={"center"}
@@ -181,6 +172,110 @@ export function HotelWrite() {
             </Flex>
 
             <Flex>
+              <FormLabel
+                my={"15px"}
+                w={"15%"}
+                textAlign="center"
+                display="flex"
+                alignItems={"center"}
+              >
+                {" "}
+                숙소 등급{" "}
+              </FormLabel>
+
+              <Select
+                value={rating}
+                onChange={(e) => {
+                  setRating(e.target.value);
+                }}
+                color={"grey"}
+              >
+                <option value={""}>등급 없음</option>
+                <option value={"1성"}>1성</option>
+                <option value={"2성"}>2성</option>
+                <option value={"3성"}>3성</option>
+                <option value={"4성"}>4성</option>
+                <option value={"5성"}>5성</option>
+              </Select>
+            </Flex>
+
+            <FormControl
+              mt={2}
+              // border={"2px solid black"}
+              h={"60px"}
+            >
+              <Flex>
+                <FormLabel w={"15%"} fontSize={"1.1rem"} lineHeight={"60px"}>
+                  판매 기간
+                </FormLabel>
+                <Flex className="date-range-picker-container">
+                  <DatePicker
+                    value={salesFrom}
+                    className="date-picker"
+                    selected={salesFrom}
+                    onChange={(date) => setSalesFrom(date)}
+                    selectsStart
+                    startDate={salesFrom}
+                    endDate={salesTo}
+                    isClearable={true}
+                    placeholderText="시작일"
+                    dateFormat="yyyy년 MM월 dd일"
+                    minDate={new Date()}
+                  />
+                  <DatePicker
+                    value={salesTo}
+                    className="date-picker"
+                    selected={salesTo}
+                    onChange={(date) => setSalesTo(date)}
+                    selectsEnd
+                    startDate={salesFrom}
+                    endDate={salesTo}
+                    isClearable={true}
+                    placeholderText="마감일"
+                    dateFormat="yyyy년 MM월 dd일"
+                    minDate={salesTo}
+                  />
+                </Flex>
+              </Flex>
+            </FormControl>
+            <Box my={"10px"}>
+              <FormLabel
+                my={"15px"}
+                w={"200px"}
+                textAlign="center"
+                display="flex"
+                alignItems={"center"}
+              >
+                {" "}
+                상세 주소 및 설명{" "}
+              </FormLabel>
+              <Textarea
+                value={description}
+                onChange={(e) => {
+                  setDescription(e.target.value);
+                }}
+              />
+            </Box>
+            <Divider />
+            <Box my={"10px"}>
+              <FormLabel
+                my={"15px"}
+                w={100}
+                textAlign="center"
+                display="flex"
+                alignItems={"center"}
+              >
+                주의 사항
+              </FormLabel>
+              <Textarea
+                value={cautionMessage}
+                onChange={(e) => setCautionMessage(e.target.value)}
+              />
+            </Box>
+
+            <Divider />
+
+            <Flex mt={"20px"}>
               <FormLabel
                 my={"15px"}
                 w={100}
