@@ -72,7 +72,7 @@ export function Bucket() {
                   key={bucket.userId}
                   onClick={() => navigate("/transport/" + bucket.tId)}
                 >
-                  <Th></Th>
+                  <Th>{++number}</Th>
                   <Th>{bucket.typeName}</Th>
                   <Th>
                     <Box w={"150px"}>
@@ -86,8 +86,8 @@ export function Bucket() {
               ))}
               {hotelBucket.map((bucket) => (
                 <Tr _hover={{ cursor: "pointer" }} key={bucket.id}>
-                  <Th></Th>
-                  <Th>{bucket.lodgingType}</Th>
+                  <Th>{++number}</Th>
+                  <Th>호텔</Th>
                   <Th>
                     <Box w={"150px"}>
                       <Img src={bucket.mainImgUrl} />

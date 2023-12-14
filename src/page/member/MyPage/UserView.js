@@ -98,7 +98,7 @@ export function UserView() {
               <Input type="password" value={user.userPassword} readOnly />
             </FormControl>
 
-            <FormControl>
+            <FormControl mb={2}>
               <FormLabel>휴대전화</FormLabel>
               <Flex>
                 <Input type="number" value={phonePart1} readOnly w="30%" />

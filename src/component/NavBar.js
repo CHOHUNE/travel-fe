@@ -15,7 +15,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faMagnifyingGlass } from "@fortawesome/free-solid-svg-icons";
 import { useLocation, useNavigate } from "react-router-dom";
 import axios from "axios";
-import React, { useContext, useEffect } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { LoginContext } from "./LoginProvider";
 
 import { Swiper, SwiperSlide } from "swiper/react";
@@ -33,6 +33,8 @@ export function NavBar() {
   const navigate = useNavigate();
   const urlParams = new URLSearchParams();
   const location = useLocation();
+
+  const [showMenu, setShowMenu] = useState(false);
 
   useEffect(() => {
     fetchLogin();
@@ -93,7 +95,7 @@ export function NavBar() {
   }
 
   return (
-    <Box mt={2}>
+    <Box mt={2} justifyContent={"center"} w={"90%"} ml={"40px"}>
       {/* 헤더 네브바1 */}
       <Box w="80%" h={"80px"} ml="10%">
         <Flex justifyContent={"space-between"} textAlign={"center"}>
@@ -153,21 +155,25 @@ export function NavBar() {
 
             {isAuthenticated() && (
               <Box position="relative" zIndex="10">
-                <Menu>
+                <Menu isOpen={showMenu}>
                   <MenuButton
                     as={Button}
-                    w={"70px"}
                     h={"30px"}
                     borderRadius={0}
                     fontSize={"0.8rem"}
                     lineHeight={"80px"}
                     background={"white"}
-                    style={{ borderRadius: "30px" }}
-                    // onClick={() => navigate("/user?" + urlParams.toString())}
+                    border={"0px solid"}
+                    style={{ borderRadius: "30px", padding: "0 15px" }}
+                    onMouseEnter={() => setShowMenu(true)}
+                    onClick={() => navigate("/user/reservationList")}
                   >
                     {login.userId}님
                   </MenuButton>
-                  <MenuList>
+                  <MenuList
+                    onMouseEnter={() => setShowMenu(true)}
+                    onMouseLeave={() => setShowMenu(false)}
+                  >
                     <MenuItem
                       onClick={() => navigate("/user?" + urlParams.toString())}
                     >
