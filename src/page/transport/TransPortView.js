@@ -70,9 +70,7 @@ export function TransPortView() {
     const recentViewed = JSON.parse(localStorage.getItem("recentViewed")) || [];
     const transViewed = {
       ...transData,
-      mainImgUrl: transData.mainImage
-        ? transData.mainImage.url
-        : "default-image-url", // 여기서 기본 이미지 URL을 설정합니다.
+      mainImgUrl: transData.mainImage ? transData.mainImage.url : "기본이미지", // 여기서 기본 이미지 URL을 설정합니다.
       type: "transport",
     };
     const updatedRecentViewed = [transViewed, ...recentViewed].slice(0, 5);
