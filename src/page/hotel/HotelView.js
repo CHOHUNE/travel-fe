@@ -329,6 +329,20 @@ export function HotelView() {
                 {reservation.checkoutDate &&
                   reservation.checkoutDate.toLocaleDateString("ko-KR")}
               </Text>
+              <Text>
+                {/* 변경된 부분: 날짜가 선택되지 않았을 때는 평일 요금 표시 */}
+                숙박 기간 :
+                {reservation.checkinDate &&
+                  reservation.checkoutDate &&
+                  `${
+                    (reservation.checkoutDate - reservation.checkinDate) /
+                    (1000 * 60 * 60 * 24)
+                  }박 ${
+                    (reservation.checkoutDate - reservation.checkinDate) /
+                      (1000 * 60 * 60 * 24) +
+                    1
+                  }일`}
+              </Text>
             </Flex>
           </Box>
           {showCheckInInput && (
@@ -366,12 +380,13 @@ export function HotelView() {
                   <Spacer />
                   <VStack mr="40px">
                     <Text fontSize="xl" fontWeight="bold">
-                      총
+                      {/* 변경된 부분: 날짜가 선택되지 않았을 때는 평일 요금 표시 */}
+                      최종 숙박료 :
                       {roomTypePrices[roomtype.roomtype] &&
                         roomTypePrices[roomtype.roomtype].toLocaleString()}
-                      원
                     </Text>
                     <Text>
+                      {/* 변경된 부분: 날짜가 선택되지 않았을 때는 평일 요금 표시 */}
                       부가세 · 봉사료 10% 포함 (세금계산서 · 현금영수증 발행)
                     </Text>
                     <Text color="red">취소불가(취소수수료 발생)</Text>
