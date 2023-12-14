@@ -1,6 +1,8 @@
 import { useEffect } from "react";
 import { useNavigate, useSearchParams } from "react-router-dom";
 import { Link } from "react-router-dom";
+import { Box, Button, Text, Center, Icon, VStack } from "@chakra-ui/react";
+import { CheckCircleIcon } from "@chakra-ui/icons";
 
 const apiSecretKey = process.env.REACT_APP_SECRET_KEY;
 export function SuccessPage() {
@@ -52,43 +54,60 @@ export function SuccessPage() {
   }, []);
 
   return (
-    <div className="result wrapper">
-      <div className="box_section">
-        <h2 style={{ padding: "20px 0px 10px 0px" }}>
-          <img
-            width="35px"
-            src="https://static.toss.im/3d-emojis/u1F389_apng.png"
-          />
-          결제 성공
-        </h2>
-        <p>{`paymentKey = ${searchParams.get("paymentKey")}`}</p>
-        <p>{`orderId = ${searchParams.get("orderId")}`}</p>
-        <p>{`amount = ${Number(
-          searchParams.get("amount"),
-        ).toLocaleString()}원`}</p>
-        <div className="result wrapper">
-          <Link to="https://docs.tosspayments.com/guides/payment-widget/integration">
-            <button
-              className="button"
-              style={{ marginTop: "30px", marginRight: "10px" }}
-            >
-              연동 문서
-            </button>
-          </Link>
-          <Link to="https://discord.gg/A4fRFXQhRu">
-            <button
-              className="button"
-              style={{
-                marginTop: "30px",
-                backgroundColor: "#e8f3ff",
-                color: "#1b64da",
-              }}
-            >
-              실시간 문의
-            </button>
-          </Link>
+    <Box w="80%" ml="10%" textAlign={"center"}>
+      <Center h="100vh" bg="gray.100">
+        <VStack spacing={4} bg="white" p={10} rounded="lg" boxShadow="md">
+          <Icon as={CheckCircleIcon} w={16} h={16} color="blue" />
+          <Text fontSize="lg" fontWeight="bold">
+            결제 완료되었습니다.
+          </Text>
+          <Text fontSize="md">
+            진행 중인 결제창에서 {"[결제완료]"} 버튼을 눌러 결제창을 닫아주세요.
+          </Text>
+          <Button colorScheme="gray" w="full">
+            확인
+          </Button>
+        </VStack>
+      </Center>
+
+      <div className="result wrapper">
+        <div className="box_section">
+          <h2 style={{ padding: "20px 0px 10px 0px" }}>
+            <img
+              width="35px"
+              src="https://static.toss.im/3d-emojis/u1F389_apng.png"
+            />
+            결제 성공
+          </h2>
+          <p>{`paymentKey = ${searchParams.get("paymentKey")}`}</p>
+          <p>{`orderId = ${searchParams.get("orderId")}`}</p>
+          <p>{`amount = ${Number(
+            searchParams.get("amount"),
+          ).toLocaleString()}원`}</p>
+          <div className="result wrapper">
+            <Link to="https://docs.tosspayments.com/guides/payment-widget/integration">
+              <button
+                className="button"
+                style={{ marginTop: "30px", marginRight: "10px" }}
+              >
+                연동 문서
+              </button>
+            </Link>
+            <Link to="https://discord.gg/A4fRFXQhRu">
+              <button
+                className="button"
+                style={{
+                  marginTop: "30px",
+                  backgroundColor: "#e8f3ff",
+                  color: "#1b64da",
+                }}
+              >
+                실시간 문의
+              </button>
+            </Link>
+          </div>
         </div>
       </div>
-    </div>
+    </Box>
   );
 }
