@@ -110,7 +110,12 @@ function SearchComponent() {
   return (
     <Center mt={5}>
       <Flex>
-        <Input value={keyword} onChange={(e) => setKeyword(e.target.value)} />
+        <Input
+          w={"400px"}
+          value={keyword}
+          placeholder={"호텔 검색"}
+          onChange={(e) => setKeyword(e.target.value)}
+        />
         <Button onClick={handleSearch}>검색</Button>
       </Flex>
     </Center>
@@ -157,7 +162,7 @@ export function Hotel() {
             name: hotelData.name,
             mainImgUrl: hotelData.mainImgUrl,
             location: hotelData.location,
-            roomType: hotelData.roomType,
+            lodgingType: hotelData.lodgingType,
           })
           .catch(() => {
             toast({
@@ -204,60 +209,33 @@ export function Hotel() {
       </Box>
 
       {/* 미들 바 */}
-      <Box
-        w={"80%"}
-        h={"100px"}
-        lineHeight={"100px"}
-        borderRadius={"10px"}
-        border={"1px solid black"}
-        ml={"10%"}
-        mt={"10px"}
-        mb={"20px"}
-        display={"flex"}
-        gap={"20px"}
-        alignItems={"center"}
-      >
-        {/* 검색 버튼 */}
-        <Box
-          w={"80px"}
-          h={"80px"}
-          border={"1px solid black"}
-          borderRadius={"10px"}
-          cursor={"pointer"}
-          ml={"5px"}
-        >
-          <Stack align={"stretch"}>
-            <FontAwesomeIcon icon={faMap} size={"2xl"} />
-          </Stack>
-        </Box>
-        <Box
-          w={"80px"}
-          h={"80px"}
-          border={"1px solid black"}
-          borderRadius={"10px"}
-          cursor={"pointer"}
-          ml={"5px"}
-        >
-          <FontAwesomeIcon icon={faBed} size={"2xl"} />
-        </Box>
+
+      {/* 검색 버튼 */}
+      <Box mt={"50px"}>
         <SearchComponent />
-        <Button
-          ml={"300px"}
-          variant={"solid"}
-          color={"green"}
-          onClick={() => navigate("/hotel/write/")}
-        >
-          호텔 추가
-        </Button>
-        <Button
-          ml={"20px"}
-          variant={"solid"}
-          color={"green"}
-          onClick={() => navigate("/reserv/" + id)}
-        >
-          호텔 삭제
-        </Button>
       </Box>
+      <Box w={"80%"} ml={"10%"}>
+        <Flex minWidth={"max-content"} alignItems={"center"} gap={"2"}>
+          <Spacer />
+          <Button
+            ml={"300px"}
+            variant={"solid"}
+            color={"green"}
+            onClick={() => navigate("/hotel/write/")}
+          >
+            호텔 추가
+          </Button>
+          <Button
+            ml={"20px"}
+            variant={"solid"}
+            color={"green"}
+            onClick={() => navigate("/reserv/" + id)}
+          >
+            호텔 삭제
+          </Button>
+        </Flex>
+      </Box>
+
       {/* 호텔 정보 렌더링 */}
       <Flex justifyContent={"center"} flexWrap="wrap">
         <SimpleGrid columns={3} spacing={10} my={"20px"}>
@@ -309,30 +287,20 @@ export function Hotel() {
                 >
                   {hotel.description}
                 </Box>
-                <Box>
-                  {hotel.totalPrice}
-                  <Box as="span" color="gray.600" fontSize="sm">
-                    원 / 1박
+                <Box
+                  display="flex"
+                  mt="2"
+                  alignItems="center"
+                  justifyContent="space-between"
+                >
+                  <Box>
+                    {hotel.totalPrice}
+                    <Box as="span" color="gray.600" fontSize="sm">
+                      원 / 1박
+                    </Box>
                   </Box>
-                </Box>
-                <Box display="flex" mt="2" alignItems="center">
-                  {Array(5)
-                    .fill("")
-                    .map((_, i) => (
-                      <StarIcon
-                        key={i}
-                        color={i < hotel.rating ? "teal.500" : "gray.300"}
-                      />
-                    ))}
-                  <Box as="span" ml="2" color="gray.600" fontSize="sm">
-                    {hotel.rating}
-                  </Box>
-                  <ButtonGroup
-                    spacing="2"
-                    size={"sm"}
-                    variant={"outline"}
-                    ml={"30px"}
-                  >
+
+                  <ButtonGroup spacing="2" size="sm" variant="outline">
                     <Button
                       colorScheme="red"
                       onClick={() => navigate("/hotel/reserv/" + hotel.hid)}

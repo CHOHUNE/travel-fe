@@ -41,6 +41,7 @@ import { TransPay } from "./page/transport/TransPay";
 import { FailPage } from "./page/payment/FailPage";
 import { SuccessPage } from "./page/payment/SuccessPage";
 import { PaymentPage } from "./page/payment/PaymentPage";
+import { HotelTypeWrite } from "./page/hotel/HotelTypeWrite";
 import { DeleteView } from "./page/member/MyPage/DeleteView";
 
 const routes = createBrowserRouter(
@@ -85,6 +86,7 @@ const routes = createBrowserRouter(
       <Route path="hotel" element={<Hotel />} />
       <Route path="hotel/reserv/:id" element={<HotelView />} />
       <Route path="hotel/write" element={<HotelWrite />} />
+      <Route path="hotel/write/type/:id" element={<HotelTypeWrite />} />
       <Route path="hotel/edit/:id" element={<HotelEdit />} />
       <Route path="hotel/pay/:id" element={<HotelPay />} />
 
