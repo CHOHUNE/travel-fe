@@ -25,6 +25,7 @@ import axios from "axios";
 import { useImmer } from "use-immer";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faTrash } from "@fortawesome/free-solid-svg-icons";
+import DatePicker from "react-datepicker";
 
 export function TransPortEdit() {
   // 운송 상품 관련
@@ -43,11 +44,26 @@ export function TransPortEdit() {
 
   const { id } = useParams();
 
+  // useEffect(() => {
+  //   axios.get("/api/transport/id/" + id).then((response) => {
+  //     updateTrans(response.data);
+  //   });
+  // }, []);
+
   useEffect(() => {
     axios.get("/api/transport/id/" + id).then((response) => {
-      updateTrans(response.data);
+      const data = response.data;
+      // 서버로부터 받은 날짜 문자열을 Date 객체로 변환
+      data.transStartDate = data.transStartDate
+        ? new Date(data.transStartDate)
+        : null;
+      data.transEndDate = data.transEndDate
+        ? new Date(data.transEndDate)
+        : null;
+      // 이제 변환된 데이터를 상태로 설정
+      updateTrans(data);
     });
-  }, []);
+  }, [id]);
 
   if (trans === null) {
     <Spinner />;
@@ -56,13 +72,14 @@ export function TransPortEdit() {
   function handleSubmitTrans() {
     axios
       .putForm("/api/transport/edit", {
-        transStartDay: trans.transStartDay,
         transTitle: trans.transTitle,
         transPrice: trans.transPrice,
         transContent: trans.transContent,
         transAddress: trans.transAddress,
         transStartLocation: trans.transStartLocation,
         transArriveLocation: trans.transArriveLocation,
+        transStartDate: trans.transStartDate,
+        transEndDate: trans.transEndDate,
         tId: trans.tid,
         removeMainImageId,
         transMainImage,
@@ -98,10 +115,17 @@ export function TransPortEdit() {
     });
   }
 
-  // 출발일 수정 기능
-  function handleStartDayChange(e) {
+  // 시작일 수정 기능
+  function handleStartDateChange(e) {
     updateTrans((draft) => {
-      draft.transStartDay = e.target.value;
+      draft.transStartDate = e;
+    });
+  }
+
+  // 마감일 수정 기능
+  function handleEndDateChange(e) {
+    updateTrans((draft) => {
+      draft.transEndDate = e;
     });
   }
 
@@ -237,31 +261,57 @@ export function TransPortEdit() {
               </FormControl>
             )}
           </FormControl>
-          <FormControl mt={4}>
-            <Flex>
-              <FormLabel
-                w={"50%"}
-                textAlign={"center"}
-                fontSize={"1.1rem"}
-                alignItems={"center"}
-              >
-                출발 일시
-              </FormLabel>
-              <Input
-                value={trans.transStartDay}
-                placeholder="Select Date and Time"
-                size={"md"}
-                type="datetime-local"
-                onChange={handleStartDayChange}
-              />
-            </Flex>
-          </FormControl>
+
           <FormControl mt={4}>
             <Flex>
               <FormLabel w={"50%"} textAlign={"center"} fontSize={"1.1rem"}>
                 제목
               </FormLabel>
               <Input value={trans.transTitle} onChange={handleTitleChange} />
+            </Flex>
+          </FormControl>
+          <FormControl
+            mt={2}
+            // border={"2px solid black"}
+            h={"60px"}
+          >
+            <Flex>
+              <FormLabel
+                w={"33%"}
+                textAlign={"center"}
+                fontSize={"1.1rem"}
+                lineHeight={"60px"}
+              >
+                날짜선택
+              </FormLabel>
+              <Flex className="date-range-picker-container">
+                <DatePicker
+                  value={trans.transStartDate}
+                  className="date-picker"
+                  selected={trans.transStartDate}
+                  onChange={handleStartDateChange}
+                  selectsStart
+                  startDate={trans.transStartDate}
+                  endDate={trans.transEndDate}
+                  isClearable={true}
+                  placeholderText="시작일"
+                  dateFormat="yyyy년 MM월 dd일"
+                  minDate={new Date()}
+                />
+                <DatePicker
+                  value={trans.transEndDate}
+                  className="date-picker"
+                  selected={trans.transEndDate}
+                  onChange={handleEndDateChange}
+                  selectsEnd
+                  startDate={trans.transStartDate}
+                  endDate={trans.transEndDate}
+                  isClearable={true}
+                  placeholderText="마감일"
+                  dateFormat="yyyy년 MM월 dd일"
+                  minDate={trans.transStartDate}
+                />
+              </Flex>
             </Flex>
           </FormControl>
           <FormControl mt={4}>

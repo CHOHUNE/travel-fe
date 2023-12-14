@@ -107,7 +107,7 @@ export function NavBar() {
           >
             <Img
               _hover={{ cursor: "pointer" }}
-              src="https://img.freepik.com/premium-vector/travel-company-logo_18099-1527.jpg?w=1060"
+              src="https://study1993garbi.s3.ap-northeast-2.amazonaws.com/travel/trans/KakaoTalk_Photo_2023-12-13-09-58-45.png"
               alt="프로젝트 로고"
               w="200px"
               h="80px"

@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from "react";
 import { nanoid } from "nanoid";
-import axios from "axios";
-import { Spinner } from "@chakra-ui/react";
+import {Box, Center, Spinner} from "@chakra-ui/react";
 import { useLocation } from "react-router-dom";
+import axios from "axios";
 
 const orderId = nanoid();
 
@@ -46,5 +46,41 @@ export function PaymentPage() {
       });
   }, []);
 
-  return null;
+  // 승원 수정 부분 그냥 페이지가 심심해서 만들어봄 시작---------------------------
+  return (
+    <Center>
+      <video style={{ height: "500px", zIndex: 2 }} autoPlay loop muted>
+        <source
+          src={
+            "https://study1993garbi.s3.ap-northeast-2.amazonaws.com/travel/trans/video/plan.mp4"
+          }
+          type="video/mp4"
+        />
+      </video>
+      <Box
+        style={{
+          position: "absolute",
+          marginTop: "80px",
+          marginLeft: "30%",
+          width: "100%",
+          height: "400px",
+          zIndex: 3,
+          fontFamily: "YEONGJUPunggiGinsengTTF",
+          fontSize: "2rem",
+          color: "white",
+        }}
+      >
+        <p>결제 진행 중 입니다.</p>
+        <br />
+        <br />
+        <p style={{ fontSize: "1.1rem", color: "black" }}>
+          결제중 실수로 취소를 하셨다면,
+        </p>
+        <p style={{ fontSize: "1.1rem", color: "orange" }}>
+          새로고침 후 다시 결제 해주세요.
+        </p>
+      </Box>
+    </Center>
+  );
+  // 승원 수정 부분 그냥 페이지가 심심해서 만들어봄 끝---------------------------
 }
