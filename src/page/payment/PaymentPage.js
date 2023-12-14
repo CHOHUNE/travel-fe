@@ -1,10 +1,19 @@
-import { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { nanoid } from "nanoid";
+import axios from "axios";
+import { Spinner } from "@chakra-ui/react";
+import { useLocation } from "react-router-dom";
 
 const orderId = nanoid();
 
 const apiKey = process.env.REACT_APP_CLIENT_KEY;
 export function PaymentPage() {
+  // 선생님 도움
+  const location = useLocation();
+
+  console.log(location.state);
+  const trans = location.state;
+  //   여까지
   useEffect(() => {
     // ------ 클라이언트 키로 객체 초기화 ------
 
@@ -17,7 +26,7 @@ export function PaymentPage() {
         // 결제 정보 파라미터
         // 더 많은 결제 정보 파라미터는 결제창 Javascript SDK에서 확인하세요.
         // https://docs.tosspayments.com/reference/js-sdk
-        amount: 100, // 결제 금액
+        amount: trans.amount, // 결제 금액  (선생님 해주심)
         orderId: orderId, // 주문 ID(주문 ID는 상점에서 직접 만들어주세요.)
         orderName: "테스트 결제", // 주문명
         customerName: "김토스", // 구매자 이름
