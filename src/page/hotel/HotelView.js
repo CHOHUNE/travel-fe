@@ -83,6 +83,7 @@ export function HotelView() {
           status: "error",
         });
       });
+    //
   }
 
   return (
