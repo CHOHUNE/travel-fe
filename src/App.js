@@ -8,8 +8,8 @@ import { FindId } from "./page/member/FindId";
 import { FindPw } from "./page/member/FindPw";
 import { FindPwChange } from "./page/member/FindPwChange";
 import React from "react";
-import {NaverLogin} from "./page/member/NaverLogin";
-import {Bucket} from "./page/member/MyPage/Bucket";
+import { NaverLogin } from "./page/member/NaverLogin";
+import { Bucket } from "./page/member/MyPage/Bucket";
 import UserLayOut from "./page/member/layout/UserLayOut";
 import { ReservationList } from "./page/member/MyPage/ReservationList";
 import { HomeLayout } from "./layout/HomeLayout";
@@ -41,7 +41,7 @@ import { TransPay } from "./page/transport/TransPay";
 import { FailPage } from "./page/payment/FailPage";
 import { SuccessPage } from "./page/payment/SuccessPage";
 import { PaymentPage } from "./page/payment/PaymentPage";
-
+import { }
 const routes = createBrowserRouter(
   createRoutesFromElements(
     <Route path="/" element={<HomeLayout />}>
@@ -84,6 +84,7 @@ const routes = createBrowserRouter(
       <Route path="hotel" element={<Hotel />} />
       <Route path="hotel/reserv/:id" element={<HotelView />} />
       <Route path="hotel/write" element={<HotelWrite />} />
+      <Route path="hotel/write/type/:id" element={<HotelTypeWrite />} />
       <Route path="hotel/edit/:id" element={<HotelEdit />} />
       <Route path="hotel/pay/:id" element={<HotelPay />} />
 
