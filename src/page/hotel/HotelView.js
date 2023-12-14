@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from "react";
 import "react-datepicker/dist/react-datepicker.css";
-
 import {
   Box,
   Button,
@@ -28,6 +27,7 @@ import { Swiper, SwiperSlide } from "swiper/react";
 import { Pagination } from "swiper/modules";
 import "./style.css";
 import DatePicker from "react-datepicker";
+import { format } from "date-fns";
 
 export function HotelView() {
   const { id } = useParams();
@@ -36,15 +36,16 @@ export function HotelView() {
   const [reservation, setReservation] = useState({
     checkinDate: null,
     checkoutDate: null,
-    totalPrice: 0,
+    totalPrice: null,
   });
 
   const navigate = useNavigate();
   const toast = useToast();
-
   const [count, setCount] = useState(0);
 
   const [showCheckInInput, setShowCheckInInput] = useState(false);
+  const [selectedRoom, setSelectedRoom] = useState();
+  const [roomTypePrices, setRoomTypePrices] = useState({});
 
   const saveToRecentViewed = (hotelData) => {
     const recentViewed = JSON.parse(localStorage.getItem("recentViewed")) || [];
@@ -88,6 +89,50 @@ export function HotelView() {
         });
       });
   }
+
+  function isWeekend(date) {
+    const dayOfWeek = date.getDay();
+    return dayOfWeek === 5 || dayOfWeek === 6;
+  }
+
+  const calculatePrice = (checkinDate, checkoutDate, roomtype) => {
+    if (!checkinDate || !checkoutDate) {
+      return 0;
+    }
+
+    let currentDate = new Date(checkinDate);
+    let total = 0;
+
+    while (currentDate < checkoutDate) {
+      const isWeekendDay = isWeekend(currentDate);
+      const price = isWeekendDay
+        ? roomtype.salePriceWeekend
+        : roomtype.salePriceWeekday || 0;
+      total += price;
+      currentDate.setDate(currentDate.getDate() + 1);
+    }
+
+    return total;
+  };
+
+  const updateRoomTypePrices = () => {
+    const updatedPrices = {};
+    if (roomtypeList && reservation.checkinDate && reservation.checkoutDate) {
+      roomtypeList.forEach((roomtype) => {
+        const price = calculatePrice(
+          reservation.checkinDate,
+          reservation.checkoutDate,
+          roomtype,
+        );
+        updatedPrices[roomtype.roomtype] = price;
+      });
+    }
+    setRoomTypePrices(updatedPrices);
+  };
+
+  useEffect(() => {
+    updateRoomTypePrices();
+  }, [reservation.checkinDate, reservation.checkoutDate, roomtypeList]);
 
   return (
     <Box>
@@ -321,7 +366,10 @@ export function HotelView() {
                   <Spacer />
                   <VStack mr="40px">
                     <Text fontSize="xl" fontWeight="bold">
-                      가격: {roomtype.salePriceWeekday.toLocaleString()} 원
+                      총
+                      {roomTypePrices[roomtype.roomtype] &&
+                        roomTypePrices[roomtype.roomtype].toLocaleString()}
+                      원
                     </Text>
                     <Text>
                       부가세 · 봉사료 10% 포함 (세금계산서 · 현금영수증 발행)
