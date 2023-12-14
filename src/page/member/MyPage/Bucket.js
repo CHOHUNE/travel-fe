@@ -14,7 +14,7 @@ import {
 } from "@chakra-ui/react";
 import { useEffect, useState } from "react";
 import axios from "axios";
-import { useLocation } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import { useSearchParams } from "react-router-dom";
 
 export function Bucket() {
@@ -22,6 +22,7 @@ export function Bucket() {
   const [transBucket, setTransBucket] = useState([]);
   const [params] = useSearchParams();
   const location = useLocation();
+  const navigate = useNavigate();
 
   useEffect(() => {
     axios
@@ -66,7 +67,11 @@ export function Bucket() {
             </Thead>
             <Tbody>
               {transBucket.map((bucket) => (
-                <Tr _hover={{ cursor: "pointer" }} key={bucket.userId}>
+                <Tr
+                  _hover={{ cursor: "pointer" }}
+                  key={bucket.userId}
+                  onClick={() => navigate("/transport/" + bucket.tId)}
+                >
                   <Th></Th>
                   <Th>{bucket.typeName}</Th>
                   <Th>
@@ -82,7 +87,7 @@ export function Bucket() {
               {hotelBucket.map((bucket) => (
                 <Tr _hover={{ cursor: "pointer" }} key={bucket.id}>
                   <Th></Th>
-                  <Th>호텔</Th>
+                  <Th>{bucket.lodgingType}</Th>
                   <Th>
                     <Box w={"150px"}>
                       <Img src={bucket.mainImgUrl} />

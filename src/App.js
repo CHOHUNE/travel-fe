@@ -8,8 +8,8 @@ import { FindId } from "./page/member/FindId";
 import { FindPw } from "./page/member/FindPw";
 import { FindPwChange } from "./page/member/FindPwChange";
 import React from "react";
-import {NaverLogin} from "./page/member/NaverLogin";
-import {Bucket} from "./page/member/MyPage/Bucket";
+import { NaverLogin } from "./page/member/NaverLogin";
+import { Bucket } from "./page/member/MyPage/Bucket";
 import UserLayOut from "./page/member/layout/UserLayOut";
 import { ReservationList } from "./page/member/MyPage/ReservationList";
 import { HomeLayout } from "./layout/HomeLayout";
@@ -41,6 +41,8 @@ import { TransPay } from "./page/transport/TransPay";
 import { FailPage } from "./page/payment/FailPage";
 import { SuccessPage } from "./page/payment/SuccessPage";
 import { PaymentPage } from "./page/payment/PaymentPage";
+import { HotelTypeWrite } from "./page/hotel/HotelTypeWrite";
+import { DeleteView } from "./page/member/MyPage/DeleteView";
 
 const routes = createBrowserRouter(
   createRoutesFromElements(
@@ -62,17 +64,17 @@ const routes = createBrowserRouter(
       <Route path="notice" element={<Notice />} />
       <Route path="noticeSound" element={<NoticeSound />} />
 
-
       {/* 회원관련 */}
       <Route path="login" element={<UserLogin />} />
       <Route path="auth" element={<AuthPage />} />
       <Route path="signup" element={<UserSignup />} />
-      <Route path="user/edit" element={<UserEdit />} />
       <Route path="user/list" element={<UserList />} />
       <Route path="user" element={<UserLayOut />}>
         <Route index element={<UserView />} />
         <Route path="/user/bucket" element={<Bucket />} />
         <Route path="/user/reservationList" element={<ReservationList />} />
+        <Route path="/user/delete" element={<DeleteView />} />
+        <Route path="/user/edit" element={<UserEdit />} />
       </Route>
       <Route path="user/bucket" element={<Bucket />} />
       <Route path="findId" element={<FindId />} />
@@ -84,6 +86,7 @@ const routes = createBrowserRouter(
       <Route path="hotel" element={<Hotel />} />
       <Route path="hotel/reserv/:id" element={<HotelView />} />
       <Route path="hotel/write" element={<HotelWrite />} />
+      <Route path="hotel/write/type/:id" element={<HotelTypeWrite />} />
       <Route path="hotel/edit/:id" element={<HotelEdit />} />
       <Route path="hotel/pay/:id" element={<HotelPay />} />
 
