@@ -33,26 +33,28 @@ export function HotelView() {
   const { id } = useParams();
   const [hotel, setHotel] = useState([]);
   const [roomtypeList, setRoomtypeList] = useState(null);
+  const [reservation, setReservation] = useState({
+    checkinDate: null,
+    checkoutDate: null,
+    totalPrice: 0,
+  });
+
   const navigate = useNavigate();
   const toast = useToast();
+
   const [count, setCount] = useState(0);
-  const [reservation, setReservation] = useState([]);
-  const [selectedRoom, setSelectedRoom] = useState();
-  // 호텔 ID를 사용하여 호텔 데이터를 가져오는 함수
 
   const [showCheckInInput, setShowCheckInInput] = useState(false);
 
-  // ---------------------- 최근 본 상품 ----------------------
   const saveToRecentViewed = (hotelData) => {
     const recentViewed = JSON.parse(localStorage.getItem("recentViewed")) || [];
-    const updatedRecentViewed = [hotelData, ...recentViewed].slice(0, 5); // 최대 5개만 저장
+    const updatedRecentViewed = [hotelData, ...recentViewed].slice(0, 5);
     localStorage.setItem("recentViewed", JSON.stringify(updatedRecentViewed));
   };
 
   useEffect(() => {
     axios.get("/api/hotel/reserv/id/" + id).then((response) => {
       setHotel(response.data);
-      // --------------------- 최근 본 상품 ----------------------
       saveToRecentViewed(response.data);
     });
   }, [id]);
@@ -63,7 +65,12 @@ export function HotelView() {
     });
   }, []);
 
-  // 삭제
+  useEffect(() => {
+    axios
+      .get("/api/hotel/pay")
+      .then((response) => setReservation(response.data));
+  }, []);
+
   function handleHotelDelete() {
     axios
       .delete("/api/hotel/delete/" + id)
@@ -82,48 +89,6 @@ export function HotelView() {
       });
   }
 
-  function handleRoomtypeDelete(hrtId) {
-    axios
-      .delete("/api/hotel/delete/" + id + "/type/" + hrtId)
-      .then(() => {
-        toast({
-          description: "삭제가 완료 되었습니다.",
-          colorScheme: "orange",
-        });
-
-        axios.get("/api/hotel/reserv/type/" + id).then((response) => {
-          setRoomtypeList(response.data);
-        });
-      })
-      .catch(() => {
-        toast({
-          description: "객실 삭제가 실패 하였습니다",
-          status: "error",
-        });
-      });
-    //
-  }
-
-  // useEffect(() => {
-  //   axios.get("/api/");
-  // }, []);
-
-  // 시작일 연월일로 보이게 설정 ------------------------------------------------
-  // const transStartDate = trans.transStartDate;
-  // // const startDate = new Date(transStartDate);
-  // const startYear = startDate.getFullYear();
-  // const startMonth = (startDate.getMonth() + 1).toString().padStart(2, "0");
-  // const startDay = startDate.getDate().toString().padStart(2, "0");
-  // const startFormat = startYear + "년 " + startMonth + "월 " + startDay + "일";
-  //
-  // // 마감일 연월일로 보이게 설정 ------------------------------------------------
-  // // const transEndDate = trans.transEndDate;
-  // // const endDate = new Date(transEndDate);
-  // const endYear = endDate.getFullYear();
-  // const endMonth = (endDate.getMonth() + 1).toString().padStart(2, "0");
-  // const EndDay = endDate.getDate().toString().padStart(2, "0");
-  // const endFormat = endYear + "년 " + endMonth + "월 " + EndDay + "일";
-
   return (
     <Box>
       {hotel && (
@@ -135,7 +100,15 @@ export function HotelView() {
             ml={"10%"}
             mt={"10px"}
           >
-            <Flex justifyContent={"flex-end"}>
+            <Flex
+              justifyContent={"flex-end"}
+              textAlign={"center"}
+              justifyItems={"center"}
+            >
+              <Text fontWeight={"bold"} mr={"15px"} mt={"10px"}>
+                판매 기간 :{hotel.salesFrom && hotel.salesFrom.split("T")[0]} ~{" "}
+                {hotel.salesTo && hotel.salesTo.split("T")[0]}
+              </Text>
               <Button
                 onClick={() => navigate("/hotel/write/type/" + hotel.hid)}
                 mr={"20px"}
@@ -143,7 +116,6 @@ export function HotelView() {
                 {" "}
                 객실 관리{" "}
               </Button>
-
               <Button onClick={() => navigate("/hotel/edit/" + hotel.hid)}>
                 {" "}
                 호텔 수정{" "}
@@ -258,7 +230,6 @@ export function HotelView() {
             </Box>
           </Box>
 
-          {/* 객실 및 인원 선택 창 */}
           <Box
             my={"10px"}
             h={"80px"}
@@ -267,34 +238,52 @@ export function HotelView() {
             border={"1px solid black"}
             borderRadius={"10px"}
           >
-            {" "}
-            <Flex className="date-range-picker-container">
-              {/*<DatePicker*/}
-              {/*  value={null}*/}
-              {/*  className="date-picker"*/}
-              {/*  selected={null}*/}
-              {/*  // onChange={handleStartDateChange}*/}
-              {/*  selectsStart*/}
-              {/*  startDate={null}*/}
-              {/*  endDate={null}*/}
-              {/*  isClearable={true}*/}
-              {/*  placeholderText="출발일을 선택해 주세요"*/}
-              {/*  dateFormat="yyyy년 MM월 dd일"*/}
-              {/*  minDate={new Date()}*/}
-              {/*/>{" "}*/}
-              {/*<DatePicker*/}
-              {/*  value={null}*/}
-              {/*  className="date-picker"*/}
-              {/*  selected={null}*/}
-              {/*  // onChange={handleStartDateChange}*/}
-              {/*  selectsStart*/}
-              {/*  startDate={null}*/}
-              {/*  endDate={null}*/}
-              {/*  isClearable={true}*/}
-              {/*  placeholderText="출발일을 선택해 주세요"*/}
-              {/*  dateFormat="yyyy년 MM월 dd일"*/}
-              {/*  minDate={new Date()}*/}
-              {/*/>*/}
+            <Flex className="date-range-picker-container" mt={"5px"} m={"10px"}>
+              <DatePicker
+                value={reservation.checkinDate}
+                className="date-picker"
+                selected={reservation.checkinDate}
+                onChange={(date) =>
+                  setReservation((prevReservation) => ({
+                    ...prevReservation,
+                    checkinDate: date,
+                  }))
+                }
+                selectsStart
+                startDate={reservation.checkinDate}
+                endDate={reservation.checkinDate}
+                isClearable={true}
+                placeholderText="체크인"
+                dateFormat="yyyy년 MM월 dd일"
+                minDate={new Date()}
+              />
+              <DatePicker
+                value={reservation.checkoutDate}
+                className="date-picker"
+                selected={reservation.checkoutDate}
+                onChange={(date) =>
+                  setReservation((prevReservation) => ({
+                    ...prevReservation,
+                    checkoutDate: date,
+                  }))
+                }
+                selectsEnd
+                startDate={reservation.checkinDate}
+                endDate={reservation.checkoutDate}
+                isClearable={true}
+                placeholderText="체크아웃"
+                dateFormat="yyyy년 MM월 dd일"
+                minDate={reservation.checkinDate}
+              />
+
+              <Text fontWeight={"bold"} mr={"15px"} mt={"10px"}>
+                예약 기간 :
+                {reservation.checkinDate &&
+                  reservation.checkinDate.toLocaleDateString("ko-KR")}{" "}
+                ~{" "}
+                {reservation.checkoutDate &&
+                  reservation.checkoutDate.toLocaleDateString("ko-KR")}
+              </Text>
             </Flex>
           </Box>
           {showCheckInInput && (
@@ -332,7 +321,7 @@ export function HotelView() {
                   <Spacer />
                   <VStack mr="40px">
                     <Text fontSize="xl" fontWeight="bold">
-                      가격: {roomtype.salePriceWeekday.toLocaleString()}원
+                      가격: {roomtype.salePriceWeekday.toLocaleString()} 원
                     </Text>
                     <Text>
                       부가세 · 봉사료 10% 포함 (세금계산서 · 현금영수증 발행)
@@ -341,12 +330,15 @@ export function HotelView() {
                   </VStack>
 
                   <Stack>
-                    <Select placeholder="객실 수 ">
-                      <option value="option1">객실 1개</option>
-                      <option value="option1">객실 2개</option>
-                      <option value="option1">객실 3개</option>
-                      <option value="option1">객실 4개</option>
-                      <option value="option1">객실 5개</option>
+                    <Select
+                      placeholder="객실 수 "
+                      onChange={(e) => setCount(e.target.value)}
+                    >
+                      <option value="1">객실 1개</option>
+                      <option value="2">객실 2개</option>
+                      <option value="3">객실 3개</option>
+                      <option value="4">객실 4개</option>
+                      <option value="5">객실 5개</option>
                     </Select>
                     <Button
                       variant={"outline"}
@@ -360,6 +352,7 @@ export function HotelView() {
                 </Box>
               ))}
           </SimpleGrid>
+
           <Box
             w={"80%"}
             ml={"10%"}
@@ -371,7 +364,10 @@ export function HotelView() {
             alignItems={"center"}
             borderRadius={"lg"}
           >
-            <Heading>객실 예약시 주의사항 기입 목록</Heading>
+            <Heading>
+              객실 예약시 주의사항 기입 목록
+              {hotel.cautionMessage}
+            </Heading>
           </Box>
         </>
       )}
