@@ -24,7 +24,7 @@ import {
   useDisclosure,
   useToast,
 } from "@chakra-ui/react";
-import { useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useNavigate, useSearchParams } from "react-router-dom";
 import axios from "axios";
 
@@ -34,27 +34,41 @@ export function UserEdit() {
 
   const [user, setUser] = useState(null);
 
+  const [userId, setUserId] = useState("");
+  const [userPassword, setUserPassword] = useState("");
+  const [userName, setUserName] = useState("");
+  const [userPostCode, setUserPostCode] = useState("");
+  const [userAddress, setUserAddress] = useState("");
+  const [userDetailAddress, setUserDetailAddress] = useState("");
+  const [phonePart1, setPhonePart1] = useState("");
+  const [phonePart2, setPhonePart2] = useState("");
+  const [phonePart3, setPhonePart3] = useState("");
+  const [emailId, setEmailId] = useState("");
+  const [emailDomain, setEmailDomain] = useState("");
+
   useEffect(() => {
     axios.get("/api/member?" + params.toString()).then((response) => {
       setUser(response.data);
       setUserId(response.data.userId);
-      setUserEmail(response.data.userEmail);
       setUserName(response.data.userName);
-      setUserPhoneNumber(response.data.userPhoneNumber);
       setUserPostCode(response.data.userPostCode);
       setUserAddress(response.data.userAddress);
       setUserDetailAddress(response.data.userDetailAddress);
+
+      const phoneParts = response.data.userPhoneNumber.split("-");
+      const emailParts = response.data.userEmail.split("@");
+      if (phoneParts.length === 3 && emailParts.length === 2) {
+        setPhonePart1(phoneParts[0]);
+        setPhonePart2(phoneParts[1]);
+        setPhonePart3(phoneParts[2]);
+        setEmailId(emailParts[0]);
+        setEmailDomain(emailParts[1]);
+      }
     });
   }, []);
 
-  const [userId, setUserId] = useState("");
-  const [userPassword, setUserPassword] = useState("");
-  const [userName, setUserName] = useState("");
-  const [userPostCode, setUserPostCode] = useState(""); // 우편번호
-  const [userAddress, setUserAddress] = useState(""); // 도로명 주소
-  const [userDetailAddress, setUserDetailAddress] = useState(""); // 상세주소
-  const [userPhoneNumber, setUserPhoneNumber] = useState("");
-  const [userEmail, setUserEmail] = useState("");
+  const combinedPhoneNumber = `${phonePart1}-${phonePart2}-${phonePart3}`;
+  const combinedEmail = `${emailId}@${emailDomain}`;
 
   const [emailAvailable, setEmailAvailable] = useState(false);
   const [phoneNumberAvailable, setPhoneNumberAvailable] = useState(false);
@@ -74,14 +88,14 @@ export function UserEdit() {
   // 기존 이메일과 같은지 다른지
   let sameOriginEmail = false;
   if (user !== null) {
-    sameOriginEmail = user.userEmail === userEmail;
+    sameOriginEmail = user.userEmail === combinedEmail;
   }
   let emailChecked = sameOriginEmail || emailAvailable;
 
   // 기존 핸드폰번호와 같은지 다른지
   let sameOriginPhoneNumber = false;
   if (user !== null) {
-    sameOriginPhoneNumber = user.userPhoneNumber === userPhoneNumber;
+    sameOriginPhoneNumber = user.userPhoneNumber === combinedPhoneNumber;
   }
   let phoneNumberChecked = sameOriginPhoneNumber || phoneNumberAvailable;
 
@@ -116,6 +130,16 @@ export function UserEdit() {
   // ------------- 모달창 -------------
   const { isOpen, onClose, onOpen } = useDisclosure();
 
+  // ------------- 핸드폰번호 변경되었을때만 본인인증 Input창 나오도록 -------------
+  const [isPhoneModified, setIsPhoneModified] = useState(false);
+
+  const handlePhoneChange = (part, value) => {
+    setIsPhoneModified(true);
+    if (part === "part1") setPhonePart1(value);
+    if (part === "part2") setPhonePart2(value);
+    if (part === "part3") setPhonePart3(value);
+  };
+
   if (user === null) {
     return <Spinner />;
   }
@@ -127,8 +151,8 @@ export function UserEdit() {
       .put("/api/member/edit", {
         userId,
         userPassword,
-        userPhoneNumber,
-        userEmail,
+        userPhoneNumber: combinedPhoneNumber,
+        userEmail: combinedEmail,
         userPostCode,
         userAddress,
         userDetailAddress,
@@ -159,7 +183,7 @@ export function UserEdit() {
 
   function handleEmailCheck() {
     const params1 = new URLSearchParams();
-    params1.set("userEmail", userEmail);
+    params1.set("userEmail", combinedEmail);
 
     axios
       .get("/api/member/check?" + params1)
@@ -219,7 +243,7 @@ export function UserEdit() {
   function handleSMSButton() {
     axios
       .post("/api/member/sendSMS", {
-        userPhoneNumber,
+        userPhoneNumber: combinedPhoneNumber,
       })
       .then(() => {
         toast({
@@ -245,7 +269,7 @@ export function UserEdit() {
     axios
       .post("/api/member/sendSmsOk2", {
         verificationCode: sendSMS,
-        userPhoneNumber,
+        userPhoneNumber: combinedPhoneNumber,
       })
       .then((response) => {
         setPhoneNumberAvailable(true);
@@ -316,7 +340,7 @@ export function UserEdit() {
                 onChange={(e) => setUserPassword(e.target.value)}
               />
             </Flex>
-            <FormHelperText>
+            <FormHelperText w={"63%"} ml={120}>
               작성하지 않으면 기존 암호를 유지합니다.
             </FormHelperText>
           </FormControl>
@@ -416,27 +440,50 @@ export function UserEdit() {
           <FormControl mb={3}>
             <Flex gap={2}>
               <FormLabel
-                w={160}
+                w={320}
                 textAlign={"center"}
                 display={"flex"}
                 alignItems={"center"}
               >
                 휴대전화
               </FormLabel>
-              <Input
-                type="number"
-                value={userPhoneNumber}
-                onChange={(e) => setUserPhoneNumber(e.target.value)}
-              />
-              <Button onClick={handleSMSButton}>본인인증</Button>
+              <Flex>
+                <Input
+                  type="number"
+                  value={phonePart1}
+                  w={93}
+                  onChange={(e) => handlePhoneChange("part1", e.target.value)}
+                />
+                <Box mt={2} mx={2}>
+                  -
+                </Box>
+                <Input
+                  type="number"
+                  value={phonePart2}
+                  w={100}
+                  onChange={(e) => handlePhoneChange("part2", e.target.value)}
+                />
+                <Box mt={2} mx={2}>
+                  -
+                </Box>
+                <Input
+                  type="number"
+                  value={phonePart3}
+                  w={100}
+                  onChange={(e) => handlePhoneChange("part3", e.target.value)}
+                />
+              </Flex>
+              <Button w={"170px"} onClick={handleSMSButton}>
+                본인인증
+              </Button>
             </Flex>
           </FormControl>
 
-          {userPhoneNumber && (
+          {isPhoneModified && (
             <FormControl mb={3}>
               <Flex gap={2}>
                 <FormLabel
-                  w={160}
+                  w={98}
                   textAlign={"center"}
                   display={"flex"}
                   alignItems={"center"}
@@ -446,6 +493,7 @@ export function UserEdit() {
                 <Input
                   type="number"
                   value={sendSMS}
+                  width={150}
                   onChange={(e) => {
                     setSendSMS(e.target.value);
                     setPhoneNumberAvailable(false);
@@ -474,14 +522,23 @@ export function UserEdit() {
               >
                 이메일
               </FormLabel>
-              <Input
-                type="email"
-                value={userEmail}
-                onChange={(e) => {
-                  setUserEmail(e.target.value);
-                  setEmailAvailable(false);
-                }}
-              />
+              <Flex>
+                <Input
+                  type="email"
+                  value={emailId}
+                  w={155}
+                  onChange={(e) => setEmailId(e.target.value)}
+                />
+                <Box mt={2} mx={2}>
+                  @
+                </Box>
+                <Input
+                  type="email"
+                  value={emailDomain}
+                  w={155}
+                  onChange={(e) => setEmailDomain(e.target.value)}
+                />
+              </Flex>
               <Button isDisabled={emailChecked} onClick={handleEmailCheck}>
                 중복확인
               </Button>
@@ -490,18 +547,20 @@ export function UserEdit() {
         </CardBody>
 
         <CardFooter alignItems={"center"}>
-          <Button
-            isDisabled={
-              !emailChecked || !passwordChecked || !phoneNumberChecked
-            }
-            colorScheme="blue"
-            onClick={onOpen}
-          >
-            수정
-          </Button>
-          <Button colorScheme="red" onClick={() => navigate("/")}>
-            취소
-          </Button>
+          <Flex gap={2}>
+            <Button
+              isDisabled={
+                !emailChecked || !passwordChecked || !phoneNumberChecked
+              }
+              colorScheme="blue"
+              onClick={onOpen}
+            >
+              수정
+            </Button>
+            <Button colorScheme="red" onClick={() => navigate("/")}>
+              취소
+            </Button>
+          </Flex>
         </CardFooter>
 
         {/* 수정 모달 */}

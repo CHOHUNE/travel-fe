@@ -42,6 +42,8 @@ import { FailPage } from "./page/payment/FailPage";
 import { SuccessPage } from "./page/payment/SuccessPage";
 import { PaymentPage } from "./page/payment/PaymentPage";
 import { HotelTypeWrite } from "./page/hotel/HotelTypeWrite";
+import { DeleteView } from "./page/member/MyPage/DeleteView";
+
 const routes = createBrowserRouter(
   createRoutesFromElements(
     <Route path="/" element={<HomeLayout />}>
@@ -66,12 +68,13 @@ const routes = createBrowserRouter(
       <Route path="login" element={<UserLogin />} />
       <Route path="auth" element={<AuthPage />} />
       <Route path="signup" element={<UserSignup />} />
-      <Route path="user/edit" element={<UserEdit />} />
       <Route path="user/list" element={<UserList />} />
       <Route path="user" element={<UserLayOut />}>
         <Route index element={<UserView />} />
         <Route path="/user/bucket" element={<Bucket />} />
         <Route path="/user/reservationList" element={<ReservationList />} />
+        <Route path="/user/delete" element={<DeleteView />} />
+        <Route path="/user/edit" element={<UserEdit />} />
       </Route>
       <Route path="user/bucket" element={<Bucket />} />
       <Route path="findId" element={<FindId />} />

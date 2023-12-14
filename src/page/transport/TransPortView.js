@@ -62,17 +62,33 @@ export function TransPortView() {
 
   const { id } = useParams();
 
+  // --------------------- 최근 본 상품 ----------------------
+  const saveTransToRecentViewed = (transData) => {
+    const recentViewed = JSON.parse(localStorage.getItem("recentViewed")) || [];
+    const transViewed = {
+      ...transData,
+      mainImgUrl: transData.mainImage
+        ? transData.mainImage.url
+        : "default-image-url", // 여기서 기본 이미지 URL을 설정합니다.
+      type: "transport",
+    };
+    const updatedRecentViewed = [transViewed, ...recentViewed].slice(0, 5);
+    localStorage.setItem("recentViewed", JSON.stringify(updatedRecentViewed));
+  };
+
   useEffect(() => {
-    axios
-      .get("/api/transport/id/" + id)
-      .then((response) => setTrans(response.data));
-  }, []);
+    axios.get("/api/transport/id/" + id).then((response) => {
+      setTrans(response.data);
+      // --------------------- 최근 본 상품 ----------------------
+      saveTransToRecentViewed(response.data);
+    });
+  }, [id]);
 
   useEffect(() => {
     axios
       .get("/api/transLike/transport/" + id)
       .then((response) => setTransLikeState(response.data));
-  }, []);
+  }, [id]);
 
   if (trans === null) {
     return <Spinner />;
