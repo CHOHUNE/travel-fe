@@ -36,12 +36,12 @@ import { HotelPay } from "./page/hotel/HotelPay";
 import LoginProvider from "./component/LoginProvider";
 import { Notice } from "./page/board/Notice";
 import { UserView } from "./page/member/MyPage/UserView";
-import { Payment } from "./page/payment/Payment";
-import { Success } from "./page/payment/Success";
-import { Fail } from "./page/payment/Fail";
 import { NoticeSound } from "./page/board/NoticeSound";
-import { HotelTypeWrite } from "./page/hotel/HotelTypeWrite";
-
+import { TransPay } from "./page/transport/TransPay";
+import { FailPage } from "./page/payment/FailPage";
+import { SuccessPage } from "./page/payment/SuccessPage";
+import { PaymentPage } from "./page/payment/PaymentPage";
+import { }
 const routes = createBrowserRouter(
   createRoutesFromElements(
     <Route path="/" element={<HomeLayout />}>
@@ -52,6 +52,7 @@ const routes = createBrowserRouter(
       <Route path="transport/list" element={<TransPortList />} />
       <Route path="transport/write" element={<TransPortWrite />} />
       <Route path="transport/edit/:id" element={<TransPortEdit />} />
+      <Route path="transport/pay/:id" element={<TransPay />} />
 
       {/* 게시판관련 */}
       <Route path="boardlist" element={<BoardList />} />
@@ -60,6 +61,7 @@ const routes = createBrowserRouter(
       <Route path="edit/:id" element={<BoardEdit />} />
       <Route path="notice" element={<Notice />} />
       <Route path="noticeSound" element={<NoticeSound />} />
+
 
       {/* 회원관련 */}
       <Route path="login" element={<UserLogin />} />
@@ -87,9 +89,9 @@ const routes = createBrowserRouter(
       <Route path="hotel/pay/:id" element={<HotelPay />} />
 
       {/* 결제관련 */}
-      <Route path="/payment" element={<Payment />} />
-      <Route path="/success" element={<Success />} />
-      <Route path="/fail" element={<Fail />} />
+      <Route path="/fail" element={<FailPage />} />
+      <Route path="/successpage" element={<SuccessPage />} />
+      <Route path="/PaymentPage/:id" element={<PaymentPage />} />
     </Route>,
   ),
 );
