@@ -356,6 +356,7 @@ export function TransPay() {
                       />
                       <Checkbox
                         ml={3}
+                        isChecked={isChecked}
                         value={isChecked}
                         onChange={() => setIsChecked(!isChecked)}
                       />
@@ -372,6 +373,7 @@ export function TransPay() {
                             verticalAlign: "middle",
                             margin: "0 4px",
                           }}
+                          onClick={() => setIsChecked(!isChecked)}
                         >
                           구매자와 이용자명이 동일합니다.
                         </Box>

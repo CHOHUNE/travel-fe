@@ -31,7 +31,7 @@ export default function App() {
         autoHeight
       >
         <SwiperSlide
-          style={{ width: "100%", height: "600px", borderRadius: "10px" }}
+          style={{ width: "100%", height: "500px", borderRadius: "10px" }}
         >
           <Img src="https://www.condo24.com/TechBean/banner/main_20231115[10].jpg" />
         </SwiperSlide>
