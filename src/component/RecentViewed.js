@@ -22,6 +22,13 @@ export const RecentViewed = () => {
     setRecentViewed(loadedRecentViewed);
   }, []);
 
+  const truncateText = (str, num) => {
+    if (str && str.length > num) {
+      return str.slice(0, num) + "...";
+    }
+    return str;
+  };
+
   return (
     <Box fontSize={"10px"}>
       <Heading size="md" mb={3}>
@@ -36,14 +43,16 @@ export const RecentViewed = () => {
           borderBottom={"1px solid gray"}
         >
           <Image
-            src={item.mainImgUrl || "default-image-url"}
+            src={item.mainImgUrl || "이미지 없음"}
             alt={item.name}
             boxSize="50px"
             mb={1}
             mt={1}
           />
           <Box ml="3">
-            <Text fontWeight="bold">{item.description || item.transTitle}</Text>
+            <Text fontWeight="bold" noOfLines={1}>
+              {truncateText(item.name || item.transTitle, 10)}
+            </Text>
           </Box>
         </Flex>
       ))}
