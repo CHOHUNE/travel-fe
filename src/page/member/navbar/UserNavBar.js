@@ -103,7 +103,12 @@ export function UserNavBar(props) {
             >
               찜하기
             </Button>
-            <Button fontWeight={"400"} variant="ghost" borderRadius="0">
+            <Button
+              fontWeight={"400"}
+              variant="ghost"
+              borderRadius="0"
+              onClick={() => navigate("/boardwrite")}
+            >
               1:1 문의
             </Button>
             <Button
