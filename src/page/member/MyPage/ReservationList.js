@@ -91,47 +91,39 @@ export function ReservationList() {
               </CardBody>
             </TabPanel>
             <TabPanel>
-              <p>two!</p>
+              <CardBody>
+                <Table>
+                  <Thead>
+                    <Tr>
+                      <Th>주문번호</Th>
+                      <Th>상품명 </Th>
+                      <Th>체크 인 </Th>
+                      <Th>체크 아웃 </Th>
+                      <Th>요청사항</Th>
+                      <Th>예약번호</Th>
+                      <Th>가격</Th>
+                      {/*<Th>상태</Th>*/}
+                    </Tr>
+                  </Thead>
+                  <Tbody>
+                    {/*{toss.map(() => (*/}
+                    {/*  <Tr key={} _hover={{ cursor: "pointer" }}>*/}
+                    {/*    <Td>{}</Td>*/}
+                    {/*    <Td>{}</Td>*/}
+                    {/*    <Td>{}</Td>*/}
+                    {/*    <Td>{}</Td>*/}
+                    {/*    <Td>{}</Td>*/}
+                    {/*    <Td>{}</Td>*/}
+                    {/*    /!*<Td>{toss.db 안만듬 }</Td>*!/*/}
+                    {/*  </Tr>*/}
+                    {/*))}*/}
+                  </Tbody>
+                </Table>
+              </CardBody>
             </TabPanel>
           </TabPanels>
         </Tabs>
       </Card>
     </Center>
-    //     <CardHeader textAlign={"center"} m={10}>
-    //       <Heading>예약내역</Heading>
-    //     </CardHeader>
-    //
-    //     <CardBody>
-    //       <Table>
-    //         <Thead>
-    //           <Tr>
-    //             <Th>주문번호</Th>
-    //             <Th>상품명 </Th>
-    //             <Th>출발시간 </Th>
-    //             <Th>도작시간 </Th>
-    //             <Th>요청사항</Th>
-    //             <Th>예약번호</Th>
-    //             <Th>가격</Th>
-    //             {/*<Th>상태</Th>*/}
-    //           </Tr>
-    //         </Thead>
-    //         <Tbody>
-    //           {toss.map((toss) => (
-    //             <Tr key={toss.id} _hover={{ cursor: "pointer" }}>
-    //               <Td>{toss.tossid}</Td>
-    //               <Td>{toss.transTitle}</Td>
-    //               <Td>{toss.transStartDate}</Td>
-    //               <Td>{toss.transEndDate}</Td>
-    //               <Td>{toss.request}</Td>
-    //               <Td>{toss.reservation}</Td>
-    //               <Td>{toss.amount}</Td>
-    //               {/*<Td>{toss.db 안만듬 }</Td>*/}
-    //             </Tr>
-    //           ))}
-    //         </Tbody>
-    //       </Table>
-    //     </CardBody>
-    //   </Card>
-    // </Center>
   );
 }
