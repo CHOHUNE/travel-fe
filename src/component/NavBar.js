@@ -173,7 +173,13 @@ export function NavBar() {
                     >
                       회원정보수정
                     </MenuItem>
-                    <MenuItem onClick={() => navigate("/user/reservationList")}>
+                    <MenuItem
+                      onClick={() =>
+                        navigate(
+                          "/user/reservationList?" + urlParams.toString(),
+                        )
+                      }
+                    >
                       예약내역
                     </MenuItem>
                     <MenuItem

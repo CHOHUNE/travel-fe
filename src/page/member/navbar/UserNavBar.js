@@ -41,7 +41,7 @@ export function UserNavBar(props) {
     setActiveButton(buttonName);
     switch (buttonName) {
       case "reservationList":
-        navigate("/user/reservationList");
+        navigate("/user/reservationList?" + urlParams.toString());
         break;
       case "userInfo":
         navigate("/user?" + urlParams.toString());
