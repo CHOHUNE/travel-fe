@@ -212,17 +212,17 @@ export function TransPortWrite() {
                   <>
                     <option>서울</option>
                     <option>인천</option>
-                    <option>고양</option>
-                    <option>성남</option>
-                    <option>강릉</option>
-                    <option>춘천</option>
+                    <option>경기</option>
+                    <option>충북</option>
+                    <option>충남</option>
+                    <option>대전</option>
                     <option>세종</option>
-                    <option>천안</option>
-                    <option>충주</option>
-                    <option>나주</option>
-                    <option>군산</option>
+                    <option>강원</option>
+                    <option>전북</option>
+                    <option>전남</option>
+                    <option>경북</option>
+                    <option>경남</option>
                     <option>부산</option>
-                    <option>구미</option>
                   </>
                 )}
               </Select>
@@ -280,38 +280,38 @@ export function TransPortWrite() {
                     <option disabled={transStartLocation === "인천"}>
                       인천
                     </option>
-                    <option disabled={transStartLocation === "고양"}>
-                      고양
+                    <option disabled={transStartLocation === "경기"}>
+                      경기
                     </option>
-                    <option disabled={transStartLocation === "성남"}>
-                      성남
+                    <option disabled={transStartLocation === "충북"}>
+                      충북
                     </option>
-                    <option disabled={transStartLocation === "강릉"}>
-                      강릉
+                    <option disabled={transStartLocation === "충남"}>
+                      충남
                     </option>
-                    <option disabled={transStartLocation === "춘천"}>
-                      춘천
+                    <option disabled={transStartLocation === "대전"}>
+                      대전
                     </option>
                     <option disabled={transStartLocation === "세종"}>
                       세종
                     </option>
-                    <option disabled={transStartLocation === "천안"}>
-                      천안
+                    <option disabled={transStartLocation === "강원"}>
+                      강원
                     </option>
-                    <option disabled={transStartLocation === "충주"}>
-                      충주
+                    <option disabled={transStartLocation === "전북"}>
+                      전북
                     </option>
-                    <option disabled={transStartLocation === "나주"}>
-                      나주
+                    <option disabled={transStartLocation === "전남"}>
+                      전남
                     </option>
-                    <option disabled={transStartLocation === "군산"}>
-                      군산
+                    <option disabled={transStartLocation === "경북"}>
+                      경북
+                    </option>
+                    <option disabled={transStartLocation === "경남"}>
+                      경남
                     </option>
                     <option disabled={transStartLocation === "부산"}>
                       부산
-                    </option>
-                    <option disabled={transStartLocation === "구미"}>
-                      구미
                     </option>
                   </>
                 )}

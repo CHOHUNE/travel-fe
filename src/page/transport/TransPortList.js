@@ -1,7 +1,9 @@
 import { useLocation, useNavigate, useSearchParams } from "react-router-dom";
 import {
+  Badge,
   Box,
   Button,
+  ButtonGroup,
   Card,
   CardBody,
   CardHeader,
@@ -173,71 +175,108 @@ export function TransPortList() {
         </Box>
         {/*)}*/}
       </Flex>
-      <SimpleGrid columns={4} w={"85%"} ml={"8.5%"} mt={4} spacing={"25px"}>
-        {transList.map(
-          (transport) =>
-            params.get("type") === transport.typeName && (
-              <Card
-                w={"275px"}
-                h={"275px"}
-                _hover={{ cursor: "pointer" }}
-                onClick={() => navigate("/transport/" + transport.tid)}
-                key={transport.tid}
-              >
-                <CardHeader mb={0} pb={0}>
-                  <Center>
-                    <Box w={"90%"}>
-                      <Image src={transport.url} />
-                    </Box>
-                  </Center>
-                </CardHeader>
-                <CardBody mt={2} pt={0}>
-                  <Center>
-                    <Box>
-                      <Box textColor={"black"} fontWeight={"bold"}>
-                        [{transport.transStartLocation}] &nbsp;
-                        <FontAwesomeIcon icon={faAnglesRight} />
-                        &nbsp; [{transport.transArriveLocation}] &nbsp;{" "}
-                        {transport.transTitle}
-                      </Box>
-                      <FormControl>
-                        <Flex>
-                          <FormLabel
-                            fontSize={"1.1rem"}
-                            textColor={"#509896"}
-                            fontWeight={"900"}
-                          >
-                            가격 :
-                          </FormLabel>
-                          <Box
-                            fontSize={"1.1rem"}
-                            textColor={"#509896"}
-                            fontWeight={"900"}
-                          >
-                            {transport.transPrice}원
+      <Flex justifyContent={"center"} flexWrap={"wrap"}>
+        <SimpleGrid columns={4} w={"85%"} my={"20px"} spacing={9}>
+          {transList.map(
+            (transport) =>
+              params.get("type") === transport.typeName && (
+                <Box
+                  // w={"275px"}
+                  // h={"275px"}
+                  maxW="sm"
+                  borderWidth="1px"
+                  borderRadius="lg"
+                  overflow="hidden"
+                  _hover={{ cursor: "pointer" }}
+                  onClick={() => navigate("/transport/" + transport.tid)}
+                  key={transport.tid}
+                >
+                  <Box position="relative" overflow={"hidden"}>
+                    <Image src={transport.url} h={"100%"} />
+                  </Box>
+                  <Box p={6}>
+                    <Box display="flex" alignItems="baseline">
+                      <Box
+                        color="gray.500"
+                        fontWeight="semibold"
+                        letterSpacing="wide"
+                        fontSize="xs"
+                        textTransform="uppercase"
+                        ml="2"
+                      ></Box>
+                      <Box>
+                        <Box
+                          fontWeight="bold"
+                          fontSize={"large"}
+                          as="h4"
+                          lineHeight="tight"
+                          noOfLines={1}
+                        >
+                          {transport.transTitle}
+                        </Box>
+                        <Box
+                          as="h4"
+                          lineHeight="tight"
+                          noOfLines={1}
+                          fontWeight={"bold"}
+                          color={"gray"}
+                        >
+                          [{transport.transStartLocation}] &nbsp;
+                          <FontAwesomeIcon icon={faAnglesRight} />
+                          &nbsp; [{transport.transArriveLocation}] &nbsp;
+                        </Box>
+
+                        <Box as="h4" lineHeight="tight" noOfLines={1}>
+                          {transport.transAddress}
+                        </Box>
+                        <Box
+                          display="flex"
+                          mt="2"
+                          alignItems="center"
+                          justifyContent="space-between"
+                        >
+                          <Box>
+                            {transport.transPrice}
+                            <Box as="span" color="gray.600" fontSize="sm">
+                              &nbsp;원
+                            </Box>
                           </Box>
-                        </Flex>
-                      </FormControl>
+
+                          <Box
+                            position="fixed" // 절대 위치를 사용해 오버레이 설정
+                            top="300" // 배너의 상단에서 시작
+                            right="2" // 배너의 우측에서 시작
+                            zIndex="10" // 다른 요소보다 위에 오도록 z-index 설정
+                            p="4" // 패딩 값
+                            bg="rgba(255, 255, 255, 0.3)" // 배경색
+                            boxShadow="lg" // 그림자 효과
+                            maxW="sm" // 최대 너비 설정
+                            overflow="hidden" // 내용이 넘치면 숨김
+                          >
+                            <RecentViewed />
+                          </Box>
+                        </Box>
+                      </Box>
+                      <Box
+                        position="fixed" // 절대 위치를 사용해 오버레이 설정
+                        top="300" // 배너의 상단에서 시작
+                        right="2" // 배너의 우측에서 시작
+                        zIndex="10" // 다른 요소보다 위에 오도록 z-index 설정
+                        p="4" // 패딩 값
+                        bg="rgba(255, 255, 255, 0.3)" // 배경색
+                        boxShadow="lg" // 그림자 효과
+                        maxW="sm" // 최대 너비 설정
+                        overflow="hidden" // 내용이 넘치면 숨김
+                      >
+                        <RecentViewed />
+                      </Box>
                     </Box>
-                    <Box
-                      position="fixed" // 절대 위치를 사용해 오버레이 설정
-                      top="300" // 배너의 상단에서 시작
-                      right="2" // 배너의 우측에서 시작
-                      zIndex="10" // 다른 요소보다 위에 오도록 z-index 설정
-                      p="4" // 패딩 값
-                      bg="rgba(255, 255, 255, 0.3)" // 배경색
-                      boxShadow="lg" // 그림자 효과
-                      maxW="sm" // 최대 너비 설정
-                      overflow="hidden" // 내용이 넘치면 숨김
-                    >
-                      <RecentViewed />
-                    </Box>
-                  </Center>
-                </CardBody>
-              </Card>
-            ),
-        )}
-      </SimpleGrid>
+                  </Box>
+                </Box>
+              ),
+          )}
+        </SimpleGrid>
+      </Flex>
 
       <Flex w={"80%"} ml={"10%"} mt={10} justifyContent={"center"}>
         <TransPage params={params.get("type")} pageInfo={pageInfo} />
