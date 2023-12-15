@@ -181,6 +181,7 @@ export function UserEdit() {
       .finally(() => onClose());
   }
 
+  // ---------- 이메일 중복체크 ----------
   function handleEmailCheck() {
     const params1 = new URLSearchParams();
     params1.set("userEmail", combinedEmail);
@@ -473,7 +474,11 @@ export function UserEdit() {
                   onChange={(e) => handlePhoneChange("part3", e.target.value)}
                 />
               </Flex>
-              <Button w={"170px"} onClick={handleSMSButton}>
+              <Button
+                isDisabled={phoneNumberChecked}
+                w={"170px"}
+                onClick={handleSMSButton}
+              >
                 본인인증
               </Button>
             </Flex>
@@ -499,11 +504,7 @@ export function UserEdit() {
                     setPhoneNumberAvailable(false);
                   }}
                 />
-                <Button
-                  isDisabled={phoneNumberChecked}
-                  w={95}
-                  onClick={handleSMSOk}
-                >
+                <Button w={95} onClick={handleSMSOk}>
                   확인
                 </Button>
               </Flex>

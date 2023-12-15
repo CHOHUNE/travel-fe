@@ -7,7 +7,6 @@ import {
   Center,
   Flex,
   FormControl,
-  FormHelperText,
   FormLabel,
   Image,
   Input,
@@ -28,6 +27,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faAnglesRight, faHeart } from "@fortawesome/free-solid-svg-icons";
 import DatePicker from "react-datepicker";
 
+// 운송 상품 찜하기 컨테이너 ----------------------------------------------------------------------
 function TransLikeContainer({ transLikeState, onClick }) {
   const toast = useToast();
   if (transLikeState === null) {
@@ -35,9 +35,26 @@ function TransLikeContainer({ transLikeState, onClick }) {
   }
 
   return (
-    <Flex gap={2}>
-      <Button onClick={onClick}>찜하기</Button>
-      <Button variant={"ghost"}>
+    <Flex w={"100%"} gap={2} justifyContent={"space-between"}>
+      <Button
+        w={"70%"}
+        shadow={"1px 1px 3px 1px #dadce0"}
+        _hover={{
+          backgroundColor: "#ef5656",
+          color: "whitesmoke",
+          transition:
+            "background 0.5s ease-in-out, color 0.5s ease-in-out, box-shadow 0.5s ease-in-out",
+          shadow: "1px 1px 3px 1px #dadce0 inset",
+        }}
+        onClick={onClick}
+      >
+        찜하기
+      </Button>
+      <Button
+        variant={"ghost"}
+        bg={"white"}
+        _hover={{ backgroundColor: "white", cursor: "default" }}
+      >
         {transLikeState.like && (
           <FontAwesomeIcon icon={faHeart} style={{ color: "#f05656" }} />
         )}
@@ -50,18 +67,18 @@ function TransLikeContainer({ transLikeState, onClick }) {
   );
 }
 
+// 운송 상품 상세 페이지 -------------------------------------------------------------------
 export function TransPortView() {
-  const [value, setValue] = useState(0);
+  const [passenger, setPassenger] = useState(1);
   const [trans, setTrans] = useState("");
   const [transLikeState, setTransLikeState] = useState(null);
-  const [transReservDay, setTransReservDay] = useState("");
+  const [transReserveDay, setTransReserveDay] = useState("");
+  const [transTotalPrice, setTransTotalPrice] = useState(0);
   const navigate = useNavigate();
 
   const toast = useToast();
 
-  const { isAuthenticated, isAdmin } = useContext(LoginContext);
-
-  const handleChange = (value) => setValue(value);
+  const { login, isAdmin } = useContext(LoginContext);
 
   const { id } = useParams();
 
@@ -70,9 +87,7 @@ export function TransPortView() {
     const recentViewed = JSON.parse(localStorage.getItem("recentViewed")) || [];
     const transViewed = {
       ...transData,
-      mainImgUrl: transData.mainImage
-        ? transData.mainImage.url
-        : "default-image-url", // 여기서 기본 이미지 URL을 설정합니다.
+      mainImgUrl: transData.mainImage ? transData.mainImage.url : "기본이미지", // 여기서 기본 이미지 URL을 설정합니다.
       type: "transport",
     };
     const updatedRecentViewed = [transViewed, ...recentViewed].slice(0, 5);
@@ -92,6 +107,12 @@ export function TransPortView() {
       .get("/api/transLike/transport/" + id)
       .then((response) => setTransLikeState(response.data));
   }, [id]);
+
+  useEffect(() => {
+    if (trans && trans.transPrice) {
+      setTransTotalPrice(passenger * trans.transPrice);
+    }
+  }, [passenger, trans]);
 
   if (trans === null) {
     return <Spinner />;
@@ -113,7 +134,7 @@ export function TransPortView() {
   const EndDay = endDate.getDate().toString().padStart(2, "0");
   const endFormat = endYear + "년 " + endMonth + "월 " + EndDay + "일";
 
-  // 운송 상품 삭제 기능 시작 ----------------------------------------------------
+  // 운송 상품 삭제 기능 ----------------------------------------------------
   function handleTransDelete() {
     axios
       .delete("/api/transport/delete/" + id)
@@ -131,12 +152,9 @@ export function TransPortView() {
         });
       });
   }
-  // 운송 상품 삭제 기능 끝 ----------------------------------------------------
 
-  // 찜하기 버튼 클릭시
+  // 찜하기 버튼 클릭시 ----------------------------------------------------
   function handleLikeClick() {
-    console.log("handle like click");
-    console.log(transLikeState);
     if (transLikeState.like === true) {
       axios
         .post("/api/transLike", { transId: trans.tid })
@@ -172,25 +190,54 @@ export function TransPortView() {
     }
   }
 
+  // 예약일 날짜 정해지면 작동 -------------------------------------------------
+  function handleReserveDayChange(e) {
+    setTransReserveDay(e);
+  }
+
+  // 탑승객 인원의 값이 변경되면 작동 ---------------------------------------------
+  function handlePassengerChange(e) {
+    setPassenger(e);
+  }
+
+  // 결제 버튼이 클릭 되면 작동 -------------------------------------------------
+  function handlePaymentClick() {
+    // 로그인한 유저가 빈스트링이 아니면 로그인 상태 이므로 결제 페이지로 이동시키기
+    if (login !== "") {
+      // 로그인 한 유저가 결제 버튼을 누르면 해당 상품 아이디와 예약일, 총금액, 인원을 넘김
+      navigate("/transport/pay/" + id, {
+        state: { transReserveDay, transTotalPrice, passenger },
+      });
+    } else {
+      // 아니면 로그인해달라고 토스트 띄우기
+      toast({ description: "로그인후 결제해주세요", status: "error" });
+    }
+  }
+
+  // 운송 상품 프론트 보이는 곳 --------------------------------------------------
   return (
     <Center>
       <Box mt={2} w={"80%"} key={trans.tid}>
-        <Box alignItems="center">
-          <Flex justifyContent={"flex-end"} gap={2}>
-            <Button
-              w={"130px"}
-              h={"30px"}
-              onClick={() => navigate("/transport/edit/" + trans.tid)}
-            >
-              수송 상품 수정
-            </Button>
-            <Button w={"130px"} h={"30px"} onClick={handleTransDelete}>
-              수송 상품 삭제
-            </Button>
-          </Flex>
-        </Box>
-
+        {/* -------- 상품 수정 삭제 버튼은 admin 계정만 볼 수 있게 함 -------- */}
+        {isAdmin() && (
+          <Box alignItems="center">
+            <Flex justifyContent={"flex-end"} gap={2}>
+              <Button
+                w={"130px"}
+                h={"30px"}
+                onClick={() => navigate("/transport/edit/" + trans.tid)}
+              >
+                수송 상품 수정
+              </Button>
+              <Button w={"130px"} h={"30px"} onClick={handleTransDelete}>
+                수송 상품 삭제
+              </Button>
+            </Flex>
+          </Box>
+        )}
         {/**/}
+
+        {/* -------- 운송 상품 설명 시작 -------- */}
         <Card
           direction={{ base: "column" }}
           overflow="hidden"
@@ -198,8 +245,10 @@ export function TransPortView() {
           // mt={2}
           w={"95%"}
           ml={"2.5%"}
+          border={"0px"}
         >
           <Flex gap={3} mt={2}>
+            {/* -------- 메인 이미지 -------- */}
             {trans.mainImage != null ? (
               <Image
                 src={trans.mainImage.url}
@@ -213,14 +262,18 @@ export function TransPortView() {
             ) : (
               <Box>빈값</Box>
             )}
+            {/* */}
 
+            {/* -------- 운송 상품 설명 --------  */}
             <CardBody
               w={"25%"}
               mr={2}
               mb={2}
               borderRadius={10}
               border={"1px solid #ced8de"}
+              shadow={"1px 1px 3px 1px #dadce0"}
             >
+              {/* -------- 상품 제목 -------- */}
               <FormControl
                 // bg={"#f3eeee"}
                 w={"90%"}
@@ -228,117 +281,115 @@ export function TransPortView() {
                 h={"100px"}
                 border={"1px solid #ced8de"}
                 borderRadius={10}
+                mt={5}
+                shadow={"1px 1px 3px 1px #dadce0 inset"}
               >
-                <FormLabel ml={2} pt={"25"}>
-                  [{trans.transStartLocation}]&nbsp;
-                  <FontAwesomeIcon icon={faAnglesRight} />
-                  &nbsp; [{trans.transArriveLocation}] &nbsp;{trans.transTitle}
-                </FormLabel>
+                <Flex h={"100%"} alignItems={"center"} ml={2}>
+                  <Box
+                    fontSize={16}
+                    fontFamily={"GmarketSansMedium"}
+                    fontWeight={"700"}
+                  >
+                    {trans.transTitle}
+                  </Box>
+                </Flex>
               </FormControl>
+              {/* */}
+
+              {/* -------- 상품 경로 -------- */}
+              <FormControl
+                // bg={"#f3eeee"}
+                w={"90%"}
+                ml={"5%"}
+                h={"60px"}
+                border={"1px solid #ced8de"}
+                borderRadius={10}
+                mt={4}
+                shadow={"1px 1px 3px 1px #dadce0 inset"}
+              >
+                <Flex h={"100%"} alignItems={"center"} ml={2}>
+                  <Box
+                    fontSize={16}
+                    fontFamily={"GmarketSansMedium"}
+                    fontWeight={"700"}
+                  >
+                    경로 : [{trans.transStartLocation}]&nbsp;
+                    <FontAwesomeIcon icon={faAnglesRight} />
+                    &nbsp; [{trans.transArriveLocation}]
+                  </Box>
+                </Flex>
+              </FormControl>
+              {/* */}
+
+              {/* -------- 상품 가격 -------- */}
               <FormControl
                 w={"90%"}
-                h={"50px"}
+                h={"60px"}
                 // bg={"#f3eeee"}
                 ml={"5%"}
-                mt={2}
+                mt={4}
                 lineHeight={"50px"}
                 border={"1px solid #ced8de"}
                 borderRadius={10}
+                shadow={"1px 1px 3px 1px #dadce0 inset"}
               >
-                <FormLabel ml={2}>가격 : {trans.transPrice}원</FormLabel>
-              </FormControl>
-              <FormControl
-                w={"90%"}
-                h="40px"
-                bg={"white"}
-                mt={4}
-                ml="5%"
-                lineHeight={"40px"}
-              >
-                <Flex>
-                  <FormLabel fontSize={"1rem"} ml={2}>
-                    인원 :{" "}
-                  </FormLabel>
-                  <NumberInput
-                    w={"150px"}
-                    max={50}
-                    min={1}
-                    defaultValue={1}
-                    onChange={handleChange}
+                <Flex
+                  h={"100%"}
+                  alignItems={"center"}
+                  ml={2}
+                  justifyContent={"space-between"}
+                >
+                  <Box
+                    fontSize={16}
+                    fontFamily={"GmarketSansMedium"}
+                    fontWeight={"700"}
                   >
-                    <NumberInputField />
-                    <NumberInputStepper>
-                      <NumberIncrementStepper />
-                      <NumberDecrementStepper />
-                    </NumberInputStepper>
-                  </NumberInput>
+                    가격 : {trans.transPrice}원
+                  </Box>
+                  <Box mr={2} color={"gray"}>
+                    1인당 가격
+                  </Box>
                 </Flex>
               </FormControl>
-              <FormControl
-                w={"90%"}
-                h="60px"
-                bg={"white"}
-                mt={4}
-                ml="5%"
-                border={"1px solid #ced8de"}
-                borderRadius={10}
-              >
-                <Box ml={2}>
-                  시작일 : {startFormat}
-                  <br />
-                  마감일 : {endFormat}
-                </Box>
-              </FormControl>
+              {/* */}
 
-              {/*<FormControl*/}
-              {/*  w={"90%"}*/}
-              {/*  h="40px"*/}
-              {/*  bg={"white"}*/}
-              {/*  mt={4}*/}
-              {/*  ml="5%"*/}
-              {/*  lineHeight={"40px"}*/}
-              {/*  border={"1px solid #ced8de"}*/}
-              {/*  borderRadius={10}*/}
-              {/*  overflow={"visible"}*/}
-              {/*>*/}
-              {/*  <Flex overflow={"visible"}>*/}
-              {/*    <FormLabel w={"40%"} ml={2}>*/}
-              {/*      출발일자 :*/}
-              {/*    </FormLabel>*/}
-              {/*    <DatePicker*/}
-              {/*      value={null}*/}
-              {/*      className="date-picker"*/}
-              {/*      selected={null}*/}
-              {/*      // onChange={handleStartDateChange}*/}
-              {/*      selectsStart*/}
-              {/*      startDate={null}*/}
-              {/*      endDate={null}*/}
-              {/*      isClearable={true}*/}
-              {/*      placeholderText="출발일을 선택해 주세요"*/}
-              {/*      dateFormat="yyyy년 MM월 dd일"*/}
-              {/*      minDate={new Date()}*/}
-              {/*    />*/}
-              {/*  </Flex>*/}
-              {/*</FormControl>*/}
+              {/* -------- 상품 출발지 주소 -------- */}
               <FormControl
                 w={"90%"}
-                h="40px"
+                h="80px"
                 bg={"white"}
                 mt={4}
                 ml="5%"
-                lineHeight={"40px"}
                 border={"1px solid #ced8de"}
                 borderRadius={10}
+                shadow={"1px 1px 3px 1px #dadce0 inset"}
               >
-                <Flex>
-                  <FormLabel ml={2}>위치 : </FormLabel>
+                <Flex h={"100%"} alignItems={"center"} ml={2}>
+                  <Box
+                    w={"30%"}
+                    fontSize={16}
+                    fontFamily={"GmarketSansMedium"}
+                    fontWeight={"700"}
+                  >
+                    출발위치 :
+                  </Box>
                   {trans.transAddress != null ? (
-                    <Box>{trans.transAddress}</Box>
+                    <Box
+                      w={"70%"}
+                      fontSize={16}
+                      fontFamily={"GmarketSansMedium"}
+                      fontWeight={"700"}
+                    >
+                      {trans.transAddress}
+                    </Box>
                   ) : (
                     <Box>주소가 없는 데이터 입니다.</Box>
                   )}
                 </Flex>
               </FormControl>
+              {/* */}
+
+              {/* -------- 상품 찜하기 -------- */}
               <FormControl
                 w={"90%"}
                 h="40px"
@@ -348,69 +399,191 @@ export function TransPortView() {
                 lineHeight={"40px"}
               >
                 <Flex justifyContent={"space-between"} mt={4} gap={"2%"}>
-                  <Button
-                    w={"39%"}
-                    onClick={() => navigate("/transport/pay/" + id)}
-                  >
-                    바로결제
-                  </Button>
                   <TransLikeContainer
-                    w={"49%"}
                     transLikeState={transLikeState}
                     onClick={handleLikeClick}
                   />
                 </Flex>
               </FormControl>
+              {/* */}
             </CardBody>
           </Flex>
         </Card>
         {/*  */}
-        <Card w={"95%"} ml={"2.5%"} h={"100px"} mt={4}>
+
+        {/* -------- 운송 상품 결제 정보 칸 -------- */}
+        <Card
+          bg={"whitesmoke"}
+          w={"95%"}
+          ml={"2.5%"}
+          h={"100px"}
+          mt={4}
+          shadow={"xl"}
+          position={"sticky"}
+          top={5}
+          zIndex={2}
+          fontSize={14}
+          fontFamily={"GmarketSansMedium"}
+          fontWeight={"500"}
+        >
           <Flex alignItems={"center"} height={"100%"} gap={2}>
+            {/* -------- 날짜 선택 범위 안내 내용 -------- */}
             <Flex
-              w={"20%"}
+              w={"18%"}
               h={"90%"}
               ml={5}
               alignItems={"center"}
-              border={"1px solid #ced8de"}
+              // border={"1px solid #ced8de"}
               borderRadius={10}
             >
               <Box fontSize={14} fontWeight={"bold"} ml={2}>
                 <Box fontSize={20}>상품 선택 기간</Box>
                 {startFormat} 00시 부터
                 <br />
-                {endFormat} 00시 까지
+                {endFormat} 24시 까지
               </Box>
             </Flex>
+            {/* */}
 
+            {/* -------- 출발일 선택 -------- */}
             <Flex
-              w={"20%"}
+              w={"27%"}
               h={"90%"}
-              ml={2}
-              border={"1px solid #ced8de"}
+              // border={"1px solid #ced8de"}
               borderRadius={10}
+              justifyContent={"space-evenly"}
+              alignItems={"center"}
             >
-              <Box w={"20%"} alignItems={"center"} h={"100%"}>
+              <Box
+                h={"100%"}
+                fontSize={20}
+                fontWeight={"bold"}
+                ml={2}
+                display={"flex"}
+                alignItems={"center"}
+                w={"30%"}
+              >
                 출발일자 :
               </Box>
               <DatePicker
-                value={null}
+                customInput={
+                  <Input
+                    w={"200px"}
+                    h={"60px"}
+                    fontWeight={"bold"}
+                    fontSize={15}
+                  />
+                }
+                fontSize="4"
+                showTimeSelect
                 className="date-picker"
-                selected={null}
-                // onChange={handleStartDateChange}
-                selectsStart
-                startDate={null}
-                endDate={null}
+                dateFormat="yy년 MM월 dd일 HH:mm"
+                minDate={new Date(trans.transStartDate)}
+                maxDate={new Date(trans.transEndDate)}
+                value={transReserveDay}
+                selected={transReserveDay}
                 isClearable={true}
-                placeholderText="출발일을 선택해 주세요"
-                dateFormat="yyyy년 MM월 dd일"
-                minDate={new Date()}
+                placeholderText="예약일"
+                onChange={handleReserveDayChange}
               />
             </Flex>
+            {/* */}
+
+            {/* -------- 탑승 인원 선택 -------- */}
+            <Flex
+              w={"15%"}
+              h={"90%"}
+              // border={"1px solid #ced8de"}
+              borderRadius={10}
+              justifyContent={"space-evenly"}
+              alignItems={"center"}
+            >
+              <Box
+                h={"100%"}
+                fontSize={20}
+                fontWeight={"bold"}
+                display={"flex"}
+                alignItems={"center"}
+              >
+                인원 :
+              </Box>
+              <NumberInput
+                w={"100px"}
+                max={50}
+                min={1}
+                defaultValue={1}
+                value={passenger}
+                onChange={handlePassengerChange}
+              >
+                <NumberInputField h={"60px"} />
+                <NumberInputStepper>
+                  <NumberIncrementStepper />
+                  <NumberDecrementStepper />
+                </NumberInputStepper>
+              </NumberInput>
+            </Flex>
+            {/* */}
+
+            {/* -------- 총 금액 안내 -------- */}
+            <Flex
+              w={"20%"}
+              h={"90%"}
+              ml={5}
+              alignItems={"center"}
+              // border={"1px solid #ced8de"}
+              borderRadius={10}
+            >
+              <Box fontSize={14} fontWeight={"bold"} alignItems={"center"}>
+                <Flex
+                  fontSize={20}
+                  justifyContent={"space-evenly"}
+                  alignItems={"center"}
+                >
+                  <Box>총 금액 : </Box>
+                  <Input
+                    fontSize={14}
+                    w={"45%"}
+                    placeholder={trans.transPrice}
+                    value={transTotalPrice}
+                    onChange={() => {
+                      setTransTotalPrice(passenger * trans.transPrice);
+                    }}
+                    // border={"0px"}
+                  />
+                  <Box>원</Box>
+                </Flex>
+              </Box>
+            </Flex>
+            {/* */}
+
+            {/* -------- 결제 페이지 이동 -------- */}
+            <Button
+              w={"11%"}
+              h={"70%"}
+              // onClick={() => navigate("/transport/pay/" + id)}
+              onClick={handlePaymentClick}
+              shadow={"1px 1px 3px 1px #dadce0"}
+              _hover={{
+                backgroundColor: "#216aa4",
+                color: "whitesmoke",
+                transition:
+                  "background 0.5s ease-in-out, color 0.5s ease-in-out, box-shadow 0.5s ease-in-out",
+                shadow: "1px 1px 3px 1px #dadce0 inset",
+              }}
+              bg={"white"}
+              border={"1px solid whitesmoke"}
+              fontSize={16}
+              fontFamily={"GmarketSansMedium"}
+              fontWeight={"700"}
+            >
+              바로결제
+            </Button>
+            {/* */}
           </Flex>
-          <Box></Box>
         </Card>
         {/*  */}
+
+        {/* -------- 운송 상품 상세 설명 내용  -------- */}
         <Card w={"95%"} mt={3} mb={20} ml="2.5%">
           <CardBody>
             {trans.contentImages != null ? (

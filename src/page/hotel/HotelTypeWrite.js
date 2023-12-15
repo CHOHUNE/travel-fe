@@ -13,6 +13,7 @@ import {
   ModalContent,
   ModalHeader,
   ModalOverlay,
+  Select,
   Table,
   Tbody,
   Td,
@@ -28,12 +29,15 @@ export function HotelTypeWrite() {
   const [roomtypes, setRoomtypes] = useState([
     {
       roomtype: "",
-      originalPriceWeekday: 0,
-      salePriceWeekday: 0,
-      originalPriceWeekend: 0,
-      salePriceWeekend: 0,
+      originalPriceWeekday: null,
+      salePriceWeekday: null,
+      originalPriceWeekend: null,
+      salePriceWeekend: null,
       // roomImg: null,
       hrtId: null,
+      maxMinPerRoom: null,
+      ableCooking: null,
+      numberOfBedRoom: null,
     },
   ]);
 
@@ -53,23 +57,26 @@ export function HotelTypeWrite() {
       ...prevRoomtypes,
       {
         roomtype: "",
-        originalPriceWeekday: 0,
-        salePriceWeekday: 0,
-        originalPriceWeekend: 0,
-        salePriceWeekend: 0,
+        originalPriceWeekday: null,
+        salePriceWeekday: null,
+        originalPriceWeekend: null,
+        salePriceWeekend: null,
         // roomImg: null,
         hrtId: null,
+        maxMinPerRoom: null,
+        ableCooking: null,
+        numberOfBedRoom: null,
       },
     ]);
   };
 
-  const handleRemoveRow = (index) => {
-    setRoomtypes((prevRoomtypes) => {
-      const updatedRoomtypes = [...prevRoomtypes];
-      updatedRoomtypes.splice(index, 1);
-      return updatedRoomtypes;
-    });
-  };
+  // const handleRemoveRow = (index) => {
+  //   setRoomtypes((prevRoomtypes) => {
+  //     const updatedRoomtypes = [...prevRoomtypes];
+  //     updatedRoomtypes.splice(index, 1);
+  //     return updatedRoomtypes;
+  //   });
+  // };
 
   // ... (이전 코드)
 
@@ -124,7 +131,7 @@ export function HotelTypeWrite() {
 
   return (
     <Center>
-      <Card w={"4xl"} p={"30px"} my={"30px"}>
+      <Card w={"1400px"} p={"30px"} my={"30px"}>
         <CardHeader>
           <Heading textAlign={"center"}>객실 관리</Heading>
         </CardHeader>
@@ -135,8 +142,10 @@ export function HotelTypeWrite() {
           <Th>주중 판매가</Th>
           <Th>주말 입금가</Th>
           <Th>주말 판매가</Th>
+          <Th>침실 수</Th>
+          <Th>기준/최대 인원</Th>
+          <Th>취사 여부</Th>
           <Th>객실 이미지</Th>
-          <Th>동작</Th>
           <Tbody>
             {roomtypes.map((room, index) => (
               <Tr key={index}>
@@ -216,6 +225,56 @@ export function HotelTypeWrite() {
                 </Td>
                 <Td>
                   <Input
+                    w="100px"
+                    value={room.numberOfBedRoom}
+                    type={"text"}
+                    placeholder="원룸(더블)"
+                    onChange={(e) => {
+                      const value = e.target.value;
+                      setRoomtypes((prevRoomtypes) => {
+                        const updatedRoomtypes = [...prevRoomtypes];
+                        updatedRoomtypes[index].numberOfBedRoom = value;
+                        return updatedRoomtypes;
+                      });
+                    }}
+                  />
+                </Td>
+                <Td>
+                  <Input
+                    type={"text"}
+                    placeholder={"기준 2인/최대 2인"}
+                    w={"150px"}
+                    value={room.maxMinPerRoom}
+                    onChange={(e) => {
+                      const value = e.target.value;
+                      setRoomtypes((prevRoomtypes) => {
+                        const updatedRoomtypes = [...prevRoomtypes];
+                        updatedRoomtypes[index].maxMinPerRoom = value;
+                        return updatedRoomtypes;
+                      });
+                    }}
+                  ></Input>
+                </Td>
+                <Td>
+                  <Select
+                    w={"80px"}
+                    value={room.maxMinPerRoom}
+                    onChange={(e) => {
+                      const value = e.target.value;
+                      setRoomtypes((prevRoomtypes) => {
+                        const updatedRoomtypes = [...prevRoomtypes];
+                        updatedRoomtypes[index].ableCooking = value;
+                        return updatedRoomtypes;
+                      });
+                    }}
+                  >
+                    <option value={room.ableCooking}>가능</option>
+                    <option value={room.ableCooking}>불가</option>
+                  </Select>
+                </Td>
+
+                <Td>
+                  <Input
                     type="file"
                     accept="image/*"
                     onChange={(e) => {
@@ -234,7 +293,7 @@ export function HotelTypeWrite() {
                     size="sm"
                     onClick={() => handleRoomtypeDelete(room.hrtId)}
                   >
-                    삭제
+                    -
                   </Button>
                 </Td>
               </Tr>
@@ -242,9 +301,9 @@ export function HotelTypeWrite() {
           </Tbody>
         </Table>
         <Flex justifyContent={"flex-end"} mt={"30px"}>
-          <Button colorScheme="orange" onClick={handleRemoveRow} mr={4}>
-            -
-          </Button>
+          {/*<Button colorScheme="orange" onClick={handleRemoveRow} mr={4}>*/}
+          {/*  -*/}
+          {/*</Button>*/}
           <Button colorScheme="teal" onClick={handleAddRow} mr={4}>
             +
           </Button>

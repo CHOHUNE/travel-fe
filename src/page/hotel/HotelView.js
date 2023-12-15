@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from "react";
 import "react-datepicker/dist/react-datepicker.css";
-
 import {
   Box,
   Button,
@@ -15,35 +14,48 @@ import {
   Input,
   SimpleGrid,
   ButtonGroup,
+  Heading,
+  Divider,
+  VStack,
+  Textarea,
+  Select,
 } from "@chakra-ui/react";
 import { useNavigate, useParams } from "react-router-dom";
 import axios from "axios";
 import { AddIcon, MinusIcon, StarIcon } from "@chakra-ui/icons";
+import { Swiper, SwiperSlide } from "swiper/react";
+import { Pagination } from "swiper/modules";
+import "./style.css";
+import DatePicker from "react-datepicker";
+import { format } from "date-fns";
 
 export function HotelView() {
   const { id } = useParams();
   const [hotel, setHotel] = useState([]);
   const [roomtypeList, setRoomtypeList] = useState(null);
+  const [reservation, setReservation] = useState({
+    checkinDate: null,
+    checkoutDate: null,
+    totalPrice: null,
+  });
+
   const navigate = useNavigate();
   const toast = useToast();
   const [count, setCount] = useState(0);
 
-  const [selectedRoom, setSelectedRoom] = useState();
-  // 호텔 ID를 사용하여 호텔 데이터를 가져오는 함수
-
   const [showCheckInInput, setShowCheckInInput] = useState(false);
+  const [selectedRoom, setSelectedRoom] = useState();
+  const [roomTypePrices, setRoomTypePrices] = useState({});
 
-  // ---------------------- 최근 본 상품 ----------------------
   const saveToRecentViewed = (hotelData) => {
     const recentViewed = JSON.parse(localStorage.getItem("recentViewed")) || [];
-    const updatedRecentViewed = [hotelData, ...recentViewed].slice(0, 5); // 최대 5개만 저장
+    const updatedRecentViewed = [hotelData, ...recentViewed].slice(0, 5);
     localStorage.setItem("recentViewed", JSON.stringify(updatedRecentViewed));
   };
 
   useEffect(() => {
     axios.get("/api/hotel/reserv/id/" + id).then((response) => {
       setHotel(response.data);
-      // --------------------- 최근 본 상품 ----------------------
       saveToRecentViewed(response.data);
     });
   }, [id]);
@@ -54,7 +66,12 @@ export function HotelView() {
     });
   }, []);
 
-  // 삭제
+  // useEffect(() => {
+  //   axios
+  //     .get("/api/hotel/pay")
+  //     .then((response) => setReservation(response.data));
+  // }, []);
+
   function handleHotelDelete() {
     axios
       .delete("/api/hotel/delete/" + id)
@@ -73,40 +90,71 @@ export function HotelView() {
       });
   }
 
-  function handleRoomtypeDelete(hrtId) {
-    axios
-      .delete("/api/hotel/delete/" + id + "/type/" + hrtId)
-      .then(() => {
-        toast({
-          description: "삭제가 완료 되었습니다.",
-          colorScheme: "orange",
-        });
-
-        axios.get("/api/hotel/reserv/type/" + id).then((response) => {
-          setRoomtypeList(response.data);
-        });
-      })
-      .catch(() => {
-        toast({
-          description: "객실 삭제가 실패 하였습니다",
-          status: "error",
-        });
-      });
-    //
+  function isWeekend(date) {
+    const dayOfWeek = date.getDay();
+    return dayOfWeek === 5 || dayOfWeek === 6;
   }
+
+  const calculatePrice = (checkinDate, checkoutDate, roomtype) => {
+    if (!checkinDate || !checkoutDate) {
+      return 0;
+    }
+
+    let currentDate = new Date(checkinDate);
+    let total = 0;
+
+    while (currentDate < checkoutDate) {
+      const isWeekendDay = isWeekend(currentDate);
+      const price = isWeekendDay
+        ? roomtype.salePriceWeekend
+        : roomtype.salePriceWeekday || 0;
+      total += price;
+      currentDate.setDate(currentDate.getDate() + 1);
+    }
+
+    return total;
+  };
+
+  const updateRoomTypePrices = () => {
+    const updatedPrices = {};
+    if (roomtypeList && reservation.checkinDate && reservation.checkoutDate) {
+      roomtypeList.forEach((roomtype) => {
+        const price = calculatePrice(
+          reservation.checkinDate,
+          reservation.checkoutDate,
+          roomtype,
+        );
+        updatedPrices[roomtype.roomtype] = price;
+      });
+    }
+    setRoomTypePrices(updatedPrices);
+  };
+
+  useEffect(() => {
+    updateRoomTypePrices();
+  }, [reservation.checkinDate, reservation.checkoutDate, roomtypeList]);
 
   return (
     <Box>
       {hotel && (
         <>
           <Box
-            border={"1px solid black"}
+            border={"1px solid"}
+            borderColor={"gray.400"}
             borderRadius={"10px"}
             w={"80%"}
             ml={"10%"}
             mt={"10px"}
           >
-            <Flex justifyContent={"flex-end"}>
+            <Flex
+              justifyContent={"flex-end"}
+              textAlign={"center"}
+              justifyItems={"center"}
+            >
+              <Text fontWeight={"bold"} mr={"15px"} mt={"10px"}>
+                판매 기간 :{hotel.salesFrom && hotel.salesFrom.split("T")[0]} ~{" "}
+                {hotel.salesTo && hotel.salesTo.split("T")[0]}
+              </Text>
               <Button
                 onClick={() => navigate("/hotel/write/type/" + hotel.hid)}
                 mr={"20px"}
@@ -114,7 +162,6 @@ export function HotelView() {
                 {" "}
                 객실 관리{" "}
               </Button>
-
               <Button onClick={() => navigate("/hotel/edit/" + hotel.hid)}>
                 {" "}
                 호텔 수정{" "}
@@ -127,19 +174,52 @@ export function HotelView() {
           </Box>
           <Box w={"80%"} ml={"15%"} display={"flex"} gap={"10px"}>
             <Box
-              border={"1px solid black"}
+              border={"1px solid"}
+              borderColor={"gray.400"}
               h={"500px"}
-              w={"100%"}
+              w={"600px"}
               my={"10px"}
               borderRadius={"lg"}
             >
-              {/* 호텔 이미지1 */}
-              <Image
-                src={hotel.mainImgUrl}
-                alt={"숙소 이미지1"}
-                w={"100%"}
-                h={"100%"}
-              />
+              <Swiper
+                pagination={true}
+                modules={[Pagination]}
+                className="hoteViewlImg"
+              >
+                <SwiperSlide>
+                  {" "}
+                  <Image
+                    src={hotel.mainImgUrl}
+                    alt={"메인 이미지"}
+                    w={"100%"}
+                    h={"100%"}
+                  />
+                </SwiperSlide>
+                <SwiperSlide>
+                  <Image
+                    src={hotel.subImgUrl1}
+                    alt={"서브 이미지1"}
+                    w={"100%"}
+                    h={"100%"}
+                  />
+                </SwiperSlide>
+                <SwiperSlide>
+                  <Image
+                    src={hotel.subImgUrl2}
+                    alt={"서브 이미지2"}
+                    w={"100%"}
+                    h={"100%"}
+                  />
+                </SwiperSlide>
+                <SwiperSlide>
+                  <Image
+                    src={hotel.mapImgUrl}
+                    alt={"맵 이미지1"}
+                    w={"100%"}
+                    h={"100%"}
+                  />
+                </SwiperSlide>
+              </Swiper>
             </Box>
 
             <Box
@@ -147,121 +227,136 @@ export function HotelView() {
               display={"flex"}
               flexDirection={"column"}
               gap={"10px"}
+              mt={"50px"}
             >
               <Box
-                border={"1px solid black"}
-                mt={"15px"}
+                border={"1px solid"}
+                borderColor={"gray.400"}
+                mt={"10px"}
                 h={"240px"}
                 w={"65%"}
                 borderRadius={"lg"}
               >
-                {/* 호텔 이미지2 */}
-                <Image
-                  src={hotel.subImgUrl1}
-                  alt={"숙소 이미지2"}
-                  w={"100"}
-                  h={"100%"}
-                />
+                <Heading>{hotel.name}</Heading>
+                <Divider />
+                <Box
+                  fontWeight={"semibold"}
+                  letterSpacing={"wide"}
+                  fontSize={"medium"}
+                  my={"10px"}
+                  ml={"2"}
+                  lineHeight={"2"}
+                >
+                  <Text>{hotel.location}</Text>
+                  <Text>등급 :{hotel.rating}</Text>
+                  <Text>총 객실 수: {hotel.numberOfBed}</Text>
+                  <Text>체크인 : 15:00 체크아웃 : 11:00</Text>
+                </Box>
               </Box>
-              <Box
-                border={"1px solid black"}
-                mb={"5px"}
-                h={"240px"}
-                w={"65%"}
-                borderRadius={"lg"}
-              >
-                {/* 호텔 이미지3 */}
-                <Image
-                  src={hotel.subImgUrl2}
-                  alt={"숙소 이미지3"}
-                  w={"100%"}
-                  h={"100%"}
-                />
+              <Box display={"flex"}>
+                <Box
+                  border={"1px solid"}
+                  borderColor={"gray.400"}
+                  cursor={"pointer"}
+                  w={"150px"}
+                  h={"100px"}
+                  borderRadius={"10px"}
+                  display={"flex"}
+                  textAlign={"center"}
+                  justifyContent={"center"}
+                  alignItems={"center"}
+                >
+                  <Heading>예약하기</Heading>
+                </Box>
+                <Box
+                  border={"1px solid"}
+                  borderColor={"gray.400"}
+                  cursor={"pointer"}
+                  w={"150px"}
+                  h={"100px"}
+                  borderRadius={"10px"}
+                  display={"flex"}
+                  textAlign={"center"}
+                  justifyContent={"center"}
+                  alignItems={"center"}
+                  ml={"20px"}
+                >
+                  <Heading>찜하기</Heading>
+                </Box>
               </Box>
             </Box>
           </Box>
-          {/* 호텔 설명 창 */}
+
           <Box
-            w={"80%"}
-            h={"130px"}
-            ml={"10%"}
-            display={"flex"}
-            gap={"10px"}
-            border={"1px solid black"}
             my={"10px"}
-            textAlign={"center"}
-            borderRadius={"lg"}
+            h={"80px"}
+            w={"80%"}
+            mx={"10%"}
+            border={"1px solid"}
+            borderColor={"gray.400"}
+            borderRadius={"10px"}
           >
-            <Stack>
-              <Text fontSize="2xl">{hotel.name}</Text>
+            <Flex className="date-range-picker-container" mt={"5px"} m={"10px"}>
+              <DatePicker
+                value={reservation.checkinDate}
+                className="date-picker"
+                selected={reservation.checkinDate}
+                onChange={(date) =>
+                  setReservation((prevReservation) => ({
+                    ...prevReservation,
+                    checkinDate: date,
+                  }))
+                }
+                selectsStart
+                startDate={reservation.checkinDate}
+                endDate={reservation.checkinDate}
+                isClearable={true}
+                placeholderText="체크인"
+                dateFormat="yyyy년 MM월 dd일"
+                minDate={new Date()}
+              />
+              <DatePicker
+                value={reservation.checkoutDate}
+                className="date-picker"
+                selected={reservation.checkoutDate}
+                onChange={(date) =>
+                  setReservation((prevReservation) => ({
+                    ...prevReservation,
+                    checkoutDate: date,
+                  }))
+                }
+                selectsEnd
+                startDate={reservation.checkinDate}
+                endDate={reservation.checkoutDate}
+                isClearable={true}
+                placeholderText="체크아웃"
+                dateFormat="yyyy년 MM월 dd일"
+                minDate={reservation.checkinDate}
+              />
 
-              <Text>{hotel.location}</Text>
-              <Text>
-                <StarIcon /> {hotel.rating} /5
+              <Text fontWeight={"bold"} ml={"40px"} mr={"40px"} mt={"17px"}>
+                {reservation.checkinDate &&
+                  reservation.checkoutDate &&
+                  "예약 기간 : " +
+                    reservation.checkinDate.toLocaleDateString("ko-KR") +
+                    " ~ " +
+                    reservation.checkoutDate.toLocaleDateString("ko-KR")}
               </Text>
-              {hotel.numberOfBed}
-              {hotel.description}
-            </Stack>
-          </Box>
+              <Text fontWeight={"bold"} mr={"20px"} mt={"17px"}>
+                {/* 변경된 부분: 날짜가 선택되지 않았을 때는 평일 요금 표시 */}
 
-          {/* 객실 및 인원 선택 창 */}
-          <Box my={"10px"} h={"80px"} w={"80%"} mx={"10%"}>
-            <Flex>
-              <Box
-                border={"1px solid black"}
-                borderRadius={"xl"}
-                h={"80px"}
-                w={"120px"}
-                onClick={() => {
-                  setShowCheckInInput((prev) => !prev);
-                }}
-              >
-                <Text color={"grey"} mt={"10px"} textAlign={"center"}>
-                  체크인
-                </Text>
-              </Box>
-
-              <Box
-                border={"1px solid black"}
-                borderRadius={"xl"}
-                h={"80px"}
-                w={"120px"}
-              >
-                <Text color={"grey"} mt={"10px"} textAlign={"center"}>
-                  체크아웃
-                </Text>
-              </Box>
-
-              <Spacer />
-              <Box
-                backgroundColor={"#f0eded"}
-                borderRadius={"xl"}
-                h={"80px"}
-                w={"200px"}
-                ml={"20px"}
-              >
-                <Stack>
-                  <Text fontWeight={"bold"} mt={"10px"} ml={"10px"}>
-                    포함사항
-                  </Text>
-                  <Text ml={"10px"}>세금/봉사료 포함</Text>
-                </Stack>
-              </Box>
-
-              <Box
-                backgroundColor={"#f0eded"}
-                borderRadius={"xl"}
-                h={"80px"}
-                w={"200px"}
-                ml={"20px"}
-              >
-                <Stack>
-                  <Text fontWeight={"bold"} mt={"10px"} ml={"10px"}>
-                    현지 추가 지불 사항
-                  </Text>
-                  <Text ml={"10px"}>세금/봉사료 포함</Text>
-                </Stack>
-              </Box>
+                {reservation.checkinDate &&
+                  reservation.checkoutDate &&
+                  "숙박 기간 : " +
+                    `${
+                      (reservation.checkoutDate - reservation.checkinDate) /
+                      (1000 * 60 * 60 * 24)
+                    }박 ${
+                      (reservation.checkoutDate - reservation.checkinDate) /
+                        (1000 * 60 * 60 * 24) +
+                      1
+                    }일`}
+              </Text>
             </Flex>
           </Box>
           {showCheckInInput && (
@@ -275,23 +370,62 @@ export function HotelView() {
                 <Box
                   key={roomtype.hrtId}
                   borderRadius="lg"
-                  border="1px solid black"
+                  border="1px solid"
+                  borderColor={"gray.400"}
                   p="20px"
                   display="flex"
+                  textAlign={"center"}
+                  alignItems={"center"}
+                  justifyContent={"center"}
+                  // maxWidth="600px" // Set the maximum width for the box
+                  // mx="auto" // Center the box horizontally
                 >
-                  <Image src={roomtype.roomImgUrl} alt={roomtype.roomtype} />
-                  <Text fontSize="xl" fontWeight="bold">
-                    room type:{roomtype.roomtype}
+                  <Image
+                    ml={"20px"}
+                    src={roomtype.roomImgUrl}
+                    alt={roomtype.roomtype}
+                    maxW="300px" // Set maximum width for the image
+                    maxH="200px" // Set maximum height for the image
+                    borderRadius={"10px"}
+                  />
+                  <Text ml={"50px"} fontSize="xl" fontWeight="bold">
+                    {roomtype.roomtype}
                   </Text>
                   <Spacer />
-
-                  <Text>Sale Price (Weekday): {roomtype.salePriceWeekday}</Text>
+                  <VStack textAlign={"right"}>
+                    <Text> 객실 인원 :{roomtype.maxMinPerRoom}</Text>
+                    <Text> 취사 여부 :{roomtype.ableCooking}</Text>
+                    <Text> 침실 수 :{roomtype.numberOfBedRoom}</Text>
+                  </VStack>
                   <Spacer />
+                  <VStack mr="40px">
+                    <Text fontSize="xl" fontWeight="bold">
+                      {/* 변경된 부분: 날짜가 선택되지 않았을 때는 평일 요금 표시 */}
+                      최종 숙박료 :
+                      {roomTypePrices[roomtype.roomtype] &&
+                        roomTypePrices[roomtype.roomtype].toLocaleString()}
+                    </Text>
+                    <Text>
+                      {/* 변경된 부분: 날짜가 선택되지 않았을 때는 평일 요금 표시 */}
+                      부가세 · 봉사료 10% 포함 (세금계산서 · 현금영수증 발행)
+                    </Text>
+                    <Text color="red" fontWeight={"semibold"}>
+                      취소불가(취소수수료 발생)
+                    </Text>
+                  </VStack>
 
-                  <Text>Sale Price (Weekend): {roomtype.salePriceWeekend}</Text>
                   <Stack>
+                    <Select
+                      placeholder="객실 수 "
+                      onChange={(e) => setCount(e.target.value)}
+                    >
+                      <option value="1">객실 1개</option>
+                      <option value="2">객실 2개</option>
+                      <option value="3">객실 3개</option>
+                      <option value="4">객실 4개</option>
+                      <option value="5">객실 5개</option>
+                    </Select>
                     <Button
-                      mt={"60px"}
                       variant={"outline"}
                       colorScheme={"green"}
                       onClick={() => navigate("/hotel/pay/" + hotel.hid)}
@@ -299,22 +433,16 @@ export function HotelView() {
                       {" "}
                       예약하기{" "}
                     </Button>
-
-                    <Button
-                      variant={"outline"}
-                      colorScheme={"red"}
-                      onClick={() => handleRoomtypeDelete(roomtype.hrtId)}
-                    >
-                      삭제하기
-                    </Button>
                   </Stack>
                 </Box>
               ))}
           </SimpleGrid>
+
           <Box
             w={"80%"}
             ml={"10%"}
-            border={"1px solid black"}
+            border={"1px solid "}
+            color="gray.400"
             h={"400px"}
             mb={"15px"}
             display={"flex"}
@@ -322,12 +450,7 @@ export function HotelView() {
             alignItems={"center"}
             borderRadius={"lg"}
           >
-            <Image
-              src={hotel.mapImgUrl}
-              alt={"지도 이미지"}
-              w={"100%"}
-              h={"100%"}
-            />
+            {hotel.cautionMessage}
           </Box>
         </>
       )}

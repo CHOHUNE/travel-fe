@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
-import { useNavigate, useParams } from "react-router-dom";
+import { useLocation, useNavigate, useParams } from "react-router-dom";
 import {
   Box,
   Button,
@@ -13,6 +13,7 @@ import {
   extendTheme,
   Flex,
   FormControl,
+  FormHelperText,
   FormLabel,
   Heading,
   Img,
@@ -21,6 +22,11 @@ import {
   MenuButton,
   MenuItem,
   MenuList,
+  NumberDecrementStepper,
+  NumberIncrementStepper,
+  NumberInput,
+  NumberInputField,
+  NumberInputStepper,
   Table,
   Tbody,
   Text,
@@ -45,9 +51,37 @@ export function TransPay() {
 
   const [member, setMember] = useState("");
 
-  const [isChecked, setIsChecked] = useState(false);
+  const [isChecked, setIsChecked] = useState(true);
 
   const [personName, setPersonName] = useState("");
+
+  // 운송 상품에서 보낸 주소지, 예약일, 탑승객 수
+  const location = useLocation();
+  const transTotalPrice = location.state.transTotalPrice;
+  const passenger = location.state.passenger;
+
+  const [person, setPerson] = useState(passenger);
+
+  // 예약시간 한글로 보이게 설정 시작 ------------------------------------------------
+  const transReserveDay = location.state.transReserveDay;
+  const reserveDate = new Date(transReserveDay);
+  const reserveYear = reserveDate.getFullYear();
+  const reserveMonth = (reserveDate.getMonth() + 1).toString().padStart(2, "0");
+  const reserveDay = reserveDate.getDate().toString().padStart(2, "0");
+  const reserveHour = reserveDate.getHours().toString().padStart(2, "0");
+  const reserveMinute = reserveDate.getMinutes().toString().padStart(2, "0");
+  const reserveFormat =
+    reserveYear +
+    "년 " +
+    reserveMonth +
+    "월 " +
+    reserveDay +
+    "일 " +
+    reserveHour +
+    "시 " +
+    reserveMinute +
+    "분";
+  // 예약시간 한글로 보이게 설정 끝 ------------------------------------------------
 
   useEffect(() => {
     axios
@@ -70,9 +104,12 @@ export function TransPay() {
   let emailInput2 = receiveEmail[1];
 
   // ---------- 핸드폰번호 수 기준으로 나누기 ---------
-  let a = member.phoneNumber ? member.phoneNumber.slice(0, 3) : "";
-  let b = member.phoneNumber ? member.phoneNumber.slice(3, 7) : "";
-  let c = member.phoneNumber ? member.phoneNumber.slice(7) : "";
+  let receivePhoneNumber = member.phoneNumber
+    ? member.phoneNumber.split("-")
+    : ["", "", ""];
+  let phoneNum1 = receivePhoneNumber[0];
+  let phoneNum2 = receivePhoneNumber[1];
+  let phoneNum3 = receivePhoneNumber[2];
 
   const theme = extendTheme({
     styles: {
@@ -85,29 +122,12 @@ export function TransPay() {
   });
 
   const [personAdult, setPersonAdult] = useState(""); // 성인 인원
-  const [personChild, setPersonChild] = useState(""); // 소인 인원
 
   // ---------- 성인 인원선택 관련 ----------
   const handlePersonnelAdultClick = (person) => {
     setPersonAdult(person);
   };
 
-  // ---------- 소인 인원선택 관련 ----------
-  const handlePersonnelChildClick = (child) => {
-    setPersonChild(child);
-  };
-
-  // function handlePaymentClick() {
-  //   //id는 ttoss , transprice= transport에 있음
-  //   axios
-  //     .post("/api/toss/save", { id, amount: trans.transPrice })
-  //     .then((response) => {
-  //       console.log(response.data);
-  //       navigate(`/PaymentPage/${id}`, {
-  //         state: { id, amount: trans.transPrice },
-  //       });
-  //     });
-  // }
 
   function handlePaymentClick(response) {
     navigate(`/PaymentPage/${id}`, {
@@ -127,24 +147,28 @@ export function TransPay() {
             <FormControl>
               <FormLabel fontSize={"20px"} fontWeight={"bold"}>
                 상품정보
+                <FormHelperText color={"gray"}>
+                  해당 상품 금액은 1인당 가격으로 결제 되는 금액은 아래의 최종
+                  결제 금액 에서 확인 부탁 드립니다.
+                </FormHelperText>
               </FormLabel>
               <Table>
                 <Thead>
                   <Tr>
-                    <Th>구분</Th>
-                    <Th>이미지</Th>
-                    <Th>상품명</Th>
-                    <Th>경로</Th>
-                    <Th>출발지 주소</Th>
-                    <Th>이용일자</Th>
-                    <Th>가격</Th>
+                    <Th textAlign={"center"}>구분</Th>
+                    <Th textAlign={"center"}>이미지</Th>
+                    <Th textAlign={"center"}>상품명</Th>
+                    <Th textAlign={"center"}>경로</Th>
+                    <Th textAlign={"center"}>출발지 주소</Th>
+                    <Th textAlign={"center"}>이용일자</Th>
+                    <Th textAlign={"center"}>가격</Th>
                   </Tr>
                 </Thead>
 
                 {/* TODO :결제 한 상품 끌고와야함 */}
                 <Tbody borderBottom={"1px solid #f5f6f6"}>
                   <Tr>
-                    <Th>{trans.typeName}</Th>
+                    <Th>{trans.typeName === "air" ? "비행기" : "버스"}</Th>
                     <Th>
                       <Box w={"150px"}>
                         <Img src={trans.url} />
@@ -158,8 +182,8 @@ export function TransPay() {
                       &nbsp; [{trans.transArriveLocation}]
                     </Th>
                     <Th>{trans.transAddress}</Th>
-                    <Th>출발일 : 23년 12월 07일 (목)</Th>
-                    <Th>{trans.transPrice}</Th>
+                    <Th>{reserveFormat}</Th>
+                    <Th>{trans.transPrice}원</Th>
                   </Tr>
                 </Tbody>
               </Table>
@@ -216,6 +240,10 @@ export function TransPay() {
                         예약자명
                       </FormLabel>
                       <Input
+                        _focus={{
+                          boxShadow: "none",
+                          borderColor: "transparent",
+                        }}
                         ml={5}
                         mt={2}
                         w={400}
@@ -242,6 +270,10 @@ export function TransPay() {
                           ml={5}
                           mt={2}
                           w={200}
+                          _focus={{
+                            boxShadow: "none",
+                            borderColor: "transparent",
+                          }}
                           value={member ? emailInput1 : ""}
                         />
                         <span
@@ -265,6 +297,10 @@ export function TransPay() {
                         <Input
                           mt={2}
                           w={200}
+                          _focus={{
+                            boxShadow: "none",
+                            borderColor: "transparent",
+                          }}
                           value={member ? emailInput2 : ""}
                         />
                       </Flex>
@@ -285,126 +321,15 @@ export function TransPay() {
                         휴대폰번호
                       </FormLabel>
                       <Flex>
-                        <Input ml={5} mt={2} w={100} value={a} />
-                        <span
-                          style={{
-                            justifyContent: "center",
-                            display: "flex",
-                            alignItems: "center",
-                            fontSize: "13px",
-                          }}
-                        >
-                          <Box
-                            style={{
-                              fontSize: "16px",
-                              verticalAlign: "middle",
-                              margin: "0 8px",
-                            }}
-                          >
-                            -
-                          </Box>
-                        </span>
-                        <Input mt={2} w={100} value={b} />
-                        <span
-                          style={{
-                            justifyContent: "center",
-                            display: "flex",
-                            alignItems: "center",
-                            fontSize: "13px",
-                          }}
-                        >
-                          <Box
-                            style={{
-                              fontSize: "16px",
-                              verticalAlign: "middle",
-                              margin: "0 8px",
-                            }}
-                          >
-                            -
-                          </Box>
-                        </span>
-                        <Input mt={2} w={100} value={c} />
-                      </Flex>
-                    </Flex>
-                  </FormControl>
-                </Box>
-
-                {/* 이용자 정보 */}
-                <Box w={"60%"}>
-                  <FormControl mt={20}>
-                    <FormLabel fontSize={"20px"} fontWeight={"bold"}>
-                      이용자 정보
-                    </FormLabel>
-                  </FormControl>
-
-                  <FormControl
-                    borderTop={"1px solid black"}
-                    borderBottom={"2px solid #ededed"}
-                  >
-                    <Flex borderBottom={"1px solid #ededed"}>
-                      <FormLabel
-                        m={0}
-                        background={"#f5f6f6"}
-                        h={"60px"}
-                        w={"102px"}
-                        justifyContent="center"
-                        display={"flex"}
-                        alignItems={"center"}
-                        fontSize={"14px"}
-                      >
-                        이용자명
-                      </FormLabel>
-                      <Input
-                        ml={5}
-                        mt={2}
-                        w={400}
-                        value={isChecked ? (member ? member.name : "") : ""}
-                        onChange={(e) => setPersonName(e.target.value)}
-                      />
-                      <Checkbox
-                        ml={3}
-                        value={isChecked}
-                        onChange={() => setIsChecked(!isChecked)}
-                      />
-                      <span
-                        style={{
-                          justifyContent: "center",
-                          display: "flex",
-                          alignItems: "center",
-                        }}
-                      >
-                        <Box
-                          style={{
-                            fontSize: "10px",
-                            verticalAlign: "middle",
-                            margin: "0 4px",
-                          }}
-                        >
-                          구매자와 이용자명이 동일합니다.
-                        </Box>
-                      </span>
-                    </Flex>
-
-                    {/* 휴대폰번호 정보 */}
-                    <Flex>
-                      <FormLabel
-                        m={0}
-                        background={"#f5f6f6"}
-                        h={"60px"}
-                        w={"100px"}
-                        justifyContent="center"
-                        display={"flex"}
-                        alignItems={"center"}
-                        fontSize={"14px"}
-                      >
-                        휴대폰번호
-                      </FormLabel>
-                      <Flex>
                         <Input
                           ml={5}
                           mt={2}
                           w={100}
-                          value={isChecked ? a : ""}
+                          value={phoneNum1}
+                          _focus={{
+                            boxShadow: "none",
+                            borderColor: "transparent",
+                          }}
                         />
                         <span
                           style={{
@@ -424,7 +349,15 @@ export function TransPay() {
                             -
                           </Box>
                         </span>
-                        <Input mt={2} w={100} value={isChecked ? b : ""} />
+                        <Input
+                          mt={2}
+                          w={100}
+                          value={phoneNum2}
+                          _focus={{
+                            boxShadow: "none",
+                            borderColor: "transparent",
+                          }}
+                        />
                         <span
                           style={{
                             justifyContent: "center",
@@ -443,28 +376,103 @@ export function TransPay() {
                             -
                           </Box>
                         </span>
-                        <Input mt={2} w={100} value={isChecked ? c : ""} />
+                        <Input
+                          mt={2}
+                          w={100}
+                          value={phoneNum3}
+                          _focus={{
+                            boxShadow: "none",
+                            borderColor: "transparent",
+                          }}
+                        />
                       </Flex>
                     </Flex>
+                  </FormControl>
+                </Box>
 
+                {/* 이용자 정보 */}
+                <Box w={"60%"}>
+                  <FormControl mt={20}>
+                    <FormLabel fontSize={"20px"} fontWeight={"bold"}>
+                      이용자 정보
+                    </FormLabel>
+                  </FormControl>
+
+                  <FormControl
+                    borderTop={"1px solid black"}
+                    borderBottom={"2px solid #ededed"}
+                  >
                     <Flex>
-                      {/* 성인 인원 선택 */}
-                      <Flex>
-                        <FormLabel
-                          m={0}
-                          background={"#f5f6f6"}
-                          h={"60px"}
-                          w={"100px"}
-                          justifyContent="center"
-                          display={"flex"}
-                          alignItems={"center"}
-                          fontSize={"14px"}
+                      <FormLabel
+                        m={0}
+                        background={"#f5f6f6"}
+                        h={"60px"}
+                        w={"200px"}
+                        justifyContent="center"
+                        display={"flex"}
+                        alignItems={"center"}
+                        fontSize={"14px"}
+                      >
+                        이용자명
+                      </FormLabel>
+                      <Input
+                        ml={5}
+                        mt={2}
+                        value={
+                          isChecked ? (member ? member.name : "") : personName
+                        }
+                        onChange={(e) => setPersonName(e.target.value)}
+                      />
+                      <Checkbox
+                        ml={3}
+                        isChecked={isChecked}
+                        value={isChecked}
+                        defaultChecked
+                        onChange={() => setIsChecked(!isChecked)}
+                      />
+                      <span
+                        style={{
+                          justifyContent: "center",
+                          display: "flex",
+                          alignItems: "center",
+                        }}
+                      >
+                        <Box
+                          style={{
+                            fontSize: "10px",
+                            verticalAlign: "middle",
+                            margin: "0 4px",
+                          }}
+                          onClick={() => setIsChecked(!isChecked)}
                         >
-                          이용인원
-                        </FormLabel>
+                          구매자와 이용자명이 동일합니다.
+                        </Box>
+                      </span>
+                    </Flex>
+
+                    {/* 휴대폰번호 정보 */}
+                    <Flex>
+                      <FormLabel
+                        m={0}
+                        background={"#f5f6f6"}
+                        h={"60px"}
+                        w={"200px"}
+                        justifyContent="center"
+                        display={"flex"}
+                        alignItems={"center"}
+                        fontSize={"14px"}
+                      >
+                        휴대폰번호
+                      </FormLabel>
+                      <Flex>
+                        <Input
+                          ml={5}
+                          mt={2}
+                          w={100}
+                          value={isChecked ? phoneNum1 : ""}
+                        />
                         <span
                           style={{
-                            marginLeft: "12px",
                             justifyContent: "center",
                             display: "flex",
                             alignItems: "center",
@@ -478,9 +486,93 @@ export function TransPay() {
                               margin: "0 8px",
                             }}
                           >
-                            성인
+                            -
                           </Box>
                         </span>
+                        <Input
+                          mt={2}
+                          w={100}
+                          value={isChecked ? phoneNum2 : ""}
+                        />
+                        <span
+                          style={{
+                            justifyContent: "center",
+                            display: "flex",
+                            alignItems: "center",
+                            fontSize: "13px",
+                          }}
+                        >
+                          <Box
+                            style={{
+                              fontSize: "16px",
+                              verticalAlign: "middle",
+                              margin: "0 8px",
+                            }}
+                          >
+                            -
+                          </Box>
+                        </span>
+                        <Input
+                          mt={2}
+                          w={100}
+                          value={isChecked ? phoneNum3 : ""}
+                        />
+                      </Flex>
+                    </Flex>
+
+                    <Flex>
+                      <FormLabel
+                        m={0}
+                        background={"#f5f6f6"}
+                        h={"60px"}
+                        w={"200px"}
+                        justifyContent="center"
+                        display={"flex"}
+                        alignItems={"center"}
+                        fontSize={"14px"}
+                      >
+                        이용인원
+                      </FormLabel>
+                      {/*<Input*/}
+                      {/*  ml={5}*/}
+                      {/*  mt={2}*/}
+                      {/*  value={person}*/}
+                      {/*  onChange={(e) => setPerson(e.target.value)}*/}
+                      {/*/>*/}
+                      <Flex>
+                        <NumberInput
+                          w={"100px"}
+                          ml={5}
+                          max={50}
+                          min={1}
+                          defaultValue={1}
+                          value={person}
+                          onChange={(e) => setPerson(e)}
+                        >
+                          <NumberInputField h={"100%"} />
+                          <NumberInputStepper>
+                            <NumberIncrementStepper />
+                            <NumberDecrementStepper />
+                          </NumberInputStepper>
+                        </NumberInput>{" "}
+                        <Box>명</Box>
+                      </Flex>
+                    </Flex>
+                    <Flex>
+                      <Flex>
+                        <FormLabel
+                          m={0}
+                          background={"#f5f6f6"}
+                          h={"60px"}
+                          w={"200px"}
+                          justifyContent="center"
+                          display={"flex"}
+                          alignItems={"center"}
+                          fontSize={"14px"}
+                        >
+                          이용인원
+                        </FormLabel>
+
                         <Menu>
                           <MenuButton
                             as={Button}
@@ -517,106 +609,6 @@ export function TransPay() {
                           </MenuList>
                         </Menu>
                       </Flex>
-
-                      {/* 소인 인원 선택 */}
-                      <Flex>
-                        <span
-                          style={{
-                            marginLeft: "12px",
-                            justifyContent: "center",
-                            display: "flex",
-                            alignItems: "center",
-                            fontSize: "13px",
-                          }}
-                        >
-                          <Box
-                            style={{
-                              fontSize: "16px",
-                              verticalAlign: "middle",
-                              margin: "0 8px",
-                            }}
-                          >
-                            소인
-                          </Box>
-                        </span>
-                        <Menu>
-                          <MenuButton
-                            as={Button}
-                            rightIcon={<ChevronDownIcon />}
-                            background={"white"}
-                            border={"1px solid #ededed"}
-                            mt={"8px"}
-                            fontSize={"13px"}
-                          >
-                            {personChild ? personChild : "1명"}
-                          </MenuButton>
-
-                          <MenuList>
-                            <MenuItem
-                              onClick={() => handlePersonnelChildClick("1명")}
-                            >
-                              1명
-                            </MenuItem>
-                            <MenuItem
-                              onClick={() => handlePersonnelChildClick("2명")}
-                            >
-                              2명
-                            </MenuItem>
-                            <MenuItem
-                              onClick={() => handlePersonnelChildClick("3명")}
-                            >
-                              3명
-                            </MenuItem>
-                            <MenuItem
-                              onClick={() => handlePersonnelChildClick("4명")}
-                            >
-                              4명
-                            </MenuItem>
-                          </MenuList>
-                        </Menu>
-
-                        {/* 기준인원/최대인원 관련 */}
-                        <span
-                          style={{
-                            marginLeft: "3px",
-                            justifyContent: "center",
-                            display: "flex",
-                            alignItems: "center",
-                          }}
-                        >
-                          <Box
-                            style={{
-                              fontSize: "13px",
-                              verticalAlign: "middle",
-                              margin: "0 8px",
-                              color: "blue",
-                            }}
-                          >
-                            기준 2인 / 최대 3인
-                          </Box>
-                        </span>
-
-                        {/* 해당 인원 초과시 추가요금 안내 */}
-                        <span
-                          style={{
-                            marginLeft: "3px",
-                            justifyContent: "center",
-                            display: "flex",
-                            alignItems: "center",
-                          }}
-                        >
-                          <Box
-                            style={{
-                              fontSize: "13px",
-                              verticalAlign: "middle",
-                              margin: "0 8px",
-                              color: "#737182",
-                            }}
-                          >
-                            기준인원 초과 시 추가 비용 발생
-                          </Box>
-                        </span>
-                      </Flex>
                     </Flex>
 
                     <Flex borderBottom={"1px solid #ededed"}>
@@ -624,7 +616,7 @@ export function TransPay() {
                         m={0}
                         background={"#f5f6f6"}
                         h={"88px"}
-                        w={"113px"}
+                        w={"200px"}
                         justifyContent="center"
                         display={"flex"}
                         alignItems={"center"}
@@ -683,7 +675,7 @@ export function TransPay() {
                           alignItems={"center"}
                           fontSize={"16px"}
                         >
-                          {isChecked ? (member ? member.name : "") : ""}
+                          {isChecked ? (member ? member.name : "") : personName}
                         </Text>
                       </Flex>
 

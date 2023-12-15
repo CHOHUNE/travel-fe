@@ -1,0 +1,78 @@
+/* 달력의 기본 크기와 폰트 사이즈를 조정합니다. */
+.react-datepicker {
+    font-size: 13px; /* 폰트 사이즈를 적절히 설정합니다. */
+    width: 482px; /* 달력의 너비를 콘텐츠에 맞게 조정합니다. */
+}
+
+/* 날짜 셀의 크기를 조정합니다. */
+.react-datepicker__day,
+.react-datepicker__day-name {
+    width: 2.5rem; /* 셀의 너비 */
+    height: 2.5rem; /* 셀의 높이 */
+    line-height: 2.5rem; /* 텍스트를 셀의 중앙으로 정렬합니다. */
+}
+
+/* 선택된 날짜의 스타일을 변경합니다. */
+.react-datepicker__day--selected,
+.react-datepicker__day--range-start,
+.react-datepicker__day--range-end {
+    background-color: #0f9d58; /* 시작일과 종료일의 배경색을 변경합니다. */
+    border-radius: 50%; /* 원형 배경 */
+    color: white; /* 시작일과 종료일의 글꼴 색상을 변경합니다. */
+}
+
+/* 중간 날짜 스타일을 변경합니다. */
+.react-datepicker__day--in-range {
+    background-color: #f0f0f0; /* 중간 날짜들의 배경색을 변경합니다. */
+    color: #000; /* 중간 날짜들의 텍스트 색상을 변경합니다. */
+    border-radius: 50%; /* 중간 날짜들도 원형으로 만듭니다. */
+}
+
+/* 호버 시 날짜 스타일 */
+.react-datepicker__day:hover {
+    background-color: #f0f0f0; /* 호버 배경색 */
+}
+
+/* 헤더의 스타일을 변경합니다. */
+.react-datepicker__header {
+    background-color: white; /* 헤더 배경색을 흰색으로 변경 */
+    border-bottom: 1px solid #ececec; /* 헤더 하단에 테두리를 추가 */
+}
+
+/* 월 표시의 스타일을 변경합니다. */
+.react-datepicker__current-month {
+    font-size: 1.4rem; /* 월 표시 폰트 사이즈를 조정 */
+}
+
+/* 요일 이름의 스타일을 변경합니다. */
+.react-datepicker__day-name {
+    color: #0f9d58; /* 요일 이름의 글꼴 색상 변경 */
+}
+
+/* 달력의 콘텐츠 부분 스타일을 변경합니다. */
+.react-datepicker__month {
+    margin: 0; /* 달력의 내부 여백을 조정합니다. */
+}
+
+/* 두 달을 나란히 보이도록 하기 위한 스타일 */
+.react-datepicker__month-container {
+    display: inline-block; /* 각 달력을 인라인 블록으로 표시 */
+    vertical-align: top; /* 수직 정렬을 상단으로 설정 */
+}
+
+/* 선택된 날짜에 대한 호버 스타일을 변경합니다. */
+.react-datepicker__day--selected:hover,
+.react-datepicker__day--range-start:hover,
+.react-datepicker__day--range-end:hover {
+    background-color: #0f9d58; /* 호버 시 배경색을 변경합니다. */
+}
+
+/* 선택 범위 내의 날짜에 대한 호버 스타일을 변경합니다. */
+.react-datepicker__day--in-range:hover {
+    background-color: #eaeaea; /* 호버 시 중간 날짜들의 배경색을 변경합니다. */
+}
+
+/* 날짜 아래에 표시되는 추가 텍스트(가격 등)를 숨깁니다. */
+.react-datepicker__day--with-info .react-datepicker__day-text {
+    display: none;
+}
