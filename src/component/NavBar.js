@@ -103,7 +103,7 @@ export function NavBar() {
             {/* 프로젝트 로고 */}
             <Box
               w={"200px"}
-              background="#b0daeb"
+              // background="#b0daeb"
               lineHeight={"80px"}
               ml={2}
               onClick={() => navigate("/")}
