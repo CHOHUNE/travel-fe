@@ -141,15 +141,15 @@ export function Hotel() {
     });
   }, [location]);
 
-  // TODO : Login 하고 Hotel 페이지 접속시 userId 정보 얻기
-  useEffect(() => {
-    axios
-      .get(`/api/hotel/wishList/` + params.get("userId"))
-      .then((response) => {
-        setWishlist(response.data);
-        console.log(response.data);
-      });
-  }, []);
+  // // TODO : Login 하고 Hotel 페이지 접속시 userId 정보 얻기
+  // useEffect(() => {
+  //   axios
+  //     .get(`/api/hotel/wishList/` + params.get("userId"))
+  //     .then((response) => {
+  //       setWishlist(response.data);
+  //       console.log(response.data);
+  //     });
+  // }, []);
 
   const handleUpdateToWishlist = (hotelId) => {
     axios
@@ -282,7 +282,7 @@ export function Hotel() {
 
       {/* 호텔 정보 렌더링 */}
       <Flex justifyContent={"center"} flexWrap="wrap">
-        <SimpleGrid columns={3} spacing={10} my={"20px"}>
+        <SimpleGrid columns={3} spacing={9} my={"20px"}>
           {hotelList.map((hotel) => (
             <Box
               maxW="sm"
@@ -291,7 +291,12 @@ export function Hotel() {
               overflow="hidden"
             >
               <Box position="relative">
-                <Image src={hotel.mainImgUrl} alt={hotel.name} />
+                <Image
+                  onClick={() => navigate("/hotel/reserv/" + hotel.hid)}
+                  src={hotel.mainImgUrl}
+                  alt={hotel.name}
+                  cursor={"pointer"}
+                />
                 <Box
                   position="absolute"
                   top="2"
@@ -299,18 +304,11 @@ export function Hotel() {
                   onClick={() => toggleWishlist(hotel.hid)}
                   cursor="pointer"
                 >
-                  <FontAwesomeIcon
-                    icon={faHeart}
-                    color={wishlist.includes(hotel.hid) ? "red" : "gray"}
-                    size={"2xl"}
-                  />
+                  <FontAwesomeIcon icon={faHeart} color={"gray"} size={"2xl"} />
                 </Box>
               </Box>
               <Box p="6">
                 <Box display="flex" alignItems="baseline">
-                  <Badge borderRadius="full" px="2" colorScheme="teal">
-                    New
-                  </Badge>
                   <Box
                     color="gray.500"
                     fontWeight="semibold"
@@ -318,19 +316,24 @@ export function Hotel() {
                     fontSize="xs"
                     textTransform="uppercase"
                     ml="2"
-                  >
-                    {hotel.numberOfBed} beds &bull;
-                  </Box>
+                  ></Box>
                 </Box>
                 <Box
-                  mt="1"
-                  fontWeight="semibold"
+                  fontWeight="bold"
+                  fontSize={"large"}
                   as="h4"
                   lineHeight="tight"
                   noOfLines={1}
                 >
-                  {hotel.description}
+                  {hotel.name}
+                  <Badge ml={"5px"}>{hotel.lodgingType}</Badge>
+
+                  {hotel.lodgingType == "호텔" && (
+                    <Badge ml={"5px"}>{hotel.rating}</Badge>
+                  )}
                 </Box>
+                {hotel.location}
+
                 <Box
                   display="flex"
                   mt="2"
@@ -339,6 +342,7 @@ export function Hotel() {
                 >
                   <Box>
                     {hotel.totalPrice}
+
                     <Box as="span" color="gray.600" fontSize="sm">
                       원 / 1박
                     </Box>
@@ -351,7 +355,14 @@ export function Hotel() {
                     >
                       예약하기
                     </Button>
-                    <Button colorScheme="blue">찜하기</Button>
+                    <Button
+                      colorScheme="blue"
+                      onClick={() => {
+                        toggleWishlist(hotel.hid);
+                      }}
+                    >
+                      찜하기
+                    </Button>
                   </ButtonGroup>
                   <Box
                     position="fixed" // 절대 위치를 사용해 오버레이 설정
