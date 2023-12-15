@@ -45,7 +45,7 @@ export function HomeBody() {
 
   useEffect(() => {
     axios
-      .get("/api/transport/listPopularBus")
+      .get("/api/transport/listPopularBusEight")
       .then((response) => setListBus(response.data));
   }, []);
 
@@ -484,6 +484,12 @@ export function HomeBody() {
           {/* --------------------------------- 호텔상품 끝끝끝끝끝---------------------------------  */}
 
           {/* --------------------------------- 버스 상품 --------------------------------- */}
+        </Box>
+      </Flex>
+      {/* --------------------------------- 버스 상품 끝 --------------------------------- */}
+
+      <Flex justifyContent="center" w="100%" mt={5} bg={"#F5F6F6"}>
+        <Box w={"65%"} justifyContent={"center"} mt={"30px"} mb={8}>
           <Card
             w={"400px"}
             h={"50px"}
@@ -499,67 +505,62 @@ export function HomeBody() {
           </Card>
 
           <Flex>
-            {listBus.map(
-              (bus) =>
-                bus.typeName === "bus" && (
-                  <Card
-                    key={bus.tid}
-                    w={"450px"}
-                    mr={7}
-                    _hover={{
-                      cursor: "pointer",
-                      backgroundColor: "#eeecec",
-                      transition: "background 0.5s ease-in-out",
-                    }}
-                    onClick={() => navigate("/transport/" + bus.tid)}
-                  >
-                    <CardHeader mb={0} pb={0}>
-                      <Center>
-                        <Box w={"90%"}>
-                          <Image src={bus.url} />
-                        </Box>
-                      </Center>
-                    </CardHeader>
-                    <CardBody mt={2} pt={0}>
-                      <Center>
-                        <Box>
-                          <Box textColor={"black"} fontWeight={"bold"}>
-                            [{bus.transStartLocation}] &nbsp;
-                            <FontAwesomeIcon icon={faAnglesRight} />
-                            &nbsp; [{bus.transArriveLocation}] &nbsp;{" "}
-                            {bus.transTitle}
+            <SimpleGrid columns={4} spacing={10}>
+              {listBus.map(
+                (bus) =>
+                  bus.typeName === "bus" && (
+                    <Box
+                      maxW="sm"
+                      borderWidth="1px"
+                      borderRadius="lg"
+                      overflow="hidden"
+                      _hover={{ cursor: "pointer" }}
+                      onClick={() => navigate("/transport/" + bus.tid)}
+                      key={bus.tid}
+                    >
+                      <Box position="relative" overflow={"hidden"}>
+                        <Image src={bus.url} h={"100%"} />
+                      </Box>
+                      <Box bg={"white"} mt={2} pt={0}>
+                        <Center>
+                          <Box>
+                            <Box textColor={"black"} fontWeight={"bold"}>
+                              [{bus.transStartLocation}] &nbsp;
+                              <FontAwesomeIcon icon={faAnglesRight} />
+                              &nbsp; [{bus.transArriveLocation}] &nbsp;{" "}
+                              {bus.transTitle}
+                            </Box>
+                            <FormControl>
+                              <Flex>
+                                <FormLabel
+                                  fontSize={"1.1rem"}
+                                  textColor={"#509896"}
+                                  fontWeight={"900"}
+                                >
+                                  가격 :
+                                </FormLabel>
+                                <Box
+                                  fontSize={"1.1rem"}
+                                  textColor={"#509896"}
+                                  fontWeight={"900"}
+                                >
+                                  {bus.transPrice}원
+                                </Box>
+                              </Flex>
+                            </FormControl>
                           </Box>
-                          <FormControl>
-                            <Flex>
-                              <FormLabel
-                                fontSize={"1.1rem"}
-                                textColor={"#509896"}
-                                fontWeight={"900"}
-                              >
-                                가격 :
-                              </FormLabel>
-                              <Box
-                                fontSize={"1.1rem"}
-                                textColor={"#509896"}
-                                fontWeight={"900"}
-                              >
-                                {bus.transPrice}원
-                              </Box>
-                            </Flex>
-                          </FormControl>
-                        </Box>
-                      </Center>
-                    </CardBody>
-                  </Card>
-                ),
-            )}
+                        </Center>
+                      </Box>
+                    </Box>
+                  ),
+              )}
+            </SimpleGrid>
           </Flex>
         </Box>
       </Flex>
-      {/* --------------------------------- 버스 상품 끝 --------------------------------- */}
 
       {/* ------------------- 항공상품 중간정렬 ------------------- */}
-      <Flex justifyContent="center" w="100%" mt={5} bg={"#F5F6F6"}>
+      <Flex justifyContent="center" w="100%" mt={5}>
         <Box w={"65%"} justifyContent={"center"} mt={"30px"}>
           <Card
             w={"400px"}
