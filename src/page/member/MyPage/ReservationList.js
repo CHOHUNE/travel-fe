@@ -48,7 +48,7 @@ export function ReservationList() {
           <TabList mb="1em">
             <Tab>
               <CardHeader textAlign={"center"} m={5}>
-                <Heading>운송 예약 관리</Heading>
+                <Heading>항공 / 버스 예약 관리</Heading>
               </CardHeader>
             </Tab>
             <Tab>
