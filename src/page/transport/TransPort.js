@@ -15,7 +15,7 @@ import React, { useEffect, useState } from "react";
 import axios from "axios";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faAnglesRight } from "@fortawesome/free-solid-svg-icons";
-import "./TransFont.css";
+import "../TransFont.css";
 import { RecentViewed } from "../../component/RecentViewed";
 
 export function TransPort() {
