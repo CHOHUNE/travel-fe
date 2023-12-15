@@ -122,7 +122,7 @@ export function NavBar() {
             <Flex alignItems={"center"} gap={3} mr={"-10px"}>
               <Input
                 _hover={{ color: "teal" }}
-                w={"400px"}
+                w={"380px"}
                 borderRadius={"30px"}
                 background={"#f5f6f6"}
                 placeholder="검색어를 입력해 주세요."
