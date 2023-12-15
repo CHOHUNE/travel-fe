@@ -25,16 +25,13 @@ export default function App() {
           delay: 3000,
           disableOnInteraction: false,
         }}
-        pagination={{
-          clickable: true,
-        }}
         speed={650}
-        modules={[Pagination, Autoplay]}
+        modules={[Autoplay]}
         className="mySwiper"
         autoHeight
       >
         <SwiperSlide
-          style={{ width: "100%", height: "600px", borderRadius: "10px" }}
+          style={{ width: "100%", height: "500px", borderRadius: "10px" }}
         >
           <Img src="https://www.condo24.com/TechBean/banner/main_20231115[10].jpg" />
         </SwiperSlide>
