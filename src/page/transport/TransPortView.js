@@ -27,6 +27,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faAnglesRight, faHeart } from "@fortawesome/free-solid-svg-icons";
 import DatePicker from "react-datepicker";
 
+// 운송 상품 찜하기 컨테이너 ----------------------------------------------------------------------
 function TransLikeContainer({ transLikeState, onClick }) {
   const toast = useToast();
   if (transLikeState === null) {
@@ -66,6 +67,7 @@ function TransLikeContainer({ transLikeState, onClick }) {
   );
 }
 
+// 운송 상품 상세 페이지 -------------------------------------------------------------------
 export function TransPortView() {
   const [passenger, setPassenger] = useState(1);
   const [trans, setTrans] = useState("");
@@ -76,7 +78,7 @@ export function TransPortView() {
 
   const toast = useToast();
 
-  const { isAuthenticated, isAdmin } = useContext(LoginContext);
+  const { login, isAdmin } = useContext(LoginContext);
 
   const { id } = useParams();
 
@@ -134,7 +136,7 @@ export function TransPortView() {
   const EndDay = endDate.getDate().toString().padStart(2, "0");
   const endFormat = endYear + "년 " + endMonth + "월 " + EndDay + "일";
 
-  // 운송 상품 삭제 기능 시작 ----------------------------------------------------
+  // 운송 상품 삭제 기능 ----------------------------------------------------
   function handleTransDelete() {
     axios
       .delete("/api/transport/delete/" + id)
@@ -152,12 +154,9 @@ export function TransPortView() {
         });
       });
   }
-  // 운송 상품 삭제 기능 끝 ----------------------------------------------------
 
-  // 찜하기 버튼 클릭시
+  // 찜하기 버튼 클릭시 ----------------------------------------------------
   function handleLikeClick() {
-    console.log("handle like click");
-    console.log(transLikeState);
     if (transLikeState.like === true) {
       axios
         .post("/api/transLike", { transId: trans.tid })
@@ -193,33 +192,54 @@ export function TransPortView() {
     }
   }
 
+  // 예약일 날짜 정해지면 작동 -------------------------------------------------
   function handleReserveDayChange(e) {
     setTransReserveDay(e);
   }
 
-  function handleChange(e) {
+  // 탑승객 인원의 값이 변경되면 작동 ---------------------------------------------
+  function handlePassengerChange(e) {
     setPassenger(e);
   }
 
+  // 결제 버튼이 클릭 되면 작동 -------------------------------------------------
+  function handlePaymentClick() {
+    // 로그인한 유저가 빈스트링이 아니면 로그인 상태 이므로 결제 페이지로 이동시키기
+    if (login !== "") {
+      // 로그인 한 유저가 결제 버튼을 누르면 해당 상품 아이디와 예약일, 총금액, 인원을 넘김
+      navigate("/transport/pay/" + id, {
+        state: { transReserveDay, transTotalPrice, passenger },
+      });
+    } else {
+      // 아니면 로그인해달라고 토스트 띄우기
+      toast({ description: "로그인후 결제해주세요", status: "error" });
+    }
+  }
+
+  // 운송 상품 프론트 보이는 곳 --------------------------------------------------
   return (
     <Center>
       <Box mt={2} w={"80%"} key={trans.tid}>
-        <Box alignItems="center">
-          <Flex justifyContent={"flex-end"} gap={2}>
-            <Button
-              w={"130px"}
-              h={"30px"}
-              onClick={() => navigate("/transport/edit/" + trans.tid)}
-            >
-              수송 상품 수정
-            </Button>
-            <Button w={"130px"} h={"30px"} onClick={handleTransDelete}>
-              수송 상품 삭제
-            </Button>
-          </Flex>
-        </Box>
-
+        {/* -------- 상품 수정 삭제 버튼은 admin 계정만 볼 수 있게 함 -------- */}
+        {isAdmin() && (
+          <Box alignItems="center">
+            <Flex justifyContent={"flex-end"} gap={2}>
+              <Button
+                w={"130px"}
+                h={"30px"}
+                onClick={() => navigate("/transport/edit/" + trans.tid)}
+              >
+                수송 상품 수정
+              </Button>
+              <Button w={"130px"} h={"30px"} onClick={handleTransDelete}>
+                수송 상품 삭제
+              </Button>
+            </Flex>
+          </Box>
+        )}
         {/**/}
+
+        {/* -------- 운송 상품 설명 시작 -------- */}
         <Card
           direction={{ base: "column" }}
           overflow="hidden"
@@ -230,6 +250,7 @@ export function TransPortView() {
           border={"0px"}
         >
           <Flex gap={3} mt={2}>
+            {/* -------- 메인 이미지 -------- */}
             {trans.mainImage != null ? (
               <Image
                 src={trans.mainImage.url}
@@ -243,7 +264,9 @@ export function TransPortView() {
             ) : (
               <Box>빈값</Box>
             )}
+            {/* */}
 
+            {/* -------- 운송 상품 설명 --------  */}
             <CardBody
               w={"25%"}
               mr={2}
@@ -252,6 +275,7 @@ export function TransPortView() {
               border={"1px solid #ced8de"}
               shadow={"1px 1px 3px 1px #dadce0"}
             >
+              {/* -------- 상품 제목 -------- */}
               <FormControl
                 // bg={"#f3eeee"}
                 w={"90%"}
@@ -270,11 +294,11 @@ export function TransPortView() {
                   >
                     {trans.transTitle}
                   </Box>
-                  {/*[{trans.transStartLocation}]&nbsp;*/}
-                  {/*<FontAwesomeIcon icon={faAnglesRight} />*/}
-                  {/*&nbsp; [{trans.transArriveLocation}]*/}
                 </Flex>
               </FormControl>
+              {/* */}
+
+              {/* -------- 상품 경로 -------- */}
               <FormControl
                 // bg={"#f3eeee"}
                 w={"90%"}
@@ -297,6 +321,9 @@ export function TransPortView() {
                   </Box>
                 </Flex>
               </FormControl>
+              {/* */}
+
+              {/* -------- 상품 가격 -------- */}
               <FormControl
                 w={"90%"}
                 h={"60px"}
@@ -326,7 +353,9 @@ export function TransPortView() {
                   </Box>
                 </Flex>
               </FormControl>
+              {/* */}
 
+              {/* -------- 상품 출발지 주소 -------- */}
               <FormControl
                 w={"90%"}
                 h="80px"
@@ -360,6 +389,9 @@ export function TransPortView() {
                   )}
                 </Flex>
               </FormControl>
+              {/* */}
+
+              {/* -------- 상품 찜하기 -------- */}
               <FormControl
                 w={"90%"}
                 h="40px"
@@ -375,10 +407,13 @@ export function TransPortView() {
                   />
                 </Flex>
               </FormControl>
+              {/* */}
             </CardBody>
           </Flex>
         </Card>
         {/*  */}
+
+        {/* -------- 운송 상품 결제 정보 칸 -------- */}
         <Card
           bg={"whitesmoke"}
           w={"95%"}
@@ -394,6 +429,7 @@ export function TransPortView() {
           fontWeight={"500"}
         >
           <Flex alignItems={"center"} height={"100%"} gap={2}>
+            {/* -------- 날짜 선택 범위 안내 내용 -------- */}
             <Flex
               w={"18%"}
               h={"90%"}
@@ -409,7 +445,9 @@ export function TransPortView() {
                 {endFormat} 24시 까지
               </Box>
             </Flex>
+            {/* */}
 
+            {/* -------- 출발일 선택 -------- */}
             <Flex
               w={"27%"}
               h={"90%"}
@@ -451,7 +489,9 @@ export function TransPortView() {
                 onChange={handleReserveDayChange}
               />
             </Flex>
+            {/* */}
 
+            {/* -------- 탑승 인원 선택 -------- */}
             <Flex
               w={"15%"}
               h={"90%"}
@@ -475,7 +515,7 @@ export function TransPortView() {
                 min={1}
                 defaultValue={1}
                 value={passenger}
-                onChange={handleChange}
+                onChange={handlePassengerChange}
               >
                 <NumberInputField h={"60px"} />
                 <NumberInputStepper>
@@ -484,7 +524,9 @@ export function TransPortView() {
                 </NumberInputStepper>
               </NumberInput>
             </Flex>
+            {/* */}
 
+            {/* -------- 총 금액 안내 -------- */}
             <Flex
               w={"20%"}
               h={"90%"}
@@ -514,10 +556,14 @@ export function TransPortView() {
                 </Flex>
               </Box>
             </Flex>
+            {/* */}
+
+            {/* -------- 결제 페이지 이동 -------- */}
             <Button
               w={"11%"}
               h={"70%"}
-              onClick={() => navigate("/transport/pay/" + id)}
+              // onClick={() => navigate("/transport/pay/" + id)}
+              onClick={handlePaymentClick}
               shadow={"1px 1px 3px 1px #dadce0"}
               _hover={{
                 backgroundColor: "#216aa4",
@@ -534,9 +580,12 @@ export function TransPortView() {
             >
               바로결제
             </Button>
+            {/* */}
           </Flex>
         </Card>
         {/*  */}
+
+        {/* -------- 운송 상품 상세 설명 내용  -------- */}
         <Card w={"95%"} mt={3} mb={20} ml="2.5%">
           <CardBody>
             {trans.contentImages != null ? (
