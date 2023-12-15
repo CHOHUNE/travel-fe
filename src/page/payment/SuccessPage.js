@@ -3,6 +3,7 @@ import { useNavigate, useSearchParams } from "react-router-dom";
 import { Link } from "react-router-dom";
 import { Box, Button, Text, Center, Icon, VStack } from "@chakra-ui/react";
 import { CheckCircleIcon } from "@chakra-ui/icons";
+import axios from "axios";
 
 const apiSecretKey = process.env.REACT_APP_SECRET_KEY;
 export function SuccessPage() {
@@ -14,8 +15,10 @@ export function SuccessPage() {
       orderId: searchParams.get("orderId"),
       amount: searchParams.get("amount"),
       paymentKey: searchParams.get("paymentKey"),
+      id: searchParams.get("id"),
     };
-
+    console.log("파람" + searchParams.get("id"));
+    // console.log(id);
     // TODO: 개발자센터에 로그인해서 내 결제위젯 연동 키 > 시크릿 키를 입력하세요. 시크릿 키는 외부에 공개되면 안돼요.
     // @docs https://docs.tosspayments.com/reference/using-api/api-keys
     const secretKey = apiSecretKey;
@@ -53,6 +56,28 @@ export function SuccessPage() {
     confirm();
   }, []);
 
+  /*
+  function handlesubmit() {
+    axios.post("/api/toss/order", searchParams).then((response) => {
+      console.log(response.data);
+      navigate("/");
+    });
+  }
+  */
+
+  function handlesubmit() {
+    axios
+      .postForm("/api/toss/save", {
+        orderId: searchParams.get("orderId"),
+        amount: searchParams.get("amount"),
+        id: searchParams.get("id"),
+      })
+      .then((response) => {
+        console.log(response.data);
+        navigate("/");
+      });
+  }
+
   return (
     <Box w="80%" ml="10%" textAlign={"center"}>
       <Center h="100vh" bg="gray.100">
@@ -64,7 +89,7 @@ export function SuccessPage() {
           <Text fontSize="md">
             진행 중인 결제창에서 {"[결제완료]"} 버튼을 눌러 결제창을 닫아주세요.
           </Text>
-          <Button colorScheme="gray" w="full">
+          <Button colorScheme="gray" w="full" onClick={handlesubmit}>
             확인
           </Button>
         </VStack>
@@ -84,6 +109,7 @@ export function SuccessPage() {
           <p>{`amount = ${Number(
             searchParams.get("amount"),
           ).toLocaleString()}원`}</p>
+          <p>{`id = ${searchParams.get("id")}`}</p>
           <div className="result wrapper">
             <Link to="https://docs.tosspayments.com/guides/payment-widget/integration">
               <button

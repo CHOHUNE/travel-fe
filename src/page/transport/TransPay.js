@@ -128,17 +128,13 @@ export function TransPay() {
     setPersonAdult(person);
   };
 
-  function handlePaymentClick() {
-    //id는 ttoss , transprice= transport에 있음
-    axios
-      .post("/api/toss/save", { id, amount: trans.transPrice })
-      .then((response) => {
-        console.log(response.data);
-        navigate(`/PaymentPage/${id}`, {
-          state: { id, amount: trans.transPrice },
-        });
-      });
+
+  function handlePaymentClick(response) {
+    navigate(`/PaymentPage/${id}`, {
+      state: { id, amount: trans.transPrice },
+    });
   }
+
   return (
     <ChakraProvider theme={theme}>
       <Center m={20}>

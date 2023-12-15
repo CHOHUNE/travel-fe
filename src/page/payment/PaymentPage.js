@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { nanoid } from "nanoid";
-import {Box, Center, Spinner} from "@chakra-ui/react";
-import { useLocation } from "react-router-dom";
+import { Box, Center, Spinner } from "@chakra-ui/react";
+import { useLocation, useParams } from "react-router-dom";
 import axios from "axios";
 
 const orderId = nanoid();
@@ -10,10 +10,12 @@ const apiKey = process.env.REACT_APP_CLIENT_KEY;
 export function PaymentPage() {
   // 선생님 도움
   const location = useLocation();
-
   console.log(location.state);
   const trans = location.state;
   //   여까지
+  const { id } = useParams();
+  console.log(id);
+
   useEffect(() => {
     // ------ 클라이언트 키로 객체 초기화 ------
 
@@ -27,10 +29,12 @@ export function PaymentPage() {
         // 더 많은 결제 정보 파라미터는 결제창 Javascript SDK에서 확인하세요.
         // https://docs.tosspayments.com/reference/js-sdk
         amount: trans.amount, // 결제 금액  (선생님 해주심)
+        // mId: id,
         orderId: orderId, // 주문 ID(주문 ID는 상점에서 직접 만들어주세요.)
         orderName: "테스트 결제", // 주문명
         customerName: "김토스", // 구매자 이름
-        successUrl: "http://localhost:3000/successpage", // 결제 성공 시 이동할 페이지(이 주소는 예시입니다. 상점에서 직접 만들어주세요.)
+
+        successUrl: "http://localhost:3000/successpage?id=" + id, // 결제 성공 시 이동할 페이지(이 주소는 예시입니다. 상점에서 직접 만들어주세요.)
         failUrl: "http://localhost:3000/fail", // 결제 실패 시 이동할 페이지(이 주소는 예시입니다. 상점에서 직접 만들어주세요.)
       })
       // ------결제창을 띄울 수 없는 에러 처리 ------
@@ -69,17 +73,7 @@ export function PaymentPage() {
           fontSize: "2rem",
           color: "white",
         }}
-      >
-        <p>결제 진행 중 입니다.</p>
-        <br />
-        <br />
-        <p style={{ fontSize: "1.1rem", color: "black" }}>
-          결제중 실수로 취소를 하셨다면,
-        </p>
-        <p style={{ fontSize: "1.1rem", color: "orange" }}>
-          새로고침 후 다시 결제 해주세요.
-        </p>
-      </Box>
+      ></Box>
     </Center>
   );
   // 승원 수정 부분 그냥 페이지가 심심해서 만들어봄 끝---------------------------
