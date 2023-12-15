@@ -411,8 +411,8 @@ export function HomeBody() {
             </Box>
           </Card>
           <Box w={"100%"} h={"300px"} mb={15}>
-            <Flex justifyContent={"center"} flexWrap="wrap">
-              <SimpleGrid columns={5} spacing={9} my={"20px"} gap={14}>
+            <Flex justifyContent={"space-between"} flexWrap="wrap">
+              <SimpleGrid columns={5} spacing={14} my={"20px"}>
                 {hotelList &&
                   hotelList.slice(0, 5).map((hotel) => (
                     <Box maxW="sm" w={"170px"} overflow="hidden">
