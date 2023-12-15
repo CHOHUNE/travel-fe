@@ -100,14 +100,13 @@ export function NavBar() {
           {/* 프로젝트 로고 */}
           <Box
             w={"200px"}
-            background="#b0daeb"
             lineHeight={"80px"}
             ml={2}
             onClick={() => navigate("/")}
           >
             <Img
               _hover={{ cursor: "pointer" }}
-              src="https://study1993garbi.s3.ap-northeast-2.amazonaws.com/travel/trans/KakaoTalk_Photo_2023-12-13-09-58-45.png"
+              src="https://study1993garbi.s3.ap-northeast-2.amazonaws.com/travel/sourceFile/logo/logo3.png"
               alt="프로젝트 로고"
               w="200px"
               h="80px"

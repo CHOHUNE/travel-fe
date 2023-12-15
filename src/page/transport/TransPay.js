@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
-import { useNavigate, useParams } from "react-router-dom";
+import { useLocation, useNavigate, useParams } from "react-router-dom";
 import {
   Box,
   Button,
@@ -49,6 +49,9 @@ export function TransPay() {
 
   const [personName, setPersonName] = useState("");
 
+  const location = useLocation();
+  const { transReserveDay, transTotalPrice, passenger } = location.state;
+
   useEffect(() => {
     axios
       .get(`/api/transport/pay/${id}`)
@@ -70,9 +73,12 @@ export function TransPay() {
   let emailInput2 = receiveEmail[1];
 
   // ---------- 핸드폰번호 수 기준으로 나누기 ---------
-  let a = member.phoneNumber ? member.phoneNumber.slice(0, 3) : "";
-  let b = member.phoneNumber ? member.phoneNumber.slice(3, 7) : "";
-  let c = member.phoneNumber ? member.phoneNumber.slice(7) : "";
+  let receivePhoneNumber = member.phoneNumber
+    ? member.phoneNumber.split("-")
+    : ["", "", ""];
+  let phoneNum1 = receivePhoneNumber[0];
+  let phoneNum2 = receivePhoneNumber[1];
+  let phoneNum3 = receivePhoneNumber[2];
 
   const theme = extendTheme({
     styles: {
@@ -278,7 +284,7 @@ export function TransPay() {
                         휴대폰번호
                       </FormLabel>
                       <Flex>
-                        <Input ml={5} mt={2} w={100} value={a} />
+                        <Input ml={5} mt={2} w={100} value={phoneNum1} />
                         <span
                           style={{
                             justifyContent: "center",
@@ -297,7 +303,7 @@ export function TransPay() {
                             -
                           </Box>
                         </span>
-                        <Input mt={2} w={100} value={b} />
+                        <Input mt={2} w={100} value={phoneNum2} />
                         <span
                           style={{
                             justifyContent: "center",
@@ -316,7 +322,7 @@ export function TransPay() {
                             -
                           </Box>
                         </span>
-                        <Input mt={2} w={100} value={c} />
+                        <Input mt={2} w={100} value={phoneNum3} />
                       </Flex>
                     </Flex>
                   </FormControl>
@@ -397,7 +403,7 @@ export function TransPay() {
                           ml={5}
                           mt={2}
                           w={100}
-                          value={isChecked ? a : ""}
+                          value={isChecked ? phoneNum1 : ""}
                         />
                         <span
                           style={{
@@ -417,7 +423,11 @@ export function TransPay() {
                             -
                           </Box>
                         </span>
-                        <Input mt={2} w={100} value={isChecked ? b : ""} />
+                        <Input
+                          mt={2}
+                          w={100}
+                          value={isChecked ? phoneNum2 : ""}
+                        />
                         <span
                           style={{
                             justifyContent: "center",
@@ -436,7 +446,11 @@ export function TransPay() {
                             -
                           </Box>
                         </span>
-                        <Input mt={2} w={100} value={isChecked ? c : ""} />
+                        <Input
+                          mt={2}
+                          w={100}
+                          value={isChecked ? phoneNum3 : ""}
+                        />
                       </Flex>
                     </Flex>
 
