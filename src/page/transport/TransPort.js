@@ -9,6 +9,7 @@ import {
   FormLabel,
   Image,
   Input,
+  SimpleGrid,
 } from "@chakra-ui/react";
 import { useNavigate } from "react-router-dom";
 import React, { useEffect, useState } from "react";
@@ -38,9 +39,9 @@ export function TransPort() {
 
   return (
     <Box mt={4}>
-      <Card h={"500px"}>
+      <Card h={"600px"} overflow={"hidden"} boxShadow={"5px 5px 5px 5px gray"}>
         <Center>
-          <video style={{ height: "500px", zIndex: 2 }} autoPlay loop muted>
+          <video style={{ width: "1500px", zIndex: 2 }} autoPlay loop muted>
             <source
               src={
                 "https://study1993garbi.s3.ap-northeast-2.amazonaws.com/travel/trans/video/plan.mp4"
@@ -55,7 +56,7 @@ export function TransPort() {
             marginTop: "0px",
             width: "100%",
             height: "400px",
-            backgroundColor: "#f4e8cd",
+            backgroundColor: "#f5f6f6",
             zIndex: 1,
           }}
         ></Box>
@@ -67,7 +68,8 @@ export function TransPort() {
             width: "100%",
             height: "400px",
             zIndex: 3,
-            fontFamily: "YEONGJUPunggiGinsengTTF",
+            fontFamily: "GmarketSansMedium",
+            fontWeight: "900",
             fontSize: "2rem",
           }}
         >
@@ -81,145 +83,198 @@ export function TransPort() {
         </Box>
       </Card>
 
-      <Box ml={"12.5%"} mt={"50px"}>
-        <Card
-          w={"400px"}
-          h={"50px"}
-          textAlign={"center"}
-          mb={10}
-          onClick={() => navigate("list?type=bus")}
-          _hover={{ cursor: "pointer", color: "#509896" }}
-          lineHeight={"50px"}
-        >
-          <Box
-            fontWeight={900}
-            fontSize={"1.2rem"}
-            style={{ fontFamily: "Pretendard-Regular" }}
+      <Center>
+        <Box mt={"50px"} w={"55%"}>
+          <Card
+            w={"400px"}
+            h={"50px"}
+            textAlign={"center"}
+            mb={10}
+            onClick={() => navigate("list?type=bus")}
+            _hover={{ cursor: "pointer", color: "#509896" }}
+            lineHeight={"50px"}
           >
-            🚎 버스 카테고리 게시글
-          </Box>
-        </Card>
+            <Box
+              fontWeight={"900"}
+              fontSize={"1.2rem"}
+              style={{ fontFamily: "GmarketSansMedium" }}
+            >
+              🚎 버스 카테고리 게시글
+            </Box>
+          </Card>
 
-        <Flex>
-          {listBus.map(
-            (bus) =>
-              bus.typeName === "bus" && (
-                <Card
-                  key={bus.tid}
-                  w={"275px"}
-                  mr={7}
-                  _hover={{
-                    cursor: "pointer",
-                    backgroundColor: "#eeecec",
-                    transition: "background 0.5s ease-in-out",
-                  }}
-                  onClick={() => navigate("/transport/" + bus.tid)}
-                >
-                  <CardHeader mb={0} pb={0}>
-                    <Center>
-                      <Box w={"90%"}>
-                        <Image src={bus.url} />
+          <Flex justifyContent={"center"} flexWrap={"wrap"}>
+            <SimpleGrid columns={4} w={"100%"} spacing={9}>
+              {listBus.map(
+                (bus) =>
+                  bus.typeName === "bus" && (
+                    <Box
+                      maxW="sm"
+                      borderWidth="1px"
+                      borderRadius="lg"
+                      overflow="hidden"
+                      _hover={{ cursor: "pointer" }}
+                      onClick={() => navigate("/transport/" + bus.tid)}
+                      key={bus.tid}
+                    >
+                      <Box position="relative" overflow={"hidden"}>
+                        <Image src={bus.url} h={"100%"} />
                       </Box>
-                    </Center>
-                  </CardHeader>
-                  <CardBody mt={2} pt={0}>
-                    <Center>
-                      <Box>
-                        <Box textColor={"black"} fontWeight={"bold"}>
-                          [{bus.transStartLocation}] &nbsp;
-                          <FontAwesomeIcon icon={faAnglesRight} />
-                          &nbsp; [{bus.transArriveLocation}] &nbsp;{" "}
-                          {bus.transTitle}
-                        </Box>
-                        <FormControl>
-                          <Flex>
-                            <FormLabel
-                              fontSize={"1.1rem"}
-                              textColor={"#509896"}
-                              fontWeight={"900"}
-                            >
-                              가격 :
-                            </FormLabel>
+                      <Box p={3}>
+                        <Box display="flex" alignItems="baseline">
+                          <Box
+                            color="gray.500"
+                            fontWeight="semibold"
+                            letterSpacing="wide"
+                            fontSize="xs"
+                            textTransform="uppercase"
+                            ml="2"
+                          ></Box>
+                          <Box>
                             <Box
-                              fontSize={"1.1rem"}
-                              textColor={"#509896"}
-                              fontWeight={"900"}
+                              fontWeight="bold"
+                              fontSize={"large"}
+                              as="h4"
+                              lineHeight="tight"
+                              noOfLines={1}
                             >
-                              {bus.transPrice}원
+                              {bus.transTitle}
                             </Box>
-                          </Flex>
-                        </FormControl>
-                      </Box>
-                    </Center>
-                  </CardBody>
-                </Card>
-              ),
-          )}
-        </Flex>
-      </Box>
-      <Box ml={"12.5%"} mt={10} mb={20}>
-        <Card
-          w={"400px"}
-          h={"50px"}
-          textAlign={"center"}
-          mb={10}
-          onClick={() => navigate("list?type=air")}
-          _hover={{ cursor: "pointer", color: "#509896" }}
-          lineHeight={"50px"}
-        >
-          <Box fontWeight={900} fontSize={"1.2rem"}>
-            🛫 항공 카테고리 게시글
-          </Box>
-        </Card>
-        <Flex>
-          {listAir.map(
-            (air) =>
-              air.typeName === "air" && (
-                <Card
-                  key={air.tid}
-                  w={"275px"}
-                  mr={7}
-                  _hover={{
-                    cursor: "pointer",
-                    backgroundColor: "#eeecec",
-                    transition: "background 0.5s ease-in-out",
-                  }}
-                  onClick={() => navigate("/transport/" + air.tid)}
-                >
-                  <CardHeader mb={0} pb={0}>
-                    <Center>
-                      <Box w={"90%"}>
-                        <Image src={air.url} />
-                      </Box>
-                    </Center>
-                  </CardHeader>
-                  <CardBody mt={2} pt={0}>
-                    <Center>
-                      <Box>
-                        <Box textColor={"black"} fontWeight={"bold"}>
-                          [{air.transStartLocation}] &nbsp;
-                          <FontAwesomeIcon icon={faAnglesRight} />
-                          &nbsp; [{air.transArriveLocation}] &nbsp;{" "}
-                          {air.transTitle}
-                        </Box>
-                        <FormControl>
-                          <Flex>
-                            <FormLabel
-                              fontSize={"1.1rem"}
-                              textColor={"#509896"}
-                              fontWeight={"900"}
-                            >
-                              가격 :
-                            </FormLabel>
                             <Box
-                              fontSize={"1.1rem"}
-                              textColor={"#509896"}
-                              fontWeight={"900"}
+                              as="h4"
+                              lineHeight="tight"
+                              noOfLines={1}
+                              fontWeight={"bold"}
+                              color={"gray"}
                             >
-                              {air.transPrice}원
+                              [{bus.transStartLocation}] &nbsp;
+                              <FontAwesomeIcon icon={faAnglesRight} />
+                              &nbsp; [{bus.transArriveLocation}]
                             </Box>
-                          </Flex>
-                        </FormControl>
+                            <Box as="h4" lineHeight="tight" noOfLines={1}>
+                              {bus.transAddress}
+                            </Box>
+                            <Box
+                              display="flex"
+                              mt="2"
+                              alignItems="center"
+                              justifyContent="space-between"
+                            >
+                              <Box
+                                fontSize={"1.1rem"}
+                                textColor={"#509896"}
+                                fontWeight={"900"}
+                              >
+                                {parseInt(bus.transPrice).toLocaleString(
+                                  "ko-KR",
+                                )}
+                                {/*{transport.transPrice}*/}
+                                &nbsp;원
+                              </Box>
+                            </Box>
+                          </Box>
+                        </Box>
+                      </Box>
+                    </Box>
+                  ),
+              )}
+            </SimpleGrid>
+          </Flex>
+        </Box>
+      </Center>
+
+      <Box mt={10} boxShadow={"1px 2px 1px 2px #f5f6f6"}></Box>
+
+      <Center>
+        <Box mt={10} w={"55%"}>
+          <Card
+            w={"400px"}
+            h={"50px"}
+            textAlign={"center"}
+            mb={10}
+            onClick={() => navigate("list?type=air")}
+            _hover={{ cursor: "pointer", color: "#509896" }}
+            lineHeight={"50px"}
+          >
+            <Box
+              fontWeight={"900"}
+              fontSize={"1.2rem"}
+              style={{ fontFamily: "GmarketSansMedium" }}
+            >
+              🛫항공 카테고리 게시글
+            </Box>
+          </Card>
+
+          <Flex justifyContent={"center"} flexWrap={"wrap"}>
+            <SimpleGrid columns={4} w={"100%"} spacing={9}>
+              {listAir.map(
+                (air) =>
+                  air.typeName === "air" && (
+                    <Box
+                      maxW="sm"
+                      borderWidth="1px"
+                      borderRadius="lg"
+                      overflow="hidden"
+                      _hover={{ cursor: "pointer" }}
+                      onClick={() => navigate("/transport/" + air.tid)}
+                      key={air.tid}
+                    >
+                      <Box position="relative" overflow={"hidden"}>
+                        <Image src={air.url} h={"100%"} />
+                      </Box>
+                      <Box p={3}>
+                        <Box display="flex" alignItems="baseline">
+                          <Box
+                            color="gray.500"
+                            fontWeight="semibold"
+                            letterSpacing="wide"
+                            fontSize="xs"
+                            textTransform="uppercase"
+                            ml="2"
+                          ></Box>
+                          <Box>
+                            <Box
+                              fontWeight="bold"
+                              fontSize={"large"}
+                              as="h4"
+                              lineHeight="tight"
+                              noOfLines={1}
+                            >
+                              {air.transTitle}
+                            </Box>
+                            <Box
+                              as="h4"
+                              lineHeight="tight"
+                              noOfLines={1}
+                              fontWeight={"bold"}
+                              color={"gray"}
+                            >
+                              [{air.transStartLocation}] &nbsp;
+                              <FontAwesomeIcon icon={faAnglesRight} />
+                              &nbsp; [{air.transArriveLocation}]
+                            </Box>
+                            <Box as="h4" lineHeight="tight" noOfLines={1}>
+                              {air.transAddress}
+                            </Box>
+                            <Box
+                              display="flex"
+                              mt="2"
+                              alignItems="center"
+                              justifyContent="space-between"
+                            >
+                              <Box
+                                fontSize={"1.1rem"}
+                                textColor={"#509896"}
+                                fontWeight={"900"}
+                              >
+                                {parseInt(air.transPrice).toLocaleString(
+                                  "ko-KR",
+                                )}
+                                &nbsp;원
+                              </Box>
+                            </Box>
+                          </Box>
+                        </Box>
                       </Box>
                       <Box
                         position="fixed" // 절대 위치를 사용해 오버레이 설정
@@ -235,13 +290,13 @@ export function TransPort() {
                       >
                         <RecentViewed />
                       </Box>
-                    </Center>
-                  </CardBody>
-                </Card>
-              ),
-          )}
-        </Flex>
-      </Box>
+                    </Box>
+                  ),
+              )}
+            </SimpleGrid>
+          </Flex>
+        </Box>
+      </Center>
     </Box>
   );
 }

@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import "react-datepicker/dist/react-datepicker.css";
 import {
   Box,
@@ -34,6 +34,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faMap } from "@fortawesome/free-regular-svg-icons";
 import { faBed } from "@fortawesome/free-solid-svg-icons/faBed";
 import { RecentViewed } from "../../component/RecentViewed";
+import { LoginContext } from "../../component/LoginProvider";
 
 function PageButton({ variant, pageNumber, children }) {
   const [params] = useSearchParams();
@@ -141,6 +142,13 @@ export function Hotel() {
     });
   }, [location]);
 
+  // useEffect(() => {
+  //   axios.get("/api/hotel/price").then((response) => {
+  //     const price = response.data.hotelList.map((hotel) => hotel.price);
+  //     setHotelList(price);
+  //   });
+  // }, [location]);
+
   // // TODO : Login 하고 Hotel 페이지 접속시 userId 정보 얻기
   // useEffect(() => {
   //   axios
@@ -152,32 +160,17 @@ export function Hotel() {
   // }, []);
 
   const handleUpdateToWishlist = (hotelId) => {
-    axios
-      .get(`/api/hotel/reserv/id/${hotelId}`)
-      .then((response) => {
-        const hotelData = response.data;
+    axios.get(`/api/hotel/reserv/id/${hotelId}`).then((response) => {
+      const hotelData = response.data;
 
-        axios
-          .post("/api/wishlist", {
-            hotelId,
-            name: hotelData.name,
-            mainImgUrl: hotelData.mainImgUrl,
-            location: hotelData.location,
-            lodgingType: hotelData.lodgingType,
-          })
-          .catch(() => {
-            toast({
-              description: "위시리스트에 저장 중 에러 발생",
-              status: "error",
-            });
-          });
-      })
-      .catch(() => {
-        toast({
-          description: "호텔 데이터를 가져오는 중 에러 발생",
-          status: "error",
-        });
+      axios.post("/api/wishlist", {
+        hotelId,
+        name: hotelData.name,
+        mainImgUrl: hotelData.mainImgUrl,
+        location: hotelData.location,
+        lodgingType: hotelData.lodgingType,
       });
+    });
   };
   // 메인 화면에서 유저가 좋아요한 목록 불러오기 ------------------------------------------------------
   // useEffect(() => {
@@ -224,22 +217,28 @@ export function Hotel() {
   // ------------------------------------------------------------------------------------------
 
   const toggleWishlist = (hotelId) => {
-    if (wishlist.includes(hotelId)) {
-      setWishlist((prev) => prev.filter((id) => id !== hotelId));
-      handleUpdateToWishlist(hotelId);
-      toast({
-        description: "찜 삭제 완료.",
-        colorScheme: "orange",
-      });
+    if (login !== "") {
+      if (wishlist.includes(hotelId)) {
+        setWishlist((prev) => prev.filter((id) => id !== hotelId));
+        handleUpdateToWishlist(hotelId);
+        toast({
+          description: "찜 삭제 완료.",
+          colorScheme: "orange",
+        });
+      } else {
+        handleUpdateToWishlist(hotelId);
+        setWishlist((prev) => [...prev, hotelId]);
+        toast({
+          description: "찜 추가 완료.",
+          status: "success",
+        });
+      }
     } else {
-      handleUpdateToWishlist(hotelId);
-      setWishlist((prev) => [...prev, hotelId]);
-      toast({
-        description: "찜 추가 완료.",
-        status: "success",
-      });
+      toast({ description: "로그인 후 이용 가능 합니다.", status: "error" });
     }
   };
+
+  const { login, isAdmin } = useContext(LoginContext);
 
   if (hotelList == null) {
     return <Spinner />;
@@ -326,12 +325,39 @@ export function Hotel() {
                   noOfLines={1}
                 >
                   {hotel.name}
-                  <Badge ml={"5px"}>{hotel.lodgingType}</Badge>
-
-                  {hotel.lodgingType == "호텔" && (
-                    <Badge ml={"5px"}>{hotel.rating}</Badge>
-                  )}
+                  <Box display="flex" alignItems="baseline" flexWrap="wrap">
+                    <Box>
+                      <Badge>{hotel.lodgingType}</Badge>
+                      {hotel.lodgingType === "호텔" && (
+                        <Badge>{hotel.rating}</Badge>
+                      )}
+                    </Box>
+                    {hotel.pool != null && (
+                      <Badge color={"skyblue"}>{hotel.pool}</Badge>
+                    )}
+                    {hotel.pet != null && (
+                      <Badge ml={"3px"} color={"green"}>
+                        {hotel.pet}
+                      </Badge>
+                    )}
+                    {hotel.oceanview != null && (
+                      <Badge ml={"3px"} color={"blue"}>
+                        {hotel.oceanview}
+                      </Badge>
+                    )}
+                    {hotel.romanticMood != null && (
+                      <Badge ml={"3px"} color={"hotpink"}>
+                        {hotel.romanticMood}
+                      </Badge>
+                    )}
+                    {hotel.familyMood != null && (
+                      <Badge ml={"3px"} color={"purple"}>
+                        {hotel.familyMood}
+                      </Badge>
+                    )}
+                  </Box>
                 </Box>
+
                 {hotel.location}
 
                 <Box
@@ -341,10 +367,8 @@ export function Hotel() {
                   justifyContent="space-between"
                 >
                   <Box>
-                    {hotel.totalPrice}
-
                     <Box as="span" color="gray.600" fontSize="sm">
-                      원 / 1박
+                      {hotel.price} 원 / 1박
                     </Box>
                   </Box>
 

@@ -194,7 +194,7 @@ export function TransPortList() {
                   <Box position="relative" overflow={"hidden"}>
                     <Image src={transport.url} h={"100%"} />
                   </Box>
-                  <Box p={6}>
+                  <Box p={3}>
                     <Box display="flex" alignItems="baseline">
                       <Box
                         color="gray.500"
@@ -235,11 +235,16 @@ export function TransPortList() {
                           alignItems="center"
                           justifyContent="space-between"
                         >
-                          <Box>
-                            {transport.transPrice}
-                            <Box as="span" color="gray.600" fontSize="sm">
-                              &nbsp;원
-                            </Box>
+                          <Box
+                            fontSize={"1.1rem"}
+                            textColor={"#509896"}
+                            fontWeight={"900"}
+                          >
+                            {parseInt(transport.transPrice).toLocaleString(
+                              "ko-KR",
+                            )}
+                            {/*{transport.transPrice}*/}
+                            &nbsp;원
                           </Box>
 
                           <Box
