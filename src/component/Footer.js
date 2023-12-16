@@ -3,7 +3,7 @@ import { Link } from "react-router-dom";
 
 export function Footer() {
   return (
-    <Box w={"100%"} mt={20} height={"150px"} backgroundColor={"#eeecee"}>
+    <Box w={"100%"} height={"150px"} backgroundColor={"#eeecee"}>
       <Flex
         w={"80%"}
         ml={"10%"}

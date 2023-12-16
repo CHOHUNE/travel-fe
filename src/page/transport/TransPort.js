@@ -276,6 +276,20 @@ export function TransPort() {
                           </Box>
                         </Box>
                       </Box>
+                      <Box
+                        position="fixed" // 절대 위치를 사용해 오버레이 설정
+                        top="300" // 배너의 상단에서 시작
+                        right="2" // 배너의 우측에서 시작
+                        zIndex="10" // 다른 요소보다 위에 오도록 z-index 설정
+                        p="4" // 패딩 값
+                        bg="rgba(255, 255, 255, 0.3)" // 배경색
+                        boxShadow="lg" // 그림자 효과
+                        maxW="sm" // 최대 너비 설정
+                        overflow="hidden" // 내용이 넘치면 숨김
+                        borderRadius="15px"
+                      >
+                        <RecentViewed />
+                      </Box>
                     </Box>
                   ),
               )}

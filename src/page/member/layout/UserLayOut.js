@@ -5,7 +5,7 @@ import { Outlet } from "react-router-dom";
 
 function UserLayOut(props) {
   return (
-    <Box>
+    <Box fontWeight={"700"} fontFamily={"GmarketSansMedium"}>
       <UserNavBar />
       <Outlet />
     </Box>
