@@ -231,6 +231,7 @@ export function TransPort() {
                         boxShadow="lg" // 그림자 효과
                         maxW="sm" // 최대 너비 설정
                         overflow="hidden" // 내용이 넘치면 숨김
+                        borderRadius="15px"
                       >
                         <RecentViewed />
                       </Box>

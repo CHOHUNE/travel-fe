@@ -5,7 +5,7 @@ import { Footer } from "../component/Footer";
 
 export function HomeLayout() {
   return (
-    <Box>
+    <Box fontWeight={"700"} fontFamily={"GmarketSansMedium"}>
       <NavBar />
       <Outlet />
       <Footer />

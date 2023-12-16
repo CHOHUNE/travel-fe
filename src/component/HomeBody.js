@@ -19,6 +19,7 @@ import {
   MenuItem,
   MenuList,
   SimpleGrid,
+  Spinner,
   Text,
   VStack,
 } from "@chakra-ui/react";
@@ -32,7 +33,7 @@ import { faAnglesRight, faHeart } from "@fortawesome/free-solid-svg-icons";
 import DatePicker from "react-datepicker";
 import ko from "date-fns/locale/ko";
 import { differenceInCalendarDays } from "date-fns";
-import "../component/Calendar.css";
+import "./Calendar.css";
 import { ChevronDownIcon } from "@chakra-ui/icons";
 
 export function HomeBody() {
@@ -51,7 +52,7 @@ export function HomeBody() {
 
   useEffect(() => {
     axios
-      .get("/api/transport/listPopularAir")
+      .get("/api/transport/listPopularAirEight")
       .then((response) => setListAir(response.data));
   }, []);
 
@@ -65,9 +66,9 @@ export function HomeBody() {
    */
 
   // ------------------- 날짜 선택 ------------------
-  const [dateRange, setDateRange] = useState([null, null]);
+  const [dateRange, setDateRange] = useState(["", ""]);
   const [startDate, endDate] = dateRange;
-  const wrapperRef = useRef(null); // 컴포넌트 참조를 위한 ref
+  const wrapperRef = useRef(""); // 컴포넌트 참조를 위한 ref
   const [isOpen, setIsOpen] = useState(false);
   const [hotelList, setHotelList] = useState([]);
 
@@ -145,14 +146,28 @@ export function HomeBody() {
     });
   }, [location]);
 
+  if (hotelList === null) {
+    return <Spinner />;
+  }
+
+  // ------------------- 특정 글자 수 넘어가면 ... 표시 -------------------
+  function truncateString(str, num) {
+    if (str.length > num) {
+      return str.slice(0, num) + "...";
+    } else {
+      return str;
+    }
+  }
+
   return (
     <Box fontWeight={"700"} fontFamily={"GmarketSansMedium"}>
-      {/* ---------- 배너이미지  */}
+      {/* ------------------- 배너이미지 ------------------- */}
       <Box boxShadow={"5px 5px 5px 5px gray"} w={"100%"} h={"520px"}>
         <Flex justifyContent={"space-around"} alignItems={"center"}>
           <Box w={"100%"} h={"500px"} mt={"20px"}>
             <App />
           </Box>
+          {/* ------------------- 최근 본 상품 ------------------- */}
           <Box
             position="fixed" // 절대 위치를 사용해 오버레이 설정
             top="300" // 배너의 상단에서 시작
@@ -163,13 +178,13 @@ export function HomeBody() {
             boxShadow="lg" // 그림자 효과
             maxW="sm" // 최대 너비 설정
             overflow="hidden" // 내용이 넘치면 숨김
+            borderRadius="15px"
           >
             <RecentViewed />
           </Box>
         </Flex>
       </Box>
 
-      {/* ------------------- 버스상품 중간정렬 ------------------- */}
       <Flex justifyContent="center" w="100%">
         <Box w={"65%"} justifyContent={"center"} mt={"30px"}>
           {/* ------------------- 검색바 ------------------- */}
@@ -210,7 +225,7 @@ export function HomeBody() {
               />
             </VStack>
 
-            {/* 달력 구현 해야함 */}
+            {/* ------------------- 검색바 달력 ------------------- */}
 
             <VStack alignItems={"flex-start"}>
               <p
@@ -269,6 +284,7 @@ export function HomeBody() {
               </Box>
             </VStack>
 
+            {/* ------------------- 인원 수 ------------------- */}
             <VStack alignItems={"flex-start"}>
               <p
                 style={{
@@ -395,10 +411,14 @@ export function HomeBody() {
               <Text mt={1}>검색하기</Text>
             </Button>
           </Box>
+        </Box>
+      </Flex>
 
-          {/* --------------------------------- 호텔상품 ---------------------------------  */}
+      {/* --------------------------------- 호텔상품 ---------------------------------  */}
+      <Flex justifyContent="center" w="100%">
+        <Box w={"65%"} justifyContent={"center"} mt={"30px"}>
           <Card
-            w={"400px"}
+            w={"200px"}
             h={"50px"}
             textAlign={"center"}
             mb={10}
@@ -407,16 +427,32 @@ export function HomeBody() {
             lineHeight={"50px"}
           >
             <Box fontWeight={900} fontSize={"1.2rem"}>
-              호텔 상품
+              호텔 목록
             </Box>
           </Card>
-          <Box w={"100%"} h={"300px"} mb={15}>
+          <Text fontSize={"1.5rem"} mb={-5}>
+            실시간 인기 숙소
+          </Text>
+          <Center w={"100%"} h={"300px"} mb={15}>
             <Flex justifyContent={"space-between"} flexWrap="wrap">
-              <SimpleGrid columns={5} spacing={14} my={"20px"}>
+              <SimpleGrid columns={5} spacing={20} my={"20px"} w={"full"}>
                 {hotelList &&
                   hotelList.slice(0, 5).map((hotel) => (
-                    <Box maxW="sm" w={"170px"} overflow="hidden">
-                      <Box position="relative">
+                    <Box
+                      transition="0.2s ease-in-out"
+                      _hover={{
+                        transform: "scale(1.20)",
+                      }}
+                      maxW="sm"
+                      w={"170px"}
+                      overflow="hidden"
+                    >
+                      <Box
+                        w={"170px"}
+                        h={"170px"}
+                        borderRadius={"50%"}
+                        position="relative"
+                      >
                         <Image
                           onClick={() => navigate("/hotel/reserv/" + hotel.hid)}
                           src={hotel.mainImgUrl}
@@ -427,7 +463,7 @@ export function HomeBody() {
                           borderRadius={"50%"}
                         />
                       </Box>
-                      <Box p="6">
+                      <Box mt={5}>
                         <Box display="flex" alignItems="baseline">
                           <Box
                             color="gray.500"
@@ -440,7 +476,7 @@ export function HomeBody() {
                         </Box>
                         <Box
                           fontWeight="bold"
-                          fontSize={"10px"}
+                          fontSize={"14px"}
                           as="h4"
                           lineHeight="tight"
                           noOfLines={1}
@@ -454,44 +490,403 @@ export function HomeBody() {
                             <Badge ml={"5px"}>{hotel.rating}</Badge>
                           )}
                         </Box>
-
-                        <Box
-                          display="flex"
-                          mt="2"
-                          alignItems="center"
-                          justifyContent="space-between"
-                        >
-                          <Box
-                            position="fixed" // 절대 위치를 사용해 오버레이 설정
-                            top="300" // 배너의 상단에서 시작
-                            right="2" // 배너의 우측에서 시작
-                            zIndex="10" // 다른 요소보다 위에 오도록 z-index 설정
-                            p="4" // 패딩 값
-                            bg="rgba(255, 255, 255, 0.3)" // 배경색
-                            boxShadow="lg" // 그림자 효과
-                            maxW="sm" // 최대 너비 설정
-                            overflow="hidden" // 내용이 넘치면 숨김
-                          >
-                            <RecentViewed />
-                          </Box>
-                        </Box>
                       </Box>
                     </Box>
                   ))}
               </SimpleGrid>
             </Flex>
-          </Box>
-          {/* --------------------------------- 호텔상품 끝끝끝끝끝---------------------------------  */}
-
-          {/* --------------------------------- 버스 상품 --------------------------------- */}
+          </Center>
         </Box>
       </Flex>
-      {/* --------------------------------- 버스 상품 끝 --------------------------------- */}
 
-      <Flex justifyContent="center" w="100%" mt={5} bg={"#F5F6F6"}>
+      <Flex w={"100%"} justifyContent={"center"}>
+        <Box w={"65%"} mb={"-7"} fontSize={"1.5rem"}>
+          취향저격 숙소찾기
+        </Box>
+      </Flex>
+
+      <Center w={"100%"} h={"auto"} mb={30} mt={30}>
+        <Flex justifyContent={"center"} flexWrap="wrap" w={"65%"}>
+          <SimpleGrid columns={5} spacing={5} my={"20px"} w={"full"}>
+            {hotelList && hotelList.length > 0 && (
+              <>
+                <Box
+                  w={"auto"}
+                  overflow="hidden"
+                  position="relative"
+                  onMouseMove={(e) => {
+                    const x = e.nativeEvent.offsetX;
+                    const y = e.nativeEvent.offsetY;
+                    e.currentTarget.style.transform = `perspective(350px) rotateX(${
+                      (4 / 30) * y - 20
+                    }deg) rotateY(${(-1 / 5) * x + 20}deg)`;
+                  }}
+                  onMouseLeave={(e) => {
+                    e.currentTarget.style.transform =
+                      "perspective(350px) rotateY(0deg) rotateX(0deg)";
+                  }}
+                  transition="all 0.1s"
+                >
+                  <Box
+                    position="absolute"
+                    top="0"
+                    left="0"
+                    w="full"
+                    h="300px"
+                    bg="linear-gradient(105deg, transparent 40%, rgba(255, 219, 112, 0.8) 45%, rgba(132, 50, 255, 0.6) 50%, transparent 54%)"
+                    filter="brightness(1.1) opacity(0)"
+                    mixBlendMode="color-dodge"
+                    backgroundSize="150% 150%"
+                    backgroundPosition="100%"
+                    transition="all 0.1s"
+                    zIndex="1"
+                  />
+                  <Image
+                    onClick={() => navigate("/")}
+                    src="https://www.gagopatour.com/data/item/1646033618/7Iuk64K07IiY7JiB7J6l.jpg"
+                    cursor={"pointer"}
+                    w={"100%"}
+                    h={"300px"}
+                    borderRadius={"10px"}
+                    transition="0.2s ease-in-out"
+                    _hover={{
+                      transform: "scale(1.07)",
+                    }}
+                    zIndex="2"
+                  />
+                  <Box mt={5} zIndex="2">
+                    <Box display="flex" alignItems="baseline">
+                      <Box
+                        color="gray.500"
+                        fontWeight="semibold"
+                        letterSpacing="wide"
+                        fontSize="xs"
+                        textTransform="uppercase"
+                        ml="2"
+                      />
+                    </Box>
+                    <Box
+                      fontWeight="bold"
+                      fontSize={"14px"}
+                      as="h4"
+                      lineHeight="tight"
+                      textAlign={"center"}
+                      ml={"12px"}
+                    >
+                      <Text>수영장 있는 숙소</Text>
+                      <Badge ml={"5px"}>{hotelList.lodgingType}</Badge>
+                      {hotelList.lodgingType === "호텔" && (
+                        <Badge ml={"5px"}>{hotelList.rating}</Badge>
+                      )}
+                    </Box>
+                  </Box>
+                </Box>
+
+                <Box
+                  w={"auto"}
+                  overflow="hidden"
+                  position="relative"
+                  onMouseMove={(e) => {
+                    const x = e.nativeEvent.offsetX;
+                    const y = e.nativeEvent.offsetY;
+                    e.currentTarget.style.transform = `perspective(350px) rotateX(${
+                      (4 / 30) * y - 20
+                    }deg) rotateY(${(-1 / 5) * x + 20}deg)`;
+                  }}
+                  onMouseLeave={(e) => {
+                    e.currentTarget.style.transform =
+                      "perspective(350px) rotateY(0deg) rotateX(0deg)";
+                  }}
+                  transition="all 0.1s"
+                >
+                  <Box
+                    position="absolute"
+                    top="0"
+                    left="0"
+                    w="full"
+                    h="300px"
+                    bg="linear-gradient(105deg, transparent 40%, rgba(255, 219, 112, 0.8) 45%, rgba(132, 50, 255, 0.6) 50%, transparent 54%)"
+                    filter="brightness(1.1) opacity(0)"
+                    mixBlendMode="color-dodge"
+                    backgroundSize="150% 150%"
+                    backgroundPosition="100%"
+                    transition="all 0.1s"
+                    zIndex="1"
+                  />
+                  <Image
+                    onClick={() => navigate("/")}
+                    src="https://www.condo24.com/conphoto/171522810779.jpg"
+                    cursor={"pointer"}
+                    w={"100%"}
+                    h={"300px"}
+                    borderRadius={"10px"}
+                    transition="0.2s ease-in-out"
+                    _hover={{
+                      transform: "scale(1.07)",
+                    }}
+                    zIndex="2"
+                  />
+                  <Box mt={5} zIndex="2">
+                    <Box display="flex" alignItems="baseline">
+                      <Box
+                        color="gray.500"
+                        fontWeight="semibold"
+                        letterSpacing="wide"
+                        fontSize="xs"
+                        textTransform="uppercase"
+                        ml="2"
+                      />
+                    </Box>
+                    <Box
+                      fontWeight="bold"
+                      fontSize={"14px"}
+                      as="h4"
+                      lineHeight="tight"
+                      textAlign={"center"}
+                      ml={"12px"}
+                    >
+                      <Text>글램핑, 카라반 숙소</Text>
+                      <Badge ml={"5px"}>{hotelList.lodgingType}</Badge>
+                      {hotelList.lodgingType === "호텔" && (
+                        <Badge ml={"5px"}>{hotelList.rating}</Badge>
+                      )}
+                    </Box>
+                  </Box>
+                </Box>
+
+                <Box
+                  w={"auto"}
+                  overflow="hidden"
+                  position="relative"
+                  onMouseMove={(e) => {
+                    const x = e.nativeEvent.offsetX;
+                    const y = e.nativeEvent.offsetY;
+                    e.currentTarget.style.transform = `perspective(350px) rotateX(${
+                      (4 / 30) * y - 20
+                    }deg) rotateY(${(-1 / 5) * x + 20}deg)`;
+                  }}
+                  onMouseLeave={(e) => {
+                    e.currentTarget.style.transform =
+                      "perspective(350px) rotateY(0deg) rotateX(0deg)";
+                  }}
+                  transition="all 0.1s"
+                >
+                  <Box
+                    position="absolute"
+                    top="0"
+                    left="0"
+                    w="full"
+                    h="300px"
+                    bg="linear-gradient(105deg, transparent 40%, rgba(255, 219, 112, 0.8) 45%, rgba(132, 50, 255, 0.6) 50%, transparent 54%)"
+                    filter="brightness(1.1) opacity(0)"
+                    mixBlendMode="color-dodge"
+                    backgroundSize="150% 150%"
+                    backgroundPosition="100%"
+                    transition="all 0.1s"
+                    zIndex="1"
+                  />
+                  <Image
+                    onClick={() => navigate("/")}
+                    src="https://search.pstatic.net/common/?src=http%3A%2F%2Fblogfiles.naver.net%2FMjAyMzEwMjdfMTY2%2FMDAxNjk4MzMyOTUwMTU0.abdxZp1psY9qPJl1XrSuCt710v-oHg1B_jKuLAKTjqAg.GDUgM5VOFfY8pETBtsdiJ2Z46O7_R9V43s55Tl6oJWog.JPEG.rkgp3310%2F1698332948530.jpg&type=sc960_832"
+                    cursor={"pointer"}
+                    w={"100%"}
+                    h={"300px"}
+                    borderRadius={"10px"}
+                    transition="0.2s ease-in-out"
+                    _hover={{
+                      transform: "scale(1.07)",
+                    }}
+                    zIndex="2"
+                  />
+                  <Box mt={5} zIndex="2">
+                    <Box display="flex" alignItems="baseline">
+                      <Box
+                        color="gray.500"
+                        fontWeight="semibold"
+                        letterSpacing="wide"
+                        fontSize="xs"
+                        textTransform="uppercase"
+                        ml="2"
+                      />
+                    </Box>
+                    <Box
+                      fontWeight="bold"
+                      fontSize={"14px"}
+                      as="h4"
+                      lineHeight="tight"
+                      textAlign={"center"}
+                      ml={"12px"}
+                    >
+                      <Text>반려견 동반 숙소</Text>
+                      <Badge ml={"5px"}>{hotelList.lodgingType}</Badge>
+                      {hotelList.lodgingType === "호텔" && (
+                        <Badge ml={"5px"}>{hotelList.rating}</Badge>
+                      )}
+                    </Box>
+                  </Box>
+                </Box>
+
+                <Box
+                  w={"auto"}
+                  overflow="hidden"
+                  position="relative"
+                  onMouseMove={(e) => {
+                    const x = e.nativeEvent.offsetX;
+                    const y = e.nativeEvent.offsetY;
+                    e.currentTarget.style.transform = `perspective(350px) rotateX(${
+                      (4 / 30) * y - 20
+                    }deg) rotateY(${(-1 / 5) * x + 20}deg)`;
+                  }}
+                  onMouseLeave={(e) => {
+                    e.currentTarget.style.transform =
+                      "perspective(350px) rotateY(0deg) rotateX(0deg)";
+                  }}
+                  transition="all 0.1s"
+                >
+                  <Box
+                    position="absolute"
+                    top="0"
+                    left="0"
+                    w="full"
+                    h="300px"
+                    bg="linear-gradient(105deg, transparent 40%, rgba(255, 219, 112, 0.8) 45%, rgba(132, 50, 255, 0.6) 50%, transparent 54%)"
+                    filter="brightness(1.1) opacity(0)"
+                    mixBlendMode="color-dodge"
+                    backgroundSize="150% 150%"
+                    backgroundPosition="100%"
+                    transition="all 0.1s"
+                    zIndex="1"
+                  />
+                  <Image
+                    onClick={() => navigate("/")}
+                    src="https://www.condo24.com/conphoto/165300963191.jpg"
+                    cursor={"pointer"}
+                    w={"100%"}
+                    h={"300px"}
+                    borderRadius={"10px"}
+                    transition="0.2s ease-in-out"
+                    _hover={{
+                      transform: "scale(1.07)",
+                    }}
+                    zIndex="2"
+                  />
+                  <Box mt={5} zIndex="2">
+                    <Box display="flex" alignItems="baseline">
+                      <Box
+                        color="gray.500"
+                        fontWeight="semibold"
+                        letterSpacing="wide"
+                        fontSize="xs"
+                        textTransform="uppercase"
+                        ml="2"
+                      />
+                    </Box>
+                    <Box
+                      fontWeight="bold"
+                      fontSize={"14px"}
+                      as="h4"
+                      lineHeight="tight"
+                      textAlign={"center"}
+                      ml={"12px"}
+                    >
+                      <Text>가족, 친구들과 함께 갈 숙소</Text>
+                      <Badge ml={"5px"}>{hotelList.lodgingType}</Badge>
+                      {hotelList.lodgingType === "호텔" && (
+                        <Badge ml={"5px"}>{hotelList.rating}</Badge>
+                      )}
+                    </Box>
+                  </Box>
+                </Box>
+
+                <Box
+                  w={"auto"}
+                  overflow="hidden"
+                  position="relative"
+                  onMouseMove={(e) => {
+                    const x = e.nativeEvent.offsetX;
+                    const y = e.nativeEvent.offsetY;
+                    e.currentTarget.style.transform = `perspective(350px) rotateX(${
+                      (4 / 30) * y - 20
+                    }deg) rotateY(${(-1 / 5) * x + 20}deg)`;
+                  }}
+                  onMouseLeave={(e) => {
+                    e.currentTarget.style.transform =
+                      "perspective(350px) rotateY(0deg) rotateX(0deg)";
+                  }}
+                  transition="all 0.1s"
+                >
+                  <Box
+                    position="absolute"
+                    top="0"
+                    left="0"
+                    w="full"
+                    h="300px"
+                    bg="linear-gradient(105deg, transparent 40%, rgba(255, 219, 112, 0.8) 45%, rgba(132, 50, 255, 0.6) 50%, transparent 54%)"
+                    filter="brightness(1.1) opacity(0)"
+                    mixBlendMode="color-dodge"
+                    backgroundSize="150% 150%"
+                    backgroundPosition="100%"
+                    transition="all 0.1s"
+                    zIndex="1"
+                  />
+                  <Image
+                    onClick={() => navigate("/")}
+                    src={hotelList[4].mainImgUrl}
+                    alt={hotelList.name}
+                    cursor={"pointer"}
+                    w={"100%"}
+                    h={"300px"}
+                    borderRadius={"10px"}
+                    transition="0.2s ease-in-out"
+                    _hover={{
+                      transform: "scale(1.07)",
+                    }}
+                    zIndex="2"
+                  />
+                  <Box mt={5} zIndex="2">
+                    <Box display="flex" alignItems="baseline">
+                      <Box
+                        color="gray.500"
+                        fontWeight="semibold"
+                        letterSpacing="wide"
+                        fontSize="xs"
+                        textTransform="uppercase"
+                        ml="2"
+                      />
+                    </Box>
+                    <Box
+                      fontWeight="bold"
+                      fontSize={"14px"}
+                      as="h4"
+                      lineHeight="tight"
+                      textAlign={"center"}
+                      ml={"12px"}
+                    >
+                      <Text>연인과 가는 아늑한 숙소</Text>
+                      <Badge ml={"5px"}>{hotelList.lodgingType}</Badge>
+                      {hotelList.lodgingType === "호텔" && (
+                        <Badge ml={"5px"}>{hotelList.rating}</Badge>
+                      )}
+                    </Box>
+                  </Box>
+                </Box>
+              </>
+            )}
+          </SimpleGrid>
+        </Flex>
+      </Center>
+
+      <Flex bor justifyContent="center" w="100%" mt={5}>
+        <Box w={"65%"} justifyContent={"center"} mt={"30px"} mb={8}>
+          <Image src="https://www.condo24.com/TechBean/banner/condo24_event_2023913[2].jpg" />
+        </Box>
+      </Flex>
+
+      {/* ------------------- 버스 상품 ------------------- */}
+      <Flex bor justifyContent="center" w="100%" mt={5} bg={"#F5F6F6"}>
         <Box w={"65%"} justifyContent={"center"} mt={"30px"} mb={8}>
           <Card
-            w={"400px"}
+            w={"200px"}
             h={"50px"}
             textAlign={"center"}
             mb={10}
@@ -500,7 +895,7 @@ export function HomeBody() {
             lineHeight={"50px"}
           >
             <Box fontWeight={900} fontSize={"1.2rem"}>
-              🚎 버스 상품
+              버스 목록
             </Box>
           </Card>
 
@@ -518,17 +913,136 @@ export function HomeBody() {
                       onClick={() => navigate("/transport/" + bus.tid)}
                       key={bus.tid}
                     >
-                      <Box position="relative" overflow={"hidden"}>
-                        <Image src={bus.url} h={"100%"} />
+                      <Box bg={"white"}>
+                        <Box position="relative" overflow={"hidden"}>
+                          <Image
+                            src={bus.url}
+                            h={"200px"}
+                            transition="0.2s ease-in-out"
+                            _hover={{
+                              transform: "scale(1.20)",
+                            }}
+                          />
+                        </Box>
+                        <Box mt={2} pt={0}>
+                          <Center>
+                            <Box>
+                              <Box textColor={"black"} fontWeight={"bold"}>
+                                {truncateString(
+                                  `[${bus.transStartLocation}] → [${bus.transArriveLocation}] ${bus.transTitle}`,
+                                  20,
+                                )}
+                              </Box>
+                              <FormControl>
+                                <Flex>
+                                  <FormLabel
+                                    fontSize={"1.1rem"}
+                                    textColor={"#509896"}
+                                    fontWeight={"900"}
+                                  >
+                                    가격 :
+                                  </FormLabel>
+                                  <Box
+                                    fontSize={"1.1rem"}
+                                    textColor={"#509896"}
+                                    fontWeight={"900"}
+                                  >
+                                    {parseInt(bus.transPrice).toLocaleString(
+                                      "ko-KR",
+                                    )}
+                                  </Box>
+                                </Flex>
+                              </FormControl>
+                            </Box>
+                          </Center>
+                        </Box>
                       </Box>
-                      <Box bg={"white"} mt={2} pt={0}>
+                    </Box>
+                  ),
+              )}
+            </SimpleGrid>
+          </Flex>
+        </Box>
+      </Flex>
+
+      {/* ------------------- 항공상품 ------------------- */}
+      <Flex
+        justifyContent="center"
+        mb={"10"}
+        w="100%"
+        position="relative" // 부모를 relative로 설정
+        h="700px" // 적절한 높이 설정
+      >
+        <Box
+          position="absolute" // 배경 이미지를 위한 절대 위치
+          top="0"
+          left="0"
+          w="full"
+          h="800px"
+          bgImage="url('https://cdn.pixabay.com/photo/2020/04/22/15/26/sky-5078664_1280.jpg')"
+          bgSize="cover"
+          bgPosition="center"
+          zIndex="-1" // 다른 내용물 뒤로 보내기
+        >
+          {/* 투명도 오버레이 */}
+          <Box
+            position="absolute"
+            top="0"
+            left="0"
+            w="full"
+            h="full"
+            bg="blackAlpha.500" // 검정색 오버레이, 여기서 투명도 조정
+            zIndex="-1"
+          />
+        </Box>
+        <Box w={"65%"} justifyContent={"center"} mt={"30px"}>
+          <Card
+            w={"200px"}
+            h={"50px"}
+            textAlign={"center"}
+            mb={10}
+            onClick={() => navigate("/transport")}
+            _hover={{ cursor: "pointer", color: "#509896" }}
+            lineHeight={"50px"}
+          >
+            <Box bg={"#ebebeb"} fontWeight={900} fontSize={"1.2rem"}>
+              항공 목록
+            </Box>
+          </Card>
+
+          <Flex>
+            <SimpleGrid columns={4} spacing={10}>
+              {listAir.map(
+                (air) =>
+                  air.typeName === "air" && (
+                    <Box
+                      bg={"white"}
+                      maxW="sm"
+                      borderRadius="lg"
+                      overflow="hidden"
+                      _hover={{ cursor: "pointer" }}
+                      onClick={() => navigate("/transport/" + air.tid)}
+                      key={air.tid}
+                    >
+                      <Box position="relative" overflow={"hidden"}>
+                        <Image
+                          src={air.url}
+                          h={"200px"}
+                          w={"100%"}
+                          transition="0.2s ease-in-out"
+                          _hover={{
+                            transform: "scale(1.20)",
+                          }}
+                        />
+                      </Box>
+                      <Box mt={2} pt={0}>
                         <Center>
                           <Box>
                             <Box textColor={"black"} fontWeight={"bold"}>
-                              [{bus.transStartLocation}] &nbsp;
-                              <FontAwesomeIcon icon={faAnglesRight} />
-                              &nbsp; [{bus.transArriveLocation}] &nbsp;{" "}
-                              {bus.transTitle}
+                              {truncateString(
+                                `[${air.transStartLocation}] → [${air.transArriveLocation}] ${air.transTitle}`,
+                                20,
+                              )}
                             </Box>
                             <FormControl>
                               <Flex>
@@ -544,7 +1058,9 @@ export function HomeBody() {
                                   textColor={"#509896"}
                                   fontWeight={"900"}
                                 >
-                                  {bus.transPrice}원
+                                  {parseInt(air.transPrice).toLocaleString(
+                                    "ko-KR",
+                                  )}
                                 </Box>
                               </Flex>
                             </FormControl>
@@ -555,82 +1071,6 @@ export function HomeBody() {
                   ),
               )}
             </SimpleGrid>
-          </Flex>
-        </Box>
-      </Flex>
-
-      {/* ------------------- 항공상품 중간정렬 ------------------- */}
-      <Flex justifyContent="center" w="100%" mt={5}>
-        <Box w={"65%"} justifyContent={"center"} mt={"30px"}>
-          <Card
-            w={"400px"}
-            h={"50px"}
-            textAlign={"center"}
-            mb={10}
-            onClick={() => navigate("/transport")}
-            _hover={{ cursor: "pointer", color: "#509896" }}
-            lineHeight={"50px"}
-          >
-            <Box fontWeight={900} fontSize={"1.2rem"}>
-              🛫 항공 상품
-            </Box>
-          </Card>
-          <Flex>
-            {listAir.map(
-              (air) =>
-                air.typeName === "air" && (
-                  <Card
-                    mb={5}
-                    key={air.tid}
-                    w={"450px"}
-                    mr={7}
-                    _hover={{
-                      cursor: "pointer",
-                      backgroundColor: "#eeecec",
-                      transition: "background 0.5s ease-in-out",
-                    }}
-                    onClick={() => navigate("/transport/" + air.tid)}
-                  >
-                    <CardHeader mb={0} pb={0}>
-                      <Center>
-                        <Box w={"90%"}>
-                          <Image src={air.url} />
-                        </Box>
-                      </Center>
-                    </CardHeader>
-                    <CardBody mt={2} pt={0}>
-                      <Center>
-                        <Box>
-                          <Box textColor={"black"} fontWeight={"bold"}>
-                            [{air.transStartLocation}] &nbsp;
-                            <FontAwesomeIcon icon={faAnglesRight} />
-                            &nbsp; [{air.transArriveLocation}] &nbsp;{" "}
-                            {air.transTitle}
-                          </Box>
-                          <FormControl>
-                            <Flex>
-                              <FormLabel
-                                fontSize={"1.1rem"}
-                                textColor={"#509896"}
-                                fontWeight={"900"}
-                              >
-                                가격 :
-                              </FormLabel>
-                              <Box
-                                fontSize={"1.1rem"}
-                                textColor={"#509896"}
-                                fontWeight={"900"}
-                              >
-                                {air.transPrice}원
-                              </Box>
-                            </Flex>
-                          </FormControl>
-                        </Box>
-                      </Center>
-                    </CardBody>
-                  </Card>
-                ),
-            )}
           </Flex>
         </Box>
       </Flex>
