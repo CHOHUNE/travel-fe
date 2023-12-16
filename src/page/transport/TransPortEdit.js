@@ -193,6 +193,13 @@ export function TransPortEdit() {
     }
   }
 
+  // 상품의 입금가 수정
+  function handleInsertPriceChange(e) {
+    updateTrans((draft) => {
+      draft.transInsertPrice = e.target.value;
+    });
+  }
+
   return (
     <Center>
       <Card w={"70%"} textAlign={"center"} mt={8} mb={8}>
@@ -467,9 +474,25 @@ export function TransPortEdit() {
           <FormControl mt={4}>
             <Flex>
               <FormLabel w={"50%"} textAlign={"center"} fontSize={"1.1rem"}>
-                가격
+                입금 가격
               </FormLabel>
-              <Input value={trans.transPrice} onChange={handlePriceChange} />
+              <Input
+                type={"number"}
+                value={trans.transInsertPrice}
+                onChange={handleInsertPriceChange}
+              />
+            </Flex>
+          </FormControl>
+          <FormControl mt={4}>
+            <Flex>
+              <FormLabel w={"50%"} textAlign={"center"} fontSize={"1.1rem"}>
+                판매 가격
+              </FormLabel>
+              <Input
+                type={"number"}
+                value={trans.transPrice}
+                onChange={handlePriceChange}
+              />
             </Flex>
           </FormControl>
           <FormControl mt={4}>

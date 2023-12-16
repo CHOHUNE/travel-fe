@@ -32,6 +32,7 @@ export function TransPortWrite() {
   const [transStartLocation, setTransStartLocation] = useState("");
   const [transArriveLocation, setTransArriveLocation] = useState("");
   const [transAddress, setTransAddress] = useState("");
+  const [transInsertPrice, setTransInsertPrice] = useState("");
 
   // 시작일 마감일 test
   const [transStartDate, setTransStartDate] = useState("");
@@ -58,6 +59,7 @@ export function TransPortWrite() {
         transAddress,
         transStartDate,
         transEndDate,
+        transInsertPrice,
       })
       .then(() => {
         toast({
@@ -322,10 +324,25 @@ export function TransPortWrite() {
           <FormControl mt={2}>
             <Flex>
               <FormLabel w={"50%"} textAlign={"center"} fontSize={"1.1rem"}>
-                가격
+                입금 가격
               </FormLabel>
               <Input
+                type={"number"}
+                value={transInsertPrice}
+                placeholder={"입금 가격 입니다."}
+                onChange={(e) => setTransInsertPrice(e.target.value)}
+              />
+            </Flex>
+          </FormControl>
+          <FormControl mt={2}>
+            <Flex>
+              <FormLabel w={"50%"} textAlign={"center"} fontSize={"1.1rem"}>
+                판매 가격
+              </FormLabel>
+              <Input
+                type={"number"}
                 value={transPrice}
+                placeholder={"판매 가격 입니다."}
                 onChange={(e) => setTransPrice(e.target.value)}
               />
             </Flex>

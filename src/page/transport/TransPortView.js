@@ -76,6 +76,8 @@ export function TransPortView() {
   const [transTotalPrice, setTransTotalPrice] = useState(0);
   const navigate = useNavigate();
 
+  const [reserveDayCheck, setReserveDayCheck] = useState(false);
+
   const toast = useToast();
 
   const { login, isAdmin } = useContext(LoginContext);
@@ -192,6 +194,7 @@ export function TransPortView() {
 
   // 예약일 날짜 정해지면 작동 -------------------------------------------------
   function handleReserveDayChange(e) {
+    setReserveDayCheck(true);
     setTransReserveDay(e);
   }
 
@@ -205,9 +208,16 @@ export function TransPortView() {
     // 로그인한 유저가 빈스트링이 아니면 로그인 상태 이므로 결제 페이지로 이동시키기
     if (login !== "") {
       // 로그인 한 유저가 결제 버튼을 누르면 해당 상품 아이디와 예약일, 총금액, 인원을 넘김
-      navigate("/transport/pay/" + id, {
-        state: { transReserveDay, transTotalPrice, passenger },
-      });
+      if (reserveDayCheck === true) {
+        navigate("/transport/pay/" + id, {
+          state: { transReserveDay, transTotalPrice, passenger },
+        });
+      } else {
+        toast({
+          description: "출발일자를 선택해 주세요",
+          colorScheme: "orange",
+        });
+      }
     } else {
       // 아니면 로그인해달라고 토스트 띄우기
       toast({ description: "로그인후 결제해주세요", status: "error" });
@@ -344,7 +354,8 @@ export function TransPortView() {
                     fontFamily={"GmarketSansMedium"}
                     fontWeight={"700"}
                   >
-                    가격 : {trans.transPrice}원
+                    가격 : {parseInt(trans.transPrice).toLocaleString("ko-KR")}
+                    원
                   </Box>
                   <Box mr={2} color={"gray"}>
                     1인당 가격
@@ -546,7 +557,7 @@ export function TransPortView() {
                     placeholder={trans.transPrice}
                     value={transTotalPrice}
                     onChange={() => {
-                      setTransTotalPrice(passenger * trans.transPrice);
+                      //   setTransTotalPrice(passenger * trans.transPrice);
                     }}
                     // border={"0px"}
                   />
