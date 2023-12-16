@@ -878,7 +878,7 @@ export function HomeBody() {
 
       <Flex bor justifyContent="center" w="100%" mt={5}>
         <Box w={"65%"} justifyContent={"center"} mt={"30px"} mb={8}>
-          <Image src="https://www.condo24.com/TechBean/banner/condo24_event_2023913[2].jpg" />
+          <Image src="https://study1993garbi.s3.ap-northeast-2.amazonaws.com/travel/sourceFile/imgeFile/%E1%84%87%E1%85%A2%E1%84%82%E1%85%A51.png" />
         </Box>
       </Flex>
 
