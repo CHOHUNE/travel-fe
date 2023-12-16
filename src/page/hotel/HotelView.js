@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import "react-datepicker/dist/react-datepicker.css";
 import {
   Box,
@@ -20,7 +20,7 @@ import {
   Textarea,
   Select,
 } from "@chakra-ui/react";
-import { useNavigate, useParams } from "react-router-dom";
+import { useLocation, useNavigate, useParams } from "react-router-dom";
 import axios from "axios";
 import { AddIcon, MinusIcon, StarIcon } from "@chakra-ui/icons";
 import { Swiper, SwiperSlide } from "swiper/react";
@@ -28,15 +28,16 @@ import { Pagination } from "swiper/modules";
 import "./style.css";
 import DatePicker from "react-datepicker";
 import { format } from "date-fns";
+import { LoginContext } from "../../component/LoginProvider";
 
 export function HotelView() {
   const { id } = useParams();
   const [hotel, setHotel] = useState([]);
   const [roomtypeList, setRoomtypeList] = useState(null);
+
   const [reservation, setReservation] = useState({
     checkinDate: null,
     checkoutDate: null,
-    totalPrice: null,
   });
 
   const navigate = useNavigate();
@@ -46,6 +47,8 @@ export function HotelView() {
   const [showCheckInInput, setShowCheckInInput] = useState(false);
   const [selectedRoom, setSelectedRoom] = useState();
   const [roomTypePrices, setRoomTypePrices] = useState({});
+
+  const { login, isAdmin } = useContext(LoginContext);
 
   const saveToRecentViewed = (hotelData) => {
     const recentViewed = JSON.parse(localStorage.getItem("recentViewed")) || [];
@@ -71,6 +74,28 @@ export function HotelView() {
   //     .get("/api/hotel/pay")
   //     .then((response) => setReservation(response.data));
   // }, []);
+
+  function handleReservationClick() {
+    if (login !== "") {
+      const selectedRoomPrice = roomTypePrices[selectedRoom];
+
+      if (selectedRoomPrice !== undefined) {
+        navigate("/hotel/pay/" + hotel.hid, {
+          state: {
+            reservation,
+            roomTypePrices: { [selectedRoom]: selectedRoomPrice },
+          },
+        });
+      } else {
+        toast({
+          description: "객실 가격 정보를 찾을 수 없습니다.",
+          status: "error",
+        });
+      }
+    } else {
+      toast({ description: "로그인 후 결제 해주세요.", status: "error" });
+    }
+  }
 
   function handleHotelDelete() {
     axios
@@ -401,7 +426,7 @@ export function HotelView() {
                   <VStack mr="40px">
                     <Text fontSize="xl" fontWeight="bold">
                       {/* 변경된 부분: 날짜가 선택되지 않았을 때는 평일 요금 표시 */}
-                      최종 숙박료 :
+                      숙박 요금 :
                       {roomTypePrices[roomtype.roomtype] &&
                         roomTypePrices[roomtype.roomtype].toLocaleString()}
                     </Text>
@@ -417,7 +442,10 @@ export function HotelView() {
                   <Stack>
                     <Select
                       placeholder="객실 수 "
-                      onChange={(e) => setCount(e.target.value)}
+                      onChange={(e) => {
+                        setCount(e.target.value);
+                        setSelectedRoom(roomtype.roomtype);
+                      }}
                     >
                       <option value="1">객실 1개</option>
                       <option value="2">객실 2개</option>
@@ -428,7 +456,7 @@ export function HotelView() {
                     <Button
                       variant={"outline"}
                       colorScheme={"green"}
-                      onClick={() => navigate("/hotel/pay/" + hotel.hid)}
+                      onClick={handleReservationClick}
                     >
                       {" "}
                       예약하기{" "}
