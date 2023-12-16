@@ -104,15 +104,15 @@ export function NavBar() {
   return (
     <Box>
       {/* ------------------ 최상단 배너 ------------------ */}
-      <Flex bor justifyContent="center" w="100%" mt={-8}>
-        <Box w={"75%"} justifyContent={"center"} mt={"30px"} mb={8}>
-          <Image src="https://study1993garbi.s3.ap-northeast-2.amazonaws.com/travel/sourceFile/imgeFile/%E1%84%87%E1%85%A2%E1%84%82%E1%85%A52.jpeg" />
-        </Box>
-      </Flex>
+      {/*<Flex bor justifyContent="center" w="100%" mt={-8}>*/}
+      {/*  <Box w={"75%"} justifyContent={"center"} mt={"30px"} mb={8}>*/}
+      {/*    <Image src="https://study1993garbi.s3.ap-northeast-2.amazonaws.com/travel/sourceFile/imgeFile/%E1%84%87%E1%85%A2%E1%84%82%E1%85%A52.jpeg" />*/}
+      {/*  </Box>*/}
+      {/*</Flex>*/}
       <Flex
         fontWeight={"700"}
         fontFamily={"GmarketSansMedium"}
-        mt={-9}
+        // mt={-9}
         justifyContent={"center"}
         w={"100%"}
       >

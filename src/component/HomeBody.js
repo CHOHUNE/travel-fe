@@ -431,7 +431,11 @@ export function HomeBody() {
             </Box>
           </Card>
           <Text fontSize={"1.5rem"} mb={-5}>
-            실시간 인기 숙소
+            이번주{" "}
+            <Text as="span" color="blue.500">
+              TOP
+            </Text>{" "}
+            랭킹 숙소
           </Text>
           <Center w={"100%"} h={"300px"} mb={15}>
             <Flex justifyContent={"space-between"} flexWrap="wrap">
