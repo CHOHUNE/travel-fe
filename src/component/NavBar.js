@@ -116,7 +116,7 @@ export function NavBar() {
         justifyContent={"center"}
         w={"100%"}
       >
-        <Box mt={2} w={"80%"}>
+        <Box mt={4} w={"80%"}>
           {/* 헤더 네브바1 */}
           <Box mb={"5px"} w="80%" h={"80px"} ml="auto" mr="auto">
             <Flex justifyContent={"space-between"} textAlign={"center"}>
@@ -155,7 +155,15 @@ export function NavBar() {
               </Flex>
 
               <Flex alignItems={"center"}>
-                <p style={{ color: "gray", fontSize: "13px" }}>인기검색어</p>
+                <p
+                  style={{
+                    color: "gray",
+                    fontSize: "13px",
+                    marginRight: "7px",
+                  }}
+                >
+                  인기검색어
+                </p>
                 <VerticalSwiper />
               </Flex>
 
