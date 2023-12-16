@@ -28,6 +28,9 @@ import {
   Tbody,
   Td,
   Box,
+  Checkbox,
+  Stack,
+  CheckboxGroup,
 } from "@chakra-ui/react";
 import { useNavigate } from "react-router-dom";
 import DatePicker from "react-datepicker";
@@ -47,6 +50,13 @@ export function HotelWrite() {
   const [salesTo, setSalesTo] = useState(null);
   const [rating, setRating] = useState(null);
   const [cautionMessage, setCautionMessage] = useState(null);
+
+  const [pool, setPool] = useState("");
+  const [pet, setPet] = useState("");
+  const [oceanview, setOceanview] = useState("");
+  const [familyMood, setFamilyMood] = useState("");
+  const [romanticMood, setRomanticMood] = useState("");
+  const [campingMood, setCampingMood] = useState("");
 
   const toast = useToast();
   const navigate = useNavigate();
@@ -77,6 +87,12 @@ export function HotelWrite() {
         salesTo,
         rating,
         cautionMessage,
+        pool,
+        oceanview,
+        pet,
+        familyMood,
+        romanticMood,
+        campingMood,
       });
 
       // 성공적으로 처리된 경우
@@ -167,10 +183,11 @@ export function HotelWrite() {
                 <option value="호텔">호텔</option>
                 <option value="모텔">모텔</option>
                 <option value="민박">민박</option>
+                <option value="캠핑/카라반">캠핑/카라반</option>
+                <option value="리조트">리조트</option>
                 <option value="게스트 하우스">게스트 하우스</option>
               </Select>
             </Flex>
-
             <Flex>
               <FormLabel
                 my={"15px"}
@@ -180,7 +197,7 @@ export function HotelWrite() {
                 alignItems={"center"}
               >
                 {" "}
-                숙소 등급{" "}
+                호텔 등급{" "}
               </FormLabel>
 
               <Select
@@ -198,7 +215,6 @@ export function HotelWrite() {
                 <option value={"5성"}>5성</option>
               </Select>
             </Flex>
-
             <FormControl
               mt={2}
               // border={"2px solid black"}
@@ -272,8 +288,74 @@ export function HotelWrite() {
                 onChange={(e) => setCautionMessage(e.target.value)}
               />
             </Box>
-
             <Divider />
+            <FormLabel
+              my={"15px"}
+              w={"200px"}
+              textAlign="center"
+              display="flex"
+              alignItems={"center"}
+            >
+              {" "}
+              테마{" "}
+            </FormLabel>
+
+            <CheckboxGroup colorScheme="green">
+              <Stack spacing={[1, 5]} direction={["column", "row"]}>
+                <Checkbox
+                  value="반려견 동반"
+                  onChange={(e) =>
+                    setPet(e.target.checked ? "반려견 동반" : null)
+                  }
+                  isChecked={pet === "반려견 동반"}
+                >
+                  반려견 동반
+                </Checkbox>
+                <Checkbox
+                  value="오션뷰"
+                  onChange={(e) =>
+                    setOceanview(e.target.checked ? "오션뷰" : null)
+                  }
+                  isChecked={oceanview === "오션뷰"}
+                >
+                  오션뷰
+                </Checkbox>
+                <Checkbox
+                  value="가족, 친구"
+                  onChange={(e) =>
+                    setFamilyMood(e.target.checked ? "가족, 친구" : null)
+                  }
+                  isChecked={familyMood === "가족, 친구"}
+                >
+                  가족, 친구
+                </Checkbox>
+                <Checkbox
+                  value="연인"
+                  onChange={(e) =>
+                    setRomanticMood(e.target.checked ? "연인" : null)
+                  }
+                  isChecked={romanticMood === "연인"}
+                >
+                  연인
+                </Checkbox>
+                <Checkbox
+                  value="캠핑, 카라반"
+                  onChange={(e) =>
+                    setCampingMood(e.target.checked ? "캠핑, 카라반" : null)
+                  }
+                  isChecked={campingMood === "캠핑, 카라반"}
+                >
+                  캠핑, 카라반
+                </Checkbox>
+                <Checkbox
+                  value="수영장"
+                  onChange={(e) => setPool(e.target.checked ? "수영장" : null)}
+                  isChecked={pool === "수영장"}
+                >
+                  수영장
+                </Checkbox>
+              </Stack>
+            </CheckboxGroup>
 
             <Flex mt={"20px"}>
               <FormLabel
@@ -292,7 +374,6 @@ export function HotelWrite() {
                 onChange={(e) => setMainImg(e.target.files)}
               />
             </Flex>
-
             <Flex>
               <FormLabel
                 my={"15px"}
