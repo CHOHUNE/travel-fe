@@ -46,7 +46,7 @@ import {
   ModalFooter,
   useDisclosure,
 } from "@chakra-ui/react";
-import { useNavigate, useParams } from "react-router-dom";
+import { useLocation, useNavigate, useParams } from "react-router-dom";
 import axios from "axios";
 import { ChevronDownIcon } from "@chakra-ui/icons";
 import { PaymentPage } from "../payment/PaymentPage";
@@ -67,6 +67,12 @@ export function HotelPay() {
 
   const [personName, setPersonName] = useState("");
 
+  const [selectedRoom, setSelectedRoom] = useState("");
+
+  const location = useLocation();
+  const reservation = location.state.reservation;
+  const roomTypePrices = location.state.roomTypePrices;
+
   useEffect(() => {
     axios
       .get(`/api/hotel/pay/${id}`)
@@ -80,7 +86,7 @@ export function HotelPay() {
           status: "error",
         });
       });
-  }, [id]);
+  }, [roomTypePrices]);
 
   // ---------- 이메일 @ 기준으로 나누기 ---------
   let receiveEmail = member.email ? member.email.split("@") : ["", ""];
@@ -154,10 +160,14 @@ export function HotelPay() {
                     <Th>{hotel.lodgingType}</Th>
                     <Th>RoomOnly</Th>
                     <Th>
-                      체크인 : 23년 12월 07일 (목) 체크아웃 : 23년 12월 08일
-                      (금) 총 : 1박 / 1실
+                      {reservation.checkinDate.toISOString().split("T")[0]} ~{" "}
+                      {reservation.checkoutDate.toISOString().split("T")[0]}
                     </Th>
-                    <Th>{hotel.totalPrice}</Th>
+                    <Th>
+                      {roomTypePrices && roomTypePrices[selectedRoom]
+                        ? roomTypePrices[selectedRoom].toLocaleString()
+                        : ""}
+                    </Th>
                   </Tr>
                 </Tbody>
               </Table>
