@@ -43,7 +43,9 @@ import { SuccessPage } from "./page/payment/SuccessPage";
 import { PaymentPage } from "./page/payment/PaymentPage";
 import { HotelTypeWrite } from "./page/hotel/HotelTypeWrite";
 import { DeleteView } from "./page/member/MyPage/DeleteView";
-
+import { FailPageH } from "./page/hotel/payment/FailPageH";
+import { SuccessPageH } from "./page/hotel/payment/SuccessPageH";
+import { PaymentPageH } from "./page/hotel/payment/PaymentPageH";
 const routes = createBrowserRouter(
   createRoutesFromElements(
     <Route path="/" element={<HomeLayout />}>
@@ -94,6 +96,10 @@ const routes = createBrowserRouter(
       <Route path="/fail" element={<FailPage />} />
       <Route path="/successpage" element={<SuccessPage />} />
       <Route path="/PaymentPage/:id" element={<PaymentPage />} />
+      {/*호텔 페이지*/}
+      <Route path="/failHotle" element={<FailPageH />} />
+      <Route path="/successpageHotel" element={<SuccessPageH />} />
+      <Route path="/PaymentPageHotel/:id" element={<PaymentPageH />} />
     </Route>,
   ),
 );

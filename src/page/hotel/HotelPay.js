@@ -121,6 +121,12 @@ export function HotelPay() {
     setPersonChild(child);
   };
 
+  function handlePaymentClick(response) {
+    navigate(`/PaymentPageHotel/${id}`, {
+      state: { id, amount: hotel.totalPrice },
+    });
+  }
+
   return (
     <ChakraProvider theme={theme}>
       <Center m={20}>
@@ -168,6 +174,8 @@ export function HotelPay() {
                         ? roomTypePrices[selectedRoom].toLocaleString()
                         : ""}
                     </Th>
+                    {/* TODO 호텔 가격 넣기*/}
+                    <Th>30000000000000</Th>
                   </Tr>
                 </Tbody>
               </Table>
@@ -734,7 +742,8 @@ export function HotelPay() {
                             color: "#3e71da",
                           }}
                         >
-                          <Box textAlign={"right"}>{hotel.totalPrice}원</Box>
+                          {/*TODO*/}
+                          <Box textAlign={"right"}>3000000 원</Box>
                         </span>
                         <Button
                           w={"100%"}
@@ -742,7 +751,7 @@ export function HotelPay() {
                           mt={"20px"}
                           background={"#4095D9"}
                           color={"white"}
-                          onClick={() => navigate(`/PaymentPage/${id}`)}
+                          onClick={handlePaymentClick}
                         >
                           결제하기
                         </Button>

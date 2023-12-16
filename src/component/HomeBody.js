@@ -1,7 +1,9 @@
 import {
+  Badge,
   border,
   Box,
   Button,
+  ButtonGroup,
   Card,
   CardBody,
   CardHeader,
@@ -12,24 +14,34 @@ import {
   Heading,
   Image,
   Input,
+  Menu,
+  MenuButton,
+  MenuItem,
+  MenuList,
+  SimpleGrid,
+  Text,
   VStack,
 } from "@chakra-ui/react";
 import App from "../page/hotel/App";
 import React, { useEffect, useRef, useState } from "react";
 import { RecentViewed } from "./RecentViewed";
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate, useSearchParams } from "react-router-dom";
 import axios from "axios";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faAnglesRight } from "@fortawesome/free-solid-svg-icons";
+import { faAnglesRight, faHeart } from "@fortawesome/free-solid-svg-icons";
 import DatePicker from "react-datepicker";
 import ko from "date-fns/locale/ko";
+import { differenceInCalendarDays } from "date-fns";
 import "../component/Calendar.css";
+import { ChevronDownIcon } from "@chakra-ui/icons";
 
 export function HomeBody() {
   const navigate = useNavigate();
 
   const [listBus, setListBus] = useState([]);
   const [listAir, setListAir] = useState([]);
+
+  const [keyword, setKeyword] = useState("");
 
   useEffect(() => {
     axios
@@ -57,6 +69,11 @@ export function HomeBody() {
   const [startDate, endDate] = dateRange;
   const wrapperRef = useRef(null); // 컴포넌트 참조를 위한 ref
   const [isOpen, setIsOpen] = useState(false);
+  const [hotelList, setHotelList] = useState([]);
+
+  // ------------------- 날짜선택시 몇박인지 조회 ------------------
+  const totalNights =
+    startDate && endDate ? differenceInCalendarDays(endDate, startDate) : 0;
 
   useEffect(() => {
     // 외부 클릭 감지를 위한 이벤트 핸들러
@@ -86,11 +103,50 @@ export function HomeBody() {
       _hover={{ color: "blue.600" }}
     >
       {value || "날짜 선택"}
+      {totalNights > 0 && (
+        <Box as="span" color="blue.500" ml="2">
+          ({totalNights}박)
+        </Box>
+      )}
     </Button>
   );
 
+  // ------------------- 인원 선택 ------------------
+  const [personAdult, setPersonAdult] = useState("1명"); // 성인 인원
+  const [personChild, setPersonChild] = useState(""); // 소인 인원
+
+  const handlePersonnelAdultClick = (person) => {
+    setPersonAdult(person);
+  };
+
+  const handlePersonnelChildClick = (child) => {
+    setPersonChild(child);
+  };
+
+  // ------------------- 검색하기 -------------------
+  function handleSearch() {
+    // /?k=keyword
+    const params = new URLSearchParams();
+    params.set("k", keyword);
+
+    const queryString = params.toString();
+    navigate(`/hotel/?${queryString}`);
+    // navigate("/?" + params);
+  }
+
+  // ------------------- 호텔상품 -------------------
+
+  const [params] = useSearchParams();
+  const location = useLocation();
+
+  useEffect(() => {
+    axios.get("/api/hotel/list?" + params).then((response) => {
+      setHotelList(response.data.hotelList);
+    });
+  }, [location]);
+
   return (
-    <Box>
+    <Box fontWeight={"700"} fontFamily={"GmarketSansMedium"}>
       {/* ---------- 배너이미지  */}
       <Box boxShadow={"5px 5px 5px 5px gray"} w={"100%"} h={"520px"}>
         <Flex justifyContent={"space-around"} alignItems={"center"}>
@@ -150,6 +206,7 @@ export function HomeBody() {
                 _focus={{
                   boxShadow: "none", // 포커스 시 박스 그림자 제거
                 }}
+                onChange={(e) => setKeyword(e.target.value)}
               />
             </VStack>
 
@@ -161,7 +218,7 @@ export function HomeBody() {
                   fontSize: "12px",
                   marginBottom: "-10px",
                   color: "gray",
-                  marginLeft: "15px",
+                  marginLeft: "16px",
                 }}
               >
                 숙박 날짜
@@ -212,12 +269,221 @@ export function HomeBody() {
               </Box>
             </VStack>
 
-            {/* 성인, 소인 인원선택 구현해야함 */}
-            <div style={{ fontSize: "16px" }}>성인 2, 객실 1</div>
-            <Button bg={"#4caf50"} color={"white"} borderRadius={"20px"}>
-              검색하기
+            <VStack alignItems={"flex-start"}>
+              <p
+                style={{
+                  fontSize: "12px",
+                  marginBottom: "-25px",
+                  color: "gray",
+                  marginLeft: "9px",
+                }}
+              >
+                인원 수
+              </p>
+              <Flex mt={2}>
+                <Flex style={{ fontSize: "16px" }}>
+                  <Box
+                    style={{
+                      fontWeight: "bold",
+                      fontSize: "16px",
+                      verticalAlign: "middle",
+                      margin: "0 8px",
+                      marginTop: "15px",
+                    }}
+                  >
+                    성인
+                  </Box>
+                  <Menu>
+                    <MenuButton
+                      as={Button}
+                      rightIcon={<ChevronDownIcon />}
+                      background={"white"}
+                      border={"1px solid #ededed"}
+                      mt={"13px"}
+                      fontSize={"13px"}
+                      w={"67px"}
+                      h={"30px"}
+                    >
+                      {personAdult ? personAdult : "1명"}
+                    </MenuButton>
+
+                    <MenuList>
+                      <MenuItem
+                        onClick={() => handlePersonnelAdultClick("1명")}
+                      >
+                        1명
+                      </MenuItem>
+                      <MenuItem
+                        onClick={() => handlePersonnelAdultClick("2명")}
+                      >
+                        2명
+                      </MenuItem>
+                      <MenuItem
+                        onClick={() => handlePersonnelAdultClick("3명")}
+                      >
+                        3명
+                      </MenuItem>
+                      <MenuItem
+                        onClick={() => handlePersonnelAdultClick("4명")}
+                      >
+                        4명
+                      </MenuItem>
+                    </MenuList>
+                  </Menu>
+                </Flex>
+
+                <Flex>
+                  <Box
+                    style={{
+                      fontWeight: "bold",
+                      fontSize: "16px",
+                      verticalAlign: "middle",
+                      margin: "0 8px",
+                      marginTop: "15px",
+                    }}
+                  >
+                    소인
+                  </Box>
+                  <Menu>
+                    <MenuButton
+                      as={Button}
+                      rightIcon={<ChevronDownIcon />}
+                      background={"white"}
+                      border={"1px solid #ededed"}
+                      mt={"13px"}
+                      fontSize={"13px"}
+                      w={"67px"}
+                      h={"30px"}
+                    >
+                      {personChild ? personChild : "1명"}
+                    </MenuButton>
+
+                    <MenuList>
+                      <MenuItem
+                        onClick={() => handlePersonnelChildClick("1명")}
+                      >
+                        1명
+                      </MenuItem>
+                      <MenuItem
+                        onClick={() => handlePersonnelChildClick("2명")}
+                      >
+                        2명
+                      </MenuItem>
+                      <MenuItem
+                        onClick={() => handlePersonnelChildClick("3명")}
+                      >
+                        3명
+                      </MenuItem>
+                      <MenuItem
+                        onClick={() => handlePersonnelChildClick("4명")}
+                      >
+                        4명
+                      </MenuItem>
+                    </MenuList>
+                  </Menu>
+                </Flex>
+              </Flex>
+            </VStack>
+            <Button
+              h={"50px"}
+              bg={"blue.500"}
+              color={"white"}
+              borderRadius={"30px"}
+              onClick={handleSearch}
+              fontSize={21}
+            >
+              <Text mt={1}>검색하기</Text>
             </Button>
           </Box>
+
+          {/* --------------------------------- 호텔상품 ---------------------------------  */}
+          <Card
+            w={"400px"}
+            h={"50px"}
+            textAlign={"center"}
+            mb={10}
+            onClick={() => navigate("/hotel")}
+            _hover={{ cursor: "pointer", color: "#509896" }}
+            lineHeight={"50px"}
+          >
+            <Box fontWeight={900} fontSize={"1.2rem"}>
+              호텔 상품
+            </Box>
+          </Card>
+          <Box w={"100%"} h={"300px"} mb={15}>
+            <Flex justifyContent={"space-between"} flexWrap="wrap">
+              <SimpleGrid columns={5} spacing={14} my={"20px"}>
+                {hotelList &&
+                  hotelList.slice(0, 5).map((hotel) => (
+                    <Box maxW="sm" w={"170px"} overflow="hidden">
+                      <Box position="relative">
+                        <Image
+                          onClick={() => navigate("/hotel/reserv/" + hotel.hid)}
+                          src={hotel.mainImgUrl}
+                          alt={hotel.name}
+                          cursor={"pointer"}
+                          w={"170px"}
+                          h={"170px"}
+                          borderRadius={"50%"}
+                        />
+                      </Box>
+                      <Box p="6">
+                        <Box display="flex" alignItems="baseline">
+                          <Box
+                            color="gray.500"
+                            fontWeight="semibold"
+                            letterSpacing="wide"
+                            fontSize="xs"
+                            textTransform="uppercase"
+                            ml="2"
+                          ></Box>
+                        </Box>
+                        <Box
+                          fontWeight="bold"
+                          fontSize={"10px"}
+                          as="h4"
+                          lineHeight="tight"
+                          noOfLines={1}
+                          textAlign={"center"}
+                          ml={"12px"}
+                        >
+                          {hotel.name}
+                          <Badge ml={"5px"}>{hotel.lodgingType}</Badge>
+
+                          {hotel.lodgingType == "호텔" && (
+                            <Badge ml={"5px"}>{hotel.rating}</Badge>
+                          )}
+                        </Box>
+
+                        <Box
+                          display="flex"
+                          mt="2"
+                          alignItems="center"
+                          justifyContent="space-between"
+                        >
+                          <Box
+                            position="fixed" // 절대 위치를 사용해 오버레이 설정
+                            top="300" // 배너의 상단에서 시작
+                            right="2" // 배너의 우측에서 시작
+                            zIndex="10" // 다른 요소보다 위에 오도록 z-index 설정
+                            p="4" // 패딩 값
+                            bg="rgba(255, 255, 255, 0.3)" // 배경색
+                            boxShadow="lg" // 그림자 효과
+                            maxW="sm" // 최대 너비 설정
+                            overflow="hidden" // 내용이 넘치면 숨김
+                          >
+                            <RecentViewed />
+                          </Box>
+                        </Box>
+                      </Box>
+                    </Box>
+                  ))}
+              </SimpleGrid>
+            </Flex>
+          </Box>
+          {/* --------------------------------- 호텔상품 끝끝끝끝끝---------------------------------  */}
+
+          {/* --------------------------------- 버스 상품 --------------------------------- */}
           <Card
             w={"400px"}
             h={"50px"}
@@ -227,11 +493,7 @@ export function HomeBody() {
             _hover={{ cursor: "pointer", color: "#509896" }}
             lineHeight={"50px"}
           >
-            <Box
-              fontWeight={900}
-              fontSize={"1.2rem"}
-              style={{ fontFamily: "Pretendard-Regular" }}
-            >
+            <Box fontWeight={900} fontSize={"1.2rem"}>
               🚎 버스 상품
             </Box>
           </Card>
@@ -294,9 +556,10 @@ export function HomeBody() {
           </Flex>
         </Box>
       </Flex>
+      {/* --------------------------------- 버스 상품 끝 --------------------------------- */}
 
       {/* ------------------- 항공상품 중간정렬 ------------------- */}
-      <Flex justifyContent="center" w="100%" bg={"#eeeeee"} mt={5}>
+      <Flex justifyContent="center" w="100%" mt={5} bg={"#F5F6F6"}>
         <Box w={"65%"} justifyContent={"center"} mt={"30px"}>
           <Card
             w={"400px"}
