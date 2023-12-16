@@ -344,7 +344,8 @@ export function TransPortView() {
                     fontFamily={"GmarketSansMedium"}
                     fontWeight={"700"}
                   >
-                    가격 : {trans.transPrice}원
+                    가격 : {parseInt(trans.transPrice).toLocaleString("ko-KR")}
+                    원
                   </Box>
                   <Box mr={2} color={"gray"}>
                     1인당 가격
@@ -546,7 +547,7 @@ export function TransPortView() {
                     placeholder={trans.transPrice}
                     value={transTotalPrice}
                     onChange={() => {
-                      setTransTotalPrice(passenger * trans.transPrice);
+                      //   setTransTotalPrice(passenger * trans.transPrice);
                     }}
                     // border={"0px"}
                   />
