@@ -554,10 +554,12 @@ export function TransPortView() {
                   <Input
                     fontSize={14}
                     w={"45%"}
-                    placeholder={trans.transPrice}
-                    value={transTotalPrice}
+                    placeholder={parseInt(trans.transPrice).toLocaleString(
+                      "ko-KR",
+                    )}
+                    value={parseInt(transTotalPrice).toLocaleString("ko-KR")}
                     onChange={() => {
-                      //   setTransTotalPrice(passenger * trans.transPrice);
+                      setTransTotalPrice(passenger * trans.transPrice);
                     }}
                     // border={"0px"}
                   />
