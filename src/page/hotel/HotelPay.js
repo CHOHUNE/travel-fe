@@ -72,6 +72,7 @@ export function HotelPay() {
   const location = useLocation();
   const reservation = location.state.reservation;
   const roomTypePrices = location.state.roomTypePrices;
+  const roomTypeName = location.state.selectedRoom;
 
   useEffect(() => {
     axios
@@ -163,21 +164,22 @@ export function HotelPay() {
                       </Box>
                     </Th>
                     <Th>{hotel.name}</Th>
-                    <Th>{hotel.lodgingType}</Th>
+                    <Th></Th>
                     <Th>RoomOnly</Th>
                     <Th>
                       {reservation.checkinDate.toISOString().split("T")[0]} ~{" "}
                       {reservation.checkoutDate.toISOString().split("T")[0]}
                     </Th>
-                    <Th>
-                      {roomTypePrices && roomTypePrices[selectedRoom]
-                        ? roomTypePrices[selectedRoom].toLocaleString()
-                        : ""}
-                    </Th>
+
                     {/* TODO 호텔 가격 넣기*/}
 
                     {Object.keys(roomTypePrices).map((roomType, index) => (
-                      <Th key={index}>{roomTypePrices[roomType]}</Th>
+                      <Th key={index}>
+                        {roomTypePrices[roomType].toLocaleString("ko-KR", {
+                          style: "currency",
+                          currency: "KRW",
+                        })}
+                      </Th>
                     ))}
                   </Tr>
                 </Tbody>
@@ -748,7 +750,11 @@ export function HotelPay() {
                           {Object.keys(roomTypePrices).map(
                             (roomType, index) => (
                               <Box key={index}>
-                                {roomTypePrices[roomType].toLocaleString()}원
+                                {roomTypePrices[roomType].toLocaleString(
+                                  "ko-KR",
+                                  { style: "currency", currency: "KRW" },
+                                )}
+                                원
                               </Box>
                             ),
                           )}

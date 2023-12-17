@@ -36,8 +36,21 @@ export function HotelView() {
   const [roomtypeList, setRoomtypeList] = useState(null);
 
   const [reservation, setReservation] = useState({
-    checkinDate: null,
-    checkoutDate: null,
+    checkinDate: new Date(),
+    checkoutDate: new Date(),
+  });
+
+  useEffect(() => {
+    // 오늘과 내일의 날짜를 생성
+    const today = new Date();
+    const tomorrow = new Date();
+    tomorrow.setDate(tomorrow.getDate() + 1);
+
+    // reservation 상태 업데이트
+    setReservation({
+      checkinDate: today,
+      checkoutDate: tomorrow,
+    });
   });
 
   const navigate = useNavigate();
@@ -84,6 +97,7 @@ export function HotelView() {
           state: {
             reservation,
             roomTypePrices: { [roomtype.roomtype]: totalPrice },
+            selectedRoom: roomtype,
           },
         });
       } else {
