@@ -17,6 +17,7 @@ import {
   Tabs,
   Tbody,
   Td,
+  Text,
   Th,
   Thead,
   Tr,
@@ -72,14 +73,24 @@ export function ReservationList() {
         <Tabs isFitted variant="enclosed">
           <TabList mb="1em">
             <Tab>
-              <CardHeader textAlign={"center"} m={5}>
-                <Heading>항공 / 버스 예약 관리</Heading>
-              </CardHeader>
+              <Text
+                fontSize={"2.2rem"}
+                fontWeight={"bold"}
+                textAlign={"center"}
+                m={5}
+              >
+                <Text>항공 / 버스 예약 관리</Text>
+              </Text>
             </Tab>
             <Tab>
-              <CardHeader textAlign={"center"} m={5}>
-                <Heading>호텔 예약 관리</Heading>
-              </CardHeader>
+              <Text
+                fontSize={"2.2rem"}
+                fontWeight={"bold"}
+                textAlign={"center"}
+                m={5}
+              >
+                <Text>숙소 예약 관리</Text>
+              </Text>
             </Tab>
           </TabList>
           <TabPanels>

@@ -3,6 +3,7 @@ import {
   Button,
   Flex,
   Heading,
+  HStack,
   Image,
   Img,
   Input,
@@ -318,30 +319,38 @@ export function NavBar() {
                 </Button>
 
                 {/* 호텔 */}
-                <Button
-                  bg={"white"}
-                  color="black"
-                  _hover={{ color: "blue.600" }}
-                  w={"65px"}
-                  h={"40px"}
-                  onClick={() => navigate("hotel")}
-                  fontSize={"1.5rem"}
-                >
-                  <FontAwesomeIcon icon={faHotel} />
-                </Button>
+                <HStack gap={5}>
+                  <Button
+                    bg={"white"}
+                    color="black"
+                    _hover={{ color: "blue.600" }}
+                    w={"80px"}
+                    h={"40px"}
+                    onClick={() => navigate("hotel")}
+                    fontSize={"1.2rem"}
+                  >
+                    <HStack>
+                      <FontAwesomeIcon icon={faHotel} />
+                      <Box fontSize={"0.8rem"}>숙소</Box>
+                    </HStack>
+                  </Button>
 
-                {/* 운송 */}
-                <Button
-                  bg={"white"}
-                  color="black"
-                  _hover={{ color: "blue.600" }}
-                  w={"65px"}
-                  h={"40px"}
-                  onClick={() => navigate("transport")}
-                  fontSize={"1.5rem"}
-                >
-                  <FontAwesomeIcon icon={faTruckPlane} />
-                </Button>
+                  {/* 운송 */}
+                  <Button
+                    bg={"white"}
+                    color="black"
+                    _hover={{ color: "blue.600" }}
+                    w={"65px"}
+                    h={"40px"}
+                    onClick={() => navigate("transport")}
+                    fontSize={"1.2rem"}
+                  >
+                    <HStack>
+                      <FontAwesomeIcon icon={faTruckPlane} />
+                      <Box fontSize={"0.8rem"}>버스/항공</Box>
+                    </HStack>
+                  </Button>
+                </HStack>
               </Flex>
               <Button
                 w={"150px"}
