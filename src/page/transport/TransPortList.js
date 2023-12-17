@@ -25,7 +25,7 @@ import {
   useDisclosure,
 } from "@chakra-ui/react";
 import axios from "axios";
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
   faAnglesLeft,
@@ -33,6 +33,7 @@ import {
   faMagnifyingGlass,
 } from "@fortawesome/free-solid-svg-icons";
 import { RecentViewed } from "../../component/RecentViewed";
+import { LoginContext } from "../../component/LoginProvider";
 
 function TransPage({ pageInfo, params }) {
   const navigate = useNavigate();
@@ -100,6 +101,8 @@ export function TransPortList() {
   // 파람의 p 가 처음 에 null 이면 1을 전달하는 page 변수 선언
   const page = params.get("p") ? parseInt(params.get("p"), 10) : 1;
 
+  const { isAdmin } = useContext(LoginContext);
+
   useEffect(() => {
     axios
       .get("/api/transport/list?type=" + params.get("type") + "&p=" + page)
@@ -163,17 +166,17 @@ export function TransPortList() {
           {params.get("type") === "bus" && <Box>🚎 국내 버스 여행</Box>}
           {params.get("type") === "air" && <Box>🛫 국내 항공 여행</Box>}
         </Box>
-        {/*{isAdmin() && (*/}
-        <Box>
-          <Button
-            ml={2}
-            onClick={() => navigate("/transport/write?" + params.toString())}
-          >
-            {params.get("type") === "bus" && <Box>버스 상품 등록</Box>}
-            {params.get("type") === "air" && <Box>항공 상품 등록</Box>}
-          </Button>
-        </Box>
-        {/*)}*/}
+        {isAdmin() && (
+          <Box>
+            <Button
+              ml={2}
+              onClick={() => navigate("/transport/write?" + params.toString())}
+            >
+              {params.get("type") === "bus" && <Box>버스 상품 등록</Box>}
+              {params.get("type") === "air" && <Box>항공 상품 등록</Box>}
+            </Button>
+          </Box>
+        )}
       </Flex>
       <Flex justifyContent={"center"} flexWrap={"wrap"}>
         <SimpleGrid columns={4} w={"85%"} my={"20px"} spacing={9}>
