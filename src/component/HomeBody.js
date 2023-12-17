@@ -427,57 +427,121 @@ export function HomeBody() {
           >
             <Box
               w={"250px"}
-              h={"50px"}
+              h={"100px"}
               textAlign={"center"}
               mb={10}
               onClick={() => navigate("/hotel")}
-              _hover={{ cursor: "pointer", color: "#509896" }}
+              // _hover={{ cursor: "pointer", color: "#509896" }}
+              shadow={"1px 1px 3px 1px #dadce0"}
+              bgImage={
+                "url('https://search.pstatic.net/common/?src=http%3A%2F%2Fblogfiles.naver.net%2FMjAyMzA2MDVfMTU4%2FMDAxNjg1OTY0NTc3NDM4.jZRyh3b2FVD5Wcpq3px5TzwfWcMDkY_bmV4vGfw3Fykg.L6-dwGJ-vE9ykHDR5jks6eNvH8UAId7L1ZX6kjDFAHIg.JPEG.tnwlsdl702%2F0F4A3456.jpg&type=sc960_832')"
+              }
+              backgroundSize="cover"
+              backgroundPosition="center -53px"
+              backgroundRepeat="no-repeat"
+              _hover={{
+                cursor: "pointer",
+                backgroundColor: "#216aa4",
+                color: "whitesmoke",
+                transition:
+                  "background 0.5s ease-in-out, color 0.5s ease-in-out, box-shadow 0.5s ease-in-out",
+                shadow: "1px 1px 3px 1px #dadce0 inset",
+              }}
               lineHeight={"50px"}
-              bg={"gray"}
               color={"white"}
               borderRadius={"15px"}
             >
-              <Box fontWeight={900} fontSize={"1.5rem"}>
-                <Box mt={1}>
-                  <FontAwesomeIcon icon={faHotel} /> 목록
+              <Box fontWeight={900}>
+                <Box
+                  fontSize={"1.5rem"}
+                  mt={1}
+                  textAlign={"left"}
+                  textIndent={"1.5rem"}
+                >
+                  숙소
+                </Box>
+                <Box mt={-5} textAlign={"left"} textIndent={"1.5rem"}>
+                  국내 호텔과 한인민박
                 </Box>
               </Box>
             </Box>
 
             <Box
               w={"250px"}
-              h={"50px"}
+              shadow={"1px 1px 3px 1px #dadce0"}
+              _hover={{
+                cursor: "pointer",
+                backgroundColor: "#216aa4",
+                color: "whitesmoke",
+                transition:
+                  "background 0.5s ease-in-out, color 0.5s ease-in-out, box-shadow 0.5s ease-in-out",
+                shadow: "1px 1px 3px 1px #dadce0 inset",
+              }}
+              h={"100px"}
               textAlign={"center"}
+              bgImage={
+                "url('https://search.pstatic.net/common/?src=http%3A%2F%2Fblogfiles.naver.net%2FMjAyMzA5MDZfMjky%2FMDAxNjkzOTk2Nzk4MTY0.s_z4MzxNQp0isT91-kAa3AyLokFQXlna4y7XOdUDXW8g.W_7N1VhhcVYxBz00XbrMUj4V-YKcGmhYyjppcCM4tKIg.JPEG.u0choi1007%2FIMG_5005.JPG&type=sc960_832')"
+              }
+              backgroundSize="cover"
+              backgroundPosition="center -53px"
+              backgroundRepeat="no-repeat"
               mb={10}
               onClick={() => navigate("/transport/list?type=bus")}
-              _hover={{ cursor: "pointer", color: "#509896" }}
+              // _hover={{ cursor: "pointer", color: "#509896" }}
               lineHeight={"50px"}
-              bg={"gray"}
               color={"white"}
               borderRadius={"15px"}
             >
-              <Box fontWeight={900} fontSize={"1.5rem"}>
-                <Box mt={1}>
-                  <FontAwesomeIcon icon={faBus} /> 목록
+              <Box fontWeight={900}>
+                <Box
+                  fontSize={"1.5rem"}
+                  mt={1}
+                  textAlign={"left"}
+                  textIndent={"1.5rem"}
+                >
+                  버스
+                </Box>
+                <Box mt={-5} textAlign={"left"} textIndent={"1.5rem"}>
+                  버스여행 어떠세요?
                 </Box>
               </Box>
             </Box>
 
             <Box
               w={"250px"}
-              h={"50px"}
+              h={"100px"}
               textAlign={"center"}
+              bgImage="url('https://search.pstatic.net/sunny/?src=https%3A%2F%2Fimages.unsplash.com%2Fphoto-1683558351037-20aebce5142b%3Fixlib%3Drb-4.0.3%26ixid%3DM3wxMjA3fDB8MHxwaG90by1yZWxhdGVkfDExfHx8ZW58MHx8fHx8%26w%3D1000%26q%3D80&type=sc960_832')"
+              backgroundSize="cover"
+              backgroundPosition="center"
+              backgroundRepeat="no-repeat"
               mb={10}
               onClick={() => navigate("/transport/list?type=air")}
-              _hover={{ cursor: "pointer", color: "#509896" }}
+              // _hover={{ cursor: "pointer", color: "#509896" }}
+              shadow={"1px 1px 3px 1px #dadce0"}
+              _hover={{
+                cursor: "pointer",
+                backgroundColor: "#216aa4",
+                color: "whitesmoke",
+                transition:
+                  "background 0.5s ease-in-out, color 0.5s ease-in-out, box-shadow 0.5s ease-in-out",
+                shadow: "1px 1px 3px 1px #dadce0 inset",
+              }}
               lineHeight={"50px"}
-              bg={"gray"}
               color={"white"}
               borderRadius={"15px"}
             >
-              <Box fontWeight={900} fontSize={"1.5rem"}>
-                <Box mt={1}>
-                  <FontAwesomeIcon icon={faPlane} /> 목록
+              <Box fontWeight={900}>
+                <Box
+                  fontSize={"1.5rem"}
+                  mt={1}
+                  textAlign={"left"}
+                  textIndent={"1.5rem"}
+                >
+                  항공
+                </Box>
+                <Box mt={-5} textAlign={"left"} textIndent={"1.5rem"}>
+                  최저가로 항공권을 예약하세요
                 </Box>
               </Box>
             </Box>
