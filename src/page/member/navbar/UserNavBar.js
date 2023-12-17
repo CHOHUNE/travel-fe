@@ -66,7 +66,7 @@ export function UserNavBar(props) {
           textIndent={"11%"}
           h="100px" // 컨테이너의 높이를 지정합니다.
           w="100%" // 컨테이너의 너비를 지정합니다.
-          background="#3E71DA" // 배경색을 지정합니다.
+          background="#3182CE" // 배경색을 지정합니다.
         >
           <Heading color="white">마이페이지</Heading>
         </Flex>
