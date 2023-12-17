@@ -262,22 +262,26 @@ export function Hotel() {
       <Box w={"80%"} ml={"10%"}>
         <Flex minWidth={"max-content"} alignItems={"center"} gap={"2"}>
           <Spacer />
-          <Button
-            ml={"300px"}
-            variant={"solid"}
-            color={"green"}
-            onClick={() => navigate("/hotel/write/")}
-          >
-            호텔 추가
-          </Button>
-          <Button
-            ml={"20px"}
-            variant={"solid"}
-            color={"green"}
-            onClick={() => navigate("/reserv/" + id)}
-          >
-            호텔 삭제
-          </Button>
+
+          {isAdmin() && (
+            <Button
+              // ml={"300px"}
+              mr={"80px"}
+              variant={"solid"}
+              color={"green"}
+              onClick={() => navigate("/hotel/write/")}
+            >
+              호텔 추가
+            </Button>
+          )}
+          {/*<Button*/}
+          {/*  ml={"20px"}*/}
+          {/*  variant={"solid"}*/}
+          {/*  color={"green"}*/}
+          {/*  onClick={() => navigate("/reserv/" + id)}*/}
+          {/*>*/}
+          {/*  호텔 삭제*/}
+          {/*</Button>*/}
         </Flex>
       </Box>
 
@@ -298,6 +302,7 @@ export function Hotel() {
                   alt={hotel.name}
                   cursor={"pointer"}
                 />
+
                 <Box
                   position="absolute"
                   top="2"
@@ -305,7 +310,7 @@ export function Hotel() {
                   onClick={() => toggleWishlist(hotel.hid)}
                   cursor="pointer"
                 >
-                  <FontAwesomeIcon icon={faHeart} color={"gray"} size={"2xl"} />
+                  <FontAwesomeIcon icon={faHeart} color="#509896" size="2x" />
                 </Box>
               </Box>
               <Box p="6">
@@ -370,13 +375,25 @@ export function Hotel() {
                 >
                   <Box>
                     <Box as="span" color="gray.600" fontSize="sm">
-                      {hotel.price} 원 / 1박
+                      <Flex>
+                        <Text
+                          fontWeight={"900"}
+                          fontSize={"1.1rem"}
+                          color={"#509896"}
+                        >
+                          {parseInt(hotel.minSalePriceWeekday).toLocaleString(
+                            "ko-KR",
+                          )}{" "}
+                          원 / 1박 ~
+                        </Text>
+                      </Flex>
                     </Box>
                   </Box>
 
                   <ButtonGroup spacing="2" size="sm" variant="outline">
                     <Button
-                      colorScheme="red"
+                      // colorScheme={"#509896"}
+                      color="#509896"
                       onClick={() => navigate("/hotel/reserv/" + hotel.hid)}
                     >
                       예약하기

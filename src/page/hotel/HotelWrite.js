@@ -45,7 +45,7 @@ export function HotelWrite() {
   const [subImg2, setSubImg2] = useState(null);
   const [mapImg, setMapImg] = useState(null);
   const [mainImg, setMainImg] = useState(null);
-  const [lodgingType, setLodgingType] = useState();
+  const [lodgingType, setLodgingType] = useState("");
   const [salesFrom, setSalesFrom] = useState(null);
   const [salesTo, setSalesTo] = useState(null);
   const [rating, setRating] = useState(null);
