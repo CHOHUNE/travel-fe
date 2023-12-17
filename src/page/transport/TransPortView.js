@@ -485,9 +485,9 @@ export function TransPortView() {
                     fontSize={15}
                   />
                 }
+                style={{ width: "300px" }}
                 fontSize="4"
                 showTimeSelect
-                className="date-picker"
                 dateFormat="yy년 MM월 dd일 HH:mm"
                 minDate={new Date(trans.transStartDate)}
                 maxDate={new Date(trans.transEndDate)}

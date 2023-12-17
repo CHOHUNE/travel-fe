@@ -50,3 +50,60 @@
 /*.react-datepicker__day--disabled {*/
 /*    color: #ced4da;*/
 /*}*/
+/*!* DateRangePicker.css *!*/
+/*.date-range-picker-container {*/
+/*    gap: 10px;*/
+/*    height: 60px;*/
+/*}*/
+
+/*!* 공통 스타일을 적용할 클래스 *!*/
+/*.date-picker {*/
+/*    padding: 8px;*/
+/*    border: 1px solid #ced4da;*/
+/*    border-radius: 4px;*/
+/*    font-size: 16px;*/
+/*    color: #495057;*/
+/*    height: 60px;*/
+/*}*/
+
+/*.date-picker:focus {*/
+/*    border-color: #80bdff;*/
+/*    outline: 0;*/
+/*    box-shadow: 0 0 0 0.2rem rgba(0,123,255,.25);*/
+/*}*/
+
+/*!* 선택된 날짜의 스타일 *!*/
+/*.react-datepicker__day--selected {*/
+/*    background-color: #0d6efd;*/
+/*    color: white;*/
+/*}*/
+
+/*!* 오늘 날짜의 스타일 *!*/
+/*.react-datepicker__day--today {*/
+/*    font-weight: bold;*/
+/*}*/
+
+/*!* 날짜 범위 내의 날짜 스타일 *!*/
+/*.react-datepicker__day--in-range {*/
+/*    background-color: #90caf9;*/
+/*}*/
+
+/*!* 날짜 범위 시작과 끝의 날짜 스타일 *!*/
+/*.react-datepicker__day--in-selecting-range,*/
+/*.react-datepicker__day--in-range,*/
+/*.react-datepicker__day--selected,*/
+/*.react-datepicker__day--range-start,*/
+/*.react-datepicker__day--range-end {*/
+/*    background-color: #0d6efd;*/
+/*    color: white;*/
+/*}*/
+
+/*!* 비활성화된 날짜 스타일 *!*/
+/*.react-datepicker__day--disabled {*/
+/*    color: #ced4da;*/
+/*}*/
+
+/*.react-datepicker {*/
+/*    font-size: 13px; !* 폰트 사이즈를 적절히 설정합니다. *!*/
+/*    width: auto; !* 달력의 너비를 콘텐츠에 맞게 조정합니다. *!*/
+/*}*/
