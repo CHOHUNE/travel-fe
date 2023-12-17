@@ -67,12 +67,11 @@ export function HotelPay() {
 
   const [personName, setPersonName] = useState("");
 
-  const [selectedRoom, setSelectedRoom] = useState("");
+  const [selectedRoom, setSelectedRoom] = useState([]);
 
   const location = useLocation();
   const reservation = location.state.reservation;
   const roomTypePrices = location.state.roomTypePrices;
-  const roomTypeName = location.state.selectedRoom;
 
   useEffect(() => {
     axios
@@ -80,6 +79,16 @@ export function HotelPay() {
       .then((response) => {
         setHotel(response.data.hotel);
         setMember(response.data.member);
+
+        // 기존 코드에서 roomTypePrices에 대한 처리를 추가
+        const roomTypePrices = location.state.roomTypePrices;
+        const selectedRoomList = Object.keys(roomTypePrices).map(
+          (roomType) => ({
+            roomType,
+            price: roomTypePrices[roomType],
+          }),
+        );
+        setSelectedRoom(selectedRoomList);
       })
       .catch(() => {
         toast({
@@ -164,7 +173,9 @@ export function HotelPay() {
                       </Box>
                     </Th>
                     <Th>{hotel.name}</Th>
-                    <Th></Th>
+                    {selectedRoom.map((room, index) => (
+                      <Th key={index}>{room.roomType}</Th>
+                    ))}
                     <Th>RoomOnly</Th>
                     <Th>
                       {reservation.checkinDate.toISOString().split("T")[0]} ~{" "}
@@ -173,9 +184,9 @@ export function HotelPay() {
 
                     {/* TODO 호텔 가격 넣기*/}
 
-                    {Object.keys(roomTypePrices).map((roomType, index) => (
+                    {selectedRoom.map((room, index) => (
                       <Th key={index}>
-                        {roomTypePrices[roomType].toLocaleString("ko-KR", {
+                        {room.price.toLocaleString("ko-KR", {
                           style: "currency",
                           currency: "KRW",
                         })}
