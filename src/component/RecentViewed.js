@@ -1,10 +1,11 @@
 import React, { useEffect, useState } from "react";
-import { Box, Flex, Heading, Image, Text } from "@chakra-ui/react";
+import { Box, Flex, Heading, Image, Text, VStack } from "@chakra-ui/react";
 import { useNavigate } from "react-router-dom";
 
 export const RecentViewed = () => {
   const [recentViewed, setRecentViewed] = useState([]);
   const navigate = useNavigate();
+
   const handleNavigateToProduct = (e, item) => {
     e.stopPropagation(); // 부모타입으로 이벤트를 안넘기는것
     // 'type' 속성이 있는 경우 운송 상품으로 간주
@@ -42,18 +43,20 @@ export const RecentViewed = () => {
           onClick={(e) => handleNavigateToProduct(e, item)}
           borderBottom={"1px solid gray"}
         >
-          <Image
-            src={item.mainImgUrl || "이미지 없음"}
-            alt={item.name}
-            boxSize="50px"
-            mb={1}
-            mt={1}
-          />
-          <Box ml="3">
-            <Text fontWeight="bold" noOfLines={1}>
-              {truncateText(item.name || item.transTitle, 10)}
-            </Text>
-          </Box>
+          <VStack>
+            <Image
+              src={item.mainImgUrl || "이미지 없음"}
+              alt={item.name}
+              boxSize="50px"
+              mb={1}
+              mt={1}
+            />
+            <Box ml="3">
+              <Text fontWeight="bold" noOfLines={1}>
+                {truncateText(item.name || item.transTitle, 10)}
+              </Text>
+            </Box>
+          </VStack>
         </Flex>
       ))}
     </Box>

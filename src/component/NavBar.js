@@ -28,6 +28,9 @@ import "swiper/css";
 import "swiper/css/pagination";
 import "swiper/css/navigation";
 import { Mousewheel, Pagination, Navigation, Autoplay } from "swiper/modules";
+import { HamburgerIcon } from "@chakra-ui/icons";
+import { faHotel } from "@fortawesome/free-solid-svg-icons/faHotel";
+import { faTruckPlane } from "@fortawesome/free-solid-svg-icons/faTruckPlane";
 
 export function NavBar() {
   const { fetchLogin, login, isAuthenticated, isAdmin } =
@@ -50,11 +53,7 @@ export function NavBar() {
   const VerticalSwiper = () => {
     return (
       <>
-        <Box
-          fontWeight={"700"}
-          fontFamily={"GmarketSansMedium"}
-          position="relative"
-        >
+        <Box position="relative">
           <Swiper
             direction={"vertical"}
             slidesPerView={1}
@@ -104,19 +103,19 @@ export function NavBar() {
   return (
     <Box>
       {/* ------------------ 최상단 배너 ------------------ */}
-      <Flex bor justifyContent="center" w="100%" mt={-8}>
-        <Box w={"75%"} justifyContent={"center"} mt={"30px"} mb={8}>
-          <Image src="https://www.condo24.com/TechBean/banner/condo24_event_2023913[2].jpg" />
-        </Box>
-      </Flex>
+      {/*<Flex bor justifyContent="center" w="100%" mt={-8}>*/}
+      {/*  <Box w={"75%"} justifyContent={"center"} mt={"30px"} mb={8}>*/}
+      {/*    <Image src="https://study1993garbi.s3.ap-northeast-2.amazonaws.com/travel/sourceFile/imgeFile/%E1%84%87%E1%85%A2%E1%84%82%E1%85%A52.jpeg" />*/}
+      {/*  </Box>*/}
+      {/*</Flex>*/}
       <Flex
         fontWeight={"700"}
         fontFamily={"GmarketSansMedium"}
-        mt={-9}
+        // mt={-9}
         justifyContent={"center"}
         w={"100%"}
       >
-        <Box mt={2} w={"80%"}>
+        <Box mt={4} w={"80%"}>
           {/* 헤더 네브바1 */}
           <Box mb={"5px"} w="80%" h={"80px"} ml="auto" mr="auto">
             <Flex justifyContent={"space-between"} textAlign={"center"}>
@@ -155,7 +154,15 @@ export function NavBar() {
               </Flex>
 
               <Flex alignItems={"center"}>
-                <p style={{ color: "gray", fontSize: "13px" }}>인기검색어</p>
+                <p
+                  style={{
+                    color: "gray",
+                    fontSize: "13px",
+                    marginRight: "7px",
+                  }}
+                >
+                  인기검색어
+                </p>
                 <VerticalSwiper />
               </Flex>
 
@@ -293,19 +300,21 @@ export function NavBar() {
           <Box w="80%" h={"60px"} ml="10%">
             <Flex justifyContent={"space-between"} textAlign={"center"}>
               <Flex
-                ml={2}
                 lineHeight={"60px"}
                 alignItems={"center"}
                 mt={"10px"}
+                w={"170px"}
+                ml={5}
               >
                 <Button
                   bg={"white"}
                   color="black"
                   _hover={{ color: "blue.600" }}
-                  w={"100px"}
+                  w={"80px"}
                   h={"40px"}
+                  fontSize={"30px"}
                 >
-                  전체메뉴
+                  <HamburgerIcon />
                 </Button>
 
                 {/* 호텔 */}
@@ -313,11 +322,12 @@ export function NavBar() {
                   bg={"white"}
                   color="black"
                   _hover={{ color: "blue.600" }}
-                  w={"100px"}
+                  w={"65px"}
                   h={"40px"}
                   onClick={() => navigate("hotel")}
+                  fontSize={"1.5rem"}
                 >
-                  호텔 / 숙박
+                  <FontAwesomeIcon icon={faHotel} />
                 </Button>
 
                 {/* 운송 */}
@@ -325,11 +335,12 @@ export function NavBar() {
                   bg={"white"}
                   color="black"
                   _hover={{ color: "blue.600" }}
-                  w={"100px"}
+                  w={"65px"}
                   h={"40px"}
                   onClick={() => navigate("transport")}
+                  fontSize={"1.5rem"}
                 >
-                  항공 / 운송
+                  <FontAwesomeIcon icon={faTruckPlane} />
                 </Button>
               </Flex>
               <Button

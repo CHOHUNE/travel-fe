@@ -1,9 +1,11 @@
 import {
   Box,
+  Button,
   Card,
   CardBody,
   CardHeader,
   Center,
+  Flex,
   Heading,
   Input,
   Spinner,
@@ -20,7 +22,7 @@ import {
   Tr,
 } from "@chakra-ui/react";
 import React, { useEffect, useState } from "react";
-import axios from "axios";
+import axios, { get } from "axios";
 import {
   useLocation,
   useNavigate,
@@ -35,11 +37,47 @@ export function ReservationList() {
   const navigate = useNavigate();
   const [toss, setToss] = useState([]);
 
+  const [reservationNumber, setReservationNumber] = useState("");
+  const [messageContent, setMessageContent] = useState("");
+  const [userPhoneNumber, setUserPhoneNumber] = useState(""); // 구매한 사용자의 핸드폰 번호 상태
+
   useEffect(() => {
     axios.get("/api/toss/id/" + params.get("userId")).then((response) => {
       setToss(response.data);
     });
   }, [location]);
+
+  // ----------------------- 핸드폰번호 가져오기 -----------------------
+
+  useEffect(() => {
+    // 서버에서 사용자 정보를 가져오는 요청
+    axios
+      .get("/api/member?" + params.toString())
+      .then((response) => {
+        // 응답에서 사용자의 전화번호를 추출하여 상태에 저장
+        const phoneNumber = response.data.phoneNumber; // response.data에 전화번호 필드가 있다고 가정
+        setUserPhoneNumber(phoneNumber);
+      })
+      .catch((error) => {
+        console.error("사용자 정보를 가져오는데 실패했습니다.", error);
+        // 에러 핸들링 로직
+      });
+  }, [params]); // params가 변경될 때마다 이 useEffect가 실행됩니다.
+
+  // ----------------------- 예약번호 문자 발송 -----------------------
+  const handleSendSMS = async () => {
+    try {
+      const response = await axios.post("/api/member/sendSMS3", {
+        userPhoneNumber: userPhoneNumber, // 구매한 사용자의 핸드폰 번호
+        messageContent: messageContent, // Input 창에 입력된 메시지 내용
+      });
+      console.log(response);
+      // 성공 시 처리 로직
+    } catch (error) {
+      console.error(error);
+      // 실패 시 처리 로직
+    }
+  };
 
   return (
     <Center m={10}>
@@ -81,7 +119,19 @@ export function ReservationList() {
                         <Td>{toss.transStartDate}</Td>
                         <Td>{toss.transEndDate}</Td>
                         <Td>{toss.request}</Td>
-                        <Td>{toss.reservation}</Td>
+                        <Td>
+                          <Flex gap={2}>
+                            <Input
+                              type="text"
+                              value={messageContent}
+                              onChange={(e) =>
+                                setMessageContent(e.target.value)
+                              }
+                              placeholder="예약번호 입력"
+                            />
+                            <Button onClick={handleSendSMS}>확인</Button>
+                          </Flex>
+                        </Td>
                         <Td>{toss.amount}</Td>
                         {/*<Td>{toss.db 안만듬 }</Td>*/}
                       </Tr>
