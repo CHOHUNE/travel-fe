@@ -186,7 +186,7 @@ export function TransPort() {
       <Box mt={10} boxShadow={"1px 2px 1px 2px #f5f6f6"}></Box>
 
       <Center>
-        <Box mt={10} w={"55%"}>
+        <Box mt={10} w={"55%"} mb={20}>
           <Card
             w={"400px"}
             h={"50px"}
