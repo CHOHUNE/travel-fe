@@ -8,13 +8,12 @@ const orderId = nanoid();
 
 const apiKey = process.env.REACT_APP_CLIENT_KEY;
 export function PaymentPage() {
-  // 선생님 도움
   const location = useLocation();
   // 운송상품 location 값 저장
   const trans = location.state;
   // 운송상품 결제금액
   const amount = trans.amount;
-  //   여까지
+
   const { id } = useParams();
 
   // 쿼리 스트링에서 호텔인지 운송 상품인지 결제 타입을 받아오기
@@ -23,10 +22,15 @@ export function PaymentPage() {
 
   // 운송상품 요청사항
   const requested = trans.requested;
+  // 이용자 휴대폰번호
+  const phoneNumber = trans.personNumber;
   // 결제 페이지로 넘어오게 되면 location 한 값을 localStorage로 저장 시키는 useEffect
   useEffect(() => {
     if (requested) {
       localStorage.setItem("payRequested", requested);
+    }
+    if (phoneNumber) {
+      localStorage.setItem("phoneNumber", phoneNumber);
     }
   }, [id]);
 
@@ -49,8 +53,7 @@ export function PaymentPage() {
           orderName: "테스트 결제", // 주문명
           customerName: "김토스", // 구매자 이름
 
-          successUrl:
-            "http://localhost:3000/successpage?id=" + id + "type=trans", // 결제 성공 시 이동할 페이지(이 주소는 예시입니다. 상점에서 직접 만들어주세요.)
+          successUrl: "http://localhost:3000/successpage?id=" + id, // 결제 성공 시 이동할 페이지(이 주소는 예시입니다. 상점에서 직접 만들어주세요.)
           failUrl: "http://localhost:3000/fail", // 결제 실패 시 이동할 페이지(이 주소는 예시입니다. 상점에서 직접 만들어주세요.)
         })
         // ------결제창을 띄울 수 없는 에러 처리 ------

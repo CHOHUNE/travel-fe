@@ -9,7 +9,10 @@ const apiSecretKey = process.env.REACT_APP_SECRET_KEY;
 export function SuccessPage() {
   const navigate = useNavigate();
   const [searchParams] = useSearchParams();
+  // 요청 사항 저장하기
   let payRequested = localStorage.getItem("payRequested");
+  // 이용자 휴대폰 번호 저장하기
+  let phoneNumber = localStorage.getItem("phoneNumber");
 
   // 쿼리 스트링에서 호텔인지 운송 상품인지 결제 타입을 받아오기
   const [params] = useSearchParams();
@@ -110,9 +113,11 @@ export function SuccessPage() {
         amount: searchParams.get("amount"),
         id: searchParams.get("id"),
         requested: payRequested,
+        phoneNumber: phoneNumber,
       })
-      .then(() => {
+      .finally(() => {
         localStorage.removeItem("payRequested");
+        localStorage.removeItem("phoneNumber");
       });
   }, []);
 

@@ -164,6 +164,7 @@ export function TransPay() {
             id,
             amount: person * trans.transPrice,
             requested,
+            personNumber: isChecked ? member.phoneNumber : personNumber,
           },
         });
       }
@@ -184,7 +185,12 @@ export function TransPay() {
         });
       } else {
         navigate(`/PaymentPage/${id}?type=trans`, {
-          state: { id, amount: person * trans.transPrice, requested },
+          state: {
+            id,
+            amount: person * trans.transPrice,
+            requested,
+            personNumber: isChecked ? member.phoneNumber : personNumber,
+          },
         });
       }
     }
