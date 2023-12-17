@@ -304,7 +304,7 @@ export function Hotel() {
                   onClick={() => toggleWishlist(hotel.hid)}
                   cursor="pointer"
                 >
-                  <FontAwesomeIcon icon={faHeart} color={"gray"} size={"2xl"} />
+                  <FontAwesomeIcon icon={faHeart} color="#509896" size="2x" />
                 </Box>
               </Box>
               <Box p="6">
@@ -371,20 +371,23 @@ export function Hotel() {
                     <Box as="span" color="gray.600" fontSize="sm">
                       <Flex>
                         <Text
-                          fontWeight={"bold"}
-                          fontStyle={"italic"}
-                          color={"red"}
+                          fontWeight={"900"}
+                          fontSize={"1.1rem"}
+                          color={"#509896"}
                         >
-                          {hotel.minSalePriceWeekday}
+                          {parseInt(hotel.minSalePriceWeekday).toLocaleString(
+                            "ko-KR",
+                          )}{" "}
+                          원 / 1박 ~
                         </Text>
-                        ~ 원 / 1박
                       </Flex>
                     </Box>
                   </Box>
 
                   <ButtonGroup spacing="2" size="sm" variant="outline">
                     <Button
-                      colorScheme="red"
+                      // colorScheme={"#509896"}
+                      color="#509896"
                       onClick={() => navigate("/hotel/reserv/" + hotel.hid)}
                     >
                       예약하기
