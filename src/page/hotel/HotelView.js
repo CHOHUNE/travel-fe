@@ -217,7 +217,6 @@ export function HotelView() {
                 </Button>
               </Box>
             )}
-
             <Box
               direction={{ base: "column" }}
               overflow="hidden"
@@ -385,7 +384,6 @@ export function HotelView() {
                 {/*</Box>*/}
               </Flex>
             </Box>
-
             <Box
               my={"10px"}
               bg={"whitesmoke"}
@@ -547,7 +545,20 @@ export function HotelView() {
                   </Box>
                 ))}
             </SimpleGrid>
-
+            <Box
+              w={"80%"}
+              ml={"10%"}
+              border={"1px solid "}
+              color="gray.400"
+              h={"400px"}
+              mb={"15px"}
+              display={"flex"}
+              justifyContent={"center"}
+              alignItems={"center"}
+              borderRadius={"lg"}
+            >
+              {hotel.description}
+            </Box>{" "}
             <Box
               w={"80%"}
               ml={"10%"}

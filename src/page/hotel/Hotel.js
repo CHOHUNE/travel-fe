@@ -260,22 +260,26 @@ export function Hotel() {
       <Box w={"80%"} ml={"10%"}>
         <Flex minWidth={"max-content"} alignItems={"center"} gap={"2"}>
           <Spacer />
-          <Button
-            ml={"300px"}
-            variant={"solid"}
-            color={"green"}
-            onClick={() => navigate("/hotel/write/")}
-          >
-            호텔 추가
-          </Button>
-          <Button
-            ml={"20px"}
-            variant={"solid"}
-            color={"green"}
-            onClick={() => navigate("/reserv/" + id)}
-          >
-            호텔 삭제
-          </Button>
+
+          {isAdmin() && (
+            <Button
+              // ml={"300px"}
+              mr={"80px"}
+              variant={"solid"}
+              color={"green"}
+              onClick={() => navigate("/hotel/write/")}
+            >
+              호텔 추가
+            </Button>
+          )}
+          {/*<Button*/}
+          {/*  ml={"20px"}*/}
+          {/*  variant={"solid"}*/}
+          {/*  color={"green"}*/}
+          {/*  onClick={() => navigate("/reserv/" + id)}*/}
+          {/*>*/}
+          {/*  호텔 삭제*/}
+          {/*</Button>*/}
         </Flex>
       </Box>
 
