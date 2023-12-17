@@ -426,8 +426,8 @@ export function HomeBody() {
             display={"flex"}
           >
             <Box
-              w={"250px"}
-              h={"100px"}
+              w={"320px"}
+              h={"130px"}
               textAlign={"center"}
               mb={10}
               onClick={() => navigate("/hotel")}
@@ -467,7 +467,8 @@ export function HomeBody() {
             </Box>
 
             <Box
-              w={"250px"}
+              w={"320px"}
+              h={"130px"}
               shadow={"1px 1px 3px 1px #dadce0"}
               _hover={{
                 cursor: "pointer",
@@ -477,7 +478,6 @@ export function HomeBody() {
                   "background 0.5s ease-in-out, color 0.5s ease-in-out, box-shadow 0.5s ease-in-out",
                 shadow: "1px 1px 3px 1px #dadce0 inset",
               }}
-              h={"100px"}
               textAlign={"center"}
               bgImage={
                 "url('https://search.pstatic.net/common/?src=http%3A%2F%2Fblogfiles.naver.net%2FMjAyMzA5MDZfMjky%2FMDAxNjkzOTk2Nzk4MTY0.s_z4MzxNQp0isT91-kAa3AyLokFQXlna4y7XOdUDXW8g.W_7N1VhhcVYxBz00XbrMUj4V-YKcGmhYyjppcCM4tKIg.JPEG.u0choi1007%2FIMG_5005.JPG&type=sc960_832')"
@@ -508,8 +508,8 @@ export function HomeBody() {
             </Box>
 
             <Box
-              w={"250px"}
-              h={"100px"}
+              w={"320px"}
+              h={"130px"}
               textAlign={"center"}
               bgImage="url('https://search.pstatic.net/sunny/?src=https%3A%2F%2Fimages.unsplash.com%2Fphoto-1683558351037-20aebce5142b%3Fixlib%3Drb-4.0.3%26ixid%3DM3wxMjA3fDB8MHxwaG90by1yZWxhdGVkfDExfHx8ZW58MHx8fHx8%26w%3D1000%26q%3D80&type=sc960_832')"
               backgroundSize="cover"
