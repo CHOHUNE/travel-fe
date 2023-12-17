@@ -44,7 +44,6 @@ export function HotelView() {
   const toast = useToast();
   const [count, setCount] = useState(0);
 
-  const [showCheckInInput, setShowCheckInInput] = useState(false);
   const [selectedRoom, setSelectedRoom] = useState();
   const [roomTypePrices, setRoomTypePrices] = useState({});
 
@@ -75,15 +74,16 @@ export function HotelView() {
   //     .then((response) => setReservation(response.data));
   // }, []);
 
-  function handleReservationClick() {
+  function handleReservationClick(roomtype) {
     if (login !== "") {
-      const selectedRoomPrice = roomTypePrices[selectedRoom];
+      const selectedRoomPrice = roomTypePrices[roomtype.roomtype];
 
       if (selectedRoomPrice !== undefined) {
+        const totalPrice = selectedRoomPrice * count;
         navigate("/hotel/pay/" + hotel.hid, {
           state: {
             reservation,
-            roomTypePrices: { [selectedRoom]: selectedRoomPrice },
+            roomTypePrices: { [roomtype.roomtype]: totalPrice },
           },
         });
       } else {
@@ -384,11 +384,6 @@ export function HotelView() {
               </Text>
             </Flex>
           </Box>
-          {showCheckInInput && (
-            <Box position zIndex={999} ml={"10%"} w={"200px"}>
-              <Input placeholder="Select Date and Time" size="md" type="date" />
-            </Box>
-          )}
           <SimpleGrid columns={1} spacing={5} my="20px" ml="10%" w="80%">
             {roomtypeList &&
               roomtypeList.map((roomtype) => (
@@ -428,8 +423,11 @@ export function HotelView() {
                       {/* 변경된 부분: 날짜가 선택되지 않았을 때는 평일 요금 표시 */}
                       숙박 요금 :
                       {roomTypePrices[roomtype.roomtype] &&
-                        roomTypePrices[roomtype.roomtype].toLocaleString()}
+                        String(
+                          roomTypePrices[roomtype.roomtype],
+                        ).toLocaleString()}
                     </Text>
+
                     <Text>
                       {/* 변경된 부분: 날짜가 선택되지 않았을 때는 평일 요금 표시 */}
                       부가세 · 봉사료 10% 포함 (세금계산서 · 현금영수증 발행)
@@ -442,10 +440,7 @@ export function HotelView() {
                   <Stack>
                     <Select
                       placeholder="객실 수 "
-                      onChange={(e) => {
-                        setCount(e.target.value);
-                        setSelectedRoom(roomtype.roomtype);
-                      }}
+                      onChange={(e) => setCount(e.target.value)}
                     >
                       <option value="1">객실 1개</option>
                       <option value="2">객실 2개</option>
@@ -456,7 +451,7 @@ export function HotelView() {
                     <Button
                       variant={"outline"}
                       colorScheme={"green"}
-                      onClick={handleReservationClick}
+                      onClick={() => handleReservationClick(roomtype)}
                     >
                       {" "}
                       예약하기{" "}

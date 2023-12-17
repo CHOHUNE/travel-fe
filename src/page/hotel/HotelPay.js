@@ -175,7 +175,10 @@ export function HotelPay() {
                         : ""}
                     </Th>
                     {/* TODO 호텔 가격 넣기*/}
-                    <Th>30000000000000</Th>
+
+                    {Object.keys(roomTypePrices).map((roomType, index) => (
+                      <Th key={index}>{roomTypePrices[roomType]}</Th>
+                    ))}
                   </Tr>
                 </Tbody>
               </Table>
@@ -742,8 +745,13 @@ export function HotelPay() {
                             color: "#3e71da",
                           }}
                         >
-                          {/*TODO*/}
-                          <Box textAlign={"right"}>3000000 원</Box>
+                          {Object.keys(roomTypePrices).map(
+                            (roomType, index) => (
+                              <Box key={index}>
+                                {roomTypePrices[roomType].toLocaleString()}원
+                              </Box>
+                            ),
+                          )}
                         </span>
                         <Button
                           w={"100%"}
