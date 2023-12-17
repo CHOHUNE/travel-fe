@@ -28,6 +28,9 @@ import "swiper/css";
 import "swiper/css/pagination";
 import "swiper/css/navigation";
 import { Mousewheel, Pagination, Navigation, Autoplay } from "swiper/modules";
+import { HamburgerIcon } from "@chakra-ui/icons";
+import { faHotel } from "@fortawesome/free-solid-svg-icons/faHotel";
+import { faTruckPlane } from "@fortawesome/free-solid-svg-icons/faTruckPlane";
 
 export function NavBar() {
   const { fetchLogin, login, isAuthenticated, isAdmin } =
@@ -50,11 +53,7 @@ export function NavBar() {
   const VerticalSwiper = () => {
     return (
       <>
-        <Box
-          fontWeight={"700"}
-          fontFamily={"GmarketSansMedium"}
-          position="relative"
-        >
+        <Box position="relative">
           <Swiper
             direction={"vertical"}
             slidesPerView={1}
@@ -301,19 +300,21 @@ export function NavBar() {
           <Box w="80%" h={"60px"} ml="10%">
             <Flex justifyContent={"space-between"} textAlign={"center"}>
               <Flex
-                ml={2}
                 lineHeight={"60px"}
                 alignItems={"center"}
                 mt={"10px"}
+                w={"170px"}
+                ml={5}
               >
                 <Button
                   bg={"white"}
                   color="black"
                   _hover={{ color: "blue.600" }}
-                  w={"100px"}
+                  w={"80px"}
                   h={"40px"}
+                  fontSize={"30px"}
                 >
-                  전체메뉴
+                  <HamburgerIcon />
                 </Button>
 
                 {/* 호텔 */}
@@ -321,11 +322,12 @@ export function NavBar() {
                   bg={"white"}
                   color="black"
                   _hover={{ color: "blue.600" }}
-                  w={"100px"}
+                  w={"65px"}
                   h={"40px"}
                   onClick={() => navigate("hotel")}
+                  fontSize={"1.5rem"}
                 >
-                  호텔 / 숙박
+                  <FontAwesomeIcon icon={faHotel} />
                 </Button>
 
                 {/* 운송 */}
@@ -333,11 +335,12 @@ export function NavBar() {
                   bg={"white"}
                   color="black"
                   _hover={{ color: "blue.600" }}
-                  w={"100px"}
+                  w={"65px"}
                   h={"40px"}
                   onClick={() => navigate("transport")}
+                  fontSize={"1.5rem"}
                 >
-                  항공 / 운송
+                  <FontAwesomeIcon icon={faTruckPlane} />
                 </Button>
               </Flex>
               <Button
