@@ -67,7 +67,7 @@ export function HotelPay() {
 
   const [personName, setPersonName] = useState("");
 
-  const [selectedRoom, setSelectedRoom] = useState("");
+  const [selectedRoom, setSelectedRoom] = useState([]);
 
   const location = useLocation();
   const reservation = location.state.reservation;
@@ -79,6 +79,16 @@ export function HotelPay() {
       .then((response) => {
         setHotel(response.data.hotel);
         setMember(response.data.member);
+
+        // 기존 코드에서 roomTypePrices에 대한 처리를 추가
+        const roomTypePrices = location.state.roomTypePrices;
+        const selectedRoomList = Object.keys(roomTypePrices).map(
+          (roomType) => ({
+            roomType,
+            price: roomTypePrices[roomType],
+          }),
+        );
+        setSelectedRoom(selectedRoomList);
       })
       .catch(() => {
         toast({
@@ -163,19 +173,25 @@ export function HotelPay() {
                       </Box>
                     </Th>
                     <Th>{hotel.name}</Th>
-                    <Th>{hotel.lodgingType}</Th>
+                    {selectedRoom.map((room, index) => (
+                      <Th key={index}>{room.roomType}</Th>
+                    ))}
                     <Th>RoomOnly</Th>
                     <Th>
                       {reservation.checkinDate.toISOString().split("T")[0]} ~{" "}
                       {reservation.checkoutDate.toISOString().split("T")[0]}
                     </Th>
-                    <Th>
-                      {roomTypePrices && roomTypePrices[selectedRoom]
-                        ? roomTypePrices[selectedRoom].toLocaleString()
-                        : ""}
-                    </Th>
+
                     {/* TODO 호텔 가격 넣기*/}
-                    <Th>30000000000000</Th>
+
+                    {selectedRoom.map((room, index) => (
+                      <Th key={index}>
+                        {room.price.toLocaleString("ko-KR", {
+                          style: "currency",
+                          currency: "KRW",
+                        })}
+                      </Th>
+                    ))}
                   </Tr>
                 </Tbody>
               </Table>
@@ -742,8 +758,17 @@ export function HotelPay() {
                             color: "#3e71da",
                           }}
                         >
-                          {/*TODO*/}
-                          <Box textAlign={"right"}>3000000 원</Box>
+                          {Object.keys(roomTypePrices).map(
+                            (roomType, index) => (
+                              <Box key={index}>
+                                {roomTypePrices[roomType].toLocaleString(
+                                  "ko-KR",
+                                  { style: "currency", currency: "KRW" },
+                                )}
+                                원
+                              </Box>
+                            ),
+                          )}
                         </span>
                         <Button
                           w={"100%"}

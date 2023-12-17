@@ -107,18 +107,35 @@ export function SuccessPage() {
 
   // 완료 페이지가 뜰때에 db에 저장 시키기
   useEffect(() => {
-    axios
-      .postForm("/api/toss/save", {
-        orderId: searchParams.get("orderId"),
-        amount: searchParams.get("amount"),
-        id: searchParams.get("id"),
-        requested: payRequested,
-        phoneNumber: phoneNumber,
-      })
-      .finally(() => {
-        localStorage.removeItem("payRequested");
-        localStorage.removeItem("phoneNumber");
-      });
+    if (payType === "trans") {
+      // 타입이 운송이면 운송 저장 요청
+      axios
+        .postForm("/api/toss/transSave", {
+          orderId: searchParams.get("orderId"),
+          amount: searchParams.get("amount"),
+          id: searchParams.get("id"),
+          requested: payRequested,
+          phoneNumber: phoneNumber,
+        })
+        .finally(() => {
+          localStorage.removeItem("payRequested");
+          localStorage.removeItem("phoneNumber");
+        });
+    } else {
+      // 타입이 호텔이면 호텔 저장 요청
+      axios
+        .postForm("/api/toss/save", {
+          orderId: searchParams.get("orderId"),
+          amount: searchParams.get("amount"),
+          id: searchParams.get("id"),
+          requested: payRequested,
+          phoneNumber: phoneNumber,
+        })
+        .finally(() => {
+          localStorage.removeItem("payRequested");
+          localStorage.removeItem("phoneNumber");
+        });
+    }
   }, []);
 
   function handlesubmit() {
