@@ -159,8 +159,12 @@ export function TransPay() {
           status: "warning",
         });
       } else {
-        navigate(`/PaymentPage/${id}`, {
-          state: { id, amount: person * trans.transPrice, requested },
+        navigate(`/PaymentPage/${id}?type=trans`, {
+          state: {
+            id,
+            amount: person * trans.transPrice,
+            requested,
+          },
         });
       }
     } else {
@@ -179,7 +183,7 @@ export function TransPay() {
           status: "warning",
         });
       } else {
-        navigate(`/PaymentPage/${id}`, {
+        navigate(`/PaymentPage/${id}?type=trans`, {
           state: { id, amount: person * trans.transPrice, requested },
         });
       }
