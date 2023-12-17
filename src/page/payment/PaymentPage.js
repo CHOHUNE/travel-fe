@@ -10,11 +10,21 @@ const apiKey = process.env.REACT_APP_CLIENT_KEY;
 export function PaymentPage() {
   // 선생님 도움
   const location = useLocation();
-  console.log(location.state);
+  // 운송상품 location 값 저장
   const trans = location.state;
+  // 운송상품 결제금액
+  const amount = trans.amount;
+  // 운송상품 요청사항
+  const requested = trans.requested;
   //   여까지
   const { id } = useParams();
-  console.log(id);
+
+  // 결제 페이지로 넘어오게 되면 location 한 값을 localStorage로 저장 시키는 useEffect
+  useEffect(() => {
+    if (requested) {
+      localStorage.setItem("payRequested", requested);
+    }
+  }, [id]);
 
   useEffect(() => {
     // ------ 클라이언트 키로 객체 초기화 ------
@@ -28,8 +38,7 @@ export function PaymentPage() {
         // 결제 정보 파라미터
         // 더 많은 결제 정보 파라미터는 결제창 Javascript SDK에서 확인하세요.
         // https://docs.tosspayments.com/reference/js-sdk
-        amount: trans.amount, // 결제 금액  (선생님 해주심)
-        // mId: id,
+        amount: amount, // 결제 금액  (선생님 해주심)
         orderId: orderId, // 주문 ID(주문 ID는 상점에서 직접 만들어주세요.)
         orderName: "테스트 결제", // 주문명
         customerName: "김토스", // 구매자 이름
