@@ -21,7 +21,7 @@ import {
   Thead,
   Tr,
 } from "@chakra-ui/react";
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import axios, { get } from "axios";
 import {
   useLocation,
@@ -29,9 +29,11 @@ import {
   useParams,
   useSearchParams,
 } from "react-router-dom";
-import * as PropTypes from "prop-types";
+import { LoginContext } from "../../../component/LoginProvider";
 
 export function ReservationList() {
+  const { fetchLogin, isAdmin } = useContext(LoginContext);
+
   const [params] = useSearchParams();
   const location = useLocation();
   const navigate = useNavigate();
@@ -47,34 +49,19 @@ export function ReservationList() {
     });
   }, [location]);
 
-  // ----------------------- 핸드폰번호 가져오기 -----------------------
-
-  useEffect(() => {
-    // 서버에서 사용자 정보를 가져오는 요청
-    axios
-      .get("/api/member?" + params.toString())
-      .then((response) => {
-        // 응답에서 사용자의 전화번호를 추출하여 상태에 저장
-        const phoneNumber = response.data.phoneNumber; // response.data에 전화번호 필드가 있다고 가정
-        setUserPhoneNumber(phoneNumber);
-      })
-      .catch((error) => {
-        console.error("사용자 정보를 가져오는데 실패했습니다.", error);
-        // 에러 핸들링 로직
-      });
-  }, [params]); // params가 변경될 때마다 이 useEffect가 실행됩니다.
-
   // ----------------------- 예약번호 문자 발송 -----------------------
-  const handleSendSMS = async () => {
+  const handleSendSMS = async (phoneNumber) => {
     try {
-      const response = await axios.post("/api/member/sendSMS3", {
-        userPhoneNumber: userPhoneNumber, // 구매한 사용자의 핸드폰 번호
-        messageContent: messageContent, // Input 창에 입력된 메시지 내용
-      });
-      console.log(response);
+      const response = await axios.post(
+        "/api/member/sendSMS3?userPhoneNumber=" + phoneNumber,
+        {
+          messageContent: messageContent,
+        },
+      );
+      console.log("response : ", response);
       // 성공 시 처리 로직
     } catch (error) {
-      console.error(error);
+      console.error("에러 : ", error);
       // 실패 시 처리 로직
     }
   };
@@ -102,36 +89,61 @@ export function ReservationList() {
                   <Thead>
                     <Tr>
                       <Th>주문번호</Th>
+                      <Th>아이디</Th>
                       <Th>상품명 </Th>
                       <Th>출발시간 </Th>
                       <Th>도작시간 </Th>
                       <Th>요청사항</Th>
+                      <Th>연락처</Th>
                       <Th>예약번호</Th>
                       <Th>가격</Th>
                       {/*<Th>상태</Th>*/}
                     </Tr>
                   </Thead>
+
                   <Tbody>
                     {toss.map((toss) => (
                       <Tr key={toss.id} _hover={{ cursor: "pointer" }}>
                         <Td>{toss.tossid}</Td>
+                        <Td>{toss.userId}</Td>
                         <Td>{toss.transTitle}</Td>
                         <Td>{toss.transStartDate}</Td>
                         <Td>{toss.transEndDate}</Td>
                         <Td>{toss.request}</Td>
-                        <Td>
-                          <Flex gap={2}>
-                            <Input
-                              type="text"
-                              value={messageContent}
-                              onChange={(e) =>
-                                setMessageContent(e.target.value)
-                              }
-                              placeholder="예약번호 입력"
-                            />
-                            <Button onClick={handleSendSMS}>확인</Button>
-                          </Flex>
-                        </Td>
+                        <Td>{toss.phoneNumber}</Td>
+                        {isAdmin() && (
+                          <Td>
+                            <Flex gap={2}>
+                              <Input
+                                type="text"
+                                value={messageContent}
+                                onChange={(e) =>
+                                  setMessageContent(e.target.value)
+                                }
+                                placeholder="예약번호 입력"
+                              />
+                              <Button
+                                onClick={() => handleSendSMS(toss.phoneNumber)}
+                              >
+                                확인
+                              </Button>
+                            </Flex>
+                          </Td>
+                        )}
+
+                        {isAdmin() || (
+                          <Td>
+                            <Flex gap={2}>
+                              <Input
+                                readOnly
+                                type="text"
+                                value={""}
+                                placeholder="관리자가 승인하면 예약번호가 발생됩니다."
+                              />
+                            </Flex>
+                          </Td>
+                        )}
+
                         <Td>{toss.amount}</Td>
                         {/*<Td>{toss.db 안만듬 }</Td>*/}
                       </Tr>
