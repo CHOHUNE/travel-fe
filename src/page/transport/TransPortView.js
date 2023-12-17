@@ -485,9 +485,9 @@ export function TransPortView() {
                     fontSize={15}
                   />
                 }
+                style={{ width: "300px" }}
                 fontSize="4"
                 showTimeSelect
-                className="date-picker"
                 dateFormat="yy년 MM월 dd일 HH:mm"
                 minDate={new Date(trans.transStartDate)}
                 maxDate={new Date(trans.transEndDate)}
@@ -554,10 +554,12 @@ export function TransPortView() {
                   <Input
                     fontSize={14}
                     w={"45%"}
-                    placeholder={trans.transPrice}
-                    value={transTotalPrice}
+                    placeholder={parseInt(trans.transPrice).toLocaleString(
+                      "ko-KR",
+                    )}
+                    value={parseInt(transTotalPrice).toLocaleString("ko-KR")}
                     onChange={() => {
-                      //   setTransTotalPrice(passenger * trans.transPrice);
+                      setTransTotalPrice(passenger * trans.transPrice);
                     }}
                     // border={"0px"}
                   />

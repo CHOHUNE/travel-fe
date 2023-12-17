@@ -35,6 +35,9 @@ import ko from "date-fns/locale/ko";
 import { differenceInCalendarDays } from "date-fns";
 import "./Calendar.css";
 import { ChevronDownIcon } from "@chakra-ui/icons";
+import { faHotel } from "@fortawesome/free-solid-svg-icons/faHotel";
+import { faBus } from "@fortawesome/free-solid-svg-icons/faBus";
+import { faPlane } from "@fortawesome/free-solid-svg-icons/faPlane";
 
 export function HomeBody() {
   const navigate = useNavigate();
@@ -162,9 +165,9 @@ export function HomeBody() {
   return (
     <Box fontWeight={"700"} fontFamily={"GmarketSansMedium"}>
       {/* ------------------- 배너이미지 ------------------- */}
-      <Box boxShadow={"5px 5px 5px 5px gray"} w={"100%"} h={"520px"}>
+      <Box boxShadow={"5px 5px 5px 5px gray"} w={"100%"} h={"100%"}>
         <Flex justifyContent={"space-around"} alignItems={"center"}>
-          <Box w={"100%"} h={"500px"} mt={"20px"}>
+          <Box w={"100%"} h={"100%"}>
             <App />
           </Box>
           {/* ------------------- 최근 본 상품 ------------------- */}
@@ -417,21 +420,139 @@ export function HomeBody() {
       {/* --------------------------------- 호텔상품 ---------------------------------  */}
       <Flex justifyContent="center" w="100%">
         <Box w={"65%"} justifyContent={"center"} mt={"30px"}>
-          <Card
-            w={"200px"}
-            h={"50px"}
-            textAlign={"center"}
-            mb={10}
-            onClick={() => navigate("/hotel")}
-            _hover={{ cursor: "pointer", color: "#509896" }}
-            lineHeight={"50px"}
+          <Flex
+            justifyContent={"space-around"}
+            alignItems={"center"}
+            display={"flex"}
           >
-            <Box fontWeight={900} fontSize={"1.2rem"}>
-              호텔 목록
+            <Box
+              w={"250px"}
+              h={"100px"}
+              textAlign={"center"}
+              mb={10}
+              onClick={() => navigate("/hotel")}
+              // _hover={{ cursor: "pointer", color: "#509896" }}
+              shadow={"1px 1px 3px 1px #dadce0"}
+              bgImage={
+                "url('https://search.pstatic.net/common/?src=http%3A%2F%2Fblogfiles.naver.net%2FMjAyMzA2MDVfMTU4%2FMDAxNjg1OTY0NTc3NDM4.jZRyh3b2FVD5Wcpq3px5TzwfWcMDkY_bmV4vGfw3Fykg.L6-dwGJ-vE9ykHDR5jks6eNvH8UAId7L1ZX6kjDFAHIg.JPEG.tnwlsdl702%2F0F4A3456.jpg&type=sc960_832')"
+              }
+              backgroundSize="cover"
+              backgroundPosition="center -53px"
+              backgroundRepeat="no-repeat"
+              _hover={{
+                cursor: "pointer",
+                backgroundColor: "#216aa4",
+                color: "whitesmoke",
+                transition:
+                  "background 0.5s ease-in-out, color 0.5s ease-in-out, box-shadow 0.5s ease-in-out",
+                shadow: "1px 1px 3px 1px #dadce0 inset",
+              }}
+              lineHeight={"50px"}
+              color={"white"}
+              borderRadius={"15px"}
+            >
+              <Box fontWeight={900}>
+                <Box
+                  fontSize={"1.5rem"}
+                  mt={1}
+                  textAlign={"left"}
+                  textIndent={"1.5rem"}
+                >
+                  숙소
+                </Box>
+                <Box mt={-5} textAlign={"left"} textIndent={"1.5rem"}>
+                  국내 호텔과 한인민박
+                </Box>
+              </Box>
             </Box>
-          </Card>
+
+            <Box
+              w={"250px"}
+              shadow={"1px 1px 3px 1px #dadce0"}
+              _hover={{
+                cursor: "pointer",
+                backgroundColor: "#216aa4",
+                color: "whitesmoke",
+                transition:
+                  "background 0.5s ease-in-out, color 0.5s ease-in-out, box-shadow 0.5s ease-in-out",
+                shadow: "1px 1px 3px 1px #dadce0 inset",
+              }}
+              h={"100px"}
+              textAlign={"center"}
+              bgImage={
+                "url('https://search.pstatic.net/common/?src=http%3A%2F%2Fblogfiles.naver.net%2FMjAyMzA5MDZfMjky%2FMDAxNjkzOTk2Nzk4MTY0.s_z4MzxNQp0isT91-kAa3AyLokFQXlna4y7XOdUDXW8g.W_7N1VhhcVYxBz00XbrMUj4V-YKcGmhYyjppcCM4tKIg.JPEG.u0choi1007%2FIMG_5005.JPG&type=sc960_832')"
+              }
+              backgroundSize="cover"
+              backgroundPosition="center -53px"
+              backgroundRepeat="no-repeat"
+              mb={10}
+              onClick={() => navigate("/transport/list?type=bus")}
+              // _hover={{ cursor: "pointer", color: "#509896" }}
+              lineHeight={"50px"}
+              color={"white"}
+              borderRadius={"15px"}
+            >
+              <Box fontWeight={900}>
+                <Box
+                  fontSize={"1.5rem"}
+                  mt={1}
+                  textAlign={"left"}
+                  textIndent={"1.5rem"}
+                >
+                  버스
+                </Box>
+                <Box mt={-5} textAlign={"left"} textIndent={"1.5rem"}>
+                  버스여행 어떠세요?
+                </Box>
+              </Box>
+            </Box>
+
+            <Box
+              w={"250px"}
+              h={"100px"}
+              textAlign={"center"}
+              bgImage="url('https://search.pstatic.net/sunny/?src=https%3A%2F%2Fimages.unsplash.com%2Fphoto-1683558351037-20aebce5142b%3Fixlib%3Drb-4.0.3%26ixid%3DM3wxMjA3fDB8MHxwaG90by1yZWxhdGVkfDExfHx8ZW58MHx8fHx8%26w%3D1000%26q%3D80&type=sc960_832')"
+              backgroundSize="cover"
+              backgroundPosition="center"
+              backgroundRepeat="no-repeat"
+              mb={10}
+              onClick={() => navigate("/transport/list?type=air")}
+              // _hover={{ cursor: "pointer", color: "#509896" }}
+              shadow={"1px 1px 3px 1px #dadce0"}
+              _hover={{
+                cursor: "pointer",
+                backgroundColor: "#216aa4",
+                color: "whitesmoke",
+                transition:
+                  "background 0.5s ease-in-out, color 0.5s ease-in-out, box-shadow 0.5s ease-in-out",
+                shadow: "1px 1px 3px 1px #dadce0 inset",
+              }}
+              lineHeight={"50px"}
+              color={"white"}
+              borderRadius={"15px"}
+            >
+              <Box fontWeight={900}>
+                <Box
+                  fontSize={"1.5rem"}
+                  mt={1}
+                  textAlign={"left"}
+                  textIndent={"1.5rem"}
+                >
+                  항공
+                </Box>
+                <Box mt={-5} textAlign={"left"} textIndent={"1.5rem"}>
+                  최저가로 항공권을 예약하세요
+                </Box>
+              </Box>
+            </Box>
+          </Flex>
+
           <Text fontSize={"1.5rem"} mb={-5}>
-            실시간 인기 숙소
+            이번주{" "}
+            <Text as="span" color="blue.500">
+              TOP
+            </Text>{" "}
+            랭킹 숙소
           </Text>
           <Center w={"100%"} h={"300px"} mb={15}>
             <Flex justifyContent={"space-between"} flexWrap="wrap">
@@ -511,6 +632,8 @@ export function HomeBody() {
             {hotelList && hotelList.length > 0 && (
               <>
                 <Box
+                  onClick={() => navigate("hotel/?k=수영장")}
+                  _hover={{ cursor: "pointer" }}
                   w={"auto"}
                   overflow="hidden"
                   position="relative"
@@ -583,6 +706,8 @@ export function HomeBody() {
                 </Box>
 
                 <Box
+                  onClick={() => navigate("hotel/?k=캠핑, 카라반")}
+                  _hover={{ cursor: "pointer" }}
                   w={"auto"}
                   overflow="hidden"
                   position="relative"
@@ -655,6 +780,8 @@ export function HomeBody() {
                 </Box>
 
                 <Box
+                  onClick={() => navigate("hotel/?k=반려견")}
+                  _hover={{ cursor: "pointer" }}
                   w={"auto"}
                   overflow="hidden"
                   position="relative"
@@ -727,6 +854,8 @@ export function HomeBody() {
                 </Box>
 
                 <Box
+                  onClick={() => navigate("hotel/?k=가족, 친구")}
+                  _hover={{ cursor: "pointer" }}
                   w={"auto"}
                   overflow="hidden"
                   position="relative"
@@ -799,6 +928,8 @@ export function HomeBody() {
                 </Box>
 
                 <Box
+                  onClick={() => navigate("hotel/?k=연인")}
+                  _hover={{ cursor: "pointer" }}
                   w={"auto"}
                   overflow="hidden"
                   position="relative"
@@ -876,28 +1007,30 @@ export function HomeBody() {
         </Flex>
       </Center>
 
-      <Flex bor justifyContent="center" w="100%" mt={5}>
-        <Box w={"65%"} justifyContent={"center"} mt={"30px"} mb={8}>
-          <Image src="https://www.condo24.com/TechBean/banner/condo24_event_2023913[2].jpg" />
+      {/* ------------------- 중간배너 ------------------- */}
+      <Flex bor justifyContent="center" w="100%">
+        <Box w={"65%"} justifyContent={"center"} mb={8}>
+          <Image src="https://study1993garbi.s3.ap-northeast-2.amazonaws.com/travel/sourceFile/imgeFile/%E1%84%87%E1%85%A2%E1%84%82%E1%85%A51.png" />
         </Box>
       </Flex>
 
       {/* ------------------- 버스 상품 ------------------- */}
-      <Flex bor justifyContent="center" w="100%" mt={5} bg={"#F5F6F6"}>
-        <Box w={"65%"} justifyContent={"center"} mt={"30px"} mb={8}>
-          <Card
-            w={"200px"}
-            h={"50px"}
+      <Flex justifyContent="center" w="100%" mt={5} bg={"#F5F6F6"}>
+        <Box w={"65%"} mt={"30px"} mb={8}>
+          <Box fontSize={"40px"}>버스여행</Box>
+          <Box
+            ml={"95%"}
+            w={"50px"}
+            h={"30px"}
             textAlign={"center"}
-            mb={10}
-            onClick={() => navigate("/transport")}
+            onClick={() => navigate("/transport/list?type=bus")}
             _hover={{ cursor: "pointer", color: "#509896" }}
-            lineHeight={"50px"}
+            lineHeight={"30px"}
           >
-            <Box fontWeight={900} fontSize={"1.2rem"}>
-              버스 목록
+            <Box color={"gray"} fontWeight={900} fontSize={"13px"}>
+              더보기
             </Box>
-          </Card>
+          </Box>
 
           <Flex>
             <SimpleGrid columns={4} spacing={10}>
@@ -996,19 +1129,22 @@ export function HomeBody() {
           />
         </Box>
         <Box w={"65%"} justifyContent={"center"} mt={"30px"}>
-          <Card
-            w={"200px"}
-            h={"50px"}
+          <Box color={"white"} fontSize={"40px"}>
+            비행기여행
+          </Box>
+          <Box
+            ml={"95%"}
+            w={"50px"}
+            h={"30px"}
             textAlign={"center"}
-            mb={10}
-            onClick={() => navigate("/transport")}
+            onClick={() => navigate("/transport/list?type=air")}
             _hover={{ cursor: "pointer", color: "#509896" }}
-            lineHeight={"50px"}
+            lineHeight={"30px"}
           >
-            <Box bg={"#ebebeb"} fontWeight={900} fontSize={"1.2rem"}>
-              항공 목록
+            <Box color={"white"} fontWeight={900} fontSize={"13px"}>
+              더보기
             </Box>
-          </Card>
+          </Box>
 
           <Flex>
             <SimpleGrid columns={4} spacing={10}>

@@ -246,9 +246,11 @@ export function Hotel() {
 
   return (
     <Box>
-      <Box w={"100%"} h={"500px"} mt={"20px"}>
+      <Box boxShadow={"5px 5px 5px 5px gray"} w={"100%"} h={"100%"}>
         {/* 여기에 App 컴포넌트 내용 */}
-        <App />
+        <Box w={"100%"} h={"100%"}>
+          <App />
+        </Box>
       </Box>
 
       {/* 미들 바 */}
