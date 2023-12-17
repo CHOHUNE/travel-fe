@@ -9,6 +9,7 @@ const apiSecretKey = process.env.REACT_APP_SECRET_KEY;
 export function SuccessPage() {
   const navigate = useNavigate();
   const [searchParams] = useSearchParams();
+  let payRequested = localStorage.getItem("payRequested");
 
   useEffect(() => {
     const requestData = {
@@ -16,9 +17,10 @@ export function SuccessPage() {
       amount: searchParams.get("amount"),
       paymentKey: searchParams.get("paymentKey"),
       id: searchParams.get("id"),
+      requested: payRequested,
     };
-    console.log("파람" + searchParams.get("id"));
-    // console.log(id);
+    console.log("요청사항 : " + payRequested);
+
     // TODO: 개발자센터에 로그인해서 내 결제위젯 연동 키 > 시크릿 키를 입력하세요. 시크릿 키는 외부에 공개되면 안돼요.
     // @docs https://docs.tosspayments.com/reference/using-api/api-keys
     const secretKey = apiSecretKey;
@@ -71,10 +73,12 @@ export function SuccessPage() {
         orderId: searchParams.get("orderId"),
         amount: searchParams.get("amount"),
         id: searchParams.get("id"),
+        requested: payRequested,
       })
       .then((response) => {
         console.log(response.data);
         navigate("/");
+        localStorage.removeItem("payRequested");
       });
   }
 
