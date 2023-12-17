@@ -37,6 +37,8 @@ import { faAnglesRight } from "@fortawesome/free-solid-svg-icons";
 
 export function TransPay() {
   const [trans, setTrans] = useState({});
+  // 고객 요청사항
+  const [requested, setRequested] = useState("");
 
   const { id } = useParams();
   const toast = useToast();
@@ -120,7 +122,7 @@ export function TransPay() {
       })
       .catch(() => {
         toast({
-          description: "해당 호텔 정보 불러오기 실패",
+          description: "해당 운송상품 정보 불러오기 실패",
           status: "error",
         });
       });
@@ -158,7 +160,7 @@ export function TransPay() {
         });
       } else {
         navigate(`/PaymentPage/${id}`, {
-          state: { id, amount: trans.transPrice },
+          state: { id, amount: person * trans.transPrice, requested },
         });
       }
     } else {
@@ -178,7 +180,7 @@ export function TransPay() {
         });
       } else {
         navigate(`/PaymentPage/${id}`, {
-          state: { id, amount: trans.transPrice },
+          state: { id, amount: person * trans.transPrice, requested },
         });
       }
     }
@@ -644,7 +646,15 @@ export function TransPay() {
                       >
                         요청사항
                       </FormLabel>
-                      <Textarea ml={5} mt={2} w={680} mb={2} />
+                      <Textarea
+                        ml={5}
+                        mt={2}
+                        w={680}
+                        mb={2}
+                        value={requested}
+                        placeholder={"요청 사항을 입력해 주세요."}
+                        onChange={(e) => setRequested(e.target.value)}
+                      />
                     </Flex>
                   </FormControl>
                 </Box>
