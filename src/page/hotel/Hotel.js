@@ -296,6 +296,7 @@ export function Hotel() {
                   alt={hotel.name}
                   cursor={"pointer"}
                 />
+
                 <Box
                   position="absolute"
                   top="2"
@@ -368,7 +369,16 @@ export function Hotel() {
                 >
                   <Box>
                     <Box as="span" color="gray.600" fontSize="sm">
-                      {hotel.price} 원 / 1박
+                      <Flex>
+                        <Text
+                          fontWeight={"bold"}
+                          fontStyle={"italic"}
+                          color={"red"}
+                        >
+                          {hotel.minSalePriceWeekday}
+                        </Text>
+                        ~ 원 / 1박
+                      </Flex>
                     </Box>
                   </Box>
 
