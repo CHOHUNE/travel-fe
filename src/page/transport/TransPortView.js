@@ -26,6 +26,8 @@ import { LoginContext } from "../../component/LoginProvider";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faAnglesRight, faHeart } from "@fortawesome/free-solid-svg-icons";
 import DatePicker from "react-datepicker";
+import "./DateRangePicker.css";
+import ko from "date-fns/locale/ko";
 
 // 운송 상품 찜하기 컨테이너 ----------------------------------------------------------------------
 function TransLikeContainer({ transLikeState, onClick }) {
@@ -477,6 +479,7 @@ export function TransPortView() {
                 출발일자 :
               </Box>
               <DatePicker
+                popperClassName="trans-react-datepicker"
                 customInput={
                   <Input
                     w={"200px"}
@@ -485,6 +488,7 @@ export function TransPortView() {
                     fontSize={15}
                   />
                 }
+                locale={ko}
                 style={{ width: "300px" }}
                 fontSize="4"
                 showTimeSelect
@@ -496,6 +500,27 @@ export function TransPortView() {
                 isClearable={true}
                 placeholderText="예약일"
                 onChange={handleReserveDayChange}
+                autoComplete="off"
+                formatWeekDay={(nameOfDay) => {
+                  switch (nameOfDay) {
+                    case "일요일":
+                      return "일";
+                    case "월요일":
+                      return "월";
+                    case "화요일":
+                      return "화";
+                    case "수요일":
+                      return "수";
+                    case "목요일":
+                      return "목";
+                    case "금요일":
+                      return "금";
+                    case "토요일":
+                      return "토";
+                    default:
+                      return nameOfDay;
+                  }
+                }}
               />
             </Flex>
             {/* */}

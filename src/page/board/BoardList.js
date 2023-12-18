@@ -163,101 +163,103 @@ export function BoardList() {
     <Box w="80%" ml="10%">
       <br />
       <br />
-      <Flex textAlign={"center"}>
-        <Box w="20%" padding={"10px"}>
-          <LBanner />
-        </Box>
+      <Box w="80%" ml="10%">
+        <Flex textAlign={"center"}>
+          <Box w="20%" padding={"10px"}>
+            <LBanner />
+          </Box>
 
-        <Box w="60%" padding={"10px"}>
-          {/*//여행사 카카오지도 모달 띠우기 */}
-          {/*<Box>*/}
-          {/*  <Button onClick={onOpen} borderRadius="50%">*/}
-          {/*    <FontAwesomeIcon icon={faLocationDot} />*/}
-          {/*  </Button>*/}
-          {/*  <Text fontSize={"10px"} fontWeight={"bold"}>*/}
-          {/*    대리점 찾기*/}
-          {/*  </Text>*/}
+          <Box w="60%" padding={"10px"}>
+            {/*//여행사 카카오지도 모달 띠우기 */}
+            {/*<Box>*/}
+            {/*  <Button onClick={onOpen} borderRadius="50%">*/}
+            {/*    <FontAwesomeIcon icon={faLocationDot} />*/}
+            {/*  </Button>*/}
+            {/*  <Text fontSize={"10px"} fontWeight={"bold"}>*/}
+            {/*    대리점 찾기*/}
+            {/*  </Text>*/}
 
-          {/*  <Modal isOpen={isOpen} onClose={onClose}>*/}
-          {/*    <ModalOverlay />*/}
-          {/*    <ModalContent>*/}
-          {/*      <ModalHeader>대리점 찾기</ModalHeader>*/}
-          {/*      <ModalCloseButton />*/}
-          {/*      <ModalBody>*/}
-          {/*        <Kakao />*/}
-          {/*      </ModalBody>*/}
+            {/*  <Modal isOpen={isOpen} onClose={onClose}>*/}
+            {/*    <ModalOverlay />*/}
+            {/*    <ModalContent>*/}
+            {/*      <ModalHeader>대리점 찾기</ModalHeader>*/}
+            {/*      <ModalCloseButton />*/}
+            {/*      <ModalBody>*/}
+            {/*        <Kakao />*/}
+            {/*      </ModalBody>*/}
 
-          {/*      <ModalFooter>*/}
-          {/*        <Button colorScheme="green" mr={3} onClick={onClose}>*/}
-          {/*          Close*/}
-          {/*        </Button>*/}
-          {/*      </ModalFooter>*/}
-          {/*    </ModalContent>*/}
-          {/*  </Modal>*/}
-          {/*</Box>*/}
+            {/*      <ModalFooter>*/}
+            {/*        <Button colorScheme="green" mr={3} onClick={onClose}>*/}
+            {/*          Close*/}
+            {/*        </Button>*/}
+            {/*      </ModalFooter>*/}
+            {/*    </ModalContent>*/}
+            {/*  </Modal>*/}
+            {/*</Box>*/}
 
-          {/*<Box>*/}
-          {/*  <h1> 우편번호 </h1>*/}
-          {/*  <Button onClick={handleSearch}> 검색</Button>*/}
-          {/*</Box>*/}
+            {/*<Box>*/}
+            {/*  <h1> 우편번호 </h1>*/}
+            {/*  <Button onClick={handleSearch}> 검색</Button>*/}
+            {/*</Box>*/}
 
-          {/*<kakao2 />*/}
+            {/*<kakao2 />*/}
 
-          <Image src="https://study1993garbi.s3.ap-northeast-2.amazonaws.com/travel/board/41/aleksas-stan-R1W78UbWBbo-unsplash%20(1).jpg" />
+            {/*<Image src="https://study1993garbi.s3.ap-northeast-2.amazonaws.com/travel/board/41/aleksas-stan-R1W78UbWBbo-unsplash%20(1).jpg" />*/}
 
-          <br />
-          <Heading textAlign={"center"} size="md" colorScheme="blue">
-            게시판 목록
-          </Heading>
-          <br />
-          <SearchComponent />
-          <br />
+            <br />
+            <Heading textAlign={"center"} size="md" colorScheme="blue">
+              게시판 목록
+            </Heading>
+            <br />
+            <SearchComponent />
+            <br />
 
-          <Table w="80%" h={"60px"} ml="10%">
-            <Thead>
-              <Tr>
-                <Th>글 순서</Th>
-                <Th>타이틀</Th>
-                <Th>컨텐츠</Th>
-                <Th>작성자</Th>
-                <Th>작성일</Th>
-              </Tr>
-            </Thead>
-            <Tbody>
-              {boardList.map((board) => (
-                <Tr
-                  key={board.id}
-                  _hover={{ cursor: "pointer" }}
-                  onClick={() => navigate("/board/" + board.id)}
-                >
-                  <Td>{board.id}</Td>
-                  <Td>{board.title}</Td>
-                  <Td>{board.content}</Td>
-                  <Td>{board.writer}</Td>
-                  <Td>{board.inserted}</Td>
+            <Table w="80%" h={"60px"} ml="10%">
+              <Thead>
+                <Tr>
+                  <Th>글 순서</Th>
+                  <Th>타이틀</Th>
+                  <Th>컨텐츠</Th>
+                  <Th>작성자</Th>
+                  <Th>작성일</Th>
                 </Tr>
-              ))}
-            </Tbody>
-          </Table>
-          <br />
-          <Flex justifyContent={"flex-end"}>
-            <Button
-              size={"sm"}
-              mr={"20px"}
-              colorScheme="blue"
-              onClick={() => navigate("../boardwrite")}
-            >
-              {" "}
-              글 쓰기{" "}
-            </Button>
-          </Flex>
-          <Pagination pageInfo={pageInfo} />
-        </Box>
+              </Thead>
+              <Tbody>
+                {boardList.map((board) => (
+                  <Tr
+                    key={board.id}
+                    _hover={{ cursor: "pointer" }}
+                    onClick={() => navigate("/board/" + board.id)}
+                  >
+                    <Td>{board.id}</Td>
+                    <Td>{board.title}</Td>
+                    <Td>{board.content}</Td>
+                    <Td>{board.writer}</Td>
+                    <Td>{board.inserted}</Td>
+                  </Tr>
+                ))}
+              </Tbody>
+            </Table>
+            <br />
+            <Flex justifyContent={"flex-end"}>
+              <Button
+                size={"sm"}
+                mr={"20px"}
+                colorScheme="blue"
+                onClick={() => navigate("../boardwrite")}
+              >
+                {" "}
+                글 쓰기{" "}
+              </Button>
+            </Flex>
+            <Pagination pageInfo={pageInfo} />
+          </Box>
 
-        <Box w={"20%"} padding={"10px"}>
-          <RBanner />
-        </Box>
-      </Flex>
+          <Box w={"20%"} padding={"10px"}>
+            <RBanner />
+          </Box>
+        </Flex>
+      </Box>
     </Box>
   );
 }
