@@ -83,9 +83,9 @@ export function UserView() {
     <Box>
       <Center m={20}>
         <Card w={"lg"}>
-          <CardHeader>
-            <Heading textAlign={"center"}>{user.userId}님 정보</Heading>
-          </CardHeader>
+          <Box fontSize={"2.2rem"} textAlign={"center"}>
+            {user.userId}님 정보
+          </Box>
 
           <CardBody>
             <FormControl mb={2}>

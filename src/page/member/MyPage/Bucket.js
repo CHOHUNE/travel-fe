@@ -49,9 +49,9 @@ export function Bucket() {
   return (
     <Center m={10}>
       <Card w={"80%"}>
-        <CardHeader textAlign={"center"} m={10}>
-          <Heading>찜하기</Heading>
-        </CardHeader>
+        <Box textAlign={"center"} m={10}>
+          <Box fontSize={"2.2rem"}>찜하기</Box>
+        </Box>
 
         <CardBody>
           <Table>
@@ -85,7 +85,11 @@ export function Bucket() {
                 </Tr>
               ))}
               {hotelBucket.map((bucket) => (
-                <Tr _hover={{ cursor: "pointer" }} key={bucket.id}>
+                <Tr
+                  _hover={{ cursor: "pointer" }}
+                  key={bucket.id}
+                  onClick={() => navigate("/hotel/reserv/" + bucket.hid)}
+                >
                   <Th>{++number}</Th>
                   <Th>호텔</Th>
                   <Th>

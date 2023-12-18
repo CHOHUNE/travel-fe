@@ -8,6 +8,7 @@ import {
   Heading,
   HStack,
   Spinner,
+  Text,
   VStack,
 } from "@chakra-ui/react";
 import { useLocation, useNavigate, useSearchParams } from "react-router-dom";
@@ -68,7 +69,9 @@ export function UserNavBar(props) {
           w="100%" // 컨테이너의 너비를 지정합니다.
           background="#3182CE" // 배경색을 지정합니다.
         >
-          <Heading color="white">마이페이지</Heading>
+          <Text fontSize={"2.2rem"} color="white">
+            마이페이지
+          </Text>
         </Flex>
         <Box>
           {/*<Flex mt={10} alignItems={"center"}>*/}

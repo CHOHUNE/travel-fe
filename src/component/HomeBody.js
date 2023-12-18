@@ -99,8 +99,9 @@ export function HomeBody() {
     setDateRange(dates);
   };
 
-  const CustomInput = ({ value, onClick }) => (
+  const CustomInput = React.forwardRef(({ value, onClick }, ref) => (
     <Button
+      ref={ref}
       onClick={onClick}
       bg={"white"}
       color="black"
@@ -113,7 +114,7 @@ export function HomeBody() {
         </Box>
       )}
     </Button>
-  );
+  ));
 
   // ------------------- 인원 선택 ------------------
   const [personAdult, setPersonAdult] = useState("1명"); // 성인 인원
@@ -560,6 +561,7 @@ export function HomeBody() {
                 {hotelList &&
                   hotelList.slice(0, 5).map((hotel) => (
                     <Box
+                      key={hotel.hid}
                       transition="0.2s ease-in-out"
                       _hover={{
                         transform: "scale(1.20)",
@@ -1008,7 +1010,7 @@ export function HomeBody() {
       </Center>
 
       {/* ------------------- 중간배너 ------------------- */}
-      <Flex bor justifyContent="center" w="100%">
+      <Flex justifyContent="center" w="100%">
         <Box w={"65%"} justifyContent={"center"} mb={8}>
           <Image src="https://study1993garbi.s3.ap-northeast-2.amazonaws.com/travel/sourceFile/imgeFile/%E1%84%87%E1%85%A2%E1%84%82%E1%85%A51.png" />
         </Box>
@@ -1016,18 +1018,22 @@ export function HomeBody() {
 
       {/* ------------------- 버스 상품 ------------------- */}
       <Flex justifyContent="center" w="100%" mt={5} bg={"#F5F6F6"}>
-        <Box w={"65%"} mt={"30px"} mb={8}>
-          <Box fontSize={"40px"}>버스여행</Box>
+        <Box w={"65%"} mt={"40px"} mb={12}>
+          <Box fontSize={"40px"} fontSize={"1.8rem"}>
+            버스여행
+          </Box>
           <Box
             ml={"95%"}
             w={"50px"}
-            h={"30px"}
+            h={"25px"}
+            mb={3}
+            borderBottom={"1px solid gray"}
             textAlign={"center"}
             onClick={() => navigate("/transport/list?type=bus")}
             _hover={{ cursor: "pointer", color: "#509896" }}
             lineHeight={"30px"}
           >
-            <Box color={"gray"} fontWeight={900} fontSize={"13px"}>
+            <Box color={"gray"} fontWeight={900} fontSize={"16px"}>
               더보기
             </Box>
           </Box>
@@ -1057,7 +1063,7 @@ export function HomeBody() {
                             }}
                           />
                         </Box>
-                        <Box mt={2} pt={0}>
+                        <Box mt={3} pt={0}>
                           <Center>
                             <Box>
                               <Box textColor={"black"} fontWeight={"bold"}>
@@ -1068,21 +1074,16 @@ export function HomeBody() {
                               </Box>
                               <FormControl>
                                 <Flex>
-                                  <FormLabel
-                                    fontSize={"1.1rem"}
-                                    textColor={"#509896"}
-                                    fontWeight={"900"}
-                                  >
-                                    가격 :
-                                  </FormLabel>
                                   <Box
                                     fontSize={"1.1rem"}
                                     textColor={"#509896"}
                                     fontWeight={"900"}
+                                    mb={2}
                                   >
                                     {parseInt(bus.transPrice).toLocaleString(
                                       "ko-KR",
                                     )}
+                                    원
                                   </Box>
                                 </Flex>
                               </FormControl>
@@ -1128,20 +1129,22 @@ export function HomeBody() {
             zIndex="-1"
           />
         </Box>
-        <Box w={"65%"} justifyContent={"center"} mt={"30px"}>
-          <Box color={"white"} fontSize={"40px"}>
-            비행기여행
+        <Box w={"65%"} justifyContent={"center"} mt={"40px"}>
+          <Box color={"white"} fontSize={"40px"} fontSize={"1.8rem"}>
+            항공권 예매
           </Box>
           <Box
             ml={"95%"}
             w={"50px"}
-            h={"30px"}
+            h={"25px"}
+            mb={3}
+            borderBottom={"1px solid white"}
             textAlign={"center"}
             onClick={() => navigate("/transport/list?type=air")}
             _hover={{ cursor: "pointer", color: "#509896" }}
             lineHeight={"30px"}
           >
-            <Box color={"white"} fontWeight={900} fontSize={"13px"}>
+            <Box color={"white"} fontWeight={900} fontSize={"16px"}>
               더보기
             </Box>
           </Box>
@@ -1171,7 +1174,7 @@ export function HomeBody() {
                           }}
                         />
                       </Box>
-                      <Box mt={2} pt={0}>
+                      <Box mt={3} pt={0}>
                         <Center>
                           <Box>
                             <Box textColor={"black"} fontWeight={"bold"}>
@@ -1182,21 +1185,21 @@ export function HomeBody() {
                             </Box>
                             <FormControl>
                               <Flex>
-                                <FormLabel
-                                  fontSize={"1.1rem"}
-                                  textColor={"#509896"}
-                                  fontWeight={"900"}
-                                >
-                                  가격 :
-                                </FormLabel>
+                                {/*<FormLabel*/}
+                                {/*  fontSize={"1.1rem"}*/}
+                                {/*  textColor={"#509896"}*/}
+                                {/*  fontWeight={"900"}*/}
+                                {/*></FormLabel>*/}
                                 <Box
                                   fontSize={"1.1rem"}
                                   textColor={"#509896"}
                                   fontWeight={"900"}
+                                  mb={2}
                                 >
                                   {parseInt(air.transPrice).toLocaleString(
                                     "ko-KR",
                                   )}
+                                  원
                                 </Box>
                               </Flex>
                             </FormControl>
