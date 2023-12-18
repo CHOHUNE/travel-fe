@@ -8,6 +8,7 @@ import {
   Divider,
   Flex,
   Heading,
+  Image,
   Input,
   Modal,
   ModalBody,
@@ -158,15 +159,6 @@ export function BoardList() {
     return <Spinner />;
   }
 
-  function handleSearch() {
-    new window.daum.Postcode({
-      oncomplete: (data) => {
-        // 우편번호 검색 완료 시 실행할 코드
-        console.log(data);
-      },
-    }).open();
-  }
-
   return (
     <Box w="80%" ml="10%">
       <br />
@@ -178,31 +170,31 @@ export function BoardList() {
 
         <Box w="60%" padding={"10px"}>
           {/*//여행사 카카오지도 모달 띠우기 */}
-          <Box>
-            <Button onClick={onOpen} borderRadius="50%">
-              <FontAwesomeIcon icon={faLocationDot} />
-            </Button>
-            <Text fontSize={"10px"} fontWeight={"bold"}>
-              대리점 찾기
-            </Text>
+          {/*<Box>*/}
+          {/*  <Button onClick={onOpen} borderRadius="50%">*/}
+          {/*    <FontAwesomeIcon icon={faLocationDot} />*/}
+          {/*  </Button>*/}
+          {/*  <Text fontSize={"10px"} fontWeight={"bold"}>*/}
+          {/*    대리점 찾기*/}
+          {/*  </Text>*/}
 
-            <Modal isOpen={isOpen} onClose={onClose}>
-              <ModalOverlay />
-              <ModalContent>
-                <ModalHeader>대리점 찾기</ModalHeader>
-                <ModalCloseButton />
-                <ModalBody>
-                  <Kakao />
-                </ModalBody>
+          {/*  <Modal isOpen={isOpen} onClose={onClose}>*/}
+          {/*    <ModalOverlay />*/}
+          {/*    <ModalContent>*/}
+          {/*      <ModalHeader>대리점 찾기</ModalHeader>*/}
+          {/*      <ModalCloseButton />*/}
+          {/*      <ModalBody>*/}
+          {/*        <Kakao />*/}
+          {/*      </ModalBody>*/}
 
-                <ModalFooter>
-                  <Button colorScheme="green" mr={3} onClick={onClose}>
-                    Close
-                  </Button>
-                </ModalFooter>
-              </ModalContent>
-            </Modal>
-          </Box>
+          {/*      <ModalFooter>*/}
+          {/*        <Button colorScheme="green" mr={3} onClick={onClose}>*/}
+          {/*          Close*/}
+          {/*        </Button>*/}
+          {/*      </ModalFooter>*/}
+          {/*    </ModalContent>*/}
+          {/*  </Modal>*/}
+          {/*</Box>*/}
 
           {/*<Box>*/}
           {/*  <h1> 우편번호 </h1>*/}
@@ -210,6 +202,8 @@ export function BoardList() {
           {/*</Box>*/}
 
           {/*<kakao2 />*/}
+
+          <Image src="https://study1993garbi.s3.ap-northeast-2.amazonaws.com/travel/board/41/aleksas-stan-R1W78UbWBbo-unsplash%20(1).jpg" />
 
           <br />
           <Heading textAlign={"center"} size="md" colorScheme="blue">
