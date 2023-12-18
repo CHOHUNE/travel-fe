@@ -133,6 +133,7 @@ export function ReservationList() {
                       <Th>연락처</Th>
                       <Th>예약번호</Th>
                       <Th>가격</Th>
+                      <Th>예약상태</Th>
                       {/*<Th>상태</Th>*/}
                     </Tr>
                   </Thead>
@@ -208,7 +209,13 @@ export function ReservationList() {
                           </Td>
                         )}
                         <Td>{parseInt(t.amount).toLocaleString("ko-KR")}원</Td>
-                        {/*<Td>{toss.db 안만듬 }</Td>*/}
+                        <Td>
+                          {t.reservNumber !== null ? (
+                            <Text color={"blue"}>예약완료</Text>
+                          ) : (
+                            <Text>예약접수</Text>
+                          )}
+                        </Td>
                       </Tr>
                     ))}
                   </Tbody>
