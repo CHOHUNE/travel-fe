@@ -113,7 +113,9 @@ export function DeleteView() {
     <Center m={20}>
       <Card w={"xl"}>
         <CardHeader>
-          <Heading textAlign={"center"}>{user.userId}님 정보</Heading>
+          <Box fontSize={"2.2rem"} textAlign={"center"}>
+            {user.userId}님 정보
+          </Box>
         </CardHeader>
 
         <CardBody>
@@ -127,7 +129,7 @@ export function DeleteView() {
             <Input type="password" value={user.userPassword} readOnly />
           </FormControl>
 
-          <FormControl>
+          <FormControl mb={2}>
             <FormLabel>휴대전화</FormLabel>
             <Flex>
               <Input type="number" value={phonePart1} readOnly w="30%" />

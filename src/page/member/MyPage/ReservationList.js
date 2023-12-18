@@ -7,7 +7,14 @@ import {
   Center,
   Flex,
   Heading,
+  Icon,
   Input,
+  Modal,
+  ModalBody,
+  ModalCloseButton,
+  ModalContent,
+  ModalHeader,
+  ModalOverlay,
   Spinner,
   Tab,
   Table,
@@ -17,9 +24,11 @@ import {
   Tabs,
   Tbody,
   Td,
+  Text,
   Th,
   Thead,
   Tr,
+  useDisclosure,
 } from "@chakra-ui/react";
 import React, { useContext, useEffect, useState } from "react";
 import axios, { get } from "axios";
@@ -30,6 +39,9 @@ import {
   useSearchParams,
 } from "react-router-dom";
 import { LoginContext } from "../../../component/LoginProvider";
+import { InfoIcon } from "@chakra-ui/icons";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faClipboard } from "@fortawesome/free-regular-svg-icons";
 
 export function ReservationList() {
   const { fetchLogin, isAdmin } = useContext(LoginContext);
@@ -39,9 +51,10 @@ export function ReservationList() {
   const navigate = useNavigate();
   const [toss, setToss] = useState([]);
 
-  const [reservationNumber, setReservationNumber] = useState("");
   const [messageContent, setMessageContent] = useState("");
-  const [userPhoneNumber, setUserPhoneNumber] = useState(""); // 구매한 사용자의 핸드폰 번호 상태
+
+  const { isOpen, onOpen, onClose } = useDisclosure();
+  const [selectedRequest, setSelectedRequest] = useState("");
 
   useEffect(() => {
     axios.get("/api/toss/id/" + params.get("userId")).then((response) => {
@@ -49,21 +62,35 @@ export function ReservationList() {
     });
   }, [location]);
 
-  // ----------------------- 예약번호 문자 발송 -----------------------
-  const handleSendSMS = async (phoneNumber) => {
+  // 문자 발송 및 DB에 예약번호 저장
+  const handleConfirmation = async (
+    tossId,
+    realUserPhoneNumber,
+    messageContent,
+  ) => {
     try {
-      const response = await axios.post(
-        "/api/member/sendSMS3?userPhoneNumber=" + phoneNumber,
+      // 문자 발송 처리
+      const smsResponse = await axios.post(
+        `/api/member/sendSMS3?userPhoneNumber=${realUserPhoneNumber}`,
         {
-          messageContent: messageContent,
+          messageContent,
         },
       );
-      console.log("response : ", response);
-      // 성공 시 처리 로직
+      console.log("문자 발송 성공: ", smsResponse);
+
+      // DB에 예약번호 저장
+      const saveResponse = await axios.put(
+        `/api/toss/sendAndSave?tossId=${tossId}&reservNumber=${messageContent}`,
+      );
+      console.log("DB 저장 성공: ", saveResponse);
     } catch (error) {
-      console.error("에러 : ", error);
-      // 실패 시 처리 로직
+      console.error("처리 에러: ", error);
     }
+  };
+
+  const handleIconClick = (request) => {
+    setSelectedRequest(request);
+    onOpen();
   };
 
   return (
@@ -72,14 +99,24 @@ export function ReservationList() {
         <Tabs isFitted variant="enclosed">
           <TabList mb="1em">
             <Tab>
-              <CardHeader textAlign={"center"} m={5}>
-                <Heading>항공 / 버스 예약 관리</Heading>
-              </CardHeader>
+              <Text
+                fontSize={"2.2rem"}
+                fontWeight={"bold"}
+                textAlign={"center"}
+                m={5}
+              >
+                <Text>항공 / 버스 예약 관리</Text>
+              </Text>
             </Tab>
             <Tab>
-              <CardHeader textAlign={"center"} m={5}>
-                <Heading>호텔 예약 관리</Heading>
-              </CardHeader>
+              <Text
+                fontSize={"2.2rem"}
+                fontWeight={"bold"}
+                textAlign={"center"}
+                m={5}
+              >
+                <Text>숙소 예약 관리</Text>
+              </Text>
             </Tab>
           </TabList>
           <TabPanels>
@@ -92,7 +129,6 @@ export function ReservationList() {
                       <Th>아이디</Th>
                       <Th>상품명 </Th>
                       <Th>출발시간 </Th>
-                      <Th>도작시간 </Th>
                       <Th>요청사항</Th>
                       <Th>연락처</Th>
                       <Th>예약번호</Th>
@@ -102,28 +138,56 @@ export function ReservationList() {
                   </Thead>
 
                   <Tbody>
-                    {toss.map((toss) => (
-                      <Tr key={toss.id} _hover={{ cursor: "pointer" }}>
-                        <Td>{toss.tossid}</Td>
-                        <Td>{toss.userId}</Td>
-                        <Td>{toss.transTitle}</Td>
-                        <Td>{toss.transStartDate}</Td>
-                        <Td>{toss.transEndDate}</Td>
-                        <Td>{toss.request}</Td>
-                        <Td>{toss.phoneNumber}</Td>
+                    {toss.map((t) => (
+                      <Tr key={t.tossId} _hover={{ cursor: "pointer" }}>
+                        <Td>{t.tossId}</Td>
+                        <Td>{t.userId}</Td>
+                        <Td>{t.transTitle}</Td>
+                        <Td>{t.transStartDay}</Td>
+                        <Td textAlign={"center"}>
+                          {t.request ? (
+                            <Icon
+                              as={InfoIcon}
+                              onClick={() => handleIconClick(t.request)}
+                              cursor="pointer"
+                            />
+                          ) : (
+                            <FontAwesomeIcon
+                              icon={faClipboard}
+                              onClick={() => handleIconClick(t.request)}
+                              cursor="pointer"
+                            />
+                          )}
+                        </Td>
+                        <Td>{t.realUserPhoneNumber}</Td>
                         {isAdmin() && (
                           <Td>
                             <Flex gap={2}>
                               <Input
                                 type="text"
-                                value={messageContent}
+                                value={t.messageContent || ""}
                                 onChange={(e) =>
-                                  setMessageContent(e.target.value)
+                                  setToss(
+                                    toss.map((item) =>
+                                      item.tossId === t.tossId
+                                        ? {
+                                            ...t,
+                                            messageContent: e.target.value,
+                                          }
+                                        : item,
+                                    ),
+                                  )
                                 }
                                 placeholder="예약번호 입력"
                               />
                               <Button
-                                onClick={() => handleSendSMS(toss.phoneNumber)}
+                                onClick={() =>
+                                  handleConfirmation(
+                                    t.tossId,
+                                    t.realUserPhoneNumber,
+                                    t.messageContent,
+                                  )
+                                }
                               >
                                 확인
                               </Button>
@@ -134,17 +198,20 @@ export function ReservationList() {
                         {isAdmin() || (
                           <Td>
                             <Flex gap={2}>
-                              <Input
-                                readOnly
-                                type="text"
-                                value={""}
-                                placeholder="관리자가 승인하면 예약번호가 발생됩니다."
-                              />
+                              {t.reservNumber !== null ? (
+                                <Input
+                                  readOnly
+                                  type="text"
+                                  value={t.reservNumber}
+                                  placeholder="관리자가 승인하면 예약번호가 발생됩니다."
+                                />
+                              ) : (
+                                <Box></Box>
+                              )}
                             </Flex>
                           </Td>
                         )}
-
-                        <Td>{toss.amount}</Td>
+                        <Td>{parseInt(t.amount).toLocaleString("ko-KR")}원</Td>
                         {/*<Td>{toss.db 안만듬 }</Td>*/}
                       </Tr>
                     ))}
@@ -159,8 +226,8 @@ export function ReservationList() {
                     <Tr>
                       <Th>주문번호</Th>
                       <Th>상품명 </Th>
-                      <Th>체크 인 </Th>
-                      <Th>체크 아웃 </Th>
+                      <Th>체크인 </Th>
+                      <Th>체크아웃 </Th>
                       <Th>요청사항</Th>
                       <Th>예약번호</Th>
                       <Th>가격</Th>
@@ -184,6 +251,15 @@ export function ReservationList() {
               </CardBody>
             </TabPanel>
           </TabPanels>
+          {/* 모달 창 */}
+          <Modal isOpen={isOpen} onClose={onClose}>
+            <ModalOverlay />
+            <ModalContent>
+              <ModalHeader>요청사항 상세</ModalHeader>
+              <ModalCloseButton />
+              <ModalBody>{selectedRequest}</ModalBody>
+            </ModalContent>
+          </Modal>
         </Tabs>
       </Card>
     </Center>

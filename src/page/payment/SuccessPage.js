@@ -9,10 +9,20 @@ const apiSecretKey = process.env.REACT_APP_SECRET_KEY;
 export function SuccessPage() {
   const navigate = useNavigate();
   const [searchParams] = useSearchParams();
-  // 요청 사항 저장하기
-  let payRequested = localStorage.getItem("payRequested");
-  // 이용자 휴대폰 번호 저장하기
-  let phoneNumber = localStorage.getItem("phoneNumber");
+  // // 요청 사항 저장하기
+  // let payRequested = localStorage.getItem("payRequested");
+  // // 이용자 휴대폰 번호 저장하기
+  // let phoneNumber = localStorage.getItem("phoneNumber");
+  // // 예약자 이름 저장
+  // let userName = localStorage.getItem("userName");
+  // // 이용자 이름 저장
+  // let realUserName = localStorage.getItem("realUserName");
+  // // 상품명 저장
+  // let transTitle = localStorage.getItem("transTitle");
+  // // 상품 출발일 저장
+  // let transStartDay = localStorage.getItem("transStartDay");
+  // // 상품 이용 인원 저장
+  // let people = localStorage.getItem("people");
 
   // 쿼리 스트링에서 호텔인지 운송 상품인지 결제 타입을 받아오기
   const [params] = useSearchParams();
@@ -24,9 +34,7 @@ export function SuccessPage() {
       amount: searchParams.get("amount"),
       paymentKey: searchParams.get("paymentKey"),
       id: searchParams.get("id"),
-      requested: payRequested,
     };
-    console.log("요청사항 : " + payRequested);
 
     // TODO: 개발자센터에 로그인해서 내 결제위젯 연동 키 > 시크릿 키를 입력하세요. 시크릿 키는 외부에 공개되면 안돼요.
     // @docs https://docs.tosspayments.com/reference/using-api/api-keys
@@ -108,33 +116,64 @@ export function SuccessPage() {
   // 완료 페이지가 뜰때에 db에 저장 시키기
   useEffect(() => {
     if (payType === "trans") {
+      // 요청 사항 저장하기
+      let payRequested = localStorage.getItem("payRequested");
+      // 이용자 휴대폰 번호 저장하기
+      let phoneNumber = localStorage.getItem("phoneNumber");
+      // 예약자 이름 저장
+      let userName = localStorage.getItem("userName");
+      // 이용자 이름 저장
+      let realUserName = localStorage.getItem("realUserName");
+      // 상품명 저장
+      let transTitle = localStorage.getItem("transTitle");
+      // 상품 출발일 저장
+      let transStartDay = new Date(localStorage.getItem("transStartDay"));
+      // 상품 이용 인원 저장
+      let people = localStorage.getItem("transPeople");
+
+      console.log("핸드폰 번호 : " + phoneNumber);
+      console.log("인원 수 : " + people);
+
       // 타입이 운송이면 운송 저장 요청
       axios
         .postForm("/api/toss/transSave", {
           orderId: searchParams.get("orderId"),
           amount: searchParams.get("amount"),
-          id: searchParams.get("id"),
+          transId: searchParams.get("id"),
+          // 여기서부터는 로케이션 저장 한 값 이기때문에 finally에서 자워줘야 한다.
           requested: payRequested,
-          phoneNumber: phoneNumber,
+          realUserPhoneNumber: phoneNumber,
+          userName: userName,
+          realUserName: realUserName,
+          transTitle: transTitle,
+          transStartDay: transStartDay.toISOString(),
+          people: people,
         })
         .finally(() => {
+          // 결제가 완료 되었든 취소 되었든 결제 정보는 지우는 코드
           localStorage.removeItem("payRequested");
           localStorage.removeItem("phoneNumber");
+          localStorage.removeItem("userName");
+          localStorage.removeItem("realUserName");
+          localStorage.removeItem("transTitle");
+          localStorage.removeItem("transStartDay");
+          localStorage.removeItem("transPeople");
         });
     } else {
+      // TODO : 호텔 타입으로 결제가 코드가 작성 되면 주석 풀기
       // 타입이 호텔이면 호텔 저장 요청
-      axios
-        .postForm("/api/toss/save", {
-          orderId: searchParams.get("orderId"),
-          amount: searchParams.get("amount"),
-          id: searchParams.get("id"),
-          requested: payRequested,
-          phoneNumber: phoneNumber,
-        })
-        .finally(() => {
-          localStorage.removeItem("payRequested");
-          localStorage.removeItem("phoneNumber");
-        });
+      // axios
+      //   .postForm("/api/toss/save", {
+      //     orderId: searchParams.get("orderId"),
+      //     amount: searchParams.get("amount"),
+      //     id: searchParams.get("id"),
+      //     requested: payRequested,
+      //     phoneNumber: phoneNumber,
+      //   })
+      //   .finally(() => {
+      //     localStorage.removeItem("payRequested");
+      //     localStorage.removeItem("phoneNumber");
+      //   });
     }
   }, []);
 
