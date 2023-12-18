@@ -204,7 +204,7 @@ export function BoardList() {
 
             {/*<kakao2 />*/}
 
-            <Image src="https://study1993garbi.s3.ap-northeast-2.amazonaws.com/travel/board/41/aleksas-stan-R1W78UbWBbo-unsplash%20(1).jpg" />
+            {/*<Image src="https://study1993garbi.s3.ap-northeast-2.amazonaws.com/travel/board/41/aleksas-stan-R1W78UbWBbo-unsplash%20(1).jpg" />*/}
 
             <br />
             <Heading textAlign={"center"} size="md" colorScheme="blue">
