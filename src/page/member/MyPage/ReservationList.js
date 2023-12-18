@@ -51,9 +51,7 @@ export function ReservationList() {
   const navigate = useNavigate();
   const [toss, setToss] = useState([]);
 
-  const [reservationNumber, setReservationNumber] = useState("");
   const [messageContent, setMessageContent] = useState("");
-  const [userPhoneNumber, setUserPhoneNumber] = useState(""); // 구매한 사용자의 핸드폰 번호 상태
 
   const { isOpen, onOpen, onClose } = useDisclosure();
   const [selectedRequest, setSelectedRequest] = useState("");
@@ -131,42 +129,52 @@ export function ReservationList() {
                   </Thead>
 
                   <Tbody>
-                    {toss.map((toss) => (
-                      <Tr key={toss.id} _hover={{ cursor: "pointer" }}>
-                        <Td>{toss.tossid}</Td>
-                        <Td>{toss.userId}</Td>
-                        <Td>{toss.transTitle}</Td>
-                        <Td>{toss.transStartDate}</Td>
+                    {toss.map((t) => (
+                      <Tr key={t.tossId} _hover={{ cursor: "pointer" }}>
+                        <Td>{t.tossId}</Td>
+                        <Td>{t.userId}</Td>
+                        <Td>{t.transTitle}</Td>
+                        <Td>{t.transStartDay}</Td>
                         <Td textAlign={"center"}>
-                          {toss.request ? (
+                          {t.request ? (
                             <Icon
                               as={InfoIcon}
-                              onClick={() => handleIconClick(toss.request)}
+                              onClick={() => handleIconClick(t.request)}
                               cursor="pointer"
                             />
                           ) : (
                             <FontAwesomeIcon
                               icon={faClipboard}
-                              onClick={() => handleIconClick(toss.request)}
+                              onClick={() => handleIconClick(t.request)}
                               cursor="pointer"
                             />
                           )}
                         </Td>
-                        <Td>{toss.realUserPhoneNumber}</Td>
+                        <Td>{t.realUserPhoneNumber}</Td>
                         {isAdmin() && (
                           <Td>
                             <Flex gap={2}>
                               <Input
                                 type="text"
-                                value={messageContent}
+                                value={t.messageContent}
                                 onChange={(e) =>
-                                  setMessageContent(e.target.value)
+                                  // setMessageContent(e.target.value)
+                                  setToss(
+                                    toss.map((item) =>
+                                      item.tossId === t.tossId
+                                        ? {
+                                            ...t,
+                                            messageContent: e.target.value,
+                                          }
+                                        : item,
+                                    ),
+                                  )
                                 }
                                 placeholder="예약번호 입력"
                               />
                               <Button
                                 onClick={() =>
-                                  handleSendSMS(toss.realUserPhoneNumber)
+                                  handleSendSMS(t.realUserPhoneNumber)
                                 }
                               >
                                 확인
@@ -187,9 +195,7 @@ export function ReservationList() {
                             </Flex>
                           </Td>
                         )}
-                        <Td>
-                          {parseInt(toss.amount).toLocaleString("ko-KR")}원
-                        </Td>
+                        <Td>{parseInt(t.amount).toLocaleString("ko-KR")}원</Td>
                         {/*<Td>{toss.db 안만듬 }</Td>*/}
                       </Tr>
                     ))}
