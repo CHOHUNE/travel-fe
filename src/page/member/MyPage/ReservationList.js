@@ -65,10 +65,10 @@ export function ReservationList() {
   }, [location]);
 
   // ----------------------- 예약번호 문자 발송 -----------------------
-  const handleSendSMS = async (phoneNumber) => {
+  const handleSendSMS = async (realUserPhoneNumber) => {
     try {
       const response = await axios.post(
-        "/api/member/sendSMS3?userPhoneNumber=" + phoneNumber,
+        "/api/member/sendSMS3?userPhoneNumber=" + realUserPhoneNumber,
         {
           messageContent: messageContent,
         },
@@ -152,7 +152,7 @@ export function ReservationList() {
                             />
                           )}
                         </Td>
-                        <Td>{toss.phoneNumber}</Td>
+                        <Td>{toss.realUserPhoneNumber}</Td>
                         {isAdmin() && (
                           <Td>
                             <Flex gap={2}>
@@ -165,7 +165,9 @@ export function ReservationList() {
                                 placeholder="예약번호 입력"
                               />
                               <Button
-                                onClick={() => handleSendSMS(toss.phoneNumber)}
+                                onClick={() =>
+                                  handleSendSMS(toss.realUserPhoneNumber)
+                                }
                               >
                                 확인
                               </Button>
