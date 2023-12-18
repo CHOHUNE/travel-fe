@@ -70,7 +70,18 @@ export function LBanner() {
               _hover={{ cursor: "pointer", color: "skyblue" }}
               onClick={() => navigate("/Kakao")}
             >
-              모두투어 지점 찾기
+              TRAVEL투어 지점 찾기
+            </Text>
+          </Box>
+
+          <Divider my="4" />
+          <Box>
+            <Text
+              fontSize="md"
+              _hover={{ cursor: "pointer", color: "skyblue" }}
+              onClick={() => navigate("/weather")}
+            >
+              유명 명소 날씨
             </Text>
           </Box>
         </Box>

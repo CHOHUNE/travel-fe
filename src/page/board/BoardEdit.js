@@ -65,55 +65,57 @@ export function BoardEdit() {
 
   return (
     <Box w="80%" ml="10%">
-      <Flex>
-        <Box w="20%" padding={"10px"}>
-          <LBanner />
-        </Box>
-        <Box w="60%" padding={"10px"}>
-          <br />
-          <Heading size="md">{id}번 글 수정</Heading>
-          <br />
+      <Box w="80%" ml="10%">
+        <Flex>
+          <Box w="20%" padding={"10px"}>
+            <LBanner />
+          </Box>
+          <Box w="60%" padding={"10px"}>
+            <br />
+            <Heading size="md">{id}번 글 수정</Heading>
+            <br />
 
-          <FormControl>
-            <FormLabel>제목</FormLabel>
-            <Input
-              value={board.title}
-              onChange={(e) =>
-                updateBoard((draft) => {
-                  draft.title = e.target.value;
-                })
-              }
-            />
-          </FormControl>
-          <FormControl>
-            <FormLabel>본문</FormLabel>
-            <Textarea
-              value={board.content}
-              onChange={(e) =>
-                updateBoard((draft) => {
-                  draft.content = e.target.value;
-                })
-              }
-            />
-          </FormControl>
-          <FormControl>
-            <FormLabel>작성자</FormLabel>
-            <Input
-              value={board.writer}
-              onChange={(e) =>
-                updateBoard((draft) => {
-                  draft.writer = e.target.value;
-                })
-              }
-            />
-          </FormControl>
-          <Button onClick={handleUpdate}>수정</Button>
-        </Box>
+            <FormControl>
+              <FormLabel>제목</FormLabel>
+              <Input
+                value={board.title}
+                onChange={(e) =>
+                  updateBoard((draft) => {
+                    draft.title = e.target.value;
+                  })
+                }
+              />
+            </FormControl>
+            <FormControl>
+              <FormLabel>본문</FormLabel>
+              <Textarea
+                value={board.content}
+                onChange={(e) =>
+                  updateBoard((draft) => {
+                    draft.content = e.target.value;
+                  })
+                }
+              />
+            </FormControl>
+            <FormControl>
+              <FormLabel>작성자</FormLabel>
+              <Input
+                value={board.writer}
+                onChange={(e) =>
+                  updateBoard((draft) => {
+                    draft.writer = e.target.value;
+                  })
+                }
+              />
+            </FormControl>
+            <Button onClick={handleUpdate}>수정</Button>
+          </Box>
 
-        <Box w={"20%"} padding={"10px"}>
-          <RBanner />
-        </Box>
-      </Flex>
+          <Box w={"20%"} padding={"10px"}>
+            <RBanner />
+          </Box>
+        </Flex>
+      </Box>
     </Box>
   );
 }
