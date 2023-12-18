@@ -8,7 +8,7 @@ import {
   Divider,
   Flex,
   Heading,
-  Icon,
+  Image,
   Input,
   Modal,
   ModalBody,
@@ -18,8 +18,6 @@ import {
   ModalHeader,
   ModalOverlay,
   Spinner,
-  Stack,
-  StackDivider,
   Table,
   Tbody,
   Td,
@@ -36,10 +34,10 @@ import {
   faAngleLeft,
   faAngleRight,
   faLocationDot,
-  faMapMarker,
 } from "@fortawesome/free-solid-svg-icons";
-import { InfoOutlineIcon, PhoneIcon } from "@chakra-ui/icons";
 import { Map, MapMarker } from "react-kakao-maps-sdk";
+import { RBanner } from "./Banner/RBanner";
+import { LBanner } from "./Banner/LBanner";
 
 function PageButton({ variant, pageNumber, children }) {
   const [params] = useSearchParams();
@@ -121,7 +119,9 @@ function SearchComponent() {
           <option value="Option3">작성자</option>
         </select>
         <Input value={keyword} onChange={(e) => setKeyword(e.target.value)} />
-        <Button onClick={handleSearch}>검색</Button>
+        <Button colorScheme="blue" onClick={handleSearch}>
+          검색
+        </Button>
       </Flex>
     </Box>
   );
@@ -159,103 +159,42 @@ export function BoardList() {
     return <Spinner />;
   }
 
-  function handleSearch() {
-    new window.daum.Postcode({
-      oncomplete: (data) => {
-        // 우편번호 검색 완료 시 실행할 코드
-        console.log(data);
-      },
-    }).open();
-  }
-
   return (
     <Box w="80%" ml="10%">
       <br />
       <br />
       <Flex textAlign={"center"}>
         <Box w="20%" padding={"10px"}>
-          <Card>
-            <CardHeader>
-              <Heading size="md">투어 고객센터</Heading>
-            </CardHeader>
-
-            <CardBody textAlign={"left"}>
-              <Box>
-                <Divider my="2" />
-                <Box>
-                  <Text
-                    fontSize="md"
-                    _hover={{ cursor: "pointer", color: "green" }}
-                    onClick={() => navigate("/notice")}
-                  >
-                    자주 찾는 질문
-                  </Text>
-                </Box>
-
-                <Divider my="4" />
-                <Box>
-                  <Text
-                    fontSize="md"
-                    _hover={{ cursor: "pointer", color: "green" }}
-                    onClick={() => navigate("/boardList")}
-                  >
-                    게 시 판
-                  </Text>
-                </Box>
-                {/* 구분선 추가 */}
-                <Divider my="4" />
-                <Box>
-                  <Text
-                    fontSize="md"
-                    _hover={{ cursor: "pointer", color: "green" }}
-                    onClick={() => navigate("/boardwrite")}
-                  >
-                    고객의 소리
-                  </Text>
-                </Box>
-
-                <Divider my="4" />
-                <Box>
-                  <Text
-                    fontSize="md"
-                    _hover={{ cursor: "pointer", color: "green" }}
-                    onClick={() => navigate("/NoticeSound")}
-                  >
-                    소비자 중심 경영
-                  </Text>
-                </Box>
-              </Box>
-            </CardBody>
-          </Card>
+          <LBanner />
         </Box>
 
         <Box w="60%" padding={"10px"}>
           {/*//여행사 카카오지도 모달 띠우기 */}
-          <Box>
-            <Button onClick={onOpen} borderRadius="50%">
-              <FontAwesomeIcon icon={faLocationDot} />
-            </Button>
-            <Text fontSize={"10px"} fontWeight={"bold"}>
-              대리점 찾기
-            </Text>
+          {/*<Box>*/}
+          {/*  <Button onClick={onOpen} borderRadius="50%">*/}
+          {/*    <FontAwesomeIcon icon={faLocationDot} />*/}
+          {/*  </Button>*/}
+          {/*  <Text fontSize={"10px"} fontWeight={"bold"}>*/}
+          {/*    대리점 찾기*/}
+          {/*  </Text>*/}
 
-            <Modal isOpen={isOpen} onClose={onClose}>
-              <ModalOverlay />
-              <ModalContent>
-                <ModalHeader>대리점 찾기</ModalHeader>
-                <ModalCloseButton />
-                <ModalBody>
-                  <Kakao />
-                </ModalBody>
+          {/*  <Modal isOpen={isOpen} onClose={onClose}>*/}
+          {/*    <ModalOverlay />*/}
+          {/*    <ModalContent>*/}
+          {/*      <ModalHeader>대리점 찾기</ModalHeader>*/}
+          {/*      <ModalCloseButton />*/}
+          {/*      <ModalBody>*/}
+          {/*        <Kakao />*/}
+          {/*      </ModalBody>*/}
 
-                <ModalFooter>
-                  <Button colorScheme="green" mr={3} onClick={onClose}>
-                    Close
-                  </Button>
-                </ModalFooter>
-              </ModalContent>
-            </Modal>
-          </Box>
+          {/*      <ModalFooter>*/}
+          {/*        <Button colorScheme="green" mr={3} onClick={onClose}>*/}
+          {/*          Close*/}
+          {/*        </Button>*/}
+          {/*      </ModalFooter>*/}
+          {/*    </ModalContent>*/}
+          {/*  </Modal>*/}
+          {/*</Box>*/}
 
           {/*<Box>*/}
           {/*  <h1> 우편번호 </h1>*/}
@@ -264,8 +203,10 @@ export function BoardList() {
 
           {/*<kakao2 />*/}
 
+          <Image src="https://study1993garbi.s3.ap-northeast-2.amazonaws.com/travel/board/41/aleksas-stan-R1W78UbWBbo-unsplash%20(1).jpg" />
+
           <br />
-          <Heading textAlign={"center"} size="md" colorScheme="green">
+          <Heading textAlign={"center"} size="md" colorScheme="blue">
             게시판 목록
           </Heading>
           <br />
@@ -298,73 +239,23 @@ export function BoardList() {
               ))}
             </Tbody>
           </Table>
+          <br />
+          <Flex justifyContent={"flex-end"}>
+            <Button
+              size={"sm"}
+              mr={"20px"}
+              colorScheme="blue"
+              onClick={() => navigate("../boardwrite")}
+            >
+              {" "}
+              글 쓰기{" "}
+            </Button>
+          </Flex>
           <Pagination pageInfo={pageInfo} />
         </Box>
 
         <Box w={"20%"} padding={"10px"}>
-          <Card>
-            <CardHeader>
-              <Heading size="md">투어 고객센터</Heading>
-            </CardHeader>
-
-            <CardBody>
-              <Stack divider={<StackDivider />} spacing="4">
-                <Box>
-                  <Heading size="xs" textTransform="uppercase">
-                    <Icon as={PhoneIcon} /> 해외/국내 여행상담
-                  </Heading>
-                  <Text pt="2" fontSize="md" fontWeight="bold" color={"green"}>
-                    1544-5252
-                  </Text>
-                </Box>
-                <Box>
-                  <Heading size="xs" textTransform="uppercase">
-                    <Icon as={PhoneIcon} /> 해외/국내 항공상담
-                  </Heading>
-                  <Text pt="2" fontSize="md" fontWeight="bold" color={"green"}>
-                    1544-5353
-                  </Text>
-                </Box>
-                <Box>
-                  <Heading size="xs" textTransform="uppercase">
-                    <Icon as={PhoneIcon} /> 부산/대구출발 여행상담
-                  </Heading>
-                  <Text pt="2" fontSize="md" fontWeight="bold" color={"green"}>
-                    1544-6722
-                  </Text>
-                </Box>
-                <Box>
-                  <Heading size="xs" textTransform="uppercase">
-                    <Icon as={PhoneIcon} /> 기업행사/출장문의
-                  </Heading>
-                  <Text pt="2" fontSize="md" fontWeight="bold" color={"green"}>
-                    1661-4873
-                  </Text>
-                  <Text pt="2" fontSize="sm" color={"gray"}>
-                    https://biz.tour.com
-                  </Text>
-                </Box>
-                <Box textAlign={"left"}>
-                  <Heading size="xs" textTransform="uppercase" p="2">
-                    <Icon as={InfoOutlineIcon} /> 상담시간 안내
-                  </Heading>
-
-                  <Text pt="2" fontSize="11px">
-                    *해외/국내 여행 및 항공상담 평일 9:00 ~ 18:00 (토/일요일 및
-                    공휴일 휴무)
-                  </Text>
-                  <Text pt="2" fontSize="11px">
-                    *항공권은 전화상담 예약 시 항공료 외 별도의 취급 수수료가
-                    발생합니다.
-                  </Text>
-                  <Text pt="2" fontSize="11px">
-                    *항공 시스템 결제요청, 환불/변경 문의 평일 9:00 ~ 17:00
-                    (토/일요일 및 공휴일 휴무)
-                  </Text>
-                </Box>
-              </Stack>
-            </CardBody>
-          </Card>
+          <RBanner />
         </Box>
       </Flex>
     </Box>
