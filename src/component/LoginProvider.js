@@ -12,8 +12,6 @@ function LoginProvider({ children }) {
     fetchLogin();
   }, []);
 
-  console.log(login);
-
   // 카카오 로그인 세션저장용 -동작안됨-
   // function fetchLogin() {
   //   if (code) {

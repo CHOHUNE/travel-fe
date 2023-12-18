@@ -300,9 +300,9 @@ export function UserEdit() {
   return (
     <Center m={20}>
       <Card w={"xl"}>
-        <CardHeader>
-          <Heading textAlign={"center"}>{user.userId}님 회원수정</Heading>
-        </CardHeader>
+        <Box fontSize={"2.2rem"} textAlign={"center"}>
+          {user.userId}님 회원수정
+        </Box>
 
         <CardBody>
           <FormControl mb={3} readOnly>

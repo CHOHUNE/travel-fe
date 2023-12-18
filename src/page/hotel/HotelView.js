@@ -469,7 +469,7 @@ export function HotelView() {
               {roomtypeList &&
                 roomtypeList.map((roomtype) => (
                   <Box
-                    key={roomtype.hrtId}
+                    key={roomtype.hid}
                     borderRadius="lg"
                     border="1px solid"
                     borderColor={"gray.400"}
