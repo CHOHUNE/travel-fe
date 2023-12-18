@@ -149,26 +149,44 @@ export function HotelPay() {
   // }
 
   function handlePaymentClick(response) {
-    console.log(selectedRoom[0].price);
-    console.log(selectedRoom[0].roomType);
-
     // 데이터를 일일히 뜯어서 로컬 스토리지에 저장
-    localStorage.setItem("hId", id);
-    localStorage.setItem("checkoutDate", reservation.checkoutDate);
-    localStorage.setItem("checkinDate", reservation.checkinDate);
-    localStorage.setItem("plusMessage", plusMessage);
-    localStorage.setItem("price", selectedRoom[0].price);
-    localStorage.setItem("roomtype", selectedRoom[0].roomType);
-    localStorage.setItem("personAdult", personAdult);
-    localStorage.setItem("personChild", personChild);
-    localStorage.setItem("guestName", personName);
-    localStorage.setItem("cellPhoneNumber", personNumber);
-    localStorage.setItem("memberName", member.name);
-    localStorage.setItem("memberNumber", member.phoneNumber);
+    // localStorage.setItem("hId", id);
+    // localStorage.setItem("checkoutDate", reservation.checkoutDate);
+    // localStorage.setItem("checkinDate", reservation.checkinDate);
+    // localStorage.setItem("plusMessage", plusMessage);
+    // localStorage.setItem("price", selectedRoom[0].price);
+    // localStorage.setItem("roomtype", selectedRoom[0].roomType);
+    // localStorage.setItem("personAdult", personAdult);
+    // localStorage.setItem("personChild", personChild);
+    // localStorage.setItem("guestName", personName);
+    // localStorage.setItem("cellPhoneNumber", personNumber);
+    // localStorage.setItem("memberName", member.name);
+    // localStorage.setItem("memberNumber", member.phoneNumber);
 
-    // navigate(`/PaymentPageHotel/${id}`, {
-    //   state: { id, amount: hotel.totalPrice },
-    // });
+    if (isChecked) {
+      if (!member.name || !member.phoneNumber) {
+        toast({
+          description: "예약자 정보를 입력해 주세요.",
+          status: "warning",
+        });
+      } else {
+        navigate(`/PaymentPage/${id}?type=hotel`, {
+          state: {
+            amount: selectedRoom[0].price,
+            hId: id,
+            checkoutDate: reservation.checkoutDate,
+            checkinDate: reservation.checkinDate,
+            plusMessage: plusMessage,
+            price: selectedRoom[0].price,
+            roomtype: selectedRoom[0].roomType,
+            personAdult: personAdult,
+            personChild: personChild,
+            guestName: isChecked ? member.name : personName,
+            cellPhoneNumber: isChecked ? member.phoneNumber : personNumber,
+          },
+        });
+      }
+    }
   }
 
   const handleInputChange1 = (e) => {
@@ -372,13 +390,12 @@ export function HotelPay() {
                       </FormLabel>
                       <Flex>
                         <Input
-                          ref={inputRef1}
+                          // ref={inputRef1}
                           ml={5}
                           mt={2}
                           w={100}
                           maxLength={3}
                           value={member ? a : ""}
-                          onChange={handleInputChange1}
                         />
                         <span
                           style={{
@@ -399,12 +416,11 @@ export function HotelPay() {
                           </Box>
                         </span>
                         <Input
-                          ref={inputRef2}
+                          // ref={inputRef2}
                           mt={2}
                           w={100}
-                          maxLength={4}
+                          type={"number"}
                           value={member ? b : ""}
-                          onChange={handleInputChange2}
                         />
                         <span
                           style={{
@@ -425,12 +441,11 @@ export function HotelPay() {
                           </Box>
                         </span>
                         <Input
-                          ref={inputRef3}
+                          // ref={inputRef3}
                           mt={2}
                           w={100}
                           maxLength={4}
                           value={member ? c : ""}
-                          onChange={handleInputChange3}
                         />
                       </Flex>
                     </Flex>
@@ -466,6 +481,8 @@ export function HotelPay() {
                         ml={5}
                         mt={2}
                         w={400}
+                        maxLength={10}
+                        type={"text"}
                         value={isChecked ? member.name : personName}
                         onChange={(e) => setPersonName(e.target.value)}
                       />
@@ -513,7 +530,10 @@ export function HotelPay() {
                         <Input
                           ml={5}
                           mt={2}
+                          ref={inputRef1}
                           w={100}
+                          type={"text"}
+                          maxLength={4}
                           value={isChecked ? a : personNumber1}
                           onChange={handleInputChange1}
                         />
@@ -538,6 +558,9 @@ export function HotelPay() {
                         <Input
                           mt={2}
                           w={100}
+                          ref={inputRef2}
+                          type={"text"}
+                          maxLength={4}
                           value={isChecked ? b : personNumber2}
                           onChange={handleInputChange2}
                         />
@@ -562,6 +585,10 @@ export function HotelPay() {
                         <Input
                           mt={2}
                           w={100}
+                          ref={inputRef3}
+                          // type={"number"}
+                          type={"text"}
+                          maxLength={4}
                           value={isChecked ? c : personNumber3}
                           onChange={handleInputChange3}
                         />
