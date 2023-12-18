@@ -71,65 +71,67 @@ export function BoardView() {
     <Box w="80%" ml="10%">
       <br />
       <br />
-      <Flex textAlign={"center"}>
-        <Box w="20%" padding={"10px"}>
-          <LBanner />
-        </Box>
+      <Box w="80%" ml="10%">
+        <Flex textAlign={"center"}>
+          <Box w="20%" padding={"10px"}>
+            <LBanner />
+          </Box>
 
-        <Box w="60%" padding={"10px"}>
-          <Flex justifyContent="space-between">
-            <Heading size="xl">{board.id}번 글 보기</Heading>
-            <Button variant="ghost" size="xl" onClick={handleLike}>
-              <FontAwesomeIcon icon={faHeart} size="xl" />
-            </Button>
-          </Flex>
-          <FormControl>
-            <FormLabel>제목</FormLabel>
-            <Input value={board.title} readOnly />
-          </FormControl>
-          <FormControl>
-            <FormLabel>본문</FormLabel>
-            <Textarea value={board.content} readOnly />
-          </FormControl>
+          <Box w="60%" padding={"10px"}>
+            <Flex justifyContent="space-between">
+              <Heading size="xl">{board.id}번 글 보기</Heading>
+              <Button variant="ghost" size="xl" onClick={handleLike}>
+                <FontAwesomeIcon icon={faHeart} size="xl" />
+              </Button>
+            </Flex>
+            <FormControl>
+              <FormLabel>제목</FormLabel>
+              <Input value={board.title} readOnly />
+            </FormControl>
+            <FormControl>
+              <FormLabel>본문</FormLabel>
+              <Textarea value={board.content} readOnly />
+            </FormControl>
 
-          {board.files.map((file) => (
-            <Card key={file.id} my={5}>
-              <CardBody>
-                <Image width="100%" src={file.url} alt={file.name} />
-              </CardBody>
-            </Card>
-          ))}
+            {board.files.map((file) => (
+              <Card key={file.id} my={5}>
+                <CardBody>
+                  <Image width="100%" src={file.url} alt={file.name} />
+                </CardBody>
+              </Card>
+            ))}
 
-          <FormControl>
-            <FormLabel>작성자</FormLabel>
-            <Input value={board.writer} readOnly />
-          </FormControl>
-          <FormControl>
-            <FormLabel>작성일시</FormLabel>
-            <Input value={board.inserted} readOnly />
-          </FormControl>
+            <FormControl>
+              <FormLabel>작성자</FormLabel>
+              <Input value={board.writer} readOnly />
+            </FormControl>
+            <FormControl>
+              <FormLabel>작성일시</FormLabel>
+              <Input value={board.inserted} readOnly />
+            </FormControl>
 
-          <br />
+            <br />
 
-          <Flex justifyContent={"space-between"}>
-            <Button
-              colorScheme={"green"}
-              onClick={() => navigate("/edit/" + id)}
-            >
-              수정
-            </Button>
-            <Button colorScheme="red" onClick={handleDelete}>
-              삭제
-            </Button>
-          </Flex>
+            <Flex justifyContent={"space-between"}>
+              <Button
+                colorScheme={"green"}
+                onClick={() => navigate("/edit/" + id)}
+              >
+                수정
+              </Button>
+              <Button colorScheme="red" onClick={handleDelete}>
+                삭제
+              </Button>
+            </Flex>
 
-          <CommentContainer boardId={id} />
-        </Box>
+            <CommentContainer boardId={id} />
+          </Box>
 
-        <Box w={"20%"} padding={"10px"}>
-          <RBanner />
-        </Box>
-      </Flex>
+          <Box w={"20%"} padding={"10px"}>
+            <RBanner />
+          </Box>
+        </Flex>
+      </Box>
     </Box>
   );
 }
