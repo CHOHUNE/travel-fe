@@ -99,8 +99,9 @@ export function HomeBody() {
     setDateRange(dates);
   };
 
-  const CustomInput = ({ value, onClick }) => (
+  const CustomInput = React.forwardRef(({ value, onClick }, ref) => (
     <Button
+      ref={ref}
       onClick={onClick}
       bg={"white"}
       color="black"
@@ -113,7 +114,7 @@ export function HomeBody() {
         </Box>
       )}
     </Button>
-  );
+  ));
 
   // ------------------- 인원 선택 ------------------
   const [personAdult, setPersonAdult] = useState("1명"); // 성인 인원
@@ -560,6 +561,7 @@ export function HomeBody() {
                 {hotelList &&
                   hotelList.slice(0, 5).map((hotel) => (
                     <Box
+                      key={hotel.hid}
                       transition="0.2s ease-in-out"
                       _hover={{
                         transform: "scale(1.20)",
@@ -1008,7 +1010,7 @@ export function HomeBody() {
       </Center>
 
       {/* ------------------- 중간배너 ------------------- */}
-      <Flex bor justifyContent="center" w="100%">
+      <Flex justifyContent="center" w="100%">
         <Box w={"65%"} justifyContent={"center"} mb={8}>
           <Image src="https://study1993garbi.s3.ap-northeast-2.amazonaws.com/travel/sourceFile/imgeFile/%E1%84%87%E1%85%A2%E1%84%82%E1%85%A51.png" />
         </Box>

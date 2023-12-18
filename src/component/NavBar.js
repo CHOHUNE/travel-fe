@@ -319,7 +319,7 @@ export function NavBar() {
                 </Button>
 
                 {/* 호텔 */}
-                <HStack gap={5}>
+                <HStack>
                   <Button
                     bg={"white"}
                     color="black"
@@ -331,7 +331,9 @@ export function NavBar() {
                   >
                     <HStack>
                       <FontAwesomeIcon icon={faHotel} />
-                      <Box fontSize={"0.8rem"}>숙소</Box>
+                      <Box ml={-1} fontSize={"0.8rem"}>
+                        숙소
+                      </Box>
                     </HStack>
                   </Button>
 
@@ -340,14 +342,17 @@ export function NavBar() {
                     bg={"white"}
                     color="black"
                     _hover={{ color: "blue.600" }}
-                    w={"65px"}
+                    w={"auto"}
                     h={"40px"}
                     onClick={() => navigate("transport")}
                     fontSize={"1.2rem"}
+                    ml={-5}
                   >
                     <HStack>
                       <FontAwesomeIcon icon={faTruckPlane} />
-                      <Box fontSize={"0.8rem"}>버스/항공</Box>
+                      <Box ml={-1} fontSize={"0.8rem"}>
+                        버스/항공
+                      </Box>
                     </HStack>
                   </Button>
                 </HStack>

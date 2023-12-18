@@ -7,7 +7,14 @@ import {
   Center,
   Flex,
   Heading,
+  Icon,
   Input,
+  Modal,
+  ModalBody,
+  ModalCloseButton,
+  ModalContent,
+  ModalHeader,
+  ModalOverlay,
   Spinner,
   Tab,
   Table,
@@ -21,6 +28,7 @@ import {
   Th,
   Thead,
   Tr,
+  useDisclosure,
 } from "@chakra-ui/react";
 import React, { useContext, useEffect, useState } from "react";
 import axios, { get } from "axios";
@@ -31,6 +39,9 @@ import {
   useSearchParams,
 } from "react-router-dom";
 import { LoginContext } from "../../../component/LoginProvider";
+import { InfoIcon } from "@chakra-ui/icons";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faClipboard } from "@fortawesome/free-regular-svg-icons";
 
 export function ReservationList() {
   const { fetchLogin, isAdmin } = useContext(LoginContext);
@@ -43,6 +54,9 @@ export function ReservationList() {
   const [reservationNumber, setReservationNumber] = useState("");
   const [messageContent, setMessageContent] = useState("");
   const [userPhoneNumber, setUserPhoneNumber] = useState(""); // 구매한 사용자의 핸드폰 번호 상태
+
+  const { isOpen, onOpen, onClose } = useDisclosure();
+  const [selectedRequest, setSelectedRequest] = useState("");
 
   useEffect(() => {
     axios.get("/api/toss/id/" + params.get("userId")).then((response) => {
@@ -65,6 +79,11 @@ export function ReservationList() {
       console.error("에러 : ", error);
       // 실패 시 처리 로직
     }
+  };
+
+  const handleIconClick = (request) => {
+    setSelectedRequest(request);
+    onOpen();
   };
 
   return (
@@ -103,7 +122,6 @@ export function ReservationList() {
                       <Th>아이디</Th>
                       <Th>상품명 </Th>
                       <Th>출발시간 </Th>
-                      <Th>도작시간 </Th>
                       <Th>요청사항</Th>
                       <Th>연락처</Th>
                       <Th>예약번호</Th>
@@ -119,8 +137,21 @@ export function ReservationList() {
                         <Td>{toss.userId}</Td>
                         <Td>{toss.transTitle}</Td>
                         <Td>{toss.transStartDate}</Td>
-                        <Td>{toss.transEndDate}</Td>
-                        <Td>{toss.request}</Td>
+                        <Td textAlign={"center"}>
+                          {toss.request ? (
+                            <Icon
+                              as={InfoIcon}
+                              onClick={() => handleIconClick(toss.request)}
+                              cursor="pointer"
+                            />
+                          ) : (
+                            <FontAwesomeIcon
+                              icon={faClipboard}
+                              onClick={() => handleIconClick(toss.request)}
+                              cursor="pointer"
+                            />
+                          )}
+                        </Td>
                         <Td>{toss.phoneNumber}</Td>
                         {isAdmin() && (
                           <Td>
@@ -154,8 +185,9 @@ export function ReservationList() {
                             </Flex>
                           </Td>
                         )}
-
-                        <Td>{toss.amount}</Td>
+                        <Td>
+                          {parseInt(toss.amount).toLocaleString("ko-KR")}원
+                        </Td>
                         {/*<Td>{toss.db 안만듬 }</Td>*/}
                       </Tr>
                     ))}
@@ -170,8 +202,8 @@ export function ReservationList() {
                     <Tr>
                       <Th>주문번호</Th>
                       <Th>상품명 </Th>
-                      <Th>체크 인 </Th>
-                      <Th>체크 아웃 </Th>
+                      <Th>체크인 </Th>
+                      <Th>체크아웃 </Th>
                       <Th>요청사항</Th>
                       <Th>예약번호</Th>
                       <Th>가격</Th>
@@ -195,6 +227,15 @@ export function ReservationList() {
               </CardBody>
             </TabPanel>
           </TabPanels>
+          {/* 모달 창 */}
+          <Modal isOpen={isOpen} onClose={onClose}>
+            <ModalOverlay />
+            <ModalContent>
+              <ModalHeader>요청사항 상세</ModalHeader>
+              <ModalCloseButton />
+              <ModalBody>{selectedRequest}</ModalBody>
+            </ModalContent>
+          </Modal>
         </Tabs>
       </Card>
     </Center>

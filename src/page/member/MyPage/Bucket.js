@@ -88,7 +88,7 @@ export function Bucket() {
                 <Tr
                   _hover={{ cursor: "pointer" }}
                   key={bucket.id}
-                  onClick={() => navigate("/hotel/reserv/" + bucket.id)}
+                  onClick={() => navigate("/hotel/reserv/" + bucket.hid)}
                 >
                   <Th>{++number}</Th>
                   <Th>호텔</Th>
