@@ -4,11 +4,6 @@ import {
   Input,
   Textarea,
   Select,
-  NumberInput,
-  NumberInputField,
-  NumberInputStepper,
-  NumberIncrementStepper,
-  NumberDecrementStepper,
   Button,
   FormLabel,
   Center,
@@ -20,13 +15,6 @@ import {
   Flex,
   useToast,
   Divider,
-  TableCaption,
-  Table,
-  Thead,
-  Tr,
-  Th,
-  Tbody,
-  Td,
   Box,
   Checkbox,
   Stack,
@@ -40,7 +28,6 @@ export function HotelWrite() {
   const [name, setName] = useState("");
   const [location, setLocation] = useState("");
   const [description, setDescription] = useState("");
-  const [numberOfBed, setNumberOfBed] = useState("0");
   const [subImg1, setSubImg1] = useState(null);
   const [subImg2, setSubImg2] = useState(null);
   const [mapImg, setMapImg] = useState(null);
@@ -50,6 +37,7 @@ export function HotelWrite() {
   const [salesTo, setSalesTo] = useState(null);
   const [rating, setRating] = useState(null);
   const [cautionMessage, setCautionMessage] = useState(null);
+  const [numberOfRoom, setNumberOfRoom] = useState(null);
 
   const [pool, setPool] = useState("");
   const [pet, setPet] = useState("");
@@ -78,7 +66,7 @@ export function HotelWrite() {
         location,
         description,
         mainImg,
-        numberOfBed,
+        numberOfRoom,
         subImg1,
         subImg2,
         mapImg,
@@ -197,7 +185,7 @@ export function HotelWrite() {
                 alignItems={"center"}
               >
                 {" "}
-                호텔 등급{" "}
+                숙소 등급{" "}
               </FormLabel>
 
               <Select
@@ -214,6 +202,23 @@ export function HotelWrite() {
                 <option value={"4성"}>4성</option>
                 <option value={"5성"}>5성</option>
               </Select>
+            </Flex>
+            <Flex>
+              <FormLabel
+                my={"15px"}
+                w={"15%"}
+                textAlign="center"
+                display="flex"
+                alignItems={"center"}
+              >
+                {" "}
+                객실 수{" "}
+              </FormLabel>
+              <Input
+                type={"number"}
+                value={numberOfRoom}
+                onChange={(e) => setNumberOfRoom(e.target.value)}
+              />
             </Flex>
             <FormControl
               mt={2}

@@ -1,18 +1,10 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import {
   Box,
   Heading,
   Button,
   Text,
-  Image,
-  Divider,
   Input,
-  NumberInput,
-  NumberInputField,
-  NumberInputStepper,
-  NumberIncrementStepper,
-  NumberDecrementStepper,
-  Select,
   useToast,
   Center,
   Card,
@@ -20,7 +12,6 @@ import {
   CardBody,
   FormControl,
   FormLabel,
-  Tab,
   Table,
   Th,
   Thead,
@@ -35,15 +26,7 @@ import {
   MenuList,
   Checkbox,
   Img,
-  CardFooter,
   Textarea,
-  Modal,
-  ModalOverlay,
-  ModalContent,
-  ModalHeader,
-  ModalCloseButton,
-  ModalBody,
-  ModalFooter,
   useDisclosure,
 } from "@chakra-ui/react";
 import { useLocation, useNavigate, useParams } from "react-router-dom";
@@ -72,6 +55,21 @@ export function HotelPay() {
   const location = useLocation();
   const reservation = location.state.reservation;
   const roomTypePrices = location.state.roomTypePrices;
+  const [plusMessage, setPlusMessage] = useState("");
+
+  const [personNumber1, setPersonNumber1] = useState("");
+  const [personNumber2, setPersonNumber2] = useState("");
+  const [personNumber3, setPersonNumber3] = useState("");
+  const [personNumber, setPersonNumber] = useState("");
+
+  useEffect(() => {
+    setPersonNumber(`${personNumber1}-${personNumber2}-${personNumber3}`);
+  }, [personNumber1, personNumber2, personNumber3]);
+
+  const inputRef1 = useRef();
+  const inputRef2 = useRef();
+  const inputRef3 = useRef();
+  // 각 입력 필드의 onChange 핸들러
 
   useEffect(() => {
     axios
@@ -118,8 +116,8 @@ export function HotelPay() {
     },
   });
 
-  const [personAdult, setPersonAdult] = useState(""); // 성인 인원
-  const [personChild, setPersonChild] = useState(""); // 소인 인원
+  const [personAdult, setPersonAdult] = useState(1); // 성인 인원
+  const [personChild, setPersonChild] = useState(1); // 소인 인원
 
   // ---------- 성인 인원선택 관련 ----------
   const handlePersonnelAdultClick = (person) => {
@@ -131,11 +129,65 @@ export function HotelPay() {
     setPersonChild(child);
   };
 
+  // function handlePaymentClick(response) {
+  //   // 데이터를 로컬 스토리지에 저장
+  //   const paymentData = {
+  //     hId: id,
+  //     checkoutDate: reservation.checkoutDate,
+  //     checkinDate: reservation.checkinDate,
+  //     plusMessage: plusMessage,
+  //     price: selectedRoom[0].price,
+  //     roomtype: selectedRoom[0].roomType,
+  //     personAdult: personAdult,
+  //     personChild: personChild,
+  //     guestName: personName,
+  //     cellPhoneNumber: personNumber,
+  //     memberName: member.name,
+  //     memberNumber: member.phoneNumber,
+  //   };
+  //   localStorage.setItem('paymentData', JSON.stringify(paymentData));
+  // }
+
   function handlePaymentClick(response) {
-    navigate(`/PaymentPageHotel/${id}`, {
-      state: { id, amount: hotel.totalPrice },
-    });
+    console.log(selectedRoom[0].price);
+    console.log(selectedRoom[0].roomType);
+
+    // 데이터를 일일히 뜯어서 로컬 스토리지에 저장
+    localStorage.setItem("hId", id);
+    localStorage.setItem("checkoutDate", reservation.checkoutDate);
+    localStorage.setItem("checkinDate", reservation.checkinDate);
+    localStorage.setItem("plusMessage", plusMessage);
+    localStorage.setItem("price", selectedRoom[0].price);
+    localStorage.setItem("roomtype", selectedRoom[0].roomType);
+    localStorage.setItem("personAdult", personAdult);
+    localStorage.setItem("personChild", personChild);
+    localStorage.setItem("guestName", personName);
+    localStorage.setItem("cellPhoneNumber", personNumber);
+    localStorage.setItem("memberName", member.name);
+    localStorage.setItem("memberNumber", member.phoneNumber);
+
+    // navigate(`/PaymentPageHotel/${id}`, {
+    //   state: { id, amount: hotel.totalPrice },
+    // });
   }
+
+  const handleInputChange1 = (e) => {
+    setPersonNumber1(e.target.value);
+    if (e.target.value.length === 3) {
+      inputRef2.current.focus();
+    }
+  };
+
+  const handleInputChange2 = (e) => {
+    setPersonNumber2(e.target.value);
+    if (e.target.value.length === 4) {
+      inputRef3.current.focus();
+    }
+  };
+
+  const handleInputChange3 = (e) => {
+    setPersonNumber3(e.target.value);
+  };
 
   return (
     <ChakraProvider theme={theme}>
@@ -319,7 +371,15 @@ export function HotelPay() {
                         휴대폰번호
                       </FormLabel>
                       <Flex>
-                        <Input ml={5} mt={2} w={100} value={a} />
+                        <Input
+                          ref={inputRef1}
+                          ml={5}
+                          mt={2}
+                          w={100}
+                          maxLength={3}
+                          value={member ? a : ""}
+                          onChange={handleInputChange1}
+                        />
                         <span
                           style={{
                             justifyContent: "center",
@@ -338,7 +398,14 @@ export function HotelPay() {
                             -
                           </Box>
                         </span>
-                        <Input mt={2} w={100} value={b} />
+                        <Input
+                          ref={inputRef2}
+                          mt={2}
+                          w={100}
+                          maxLength={4}
+                          value={member ? b : ""}
+                          onChange={handleInputChange2}
+                        />
                         <span
                           style={{
                             justifyContent: "center",
@@ -357,7 +424,14 @@ export function HotelPay() {
                             -
                           </Box>
                         </span>
-                        <Input mt={2} w={100} value={c} />
+                        <Input
+                          ref={inputRef3}
+                          mt={2}
+                          w={100}
+                          maxLength={4}
+                          value={member ? c : ""}
+                          onChange={handleInputChange3}
+                        />
                       </Flex>
                     </Flex>
                   </FormControl>
@@ -392,7 +466,7 @@ export function HotelPay() {
                         ml={5}
                         mt={2}
                         w={400}
-                        value={isChecked ? (member ? member.name : "") : ""}
+                        value={isChecked ? member.name : personName}
                         onChange={(e) => setPersonName(e.target.value)}
                       />
                       <Checkbox
@@ -440,7 +514,8 @@ export function HotelPay() {
                           ml={5}
                           mt={2}
                           w={100}
-                          value={isChecked ? a : ""}
+                          value={isChecked ? a : personNumber1}
+                          onChange={handleInputChange1}
                         />
                         <span
                           style={{
@@ -460,7 +535,12 @@ export function HotelPay() {
                             -
                           </Box>
                         </span>
-                        <Input mt={2} w={100} value={isChecked ? b : ""} />
+                        <Input
+                          mt={2}
+                          w={100}
+                          value={isChecked ? b : personNumber2}
+                          onChange={handleInputChange2}
+                        />
                         <span
                           style={{
                             justifyContent: "center",
@@ -479,7 +559,12 @@ export function HotelPay() {
                             -
                           </Box>
                         </span>
-                        <Input mt={2} w={100} value={isChecked ? c : ""} />
+                        <Input
+                          mt={2}
+                          w={100}
+                          value={isChecked ? c : personNumber3}
+                          onChange={handleInputChange3}
+                        />
                       </Flex>
                     </Flex>
 
@@ -526,27 +611,27 @@ export function HotelPay() {
                             mt={"8px"}
                             fontSize={"13px"}
                           >
-                            {personAdult ? personAdult : "1명"}
+                            {personAdult ? personAdult : 1}
                           </MenuButton>
 
                           <MenuList>
                             <MenuItem
-                              onClick={() => handlePersonnelAdultClick("1명")}
+                              onClick={() => handlePersonnelAdultClick(1)}
                             >
                               1명
                             </MenuItem>
                             <MenuItem
-                              onClick={() => handlePersonnelAdultClick("2명")}
+                              onClick={() => handlePersonnelAdultClick(2)}
                             >
                               2명
                             </MenuItem>
                             <MenuItem
-                              onClick={() => handlePersonnelAdultClick("3명")}
+                              onClick={() => handlePersonnelAdultClick(3)}
                             >
                               3명
                             </MenuItem>
                             <MenuItem
-                              onClick={() => handlePersonnelAdultClick("4명")}
+                              onClick={() => handlePersonnelAdultClick(4)}
                             >
                               4명
                             </MenuItem>
@@ -589,22 +674,22 @@ export function HotelPay() {
 
                           <MenuList>
                             <MenuItem
-                              onClick={() => handlePersonnelChildClick("1명")}
+                              onClick={() => handlePersonnelChildClick(1)}
                             >
                               1명
                             </MenuItem>
                             <MenuItem
-                              onClick={() => handlePersonnelChildClick("2명")}
+                              onClick={() => handlePersonnelChildClick(2)}
                             >
                               2명
                             </MenuItem>
                             <MenuItem
-                              onClick={() => handlePersonnelChildClick("3명")}
+                              onClick={() => handlePersonnelChildClick(3)}
                             >
                               3명
                             </MenuItem>
                             <MenuItem
-                              onClick={() => handlePersonnelChildClick("4명")}
+                              onClick={() => handlePersonnelChildClick(4)}
                             >
                               4명
                             </MenuItem>
@@ -671,7 +756,16 @@ export function HotelPay() {
                       >
                         요청사항
                       </FormLabel>
-                      <Textarea ml={5} mt={2} w={680} mb={2} />
+                      <Textarea
+                        ml={5}
+                        mt={2}
+                        w={680}
+                        mb={2}
+                        value={plusMessage}
+                        onChange={(e) => {
+                          setPlusMessage(e.target.value);
+                        }}
+                      />
                     </Flex>
                   </FormControl>
                 </Box>
@@ -706,12 +800,15 @@ export function HotelPay() {
                           alignItems={"center"}
                           fontSize={"16px"}
                         >
-                          {member ? member.name : ""}
+                          {member ? member.name : personName}
                         </Text>
                       </Flex>
 
                       <Flex>
-                        <FormLabel style={{ marginTop: "7px" }}>
+                        <FormLabel
+                          style={{ marginTop: "7px" }}
+                          value={"guestName"}
+                        >
                           · 이용자명 :
                         </FormLabel>
                         <Text
@@ -721,7 +818,7 @@ export function HotelPay() {
                           alignItems={"center"}
                           fontSize={"16px"}
                         >
-                          {isChecked ? (member ? member.name : "") : ""}
+                          {isChecked ? (member ? member.name : "") : personName}
                         </Text>
                       </Flex>
 
@@ -739,7 +836,7 @@ export function HotelPay() {
                           alignItems={"center"}
                           fontSize={"16px"}
                         >
-                          {isChecked ? member.phoneNumber : ""}
+                          {isChecked ? member.phoneNumber : personNumber}
                         </Text>
                       </Flex>
                     </Box>
