@@ -62,20 +62,29 @@ export function ReservationList() {
     });
   }, [location]);
 
-  // ----------------------- 예약번호 문자 발송 -----------------------
-  const handleSendSMS = async (realUserPhoneNumber) => {
+  // 문자 발송 및 DB에 예약번호 저장
+  const handleConfirmation = async (
+    tossId,
+    realUserPhoneNumber,
+    messageContent,
+  ) => {
     try {
-      const response = await axios.post(
-        "/api/member/sendSMS3?userPhoneNumber=" + realUserPhoneNumber,
+      // 문자 발송 처리
+      const smsResponse = await axios.post(
+        `/api/member/sendSMS3?userPhoneNumber=${realUserPhoneNumber}`,
         {
-          messageContent: messageContent,
+          messageContent,
         },
       );
-      console.log("response : ", response);
-      // 성공 시 처리 로직
+      console.log("문자 발송 성공: ", smsResponse);
+
+      // DB에 예약번호 저장
+      const saveResponse = await axios.put(
+        `/api/toss/sendAndSave?tossId=${tossId}&reservNumber=${messageContent}`,
+      );
+      console.log("DB 저장 성공: ", saveResponse);
     } catch (error) {
-      console.error("에러 : ", error);
-      // 실패 시 처리 로직
+      console.error("처리 에러: ", error);
     }
   };
 
@@ -156,9 +165,8 @@ export function ReservationList() {
                             <Flex gap={2}>
                               <Input
                                 type="text"
-                                value={t.messageContent}
+                                value={t.messageContent || ""}
                                 onChange={(e) =>
-                                  // setMessageContent(e.target.value)
                                   setToss(
                                     toss.map((item) =>
                                       item.tossId === t.tossId
@@ -174,7 +182,11 @@ export function ReservationList() {
                               />
                               <Button
                                 onClick={() =>
-                                  handleSendSMS(t.realUserPhoneNumber)
+                                  handleConfirmation(
+                                    t.tossId,
+                                    t.realUserPhoneNumber,
+                                    t.messageContent,
+                                  )
                                 }
                               >
                                 확인
@@ -186,12 +198,16 @@ export function ReservationList() {
                         {isAdmin() || (
                           <Td>
                             <Flex gap={2}>
-                              <Input
-                                readOnly
-                                type="text"
-                                value={""}
-                                placeholder="관리자가 승인하면 예약번호가 발생됩니다."
-                              />
+                              {t.reservNumber !== null ? (
+                                <Input
+                                  readOnly
+                                  type="text"
+                                  value={t.reservNumber}
+                                  placeholder="관리자가 승인하면 예약번호가 발생됩니다."
+                                />
+                              ) : (
+                                <Box></Box>
+                              )}
                             </Flex>
                           </Td>
                         )}
