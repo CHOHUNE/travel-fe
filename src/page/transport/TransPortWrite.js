@@ -21,7 +21,8 @@ import { useNavigate, useSearchParams } from "react-router-dom";
 import axios from "axios";
 import "react-datepicker/dist/react-datepicker.css";
 import DatePicker from "react-datepicker";
-import "./CustomDatePicker.css";
+import "./DateRangePicker.css";
+import ko from "date-fns/locale/ko";
 
 export function TransPortWrite() {
   const [transMainImage, setTransMainImage] = useState("");
@@ -141,6 +142,16 @@ export function TransPortWrite() {
               </FormLabel>
               <Flex className="date-range-picker-container">
                 <DatePicker
+                  popperClassName="trans-react-datepicker"
+                  customInput={
+                    <Input
+                      w={"200px"}
+                      h={"60px"}
+                      fontWeight={"bold"}
+                      fontSize={15}
+                    />
+                  }
+                  locale={ko}
                   value={transStartDate}
                   className="date-picker"
                   selected={transStartDate}
@@ -152,8 +163,40 @@ export function TransPortWrite() {
                   placeholderText="시작일"
                   dateFormat="yyyy년 MM월 dd일"
                   minDate={new Date()}
+                  autoComplete="off"
+                  formatWeekDay={(nameOfDay) => {
+                    switch (nameOfDay) {
+                      case "일요일":
+                        return "일";
+                      case "월요일":
+                        return "월";
+                      case "화요일":
+                        return "화";
+                      case "수요일":
+                        return "수";
+                      case "목요일":
+                        return "목";
+                      case "금요일":
+                        return "금";
+                      case "토요일":
+                        return "토";
+                      default:
+                        return nameOfDay;
+                    }
+                  }}
                 />
                 <DatePicker
+                  popperClassName="trans-react-datepicker"
+                  customInput={
+                    <Input
+                      w={"200px"}
+                      h={"60px"}
+                      fontWeight={"bold"}
+                      fontSize={15}
+                    />
+                  }
+                  autoComplete="off"
+                  locale={ko}
                   value={transEndDate}
                   className="date-picker"
                   selected={transEndDate}
@@ -165,6 +208,26 @@ export function TransPortWrite() {
                   placeholderText="마감일"
                   dateFormat="yyyy년 MM월 dd일"
                   minDate={transStartDate}
+                  formatWeekDay={(nameOfDay) => {
+                    switch (nameOfDay) {
+                      case "일요일":
+                        return "일";
+                      case "월요일":
+                        return "월";
+                      case "화요일":
+                        return "화";
+                      case "수요일":
+                        return "수";
+                      case "목요일":
+                        return "목";
+                      case "금요일":
+                        return "금";
+                      case "토요일":
+                        return "토";
+                      default:
+                        return nameOfDay;
+                    }
+                  }}
                 />
               </Flex>
             </Flex>
