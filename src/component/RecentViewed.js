@@ -15,6 +15,28 @@ export const RecentViewed = () => {
       // 'type' 속성이 없는 경우 호텔 상품으로 간주
       navigate(`/hotel/reserv/${item.hid}`);
     }
+    addRecentViewed(item);
+  };
+
+  const addRecentViewed = (e, newItem) => {
+    e.stopPropagation();
+    setRecentViewed((prevItems) => {
+      // 이미 목록에 있는 상품인지 확인
+      const isExist = prevItems.some(
+        (item) => item.hid === newItem.hid || item.tid === newItem.tid,
+      );
+
+      console.log("New Item:", newItem, "Is Exist:", isExist); // 디버깅 정보
+
+      // 존재하지 않는 경우에만 목록에 추가
+      if (!isExist) {
+        const updatedItems = [newItem, ...prevItems];
+        localStorage.setItem("recentViewed", JSON.stringify(updatedItems));
+        return updatedItems;
+      }
+
+      return prevItems;
+    });
   };
 
   useEffect(() => {

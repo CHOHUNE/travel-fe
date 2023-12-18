@@ -165,6 +165,11 @@ export function TransPay() {
             amount: person * trans.transPrice,
             requested,
             personNumber: isChecked ? member.phoneNumber : personNumber,
+            userName: member.name,
+            realUserName: isChecked ? (member ? member.name : "") : personName,
+            transTitle: trans.transTitle,
+            transStartDay: transReserveDay,
+            people: person,
           },
         });
       }
@@ -190,6 +195,11 @@ export function TransPay() {
             amount: person * trans.transPrice,
             requested,
             personNumber: isChecked ? member.phoneNumber : personNumber,
+            userName: member.name,
+            realUserName: isChecked ? (member ? member.name : "") : personName,
+            transTitle: trans.transTitle,
+            transStartDay: transReserveDay,
+            people: person,
           },
         });
       }
