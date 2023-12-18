@@ -28,16 +28,11 @@ import React, { useEffect, useRef, useState } from "react";
 import { RecentViewed } from "./RecentViewed";
 import { useLocation, useNavigate, useSearchParams } from "react-router-dom";
 import axios from "axios";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faAnglesRight, faHeart } from "@fortawesome/free-solid-svg-icons";
 import DatePicker from "react-datepicker";
 import ko from "date-fns/locale/ko";
 import { differenceInCalendarDays } from "date-fns";
 import "./Calendar.css";
 import { ChevronDownIcon } from "@chakra-ui/icons";
-import { faHotel } from "@fortawesome/free-solid-svg-icons/faHotel";
-import { faBus } from "@fortawesome/free-solid-svg-icons/faBus";
-import { faPlane } from "@fortawesome/free-solid-svg-icons/faPlane";
 
 export function HomeBody() {
   const navigate = useNavigate();
@@ -244,8 +239,9 @@ export function HomeBody() {
               </p>
               <Box ref={wrapperRef} style={{ position: "relative" }}>
                 <DatePicker
-                  className="react-datepicker"
+                  popperClassName="home-react-datepicker"
                   locale={ko}
+                  minDate={new Date()}
                   selectsRange
                   startDate={startDate}
                   endDate={endDate}

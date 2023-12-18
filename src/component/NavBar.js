@@ -307,16 +307,56 @@ export function NavBar() {
                 w={"170px"}
                 ml={5}
               >
-                <Button
-                  bg={"white"}
-                  color="black"
-                  _hover={{ color: "blue.600" }}
-                  w={"80px"}
-                  h={"40px"}
-                  fontSize={"30px"}
-                >
-                  <HamburgerIcon />
-                </Button>
+                <Menu>
+                  <MenuButton
+                    bg={"white"}
+                    color="black"
+                    _hover={{ color: "blue.600" }}
+                    w={"80px"}
+                    h={"40px"}
+                    fontSize={"30px"}
+                  >
+                    <HamburgerIcon />
+                  </MenuButton>
+                  <MenuList
+                    zIndex={10}
+                    boxShadow="md"
+                    minWidth="160px"
+                    fontSize="13px"
+                    p={0}
+                  >
+                    <MenuItem
+                      borderBottom={"1px solid #eeeeee"}
+                      onClick={() => navigate("hotel")}
+                    >
+                      호텔
+                    </MenuItem>
+                    <MenuItem
+                      borderBottom={"1px solid #eeeeee"}
+                      onClick={() => navigate("hotel/?k=리조트")}
+                    >
+                      리조트
+                    </MenuItem>
+                    <MenuItem
+                      borderBottom={"1px solid #eeeeee"}
+                      onClick={() => navigate("hotel/?k=캠핑")}
+                    >
+                      캠핑
+                    </MenuItem>
+                    <MenuItem
+                      borderBottom={"1px solid #eeeeee"}
+                      onClick={() => navigate("hotel/?k=반려견")}
+                    >
+                      반려견 동반 숙소
+                    </MenuItem>
+                    <MenuItem
+                      borderBottom={"1px solid #eeeeee"}
+                      onClick={() => navigate("hotel/?k=수영장")}
+                    >
+                      수영장 있는 숙소
+                    </MenuItem>
+                  </MenuList>
+                </Menu>
 
                 {/* 호텔 */}
                 <HStack>

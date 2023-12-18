@@ -152,11 +152,7 @@ export function ReservationList() {
                               cursor="pointer"
                             />
                           ) : (
-                            <FontAwesomeIcon
-                              icon={faClipboard}
-                              onClick={() => handleIconClick(t.request)}
-                              cursor="pointer"
-                            />
+                            <></>
                           )}
                         </Td>
                         <Td>{t.realUserPhoneNumber}</Td>
@@ -165,7 +161,7 @@ export function ReservationList() {
                             <Flex gap={2}>
                               <Input
                                 type="text"
-                                value={t.messageContent || ""}
+                                value={t.messageContent || t.reservNumber}
                                 onChange={(e) =>
                                   setToss(
                                     toss.map((item) =>
