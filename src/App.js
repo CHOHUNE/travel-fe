@@ -46,6 +46,7 @@ import { DeleteView } from "./page/member/MyPage/DeleteView";
 import { FailPageH } from "./page/hotel/payment/FailPageH";
 import { SuccessPageH } from "./page/hotel/payment/SuccessPageH";
 import { PaymentPageH } from "./page/hotel/payment/PaymentPageH";
+import { Kakao } from "./page/board/Kakao";
 const routes = createBrowserRouter(
   createRoutesFromElements(
     <Route path="/" element={<HomeLayout />}>
@@ -64,6 +65,7 @@ const routes = createBrowserRouter(
       <Route path="board/:id" element={<BoardView />} />
       <Route path="edit/:id" element={<BoardEdit />} />
       <Route path="notice" element={<Notice />} />
+      <Route path="kakao" element={<Kakao />} />
       <Route path="noticeSound" element={<NoticeSound />} />
 
       {/* 회원관련 */}
