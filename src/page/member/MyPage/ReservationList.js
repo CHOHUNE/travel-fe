@@ -13,6 +13,7 @@ import {
   ModalBody,
   ModalCloseButton,
   ModalContent,
+  ModalFooter,
   ModalHeader,
   ModalOverlay,
   Spinner,
@@ -56,6 +57,9 @@ export function ReservationList() {
   const { isOpen, onOpen, onClose } = useDisclosure();
   const [selectedRequest, setSelectedRequest] = useState("");
 
+  const [isCancelModalOpen, setIsCancelModalOpen] = useState(false);
+  const [selectedForCancellation, setSelectedForCancellation] = useState(null);
+
   useEffect(() => {
     axios.get("/api/toss/id/" + params.get("userId")).then((response) => {
       setToss(response.data);
@@ -91,6 +95,11 @@ export function ReservationList() {
   const handleIconClick = (request) => {
     setSelectedRequest(request);
     onOpen();
+  };
+
+  const handleCancelClick = (reservation) => {
+    setSelectedForCancellation(reservation);
+    setIsCancelModalOpen(true);
   };
 
   return (
@@ -216,6 +225,14 @@ export function ReservationList() {
                             <Text>예약접수</Text>
                           )}
                         </Td>
+                        <Td>
+                          <Button
+                            color={"red"}
+                            onClick={() => handleCancelClick(t)}
+                          >
+                            취소요청
+                          </Button>
+                        </Td>
                       </Tr>
                     ))}
                   </Tbody>
@@ -261,6 +278,41 @@ export function ReservationList() {
               <ModalHeader>요청사항 상세</ModalHeader>
               <ModalCloseButton />
               <ModalBody>{selectedRequest}</ModalBody>
+            </ModalContent>
+          </Modal>
+
+          <Modal
+            isOpen={isCancelModalOpen}
+            onClose={() => setIsCancelModalOpen(false)}
+          >
+            <ModalOverlay />
+            <ModalContent>
+              <ModalHeader>예약 취소 요청</ModalHeader>
+              <ModalCloseButton />
+              <ModalBody fontWeight={"700"} fontFamily={"GmarketSansMedium"}>
+                <Text>
+                  예약 번호: {selectedForCancellation?.reservNumber}
+                  <Box>
+                    취소요청 해주시면 관리자 승인에 따라 취소처리 될 예정이며
+                    <br />
+                    전액 환불됩니다.
+                  </Box>
+                  <br />
+                  <Box>이용해주셔서 감사합니다.</Box>
+                </Text>
+              </ModalBody>
+              <ModalFooter>
+                <Button
+                  colorScheme="blue"
+                  mr={3}
+                  onClick={() => setIsCancelModalOpen(false)}
+                >
+                  닫기
+                </Button>
+                <Button bg={"red"} color={"white"}>
+                  취소요청
+                </Button>
+              </ModalFooter>
             </ModalContent>
           </Modal>
         </Tabs>
