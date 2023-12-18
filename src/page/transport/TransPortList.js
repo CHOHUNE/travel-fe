@@ -13,6 +13,10 @@ import {
   FormLabel,
   Image,
   Input,
+  Menu,
+  MenuButton,
+  MenuItem,
+  MenuList,
   Modal,
   ModalBody,
   ModalCloseButton,
@@ -22,7 +26,9 @@ import {
   ModalOverlay,
   SimpleGrid,
   Spinner,
+  Text,
   useDisclosure,
+  VStack,
 } from "@chakra-ui/react";
 import axios from "axios";
 import React, { useContext, useEffect, useState } from "react";
@@ -34,6 +40,9 @@ import {
 } from "@fortawesome/free-solid-svg-icons";
 import { RecentViewed } from "../../component/RecentViewed";
 import { LoginContext } from "../../component/LoginProvider";
+import DatePicker from "react-datepicker";
+import ko from "date-fns/locale/ko";
+import { ChevronDownIcon } from "@chakra-ui/icons";
 
 function TransPage({ pageInfo, params }) {
   const navigate = useNavigate();
@@ -87,6 +96,87 @@ function TransPage({ pageInfo, params }) {
     </Box>
   );
 }
+// 검색 컴포넌트
+function TransSearchComponent() {
+  const [keyword, setKeyword] = useState("");
+  const navigate = useNavigate();
+  const [searchResults, setSearchResults] = useState([]);
+  const [params] = useSearchParams();
+
+  async function handleSearch() {
+    try {
+      const response = await axios.get(
+        "/api/transport/list?type=" + params.get("type") + "&k=" + keyword,
+      ); // 검색어를 서버에 보내고 검색 결과를 받아옵니다.
+      setSearchResults(response.data); // 검색 결과를 상태 변수에 저장합니다.
+      navigate("/transport/list?type=" + params.get("type") + "&k=" + keyword); // 이동할 경로를 설정합니다.
+    } catch (error) {
+      console.error("검색 중 에러 발생:", error);
+    }
+  }
+
+  return (
+    <Flex justifyContent="center" w="100%">
+      <Box w={"65%"} justifyContent={"center"} mt={"30px"}>
+        {/* ------------------- 검색바 ------------------- */}
+        <Box
+          display={"flex"}
+          justifyContent={"space-evenly"}
+          alignItems={"center"}
+          // border={"1px solid gray"}
+          boxSizing="border-box"
+          mb={10}
+          w={"90%"}
+          h={"90px"}
+          ml={"5%"}
+          borderRadius={"20px"}
+          shadow={"1px 1px 3px 1px #dadce0"}
+        >
+          <Input
+            w={"50%"}
+            h={"60%"}
+            border={"none"}
+            placeholder="어디로 떠나시나요?"
+            style={{ fontSize: "1.5rem" }}
+            _focus={{
+              boxShadow: "none", // 포커스 시 박스 그림자 제거
+            }}
+            shadow={"1px 1px 3px 1px #dadce0 inset"}
+            value={keyword}
+            onChange={(e) => setKeyword(e.target.value)}
+          />
+
+          <Button
+            h={"50px"}
+            bg={"blue.500"}
+            color={"white"}
+            borderRadius={"10px"}
+            shadow={"1px 1px 3px 1px #dadce0"}
+            _hover={{
+              color: "black",
+              backgroundColor: "gray.100",
+              shadow: "1px 1px 3px 1px #dadce0 inset",
+            }}
+            onClick={handleSearch}
+            fontSize={21}
+          >
+            검색
+          </Button>
+        </Box>
+      </Box>
+      {searchResults.length > 0 && (
+        <Box>
+          <Text>검색 결과:</Text>
+          <ul>
+            {searchResults.map((result) => (
+              <li key={result.id}>{result.name}</li>
+            ))}
+          </ul>
+        </Box>
+      )}
+    </Flex>
+  );
+}
 
 export function TransPortList() {
   const [transList, setTransList] = useState([]);
@@ -103,14 +193,18 @@ export function TransPortList() {
 
   const { isAdmin } = useContext(LoginContext);
 
+  const keyword = params.get("k");
+
   useEffect(() => {
-    axios
-      .get("/api/transport/list?type=" + params.get("type") + "&p=" + page)
-      .then((response) => {
-        setTransList(response.data.transList);
-        setPageInfo(response.data.pageInfo);
-      });
-  }, [location]);
+    let query = `/api/transport/list?type=${params.get("type")}&p=${page}`;
+    if (keyword) {
+      query += `&k=${keyword}`;
+    }
+    axios.get(query).then((response) => {
+      setTransList(response.data.transList);
+      setPageInfo(response.data.pageInfo);
+    });
+  }, [location, params]);
 
   if (transList === null) {
     <Spinner />;
@@ -128,27 +222,10 @@ export function TransPortList() {
       >
         버스 항공 이미지
       </Box>
-      <Flex
-        w={"85%"}
-        h={"100px"}
-        ml={"7.5%"}
-        bg={"#d9d9d9"}
-        mt={2}
-        justifyContent={"space-evenly"}
-        alignItems={"center"}
-      >
-        <Input
-          w={"290px"}
-          h={"60px"}
-          bg={"white"}
-          placeholder={"검색어를 입력해 주세요"}
-        />
-        <Button onClick={onOpen}>출발일</Button>
-
-        <Button w={"50px"} h={"50px"} bg={"white"}>
-          <FontAwesomeIcon icon={faMagnifyingGlass} />
-        </Button>
-      </Flex>
+      <Center w={"100%"} h={"100px"} mt={5}>
+        {/*// 검색창 */}
+        <TransSearchComponent />
+      </Center>
       <Flex
         ml={"7.5%"}
         mt={4}
@@ -289,30 +366,6 @@ export function TransPortList() {
       <Flex w={"80%"} ml={"10%"} mt={10} justifyContent={"center"}>
         <TransPage params={params.get("type")} pageInfo={pageInfo} />
       </Flex>
-
-      <Modal isOpen={isOpen} onClose={onClose}>
-        <ModalOverlay />
-        <ModalContent>
-          <ModalHeader>Modal Title</ModalHeader>
-          <ModalCloseButton />
-          <ModalBody>
-            <Input
-              placeholder="Select Date and Time"
-              type="date"
-              bg={"white"}
-              w={"200px"}
-              h={"50px"}
-            />
-          </ModalBody>
-
-          <ModalFooter>
-            <Button colorScheme="blue" mr={3} onClick={onClose}>
-              Close
-            </Button>
-            <Button variant="ghost">Secondary Action</Button>
-          </ModalFooter>
-        </ModalContent>
-      </Modal>
     </Box>
   );
 }
