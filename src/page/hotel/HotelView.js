@@ -189,32 +189,38 @@ export function HotelView() {
                 h={"80px"}
                 display={"flex"}
                 alignItems={"center"}
-                w={"80%"}
-                ml={"10%"}
+                w={"100%"}
                 mt={"10px"}
                 my={"10px"}
                 mb={"30px"}
               >
-                <Text fontWeight={"bold"} mr={"15px"} mt={"10px"} ml={"10px"}>
+                <Text
+                  fontWeight={"bold"}
+                  mr={"15px"}
+                  mt={"10px"}
+                  ml={"5%"}
+                  fontSize={"1.1rem"}
+                >
                   판매 기간 :{hotel.salesFrom && hotel.salesFrom.split("T")[0]}{" "}
                   ~ {hotel.salesTo && hotel.salesTo.split("T")[0]}
                 </Text>
                 <Spacer />
-                <Button
-                  onClick={() => navigate("/hotel/write/type/" + hotel.hid)}
-                  mr={"20px"}
-                >
-                  {" "}
-                  객실 관리{" "}
-                </Button>
-                <Button onClick={() => navigate("/hotel/edit/" + hotel.hid)}>
-                  {" "}
-                  호텔 수정{" "}
-                </Button>
-                <Button ml={"20px"} onClick={handleHotelDelete}>
-                  {" "}
-                  호텔 삭제{" "}
-                </Button>
+                <ButtonGroup mr={"5%"} gap={3}>
+                  <Button
+                    onClick={() => navigate("/hotel/write/type/" + hotel.hid)}
+                  >
+                    {" "}
+                    객실 관리{" "}
+                  </Button>
+                  <Button onClick={() => navigate("/hotel/edit/" + hotel.hid)}>
+                    {" "}
+                    호텔 수정{" "}
+                  </Button>
+                  <Button ml={"20px"} onClick={handleHotelDelete}>
+                    {" "}
+                    호텔 삭제{" "}
+                  </Button>
+                </ButtonGroup>
               </Box>
             )}
             <Box
@@ -333,7 +339,7 @@ export function HotelView() {
                     display={"flex"}
                     alignItems={"center"}
                   >
-                    <Text ml={"10px"}>총 객실 수: {hotel.numberOfBed}</Text>
+                    <Text ml={"10px"}>총 객실 수: {hotel.numberOfRoom}</Text>
                   </Box>
                   <Box
                     my={"10px"}
