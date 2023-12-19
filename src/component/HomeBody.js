@@ -607,11 +607,6 @@ export function HomeBody() {
                           ml={"12px"}
                         >
                           {hotel.name}
-                          <Badge ml={"5px"}>{hotel.lodgingType}</Badge>
-
-                          {hotel.lodgingType == "호텔" && (
-                            <Badge ml={"5px"}>{hotel.rating}</Badge>
-                          )}
                         </Box>
                       </Box>
                     </Box>
