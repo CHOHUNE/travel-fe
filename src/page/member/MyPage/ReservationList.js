@@ -69,19 +69,14 @@ export function ReservationList() {
 
   const toast = useToast();
 
-  // let clientID = process.env.REACT_APP_CLIENT_KEY;
-  // let secretKey = process.env.REACT_APP_SECRET_KEY;
-  //
-  // let encodedCredentials = Buffer.from(clientID + ":" + secretKey).toString(
-  //   "base64",
-  // );
+  let clientID = process.env.REACT_APP_CLIENT_KEY;
+  let secretKey = process.env.REACT_APP_SECRET_KEY;
 
-  // let authorizationHeader = "Basic " + encodedCredentials;
+  let encodedCredentials = Buffer.from(clientID + ":" + secretKey).toString(
+    "base64",
+  );
 
-  // 키 찾는중
-  const apiSecretKey = process.env.REACT_APP_SECRET_KEY;
-  const secretKey = apiSecretKey;
-  const encryptedSecretKey = `Basic ${btoa(secretKey + ":")}`;
+  let authorizationHeader = "Basic " + encodedCredentials;
 
   useEffect(() => {
     axios.get("/api/toss/id/" + params.get("userId")).then((response) => {
@@ -154,24 +149,21 @@ export function ReservationList() {
   };
 
   // -------------------- 결제 취소 -------------------
-  const handleCancelClick = (reservation) => {
-    // 결제 취소 로직 실행
-    // 결제 취소 시 필요 데이터 입니다.
-    const requestData = {
-      orderId: reservation.orderId,
-      amount: reservation.amount,
-      paymentKey: reservation.paymentKey,
-    };
-    // 실질적 결제 취소 로직
+  const handleAmdinCancelClick = (reservation) => {
+    // setSelectedForCancellation(reservation);
+    // setIsCancelModalOpen(true);
+
     var options = {
       method: "POST",
-      url: `https://api.tosspayments.com/v1/payments/${requestData.paymentKey}/cancel`,
+      url: "https://api.tosspayments.com/v1/payments/sxKtnMS6e3aMAl18X2cHL/cancel",
       headers: {
-        Authorization: encryptedSecretKey,
+        Authorization: authorizationHeader,
+
         "Content-Type": "application/json",
       },
       data: { cancelReason: "고객이 취소를 원함" },
     };
+
     axios
       .request(options)
       .then(function (response) {
@@ -182,10 +174,27 @@ export function ReservationList() {
       });
   };
 
-  function handleCancelClick2(h) {
-    setSelectedForCancellation2(h);
-    setIsCancelModalOpen2(true);
+  const [reservStatus, setReservStatus] = useState("");
+
+  useEffect(() => {}, []);
+
+  function handleUserTransCancelClick(t) {
+    const updatedReservStatus = "취소중";
+
+    axios
+      .put("/api/toss/updateTransReservStatus", {
+        reservStatus: updatedReservStatus,
+        tossId: t.tossId,
+      })
+      .then((response) => {
+        // 성공적으로 상태 업데이트 후 수행할 작업
+      })
+      .catch((error) => {
+        // 에러 처리
+      });
   }
+
+  function handleUserHotelCancelClick(h) {}
 
   return (
     <Center m={10}>
@@ -305,35 +314,40 @@ export function ReservationList() {
                         )}
                         <Td>{parseInt(t.amount).toLocaleString("ko-KR")}원</Td>
                         <Td>
-                          {t.reservNumber !== null ? (
+                          {t.reservStatus === "예약접수" && (
+                            <Text color={"blue"}>예약접수</Text>
+                          )}
+                          {t.reservStatus === "예약완료" && (
                             <Text color={"blue"}>예약완료</Text>
-                          ) : (
-                            <Text>예약접수</Text>
+                          )}
+                          {t.reservStatus === "취소중" && (
+                            <Text color={"blue"}>취소중</Text>
+                          )}
+                          {t.reservStatus === "취소완료" && (
+                            <Text color={"blue"}>취소완료</Text>
                           )}
                         </Td>
                         {isAdmin() && (
                           <Td>
-                            {t.cancels === null ? (
-                              <Button
-                                color={"red"}
-                                onClick={() => handleCancelClick(t)}
-                              >
-                                취소
-                              </Button>
-                            ) : (
-                              <></>
-                            )}
+                            <Button
+                              color={"red"}
+                              onClick={() => handleAmdinCancelClick(t)}
+                            >
+                              취소
+                            </Button>
                           </Td>
                         )}
 
                         {isAdmin() || (
                           <Td>
-                            <Button
-                              color={"red"}
-                              onClick={() => handleCancelClick(t)}
-                            >
-                              취소요청
-                            </Button>
+                            {t.reservStatus !== "취소중" && (
+                              <Button
+                                color={"red"}
+                                onClick={() => handleUserTransCancelClick(t)}
+                              >
+                                취소요청
+                              </Button>
+                            )}
                           </Td>
                         )}
                       </Tr>
@@ -433,7 +447,7 @@ export function ReservationList() {
                           <Td>
                             <Button
                               color={"red"}
-                              onClick={() => handleCancelClick2(h)}
+                              onClick={() => handleAmdinCancelClick(h)}
                             >
                               취소
                             </Button>
@@ -442,12 +456,12 @@ export function ReservationList() {
 
                         {isAdmin() || (
                           <Td>
-                            <Button
-                              color={"red"}
-                              onClick={() => handleCancelClick2(h)}
-                            >
-                              취소요청
-                            </Button>
+                            {/*<Button*/}
+                            {/*  color={"red"}*/}
+                            {/*  onClick={() => handleUserHotelCancelClick(h)}*/}
+                            {/*>*/}
+                            {/*  취소요청*/}
+                            {/*</Button>*/}
                           </Td>
                         )}
                       </Tr>
