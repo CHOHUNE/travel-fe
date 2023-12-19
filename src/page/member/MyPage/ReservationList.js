@@ -45,7 +45,6 @@ import { InfoIcon } from "@chakra-ui/icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faClipboard } from "@fortawesome/free-regular-svg-icons";
 import { Buffer } from "buffer";
-
 export function ReservationList() {
   const { fetchLogin, isAdmin } = useContext(LoginContext);
 

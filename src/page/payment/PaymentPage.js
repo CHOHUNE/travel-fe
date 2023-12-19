@@ -62,8 +62,8 @@ export function PaymentPage() {
           // https://docs.tosspayments.com/reference/js-sdk
           amount: amount, // 결제 금액  (선생님 해주심)
           orderId: orderId, // 주문 ID(주문 ID는 상점에서 직접 만들어주세요.)
-          orderName: "테스트 결제", // 주문명
-          customerName: "김토스", // 구매자 이름
+          orderName: transTitle, // 주문명
+          customerName: userName, // 구매자 이름
 
           successUrl:
             "http://localhost:3000/successpage?id=" + id + "&type=trans", // 결제 성공 시 이동할 페이지(이 주소는 예시입니다. 상점에서 직접 만들어주세요.)
@@ -144,8 +144,8 @@ export function PaymentPage() {
           // https://docs.tosspayments.com/reference/js-sdk
           amount: amount, // 결제 금액  (선생님 해주심)
           orderId: orderId, // 주문 ID(주문 ID는 상점에서 직접 만들어주세요.)
-          orderName: "테스트 결제", // 주문명
-          customerName: "김토스", // 구매자 이름
+          orderName: hotelName, // 주문명
+          customerName: userName, // 구매자 이름
 
           successUrl:
             "http://localhost:3000/successpage?id=" + id + "&type=hotel", // 결제 성공 시 이동할 페이지(이 주소는 예시입니다. 상점에서 직접 만들어주세요.)
