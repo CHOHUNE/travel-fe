@@ -121,6 +121,11 @@ function TransSearchComponent() {
             }}
             value={keyword}
             onChange={(e) => setKeyword(e.target.value)}
+            onKeyPress={(e) => {
+              if (e.key === "Enter") {
+                handleSearch();
+              }
+            }}
           />
 
           <Button
@@ -238,15 +243,9 @@ export function TransPortList() {
           h={"50px"}
           textAlign={"center"}
           mb={10}
-          onClick={() => navigate("list?type=bus")}
-          _hover={{ cursor: "pointer", color: "#509896" }}
           lineHeight={"50px"}
         >
-          <Box
-            fontWeight={"900"}
-            fontSize={"1.5rem"}
-            // style={{ fontFamily: "GmarketSansMedium" }}
-          >
+          <Box fontWeight={"900"} fontSize={"1.5rem"}>
             {params.get("type") === "bus" && <Box>🚎 버스 여행</Box>}
             {params.get("type") === "air" && <Box>🛫 항공 여행</Box>}
           </Box>
