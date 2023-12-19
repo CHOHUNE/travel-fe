@@ -1,16 +1,4 @@
-import {
-  Box,
-  Card,
-  CardBody,
-  CardHeader,
-  Center,
-  Flex,
-  FormControl,
-  FormLabel,
-  Image,
-  Input,
-  SimpleGrid,
-} from "@chakra-ui/react";
+import { Box, Card, Center, Flex, Image, SimpleGrid } from "@chakra-ui/react";
 import { useNavigate } from "react-router-dom";
 import React, { useEffect, useState } from "react";
 import axios from "axios";
@@ -39,7 +27,7 @@ export function TransPort() {
 
   return (
     <Box mt={4}>
-      <Card h={"600px"} overflow={"hidden"} boxShadow={"5px 5px 5px 5px gray"}>
+      <Card h={"450px"} overflow={"hidden"} boxShadow={"5px 5px 5px 5px gray"}>
         <Center>
           <video style={{ width: "1500px", zIndex: 2 }} autoPlay loop muted>
             <source

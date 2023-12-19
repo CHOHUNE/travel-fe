@@ -13,6 +13,7 @@ import {
   ModalBody,
   ModalCloseButton,
   ModalContent,
+  ModalFooter,
   ModalHeader,
   ModalOverlay,
   Spinner,
@@ -29,6 +30,7 @@ import {
   Thead,
   Tr,
   useDisclosure,
+  useToast,
 } from "@chakra-ui/react";
 import React, { useContext, useEffect, useState } from "react";
 import axios, { get } from "axios";
@@ -49,20 +51,28 @@ export function ReservationList() {
   const [params] = useSearchParams();
   const location = useLocation();
   const navigate = useNavigate();
-  const [toss, setToss] = useState([]);
+
+  const [transToss, setTransToss] = useState([]);
+  const [hotelToss, setHotelToss] = useState([]);
 
   const [messageContent, setMessageContent] = useState("");
 
   const { isOpen, onOpen, onClose } = useDisclosure();
   const [selectedRequest, setSelectedRequest] = useState("");
 
+  const [isCancelModalOpen, setIsCancelModalOpen] = useState(false);
+  const [selectedForCancellation, setSelectedForCancellation] = useState(null);
+
+  const toast = useToast();
+
   useEffect(() => {
     axios.get("/api/toss/id/" + params.get("userId")).then((response) => {
-      setToss(response.data);
+      setTransToss(response.data.transToss);
+      setHotelToss(response.data.hotelToss);
     });
   }, [location]);
 
-  // 문자 발송 및 DB에 예약번호 저장
+  // 문자 발송 및 DB에 예약번호 저장 ------------ 운송상품용
   const handleConfirmation = async (
     tossId,
     realUserPhoneNumber,
@@ -76,7 +86,10 @@ export function ReservationList() {
           messageContent,
         },
       );
-      console.log("문자 발송 성공: ", smsResponse);
+      toast({
+        description: "예약번호 발송되었습니다.",
+        status: "success",
+      });
 
       // DB에 예약번호 저장
       const saveResponse = await axios.put(
@@ -88,9 +101,43 @@ export function ReservationList() {
     }
   };
 
+  // 문자 발송 및 DB에 예약번호 저장 ------------ 호텔상품용
+  const handleConfirmation2 = async (
+    hotelTossId,
+    cellPhoneNumber,
+    messageContent2,
+  ) => {
+    try {
+      // 문자 발송 처리
+      const smsResponse = await axios.post(
+        `/api/member/sendSMS4?userPhoneNumber=${cellPhoneNumber}`,
+        {
+          messageContent: messageContent2,
+        },
+      );
+      toast({
+        description: "예약번호 발송되었습니다.",
+        status: "success",
+      });
+
+      // DB에 예약번호 저장
+      const saveResponse = await axios.put(
+        `/api/toss/sendAndSave2?hotelTossId=${hotelTossId}&reservNumber=${messageContent2}`,
+      );
+      console.log("DB 저장 성공: ", saveResponse);
+    } catch (error) {
+      console.error("처리 에러: ", error);
+    }
+  };
+
   const handleIconClick = (request) => {
     setSelectedRequest(request);
     onOpen();
+  };
+
+  const handleCancelClick = (reservation) => {
+    setSelectedForCancellation(reservation);
+    setIsCancelModalOpen(true);
   };
 
   return (
@@ -133,12 +180,13 @@ export function ReservationList() {
                       <Th>연락처</Th>
                       <Th>예약번호</Th>
                       <Th>가격</Th>
+                      <Th>예약상태</Th>
                       {/*<Th>상태</Th>*/}
                     </Tr>
                   </Thead>
 
                   <Tbody>
-                    {toss.map((t) => (
+                    {transToss.map((t) => (
                       <Tr key={t.tossId} _hover={{ cursor: "pointer" }}>
                         <Td>{t.tossId}</Td>
                         <Td>{t.userId}</Td>
@@ -152,11 +200,7 @@ export function ReservationList() {
                               cursor="pointer"
                             />
                           ) : (
-                            <FontAwesomeIcon
-                              icon={faClipboard}
-                              onClick={() => handleIconClick(t.request)}
-                              cursor="pointer"
-                            />
+                            <></>
                           )}
                         </Td>
                         <Td>{t.realUserPhoneNumber}</Td>
@@ -165,10 +209,10 @@ export function ReservationList() {
                             <Flex gap={2}>
                               <Input
                                 type="text"
-                                value={t.messageContent || ""}
+                                value={t.messageContent || t.reservNumber}
                                 onChange={(e) =>
-                                  setToss(
-                                    toss.map((item) =>
+                                  setTransToss(
+                                    transToss.map((item) =>
                                       item.tossId === t.tossId
                                         ? {
                                             ...t,
@@ -212,7 +256,21 @@ export function ReservationList() {
                           </Td>
                         )}
                         <Td>{parseInt(t.amount).toLocaleString("ko-KR")}원</Td>
-                        {/*<Td>{toss.db 안만듬 }</Td>*/}
+                        <Td>
+                          {t.reservNumber !== null ? (
+                            <Text color={"blue"}>예약완료</Text>
+                          ) : (
+                            <Text>예약접수</Text>
+                          )}
+                        </Td>
+                        <Td>
+                          <Button
+                            color={"red"}
+                            onClick={() => handleCancelClick(t)}
+                          >
+                            취소요청
+                          </Button>
+                        </Td>
                       </Tr>
                     ))}
                   </Tbody>
@@ -229,23 +287,84 @@ export function ReservationList() {
                       <Th>체크인 </Th>
                       <Th>체크아웃 </Th>
                       <Th>요청사항</Th>
+                      <Th>연락처</Th>
                       <Th>예약번호</Th>
                       <Th>가격</Th>
-                      {/*<Th>상태</Th>*/}
+                      <Th>상태</Th>
                     </Tr>
                   </Thead>
                   <Tbody>
-                    {/*{toss.map(() => (*/}
-                    {/*  <Tr key={} _hover={{ cursor: "pointer" }}>*/}
-                    {/*    <Td>{}</Td>*/}
-                    {/*    <Td>{}</Td>*/}
-                    {/*    <Td>{}</Td>*/}
-                    {/*    <Td>{}</Td>*/}
-                    {/*    <Td>{}</Td>*/}
-                    {/*    <Td>{}</Td>*/}
-                    {/*    /!*<Td>{toss.db 안만듬 }</Td>*!/*/}
-                    {/*  </Tr>*/}
-                    {/*))}*/}
+                    {hotelToss.map((h) => (
+                      <Tr key={h.hotelTossId} _hover={{ cursor: "pointer" }}>
+                        <Td>{h.hotelTossId}</Td>
+                        <Td>{h.hotelName}</Td>
+                        <Td>{h.checkinDate}</Td>
+                        <Td>{h.checkoutDate}</Td>
+                        <Td>{h.plusMessage}</Td>
+                        <Td>{h.cellPhoneNumber}</Td>
+                        {isAdmin() && (
+                          <Td>
+                            <Flex gap={2}>
+                              <Input
+                                type="text"
+                                value={h.messageContent2 || h.reservNumber}
+                                onChange={(e) =>
+                                  setHotelToss(
+                                    hotelToss.map((item) =>
+                                      item.hotelTossId === h.hotelTossId
+                                        ? {
+                                            ...h,
+                                            messageContent2: e.target.value,
+                                          }
+                                        : item,
+                                    ),
+                                  )
+                                }
+                                placeholder="예약번호 입력"
+                              />
+                              <Button
+                                onClick={() =>
+                                  handleConfirmation2(
+                                    h.hotelTossId,
+                                    h.cellPhoneNumber,
+                                    h.messageContent2,
+                                  )
+                                }
+                              >
+                                확인
+                              </Button>
+                            </Flex>
+                          </Td>
+                        )}
+
+                        {isAdmin() || (
+                          <Td>
+                            <Flex gap={2}>
+                              {h.reservNumber !== null ? (
+                                <Input
+                                  readOnly
+                                  type="text"
+                                  value={h.reservNumber}
+                                  placeholder="관리자가 승인하면 예약번호가 발생됩니다."
+                                />
+                              ) : (
+                                <Box></Box>
+                              )}
+                            </Flex>
+                          </Td>
+                        )}
+
+                        <Td>{h.reservNumber}</Td>
+                        <Td>{parseInt(h.amount).toLocaleString("ko-KR")}원</Td>
+                        <Td>
+                          {h.reservNumber !== null ? (
+                            <Text color={"blue"}>예약완료</Text>
+                          ) : (
+                            <Text>예약접수</Text>
+                          )}
+                        </Td>
+                      </Tr>
+                    ))}
                   </Tbody>
                 </Table>
               </CardBody>
@@ -258,6 +377,41 @@ export function ReservationList() {
               <ModalHeader>요청사항 상세</ModalHeader>
               <ModalCloseButton />
               <ModalBody>{selectedRequest}</ModalBody>
+            </ModalContent>
+          </Modal>
+
+          <Modal
+            isOpen={isCancelModalOpen}
+            onClose={() => setIsCancelModalOpen(false)}
+          >
+            <ModalOverlay />
+            <ModalContent>
+              <ModalHeader>예약 취소 요청</ModalHeader>
+              <ModalCloseButton />
+              <ModalBody fontWeight={"700"} fontFamily={"GmarketSansMedium"}>
+                <Text>
+                  예약 번호: {selectedForCancellation?.reservNumber}
+                  <Box>
+                    취소요청 해주시면 관리자 승인에 따라 취소처리 될 예정이며
+                    <br />
+                    전액 환불됩니다.
+                  </Box>
+                  <br />
+                  <Box>이용해주셔서 감사합니다.</Box>
+                </Text>
+              </ModalBody>
+              <ModalFooter>
+                <Button
+                  colorScheme="blue"
+                  mr={3}
+                  onClick={() => setIsCancelModalOpen(false)}
+                >
+                  닫기
+                </Button>
+                <Button bg={"red"} color={"white"}>
+                  취소요청
+                </Button>
+              </ModalFooter>
             </ModalContent>
           </Modal>
         </Tabs>

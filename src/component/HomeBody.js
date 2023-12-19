@@ -28,16 +28,11 @@ import React, { useEffect, useRef, useState } from "react";
 import { RecentViewed } from "./RecentViewed";
 import { useLocation, useNavigate, useSearchParams } from "react-router-dom";
 import axios from "axios";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faAnglesRight, faHeart } from "@fortawesome/free-solid-svg-icons";
 import DatePicker from "react-datepicker";
 import ko from "date-fns/locale/ko";
 import { differenceInCalendarDays } from "date-fns";
 import "./Calendar.css";
 import { ChevronDownIcon } from "@chakra-ui/icons";
-import { faHotel } from "@fortawesome/free-solid-svg-icons/faHotel";
-import { faBus } from "@fortawesome/free-solid-svg-icons/faBus";
-import { faPlane } from "@fortawesome/free-solid-svg-icons/faPlane";
 
 export function HomeBody() {
   const navigate = useNavigate();
@@ -244,8 +239,9 @@ export function HomeBody() {
               </p>
               <Box ref={wrapperRef} style={{ position: "relative" }}>
                 <DatePicker
-                  className="react-datepicker"
+                  popperClassName="home-react-datepicker"
                   locale={ko}
+                  minDate={new Date()}
                   selectsRange
                   startDate={startDate}
                   endDate={endDate}
@@ -427,7 +423,7 @@ export function HomeBody() {
             display={"flex"}
           >
             <Box
-              w={"320px"}
+              w={"31%"}
               h={"130px"}
               textAlign={"center"}
               mb={10}
@@ -468,7 +464,7 @@ export function HomeBody() {
             </Box>
 
             <Box
-              w={"320px"}
+              w={"31%"}
               h={"130px"}
               shadow={"1px 1px 3px 1px #dadce0"}
               _hover={{
@@ -509,7 +505,7 @@ export function HomeBody() {
             </Box>
 
             <Box
-              w={"320px"}
+              w={"31%"}
               h={"130px"}
               textAlign={"center"}
               bgImage="url('https://search.pstatic.net/sunny/?src=https%3A%2F%2Fimages.unsplash.com%2Fphoto-1683558351037-20aebce5142b%3Fixlib%3Drb-4.0.3%26ixid%3DM3wxMjA3fDB8MHxwaG90by1yZWxhdGVkfDExfHx8ZW58MHx8fHx8%26w%3D1000%26q%3D80&type=sc960_832')"
