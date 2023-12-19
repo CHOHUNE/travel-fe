@@ -9,20 +9,6 @@ const apiSecretKey = process.env.REACT_APP_SECRET_KEY;
 export function SuccessPage() {
   const navigate = useNavigate();
   const [searchParams] = useSearchParams();
-  // // 요청 사항 저장하기
-  // let payRequested = localStorage.getItem("payRequested");
-  // // 이용자 휴대폰 번호 저장하기
-  // let phoneNumber = localStorage.getItem("phoneNumber");
-  // // 예약자 이름 저장
-  // let userName = localStorage.getItem("userName");
-  // // 이용자 이름 저장
-  // let realUserName = localStorage.getItem("realUserName");
-  // // 상품명 저장
-  // let transTitle = localStorage.getItem("transTitle");
-  // // 상품 출발일 저장
-  // let transStartDay = localStorage.getItem("transStartDay");
-  // // 상품 이용 인원 저장
-  // let people = localStorage.getItem("people");
 
   // 쿼리 스트링에서 호텔인지 운송 상품인지 결제 타입을 받아오기
   const [params] = useSearchParams();
@@ -162,18 +148,64 @@ export function SuccessPage() {
     } else {
       // TODO : 호텔 타입으로 결제가 코드가 작성 되면 주석 풀기
       // 타입이 호텔이면 호텔 저장 요청
-      // axios
-      //   .postForm("/api/toss/save", {
-      //     orderId: searchParams.get("orderId"),
-      //     amount: searchParams.get("amount"),
-      //     id: searchParams.get("id"),
-      //     requested: payRequested,
-      //     phoneNumber: phoneNumber,
-      //   })
-      //   .finally(() => {
-      //     localStorage.removeItem("payRequested");
-      //     localStorage.removeItem("phoneNumber");
-      //   });
+      // 호텔 id
+      let hotelId = localStorage.getItem("hotelId");
+      // 결제 금액
+      let amount = localStorage.getItem("amount");
+      // 체크인 날짜
+      let checkinDate = new Date(localStorage.getItem("checkinDate"));
+      // 체크 아웃 날짜
+      let checkoutDate = new Date(localStorage.getItem("checkoutDate"));
+      // 룸 타입
+      let roomtype = localStorage.getItem("roomtype");
+      // 성인 인원 수
+      let personAdult = localStorage.getItem("personAdult");
+      // 소인 인원 수
+      let personChild = localStorage.getItem("personChild");
+      // 예약자 이름
+      let userName = localStorage.getItem("userName");
+      // 이용자 이름
+      let guestName = localStorage.getItem("guestName");
+      // 이용자 핸드폰 번호
+      let cellPhoneNumber = localStorage.getItem("cellPhoneNumber");
+      // 상품 명
+      let hotelName = localStorage.getItem("hotelName");
+      // 요청 사항
+      let plusMessage = localStorage.getItem("plusMessage");
+
+      // 타입이 호텔이면 호텔 저장 요청
+      axios
+        .postForm("/api/toss/hotelSave", {
+          orderId: searchParams.get("orderId"),
+          amount: amount,
+          hotelId: hotelId,
+          // 여기서부터는 로케이션 저장 한 값 이기때문에 finally에서 자워줘야 한다.
+          checkinDate: checkinDate,
+          checkoutDate: checkoutDate,
+          roomtype: roomtype,
+          personAdult: personAdult,
+          personChild: personChild,
+          userName: userName,
+          guestName: guestName,
+          cellPhoneNumber: cellPhoneNumber,
+          hotelName: hotelName,
+          plusMessage: plusMessage,
+        })
+        .finally(() => {
+          // 결제가 완료 되었든 취소 되었든 결제 정보는 지우는 코드
+          localStorage.removeItem("amount");
+          localStorage.removeItem("hotelId");
+          localStorage.removeItem("checkinDate");
+          localStorage.removeItem("checkoutDate");
+          localStorage.removeItem("roomtype");
+          localStorage.removeItem("personAdult");
+          localStorage.removeItem("personChild");
+          localStorage.removeItem("userName");
+          localStorage.removeItem("guestName");
+          localStorage.removeItem("cellPhoneNumber");
+          localStorage.removeItem("hotelName");
+          localStorage.removeItem("plusMessage");
+        });
     }
   }, []);
 
