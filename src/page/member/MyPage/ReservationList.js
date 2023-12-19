@@ -313,12 +313,16 @@ export function ReservationList() {
                         </Td>
                         {isAdmin() && (
                           <Td>
-                            <Button
-                              color={"red"}
-                              onClick={() => handleCancelClick(t)}
-                            >
-                              취소
-                            </Button>
+                            {t.cancels === null ? (
+                              <Button
+                                color={"red"}
+                                onClick={() => handleCancelClick(t)}
+                              >
+                                취소
+                              </Button>
+                            ) : (
+                              <></>
+                            )}
                           </Td>
                         )}
 
