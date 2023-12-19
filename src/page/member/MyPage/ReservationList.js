@@ -162,6 +162,7 @@ export function ReservationList() {
       amount: reservation.amount,
       paymentKey: reservation.paymentKey,
     };
+
     // 실질적 결제 취소 로직
     var options = {
       method: "POST",
