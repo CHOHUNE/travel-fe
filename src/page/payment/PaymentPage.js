@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { nanoid } from "nanoid";
-import { Box, Center, Spinner } from "@chakra-ui/react";
+import { Box, Center, Spinner, Text } from "@chakra-ui/react";
 import { useLocation, useParams, useSearchParams } from "react-router-dom";
 import axios from "axios";
 
@@ -62,8 +62,8 @@ export function PaymentPage() {
           // https://docs.tosspayments.com/reference/js-sdk
           amount: amount, // 결제 금액  (선생님 해주심)
           orderId: orderId, // 주문 ID(주문 ID는 상점에서 직접 만들어주세요.)
-          orderName: "테스트 결제", // 주문명
-          customerName: "김토스", // 구매자 이름
+          orderName: transTitle, // 주문명
+          customerName: userName, // 구매자 이름
 
           successUrl:
             "http://localhost:3000/successpage?id=" + id + "&type=trans", // 결제 성공 시 이동할 페이지(이 주소는 예시입니다. 상점에서 직접 만들어주세요.)
@@ -144,8 +144,8 @@ export function PaymentPage() {
           // https://docs.tosspayments.com/reference/js-sdk
           amount: amount, // 결제 금액  (선생님 해주심)
           orderId: orderId, // 주문 ID(주문 ID는 상점에서 직접 만들어주세요.)
-          orderName: "테스트 결제", // 주문명
-          customerName: "김토스", // 구매자 이름
+          orderName: hotelName, // 주문명
+          customerName: userName, // 구매자 이름
 
           successUrl:
             "http://localhost:3000/successpage?id=" + id + "&type=hotel", // 결제 성공 시 이동할 페이지(이 주소는 예시입니다. 상점에서 직접 만들어주세요.)
@@ -184,11 +184,21 @@ export function PaymentPage() {
           width: "100%",
           height: "400px",
           zIndex: 3,
-          fontFamily: "YEONGJUPunggiGinsengTTF",
           fontSize: "2rem",
           color: "white",
         }}
-      ></Box>
+      >
+        <Text
+          fontWeight={"700"}
+          fontFamily={"GmarketSansMedium"}
+          textAlign={"left"}
+          ml={60}
+          justifyContent={"center"}
+          fontSize={"5rem"}
+        >
+          결제중...
+        </Text>
+      </Box>
     </Center>
   );
   // 승원 수정 부분 그냥 페이지가 심심해서 만들어봄 끝---------------------------

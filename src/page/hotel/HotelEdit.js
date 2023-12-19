@@ -16,6 +16,9 @@ import {
   useToast,
   Divider,
   Box,
+  SimpleGrid,
+  Checkbox,
+  CheckboxGroup,
 } from "@chakra-ui/react";
 import { useNavigate, useParams } from "react-router-dom";
 import DatePicker from "react-datepicker";
@@ -51,6 +54,15 @@ export function HotelEdit() {
         salesTo: hotel.salesTo,
         rating: hotel.rating,
         cautionMessage: hotel.cautionMessage,
+        pool: hotel.pool,
+        oceanview: hotel.oceanview,
+        pet: hotel.pet,
+        familyMood: hotel.familyMood,
+        romanticMood: hotel.romanticMood,
+        campingMood: hotel.campingMood,
+        natureMood: hotel.natureMood,
+        surfing: hotel.surfing,
+        winterSport: hotel.winterSport,
         removeFileId,
         uploadFiles,
       })
@@ -166,7 +178,6 @@ export function HotelEdit() {
                 {/* 필요에 따라 더 많은 Room Type을 추가하세요. */}
               </Select>
             </Flex>
-
             <Flex>
               <FormLabel
                 my={"15px"}
@@ -203,7 +214,6 @@ export function HotelEdit() {
                 />
               </Flex>
             </Flex>
-
             {/* 숙소 등급 */}
             <Flex>
               <FormLabel
@@ -229,7 +239,6 @@ export function HotelEdit() {
                 <option value={"5성"}>5성</option>
               </Select>
             </Flex>
-
             {/* 숙소 타입 */}
             <Flex>
               <FormLabel
@@ -254,7 +263,6 @@ export function HotelEdit() {
                 <option value="게스트 하우스">게스트 하우스</option>
               </Select>
             </Flex>
-
             {/* 상세 주소및 설명 */}
             <Box my={"10px"}>
               <FormLabel
@@ -274,7 +282,6 @@ export function HotelEdit() {
                 }
               />
             </Box>
-
             {/* 주의사항 */}
             <Divider />
             <Box my={"10px"}>
@@ -294,7 +301,118 @@ export function HotelEdit() {
                 }
               />
             </Box>
-
+            <CheckboxGroup colorScheme="green">
+              <SimpleGrid columns={5} spacingY={"10px"}>
+                <Checkbox
+                  value="반려견 동반"
+                  onChange={(e) =>
+                    setHotel((prevHotel) => ({
+                      ...prevHotel,
+                      pet: e.target.checked ? "반려견 동반" : null,
+                    }))
+                  }
+                  isChecked={hotel.pet === "반려견 동반"}
+                >
+                  반려견 동반
+                </Checkbox>
+                <Checkbox
+                  value="오션뷰"
+                  onChange={(e) =>
+                    setHotel((prevHotel) => ({
+                      ...prevHotel,
+                      oceanview: e.target.checked ? "오션뷰" : null,
+                    }))
+                  }
+                  isChecked={hotel.oceanview === "오션뷰"}
+                >
+                  오션뷰
+                </Checkbox>
+                <Checkbox
+                  value="가족, 친구"
+                  onChange={(e) =>
+                    setHotel((prevHotel) => ({
+                      ...prevHotel,
+                      familyMood: e.target.checked ? "가족, 친구" : null,
+                    }))
+                  }
+                  isChecked={hotel.familyMood === "가족, 친구"}
+                >
+                  가족, 친구
+                </Checkbox>
+                <Checkbox
+                  value="연인"
+                  onChange={(e) =>
+                    setHotel((prevHotel) => ({
+                      ...prevHotel,
+                      romanticMood: e.target.checked ? "연인" : null,
+                    }))
+                  }
+                  isChecked={hotel.romanticMood === "연인"}
+                >
+                  연인
+                </Checkbox>
+                <Checkbox
+                  value="캠핑, 카라반"
+                  onChange={(e) =>
+                    setHotel((prevHotel) => ({
+                      ...prevHotel,
+                      campingMood: e.target.checked ? "캠핑, 카라반" : null,
+                    }))
+                  }
+                  isChecked={hotel.campingMood === "캠핑, 카라반"}
+                >
+                  캠핑, 카라반
+                </Checkbox>
+                <Checkbox
+                  value="수영장"
+                  onChange={(e) =>
+                    setHotel((prevHotel) => ({
+                      ...prevHotel,
+                      pool: e.target.checked ? "수영장" : null,
+                    }))
+                  }
+                  isChecked={hotel.pool === "수영장"}
+                >
+                  수영장
+                </Checkbox>
+                <Checkbox
+                  value="자연가옥"
+                  onChange={(e) =>
+                    setHotel((prevHotel) => ({
+                      ...prevHotel,
+                      natureMood: e.target.checked ? "자연가옥" : null,
+                    }))
+                  }
+                  isChecked={hotel.natureMood === "자연가옥"}
+                >
+                  자연가옥
+                </Checkbox>
+                <Checkbox
+                  value="스키"
+                  onChange={(e) =>
+                    setHotel((prevHotel) => ({
+                      ...prevHotel,
+                      winterSport: e.target.checked ? "스키" : null,
+                    }))
+                  }
+                  isChecked={hotel.winterSport === "스키"}
+                >
+                  스키
+                </Checkbox>
+                <Checkbox
+                  value="서핑"
+                  onChange={(e) =>
+                    setHotel((prevHotel) => ({
+                      ...prevHotel,
+                      surfing: e.target.checked ? "서핑" : null,
+                    }))
+                  }
+                  isChecked={hotel.surfing === "서핑"}
+                >
+                  서핑
+                </Checkbox>
+              </SimpleGrid>
+            </CheckboxGroup>
             {/* 대표 이미지 */}
             <Divider />
             <Flex mt={"20px"}>
@@ -316,7 +434,6 @@ export function HotelEdit() {
                 }
               />
             </Flex>
-
             {/* 부가 이미지 1 */}
             <Flex>
               <FormLabel
@@ -337,7 +454,6 @@ export function HotelEdit() {
                 }
               />
             </Flex>
-
             {/* 부가 이미지 2 */}
             <Flex>
               <FormLabel
@@ -358,7 +474,6 @@ export function HotelEdit() {
                 }
               />
             </Flex>
-
             {/* 지도 이미지 */}
             <Flex>
               <FormLabel
@@ -377,7 +492,6 @@ export function HotelEdit() {
                 onChange={(e) => setHotel({ ...hotel, mapImg: e.target.files })}
               />
             </Flex>
-
             <Flex justifyContent={"flex-end"} mt={"30px"}>
               <Button colorScheme="teal" onClick={handleChange}>
                 확인

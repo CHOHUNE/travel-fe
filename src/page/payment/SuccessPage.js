@@ -101,6 +101,7 @@ export function SuccessPage() {
 
   // 완료 페이지가 뜰때에 db에 저장 시키기
   useEffect(() => {
+    let paymentKey = searchParams.get("paymentKey");
     if (payType === "trans") {
       // 요청 사항 저장하기
       let payRequested = localStorage.getItem("payRequested");
@@ -134,6 +135,7 @@ export function SuccessPage() {
           transTitle: transTitle,
           transStartDay: transStartDay.toISOString(),
           people: people,
+          paymentKey: paymentKey,
         })
         .finally(() => {
           // 결제가 완료 되었든 취소 되었든 결제 정보는 지우는 코드
@@ -190,6 +192,7 @@ export function SuccessPage() {
           cellPhoneNumber: cellPhoneNumber,
           hotelName: hotelName,
           plusMessage: plusMessage,
+          paymentKey: paymentKey,
         })
         .finally(() => {
           // 결제가 완료 되었든 취소 되었든 결제 정보는 지우는 코드
@@ -210,18 +213,6 @@ export function SuccessPage() {
   }, []);
 
   function handlesubmit() {
-    // axios
-    //   .postForm("/api/toss/save", {
-    //     orderId: searchParams.get("orderId"),
-    //     amount: searchParams.get("amount"),
-    //     id: searchParams.get("id"),
-    //     requested: payRequested,
-    //   })
-    //   .then((response) => {
-    //     console.log(response.data);
-    //     navigate("/");
-    //     localStorage.removeItem("payRequested");
-    //   });
     navigate("/");
   }
 

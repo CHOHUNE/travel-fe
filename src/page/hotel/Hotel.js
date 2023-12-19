@@ -35,6 +35,12 @@ import { faMap } from "@fortawesome/free-regular-svg-icons";
 import { faBed } from "@fortawesome/free-solid-svg-icons/faBed";
 import { RecentViewed } from "../../component/RecentViewed";
 import { LoginContext } from "../../component/LoginProvider";
+import { Swiper, SwiperSlide } from "swiper/react";
+import {
+  EffectFade,
+  Pagination as SwiperPagination,
+  Navigation,
+} from "swiper/modules";
 
 function PageButton({ variant, pageNumber, children }) {
   const [params] = useSearchParams();
@@ -110,12 +116,17 @@ function SearchComponent() {
 
   return (
     <Center mt={5}>
-      <Flex>
+      <Flex my={"30px"}>
         <Input
-          w={"400px"}
+          w={"500px"}
           value={keyword}
-          placeholder={"호텔 검색"}
+          placeholder={"호텔명, 지명, 숙소 타입, 테마"}
           onChange={(e) => setKeyword(e.target.value)}
+          onKeyDown={(e) => {
+            if (e.key === "Enter") {
+              handleSearch();
+            }
+          }}
         />
         <Button onClick={handleSearch}>검색</Button>
       </Flex>
@@ -135,6 +146,8 @@ export function Hotel() {
 
   const [wishlist, setWishlist] = useState([]);
 
+  const [hotelHeartbeats, setHotelHeartbeats] = useState([]);
+
   useEffect(() => {
     axios.get("/api/hotel/list?" + params).then((response) => {
       setHotelList(response.data.hotelList);
@@ -142,7 +155,7 @@ export function Hotel() {
     });
   }, [location]);
 
-  // useEffect(() => {
+  // useEffect(() => {x
   //   axios.get("/api/hotel/price").then((response) => {
   //     const price = response.data.hotelList.map((hotel) => hotel.price);
   //     setHotelList(price);
@@ -233,6 +246,18 @@ export function Hotel() {
           status: "success",
         });
       }
+      setHotelHeartbeats((prevHeartbeats) => ({
+        ...prevHeartbeats,
+        [hotelId]: true,
+      }));
+
+      // Reset the heartbeat state after the animation duration (500ms)
+      setTimeout(() => {
+        setHotelHeartbeats((prevHeartbeats) => ({
+          ...prevHeartbeats,
+          [hotelId]: false,
+        }));
+      }, 500);
     } else {
       toast({ description: "로그인 후 이용 가능 합니다.", status: "error" });
     }
@@ -243,6 +268,32 @@ export function Hotel() {
   if (hotelList == null) {
     return <Spinner />;
   }
+  const GrayscaleImageWithText = ({ imageUrl, text, navi }) => (
+    <Center>
+      <Box
+        position="relative"
+        mt={"40px"}
+        w={"70px"}
+        opacity={"45%"}
+        _hover={{ cursor: "pointer", color: "black", opacity: 1 }}
+        onClick={() => navigate(navi)}
+      >
+        <Image brightness={"60%"} src={imageUrl} boxSize={"35px"} />
+        <Box
+          position="absolute"
+          top="50px"
+          left="-15px"
+          textAlign="center"
+          width="100%"
+          h={"100px"}
+        >
+          <Text fontSize="0.8rrem" opacity={"85%"}>
+            {text}
+          </Text>
+        </Box>
+      </Box>
+    </Center>
+  );
 
   return (
     <Box>
@@ -253,8 +304,59 @@ export function Hotel() {
         </Box>
       </Box>
 
-      {/* 미들 바 */}
+      <Box
+        display={"flex"}
+        justifyContent={"space-evenly"}
+        w={"80%"}
+        ml={"10%"}
+      >
+        <GrayscaleImageWithText
+          imageUrl="https://study1993garbi.s3.ap-northeast-2.amazonaws.com/travel/board/46/10ce1091-c854-40f3-a2fb-defc2995bcaf.jpg"
+          text="해변가"
+          navi={"/hotel/?k=바다"}
+        />
+        <GrayscaleImageWithText
+          imageUrl="https://study1993garbi.s3.ap-northeast-2.amazonaws.com/travel/board/46/ca25c7f3-0d1f-432b-9efa-b9f5dc6d8770.jpg"
+          text="캠핑, 글램핑"
+          navi={"/hotel/?k=바다"}
+        />
 
+        <GrayscaleImageWithText
+          imageUrl="https://study1993garbi.s3.ap-northeast-2.amazonaws.com/travel/board/46/3b1eb541-46d9-4bef-abc4-c37d77e3c21b.jpg"
+          text="전망"
+          navi={"/hotel/?k=전망"}
+        />
+        <GrayscaleImageWithText
+          imageUrl="https://study1993garbi.s3.ap-northeast-2.amazonaws.com/travel/board/46/6ad4bd95-f086-437d-97e3-14d12155ddfe.jpg"
+          text="촌캉스"
+          navi={"/hotel/?k=촌캉스"}
+        />
+        <GrayscaleImageWithText
+          imageUrl="https://study1993garbi.s3.ap-northeast-2.amazonaws.com/travel/board/46/51f5cf64-5821-400c-8033-8a10c7787d69.jpg"
+          text="한옥"
+          navi={"/hotel/?k=한옥"}
+        />
+        <GrayscaleImageWithText
+          imageUrl="https://study1993garbi.s3.ap-northeast-2.amazonaws.com/travel/board/46/732edad8-3ae0-49a8-a451-29a8010dcc0c.jpg"
+          text="자연가옥"
+          navi={"/hotel/?k=자연가옥"}
+        />
+        <GrayscaleImageWithText
+          imageUrl="https://study1993garbi.s3.ap-northeast-2.amazonaws.com/travel/board/46/957f8022-dfd7-426c-99fd-77ed792f6d7a.jpg"
+          text="서핑"
+          navi={"/hotel/?k=서핑"}
+        />
+        <GrayscaleImageWithText
+          imageUrl="https://study1993garbi.s3.ap-northeast-2.amazonaws.com/travel/board/46/c8bba3ed-34c0-464a-8e6e-27574d20e4d2.jpg"
+          text="스키"
+          navi={"/hotel/?k=스키"}
+        />
+        <GrayscaleImageWithText
+          imageUrl="https://study1993garbi.s3.ap-northeast-2.amazonaws.com/travel/board/47/3fb523a0-b622-4368-8142-b5e03df7549b.jpg"
+          text="수영장"
+          navi={"/hotel/?k=수영장"}
+        />
+      </Box>
       {/* 검색 버튼 */}
       <Box mt={"50px"}>
         <SearchComponent />
@@ -296,21 +398,62 @@ export function Hotel() {
               overflow="hidden"
             >
               <Box position="relative">
-                <Image
-                  onClick={() => navigate("/hotel/reserv/" + hotel.hid)}
-                  src={hotel.mainImgUrl}
-                  alt={hotel.name}
-                  cursor={"pointer"}
-                />
+                <Swiper
+                  pagination={{
+                    clickable: true,
+                  }}
+                  modules={[SwiperPagination]}
+                  className="mySwiper"
+                >
+                  <SwiperSlide>
+                    <Image
+                      onClick={() => navigate("/hotel/reserv/" + hotel.hid)}
+                      src={hotel.mainImgUrl}
+                      alt={hotel.name}
+                      cursor={"pointer"}
+                    />
+                  </SwiperSlide>
+                  <SwiperSlide>
+                    <Image
+                      onClick={() => navigate("/hotel/reserv/" + hotel.hid)}
+                      src={hotel.subImgUrl1}
+                      alt={hotel.name}
+                      cursor={"pointer"}
+                    />
+                  </SwiperSlide>
+                  <SwiperSlide>
+                    <Image
+                      onClick={() => navigate("/hotel/reserv/" + hotel.hid)}
+                      src={hotel.subImgUrl2}
+                      alt={hotel.name}
+                      cursor={"pointer"}
+                    />
+                  </SwiperSlide>
+                  <SwiperSlide>
+                    <Image
+                      onClick={() => navigate("/hotel/reserv/" + hotel.hid)}
+                      src={hotel.mapImgUrl}
+                      alt={hotel.name}
+                      cursor={"pointer"}
+                    />
+                  </SwiperSlide>
+                </Swiper>
 
                 <Box
                   position="absolute"
                   top="2"
                   right="2"
+                  zIndex={999}
                   onClick={() => toggleWishlist(hotel.hid)}
                   cursor="pointer"
+                  style={{
+                    transform: hotelHeartbeats[hotel.hid]
+                      ? "scale(1.5)"
+                      : "scale(1)",
+                    transition: "transform 0.5s ease-in-out",
+                  }}
                 >
-                  <FontAwesomeIcon icon={faHeart} color="#509896" size="2x" />
+                  <FontAwesomeIcon icon={faHeart} color={"#80d9d0"} size="2x" />
                 </Box>
               </Box>
               <Box p="6">
@@ -340,7 +483,7 @@ export function Hotel() {
                       )}
                     </Box>
                     {hotel.pool != null && (
-                      <Badge color={"skyblue"}>{hotel.pool}</Badge>
+                      <Badge color={"blue"}>{hotel.pool}</Badge>
                     )}
                     {hotel.pet != null && (
                       <Badge ml={"3px"} color={"green"}>
