@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { nanoid } from "nanoid";
-import { Box, Center, Spinner } from "@chakra-ui/react";
+import { Box, Center, Spinner, Text } from "@chakra-ui/react";
 import { useLocation, useParams, useSearchParams } from "react-router-dom";
 import axios from "axios";
 
@@ -184,11 +184,21 @@ export function PaymentPage() {
           width: "100%",
           height: "400px",
           zIndex: 3,
-          fontFamily: "YEONGJUPunggiGinsengTTF",
           fontSize: "2rem",
           color: "white",
         }}
-      ></Box>
+      >
+        <Text
+          fontWeight={"700"}
+          fontFamily={"GmarketSansMedium"}
+          textAlign={"left"}
+          ml={60}
+          justifyContent={"center"}
+          fontSize={"5rem"}
+        >
+          결제중...
+        </Text>
+      </Box>
     </Center>
   );
   // 승원 수정 부분 그냥 페이지가 심심해서 만들어봄 끝---------------------------

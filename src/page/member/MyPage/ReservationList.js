@@ -42,8 +42,9 @@ import {
 } from "react-router-dom";
 import { LoginContext } from "../../../component/LoginProvider";
 import { InfoIcon } from "@chakra-ui/icons";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faClipboard } from "@fortawesome/free-regular-svg-icons";
 import { Buffer } from "buffer";
-
 export function ReservationList() {
   const { fetchLogin, isAdmin } = useContext(LoginContext);
 
@@ -62,16 +63,20 @@ export function ReservationList() {
   const [isCancelModalOpen, setIsCancelModalOpen] = useState(false);
   const [selectedForCancellation, setSelectedForCancellation] = useState(null);
 
+  const [isCancelModalOpen2, setIsCancelModalOpen2] = useState(false);
+  const [selectedForCancellation2, setSelectedForCancellation2] =
+    useState(null);
+
   const toast = useToast();
 
-  var clientID = process.env.REACT_APP_CLIENT_KEY;
-  var secretKey = process.env.REACT_APP_SECRET_KEY;
+  let clientID = process.env.REACT_APP_CLIENT_KEY;
+  let secretKey = process.env.REACT_APP_SECRET_KEY;
 
-  var encodedCredentials = Buffer.from(clientID + ":" + secretKey).toString(
+  let encodedCredentials = Buffer.from(clientID + ":" + secretKey).toString(
     "base64",
   );
 
-  var authorizationHeader = "Basic " + encodedCredentials;
+  let authorizationHeader = "Basic " + encodedCredentials;
 
   useEffect(() => {
     axios.get("/api/toss/id/" + params.get("userId")).then((response) => {
@@ -143,35 +148,36 @@ export function ReservationList() {
     onOpen();
   };
 
+  // -------------------- 결제 취소 -------------------
   const handleCancelClick = (reservation) => {
     // setSelectedForCancellation(reservation);
     // setIsCancelModalOpen(true);
-    // async function confirm() {
-    //   const response = await fetch(
-    //       "https://api.tosspayments.com/v1/payments/confirm",
-    //       {
-    //         method: "POST",
-    //         headers: {
-    //           Authorization: encryptedSecretKey,
-    //           "Content-Type": "application/json",
-    //         },
-    //         body: JSON.stringify(requestData),
-    //       },
-    //   );
-    //
-    //   const json = await response.json();
-    //
-    //   if (!response.ok) {
-    //     // TODO: 구매 실패 비즈니스 로직 구현
-    //     console.log(json);
-    //     navigate(`/fail?code=${json.code}&message=${json.message}`);
-    //     return;
-    //   }
-    //
-    //   // TODO: 구매 완료 비즈니스 로직 구현
-    //   console.log(json);
-    // }
+
+    var options = {
+      method: "POST",
+      url: "https://api.tosspayments.com/v1/payments/sxKtnMS6e3aMAl18X2cHL/cancel",
+      headers: {
+        Authorization: authorizationHeader,
+
+        "Content-Type": "application/json",
+      },
+      data: { cancelReason: "고객이 취소를 원함" },
+    };
+
+    axios
+      .request(options)
+      .then(function (response) {
+        console.log(response.data);
+      })
+      .catch(function (error) {
+        console.error(error);
+      });
   };
+
+  function handleCancelClick2(h) {
+    setSelectedForCancellation2(h);
+    setIsCancelModalOpen2(true);
+  }
 
   return (
     <Center m={10}>
@@ -242,6 +248,7 @@ export function ReservationList() {
                             <Flex gap={2}>
                               <Input
                                 type="text"
+                                fontSize={"12px"}
                                 value={t.messageContent || t.reservNumber}
                                 onChange={(e) =>
                                   setTransToss(
@@ -296,14 +303,27 @@ export function ReservationList() {
                             <Text>예약접수</Text>
                           )}
                         </Td>
-                        <Td>
-                          <Button
-                            color={"red"}
-                            onClick={() => handleCancelClick(t)}
-                          >
-                            취소요청
-                          </Button>
-                        </Td>
+                        {isAdmin() && (
+                          <Td>
+                            <Button
+                              color={"red"}
+                              onClick={() => handleCancelClick(t)}
+                            >
+                              취소
+                            </Button>
+                          </Td>
+                        )}
+
+                        {isAdmin() || (
+                          <Td>
+                            <Button
+                              color={"red"}
+                              onClick={() => handleCancelClick(t)}
+                            >
+                              취소요청
+                            </Button>
+                          </Td>
+                        )}
                       </Tr>
                     ))}
                   </Tbody>
@@ -339,6 +359,7 @@ export function ReservationList() {
                           <Td>
                             <Flex gap={2}>
                               <Input
+                                fontSize={"13px"}
                                 type="text"
                                 value={h.messageContent2 || h.reservNumber}
                                 onChange={(e) =>
@@ -396,6 +417,27 @@ export function ReservationList() {
                             <Text>예약접수</Text>
                           )}
                         </Td>
+                        {isAdmin() && (
+                          <Td>
+                            <Button
+                              color={"red"}
+                              onClick={() => handleCancelClick2(h)}
+                            >
+                              취소
+                            </Button>
+                          </Td>
+                        )}
+
+                        {isAdmin() || (
+                          <Td>
+                            <Button
+                              color={"red"}
+                              onClick={() => handleCancelClick2(h)}
+                            >
+                              취소요청
+                            </Button>
+                          </Td>
+                        )}
                       </Tr>
                     ))}
                   </Tbody>
@@ -403,7 +445,8 @@ export function ReservationList() {
               </CardBody>
             </TabPanel>
           </TabPanels>
-          {/* 모달 창 */}
+
+          {/* ---------------------- 운송상품 고객 취소요청 모달 창 ---------------------- */}
           <Modal isOpen={isOpen} onClose={onClose}>
             <ModalOverlay />
             <ModalContent>
@@ -438,6 +481,51 @@ export function ReservationList() {
                   colorScheme="blue"
                   mr={3}
                   onClick={() => setIsCancelModalOpen(false)}
+                >
+                  닫기
+                </Button>
+                <Button bg={"red"} color={"white"}>
+                  취소요청
+                </Button>
+              </ModalFooter>
+            </ModalContent>
+          </Modal>
+
+          {/* ---------------------- 호텔상품 고객 취소요청 모달 창 ---------------------- */}
+          <Modal isOpen={isOpen} onClose={onClose}>
+            <ModalOverlay />
+            <ModalContent>
+              <ModalHeader>요청사항 상세</ModalHeader>
+              <ModalCloseButton />
+              <ModalBody>{selectedRequest}</ModalBody>
+            </ModalContent>
+          </Modal>
+
+          <Modal
+            isOpen={isCancelModalOpen2}
+            onClose={() => setIsCancelModalOpen2(false)}
+          >
+            <ModalOverlay />
+            <ModalContent>
+              <ModalHeader>예약 취소 요청</ModalHeader>
+              <ModalCloseButton />
+              <ModalBody fontWeight={"700"} fontFamily={"GmarketSansMedium"}>
+                <Text>
+                  예약 번호: {selectedForCancellation2?.reservNumber}
+                  <Box>
+                    취소요청 해주시면 관리자 승인에 따라 취소처리 될 예정이며
+                    <br />
+                    전액 환불됩니다.
+                  </Box>
+                  <br />
+                  <Box>이용해주셔서 감사합니다.</Box>
+                </Text>
+              </ModalBody>
+              <ModalFooter>
+                <Button
+                  colorScheme="blue"
+                  mr={3}
+                  onClick={() => setIsCancelModalOpen2(false)}
                 >
                   닫기
                 </Button>
