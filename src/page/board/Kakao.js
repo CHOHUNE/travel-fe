@@ -21,6 +21,7 @@ import { useNavigate } from "react-router-dom";
 import { RBanner } from "./Banner/RBanner";
 import { LBanner } from "./Banner/LBanner";
 import axios from "axios";
+import { NYW } from "./weather/F/NYW";
 
 export function Kakao(props) {
   const navigate = useNavigate();
