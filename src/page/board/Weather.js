@@ -69,13 +69,14 @@ export function Weather() {
             />
 
             {Object.keys(result).length !== 0 && (
-              <Box>
-                <div> {result.data.name}</div>
-                <div>
+              <Box fontSize={"lg"}>
+                <br />
+                <Box fontSize={"25px"}> {result.data.name}</Box>
+                <Box color={"blue.500"}>
                   {" "}
                   {Math.round((result.data.main.temp - 273.15) * 10) / 10}°C
-                </div>
-                <div> {result.data.weather[0].main}</div>
+                </Box>
+                <Box fontSize={"15px"}> {result.data.weather[0].main}</Box>
               </Box>
             )}
             <br />
