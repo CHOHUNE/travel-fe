@@ -44,6 +44,7 @@ import { LoginContext } from "../../../component/LoginProvider";
 import { InfoIcon } from "@chakra-ui/icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faClipboard } from "@fortawesome/free-regular-svg-icons";
+import { Buffer } from "buffer";
 
 export function ReservationList() {
   const { fetchLogin, isAdmin } = useContext(LoginContext);
@@ -68,6 +69,15 @@ export function ReservationList() {
     useState(null);
 
   const toast = useToast();
+
+  let clientID = process.env.REACT_APP_CLIENT_KEY;
+  let secretKey = process.env.REACT_APP_SECRET_KEY;
+
+  let encodedCredentials = Buffer.from(clientID + ":" + secretKey).toString(
+    "base64",
+  );
+
+  let authorizationHeader = "Basic " + encodedCredentials;
 
   useEffect(() => {
     axios.get("/api/toss/id/" + params.get("userId")).then((response) => {
@@ -139,9 +149,30 @@ export function ReservationList() {
     onOpen();
   };
 
+  // -------------------- 결제 취소 -------------------
   const handleCancelClick = (reservation) => {
-    setSelectedForCancellation(reservation);
-    setIsCancelModalOpen(true);
+    // setSelectedForCancellation(reservation);
+    // setIsCancelModalOpen(true);
+
+    var options = {
+      method: "POST",
+      url: "https://api.tosspayments.com/v1/payments/sxKtnMS6e3aMAl18X2cHL/cancel",
+      headers: {
+        Authorization: authorizationHeader,
+
+        "Content-Type": "application/json",
+      },
+      data: { cancelReason: "고객이 취소를 원함" },
+    };
+
+    axios
+      .request(options)
+      .then(function (response) {
+        console.log(response.data);
+      })
+      .catch(function (error) {
+        console.error(error);
+      });
   };
 
   function handleCancelClick2(h) {
