@@ -30,6 +30,7 @@ import {
   Thead,
   Tr,
   useDisclosure,
+  useToast,
 } from "@chakra-ui/react";
 import React, { useContext, useEffect, useState } from "react";
 import axios, { get } from "axios";
@@ -50,7 +51,9 @@ export function ReservationList() {
   const [params] = useSearchParams();
   const location = useLocation();
   const navigate = useNavigate();
-  const [toss, setToss] = useState([]);
+
+  const [transToss, setTransToss] = useState([]);
+  const [hotelToss, setHotelToss] = useState([]);
 
   const [messageContent, setMessageContent] = useState("");
 
@@ -60,13 +63,16 @@ export function ReservationList() {
   const [isCancelModalOpen, setIsCancelModalOpen] = useState(false);
   const [selectedForCancellation, setSelectedForCancellation] = useState(null);
 
+  const toast = useToast();
+
   useEffect(() => {
     axios.get("/api/toss/id/" + params.get("userId")).then((response) => {
-      setToss(response.data);
+      setTransToss(response.data.transToss);
+      setHotelToss(response.data.hotelToss);
     });
   }, [location]);
 
-  // 문자 발송 및 DB에 예약번호 저장
+  // 문자 발송 및 DB에 예약번호 저장 ------------ 운송상품용
   const handleConfirmation = async (
     tossId,
     realUserPhoneNumber,
@@ -80,11 +86,43 @@ export function ReservationList() {
           messageContent,
         },
       );
-      console.log("문자 발송 성공: ", smsResponse);
+      toast({
+        description: "예약번호 발송되었습니다.",
+        status: "success",
+      });
 
       // DB에 예약번호 저장
       const saveResponse = await axios.put(
         `/api/toss/sendAndSave?tossId=${tossId}&reservNumber=${messageContent}`,
+      );
+      console.log("DB 저장 성공: ", saveResponse);
+    } catch (error) {
+      console.error("처리 에러: ", error);
+    }
+  };
+
+  // 문자 발송 및 DB에 예약번호 저장 ------------ 호텔상품용
+  const handleConfirmation2 = async (
+    hotelTossId,
+    cellPhoneNumber,
+    messageContent2,
+  ) => {
+    try {
+      // 문자 발송 처리
+      const smsResponse = await axios.post(
+        `/api/member/sendSMS4?userPhoneNumber=${cellPhoneNumber}`,
+        {
+          messageContent: messageContent2,
+        },
+      );
+      toast({
+        description: "예약번호 발송되었습니다.",
+        status: "success",
+      });
+
+      // DB에 예약번호 저장
+      const saveResponse = await axios.put(
+        `/api/toss/sendAndSave2?hotelTossId=${hotelTossId}&reservNumber=${messageContent2}`,
       );
       console.log("DB 저장 성공: ", saveResponse);
     } catch (error) {
@@ -148,7 +186,7 @@ export function ReservationList() {
                   </Thead>
 
                   <Tbody>
-                    {toss.map((t) => (
+                    {transToss.map((t) => (
                       <Tr key={t.tossId} _hover={{ cursor: "pointer" }}>
                         <Td>{t.tossId}</Td>
                         <Td>{t.userId}</Td>
@@ -173,8 +211,8 @@ export function ReservationList() {
                                 type="text"
                                 value={t.messageContent || t.reservNumber}
                                 onChange={(e) =>
-                                  setToss(
-                                    toss.map((item) =>
+                                  setTransToss(
+                                    transToss.map((item) =>
                                       item.tossId === t.tossId
                                         ? {
                                             ...t,
@@ -249,23 +287,84 @@ export function ReservationList() {
                       <Th>체크인 </Th>
                       <Th>체크아웃 </Th>
                       <Th>요청사항</Th>
+                      <Th>연락처</Th>
                       <Th>예약번호</Th>
                       <Th>가격</Th>
-                      {/*<Th>상태</Th>*/}
+                      <Th>상태</Th>
                     </Tr>
                   </Thead>
                   <Tbody>
-                    {/*{toss.map(() => (*/}
-                    {/*  <Tr key={} _hover={{ cursor: "pointer" }}>*/}
-                    {/*    <Td>{}</Td>*/}
-                    {/*    <Td>{}</Td>*/}
-                    {/*    <Td>{}</Td>*/}
-                    {/*    <Td>{}</Td>*/}
-                    {/*    <Td>{}</Td>*/}
-                    {/*    <Td>{}</Td>*/}
-                    {/*    /!*<Td>{toss.db 안만듬 }</Td>*!/*/}
-                    {/*  </Tr>*/}
-                    {/*))}*/}
+                    {hotelToss.map((h) => (
+                      <Tr key={h.hotelTossId} _hover={{ cursor: "pointer" }}>
+                        <Td>{h.hotelTossId}</Td>
+                        <Td>{h.hotelName}</Td>
+                        <Td>{h.checkinDate}</Td>
+                        <Td>{h.checkoutDate}</Td>
+                        <Td>{h.plusMessage}</Td>
+                        <Td>{h.cellPhoneNumber}</Td>
+                        {isAdmin() && (
+                          <Td>
+                            <Flex gap={2}>
+                              <Input
+                                type="text"
+                                value={h.messageContent2 || h.reservNumber}
+                                onChange={(e) =>
+                                  setHotelToss(
+                                    hotelToss.map((item) =>
+                                      item.hotelTossId === h.hotelTossId
+                                        ? {
+                                            ...h,
+                                            messageContent2: e.target.value,
+                                          }
+                                        : item,
+                                    ),
+                                  )
+                                }
+                                placeholder="예약번호 입력"
+                              />
+                              <Button
+                                onClick={() =>
+                                  handleConfirmation2(
+                                    h.hotelTossId,
+                                    h.cellPhoneNumber,
+                                    h.messageContent2,
+                                  )
+                                }
+                              >
+                                확인
+                              </Button>
+                            </Flex>
+                          </Td>
+                        )}
+
+                        {isAdmin() || (
+                          <Td>
+                            <Flex gap={2}>
+                              {h.reservNumber !== null ? (
+                                <Input
+                                  readOnly
+                                  type="text"
+                                  value={h.reservNumber}
+                                  placeholder="관리자가 승인하면 예약번호가 발생됩니다."
+                                />
+                              ) : (
+                                <Box></Box>
+                              )}
+                            </Flex>
+                          </Td>
+                        )}
+
+                        <Td>{h.reservNumber}</Td>
+                        <Td>{parseInt(h.amount).toLocaleString("ko-KR")}원</Td>
+                        <Td>
+                          {h.reservNumber !== null ? (
+                            <Text color={"blue"}>예약완료</Text>
+                          ) : (
+                            <Text>예약접수</Text>
+                          )}
+                        </Td>
+                      </Tr>
+                    ))}
                   </Tbody>
                 </Table>
               </CardBody>
