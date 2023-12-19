@@ -19,7 +19,6 @@ export const RecentViewed = () => {
   };
 
   const addRecentViewed = (e, newItem) => {
-    e.stopPropagation();
     setRecentViewed((prevItems) => {
       // 이미 목록에 있는 상품인지 확인
       const isExist = prevItems.some(

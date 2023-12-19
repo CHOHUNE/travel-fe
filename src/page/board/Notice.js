@@ -50,98 +50,100 @@ export function Notice() {
     <Box w="80%" ml="10%">
       <br />
       <br />
-      <Flex textAlign={"center"}>
-        <Box w="20%" padding={"10px"}>
-          <LBanner />
-        </Box>
-        <Box w="60%" padding={"10px"}>
-          <Accordion defaultIndex={[0]} allowMultiple>
-            <Heading size="md"> 자주 찾는 질문</Heading>
-            <br></br>
-            <Stack direction="row" spacing={3} padding={"5px"}>
-              <Button
-                size={"sm"}
-                variant="outline"
-                color={"green"}
-                onClick={() => handleSwitch(1)}
-              >
-                {" "}
-                급상승 질문{" "}
-              </Button>
-              <Button
-                size={"sm"}
-                variant="outline"
-                color={"green"}
-                onClick={() => handleSwitch(2)}
-              >
-                {" "}
-                패키지 여행{" "}
-              </Button>
-              <Button
-                size={"sm"}
-                variant="outline"
-                color={"green"}
-                onClick={() => handleSwitch(3)}
-              >
-                {" "}
-                자유 여행{" "}
-              </Button>
-              <Button
-                size={"sm"}
-                variant="outline"
-                color={"green"}
-                onClick={() => handleSwitch(4)}
-              >
-                {" "}
-                항 공{" "}
-              </Button>
-              <Button
-                size={"sm"}
-                variant="outline"
-                color={"green"}
-                onClick={() => handleSwitch(5)}
-              >
-                {" "}
-                호 텔{" "}
-              </Button>
-              <Button
-                size={"sm"}
-                variant="outline"
-                color={"green"}
-                onClick={() => handleSwitch(6)}
-              >
-                {" "}
-                예 약 / 결 재{" "}
-              </Button>
-            </Stack>
-            <br></br>
+      <Box w="80%" ml="10%">
+        <Flex textAlign={"center"}>
+          <Box w="20%" padding={"10px"}>
+            <LBanner />
+          </Box>
+          <Box w="60%" padding={"10px"}>
+            <Accordion defaultIndex={[0]} allowMultiple>
+              <Heading size="md"> 자주 찾는 질문</Heading>
+              <br></br>
+              <Stack direction="row" spacing={3} padding={"5px"}>
+                <Button
+                  size={"sm"}
+                  variant="outline"
+                  color={"green"}
+                  onClick={() => handleSwitch(1)}
+                >
+                  {" "}
+                  급상승 질문{" "}
+                </Button>
+                <Button
+                  size={"sm"}
+                  variant="outline"
+                  color={"green"}
+                  onClick={() => handleSwitch(2)}
+                >
+                  {" "}
+                  패키지 여행{" "}
+                </Button>
+                <Button
+                  size={"sm"}
+                  variant="outline"
+                  color={"green"}
+                  onClick={() => handleSwitch(3)}
+                >
+                  {" "}
+                  자유 여행{" "}
+                </Button>
+                <Button
+                  size={"sm"}
+                  variant="outline"
+                  color={"green"}
+                  onClick={() => handleSwitch(4)}
+                >
+                  {" "}
+                  항 공{" "}
+                </Button>
+                <Button
+                  size={"sm"}
+                  variant="outline"
+                  color={"green"}
+                  onClick={() => handleSwitch(5)}
+                >
+                  {" "}
+                  호 텔{" "}
+                </Button>
+                <Button
+                  size={"sm"}
+                  variant="outline"
+                  color={"green"}
+                  onClick={() => handleSwitch(6)}
+                >
+                  {" "}
+                  예 약 / 결 재{" "}
+                </Button>
+              </Stack>
+              <br></br>
 
-            {noticeList.map((notice) => (
-              <AccordionItem key={notice.id}>
-                <h2>
-                  <AccordionButton>
-                    <Box
-                      as="span"
-                      padding={"15px"}
-                      flex="1"
-                      fontSize={"13px"}
-                      as="b"
-                      textAlign="left"
-                    >
-                      {notice.title}
-                    </Box>
-                    <AccordionIcon />
-                  </AccordionButton>
-                </h2>
-                <AccordionPanel pb={4}>{notice.content}</AccordionPanel>
-              </AccordionItem>
-            ))}
-          </Accordion>
-        </Box>
-        <Box w={"20%"} padding={"10px"}>
-          <RBanner />
-        </Box>
-      </Flex>
+              {noticeList.map((notice) => (
+                <AccordionItem key={notice.id}>
+                  <h2>
+                    <AccordionButton>
+                      <Box
+                        as="span"
+                        padding={"15px"}
+                        flex="1"
+                        fontSize={"13px"}
+                        as="b"
+                        textAlign="left"
+                      >
+                        {notice.title}
+                      </Box>
+                      <AccordionIcon />
+                    </AccordionButton>
+                  </h2>
+                  <AccordionPanel pb={4}>{notice.content}</AccordionPanel>
+                </AccordionItem>
+              ))}
+            </Accordion>
+          </Box>
+          <Box w={"20%"} padding={"10px"}>
+            <RBanner />
+          </Box>
+        </Flex>
+      </Box>
     </Box>
   );
 }

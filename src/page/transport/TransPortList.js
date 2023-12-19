@@ -1,34 +1,15 @@
 import { useLocation, useNavigate, useSearchParams } from "react-router-dom";
 import {
-  Badge,
   Box,
   Button,
-  ButtonGroup,
   Card,
-  CardBody,
-  CardHeader,
   Center,
   Flex,
-  FormControl,
-  FormLabel,
   Image,
   Input,
-  Menu,
-  MenuButton,
-  MenuItem,
-  MenuList,
-  Modal,
-  ModalBody,
-  ModalCloseButton,
-  ModalContent,
-  ModalFooter,
-  ModalHeader,
-  ModalOverlay,
   SimpleGrid,
   Spinner,
   Text,
-  useDisclosure,
-  VStack,
 } from "@chakra-ui/react";
 import axios from "axios";
 import React, { useContext, useEffect, useState } from "react";
@@ -40,9 +21,6 @@ import {
 } from "@fortawesome/free-solid-svg-icons";
 import { RecentViewed } from "../../component/RecentViewed";
 import { LoginContext } from "../../component/LoginProvider";
-import DatePicker from "react-datepicker";
-import ko from "date-fns/locale/ko";
-import { ChevronDownIcon } from "@chakra-ui/icons";
 
 function TransPage({ pageInfo, params }) {
   const navigate = useNavigate();
@@ -139,28 +117,32 @@ function TransSearchComponent() {
             placeholder="어디로 떠나시나요?"
             style={{ fontSize: "1.5rem" }}
             _focus={{
-              boxShadow: "none", // 포커스 시 박스 그림자 제거
+              boxShadow: "1px 1px 3px 1px #dadce0 inset", // 포커스 시 박스 그림자 제거
             }}
-            shadow={"1px 1px 3px 1px #dadce0 inset"}
             value={keyword}
             onChange={(e) => setKeyword(e.target.value)}
+            onKeyPress={(e) => {
+              if (e.key === "Enter") {
+                handleSearch();
+              }
+            }}
           />
 
           <Button
             h={"50px"}
-            bg={"blue.500"}
-            color={"white"}
+            color={"black"}
             borderRadius={"10px"}
             shadow={"1px 1px 3px 1px #dadce0"}
+            backgroundColor={"gray.300"}
             _hover={{
-              color: "black",
-              backgroundColor: "gray.100",
+              color: "white",
+              backgroundColor: "blue.500",
               shadow: "1px 1px 3px 1px #dadce0 inset",
             }}
             onClick={handleSearch}
             fontSize={21}
           >
-            검색
+            <FontAwesomeIcon icon={faMagnifyingGlass} />
           </Button>
         </Box>
       </Box>
@@ -181,8 +163,6 @@ function TransSearchComponent() {
 export function TransPortList() {
   const [transList, setTransList] = useState([]);
   const [pageInfo, setPageInfo] = useState([]);
-
-  const { isOpen, onClose, onOpen } = useDisclosure();
 
   const navigate = useNavigate();
 
@@ -220,7 +200,32 @@ export function TransPortList() {
         mt={4}
         bg={"#f5f8ec"}
       >
-        버스 항공 이미지
+        {params.get("type") === "bus" && (
+          <Image
+            src={
+              "https://study1993garbi.s3.ap-northeast-2.amazonaws.com/travel/sourceFile/imgeFile/%E1%84%87%E1%85%A5%E1%84%89%E1%85%B3%E1%84%86%E1%85%A6%E1%84%8B%E1%85%B5%E1%86%AB%E1%84%8B%E1%85%B5%E1%84%86%E1%85%B5%E1%84%8C%E1%85%B5.jpg"
+            }
+            style={{
+              width: "100%",
+              height: "100%",
+              objectFit: "cover",
+              opacity: 0.8,
+            }}
+          />
+        )}
+        {params.get("type") === "air" && (
+          <Image
+            src={
+              "https://study1993garbi.s3.ap-northeast-2.amazonaws.com/travel/sourceFile/imgeFile/planemain.jpg"
+            }
+            style={{
+              width: "100%",
+              height: "100%",
+              objectFit: "cover",
+              opacity: 0.8,
+            }}
+          />
+        )}
       </Box>
       <Center w={"100%"} h={"100px"} mt={5}>
         {/*// 검색창 */}
@@ -233,16 +238,18 @@ export function TransPortList() {
         h={"50px"}
         justifyContent={"space-between"}
       >
-        <Box
-          w={"400px"}
-          lineHeight={"50px"}
-          bg={"#d9d9d9"}
+        <Card
+          w={"300px"}
+          h={"50px"}
           textAlign={"center"}
-          fontSize={"2rem"}
+          mb={10}
+          lineHeight={"50px"}
         >
-          {params.get("type") === "bus" && <Box>🚎 국내 버스 여행</Box>}
-          {params.get("type") === "air" && <Box>🛫 국내 항공 여행</Box>}
-        </Box>
+          <Box fontWeight={"900"} fontSize={"1.5rem"}>
+            {params.get("type") === "bus" && <Box>🚎 버스 여행</Box>}
+            {params.get("type") === "air" && <Box>🛫 항공 여행</Box>}
+          </Box>
+        </Card>
         {isAdmin() && (
           <Box>
             <Button
@@ -261,8 +268,6 @@ export function TransPortList() {
             (transport) =>
               params.get("type") === transport.typeName && (
                 <Box
-                  // w={"275px"}
-                  // h={"275px"}
                   maxW="sm"
                   borderWidth="1px"
                   borderRadius="lg"
@@ -362,7 +367,6 @@ export function TransPortList() {
           )}
         </SimpleGrid>
       </Flex>
-
       <Flex w={"80%"} ml={"10%"} mt={10} justifyContent={"center"}>
         <TransPage params={params.get("type")} pageInfo={pageInfo} />
       </Flex>

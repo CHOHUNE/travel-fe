@@ -47,6 +47,8 @@ import { FailPageH } from "./page/hotel/payment/FailPageH";
 import { SuccessPageH } from "./page/hotel/payment/SuccessPageH";
 import { PaymentPageH } from "./page/hotel/payment/PaymentPageH";
 import { Kakao } from "./page/board/Kakao";
+import { Weather } from "./page/board/Weather";
+
 const routes = createBrowserRouter(
   createRoutesFromElements(
     <Route path="/" element={<HomeLayout />}>
@@ -66,6 +68,7 @@ const routes = createBrowserRouter(
       <Route path="edit/:id" element={<BoardEdit />} />
       <Route path="notice" element={<Notice />} />
       <Route path="kakao" element={<Kakao />} />
+      <Route path="weather" element={<Weather />} />
       <Route path="noticeSound" element={<NoticeSound />} />
 
       {/* 회원관련 */}

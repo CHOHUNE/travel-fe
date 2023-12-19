@@ -46,8 +46,6 @@ export function HotelPay() {
 
   const [isChecked, setIsChecked] = useState(false);
 
-  const { onOpen, isOpen, onClose } = useDisclosure();
-
   const [personName, setPersonName] = useState("");
 
   const [selectedRoom, setSelectedRoom] = useState([]);
@@ -101,10 +99,12 @@ export function HotelPay() {
   let emailInput1 = receiveEmail[0];
   let emailInput2 = receiveEmail[1];
 
-  // ---------- 핸드폰번호 수 기준으로 나누기 ---------
-  let a = member.phoneNumber ? member.phoneNumber.slice(0, 3) : "";
-  let b = member.phoneNumber ? member.phoneNumber.slice(3, 7) : "";
-  let c = member.phoneNumber ? member.phoneNumber.slice(7) : "";
+  let receivePhoneNumber = member.phoneNumber
+    ? member.phoneNumber.split("-")
+    : ["", "", ""];
+  let phoneNum1 = receivePhoneNumber[0];
+  let phoneNum2 = receivePhoneNumber[1];
+  let phoneNum3 = receivePhoneNumber[2];
 
   const theme = extendTheme({
     styles: {
@@ -129,40 +129,7 @@ export function HotelPay() {
     setPersonChild(child);
   };
 
-  // function handlePaymentClick(response) {
-  //   // 데이터를 로컬 스토리지에 저장
-  //   const paymentData = {
-  //     hId: id,
-  //     checkoutDate: reservation.checkoutDate,
-  //     checkinDate: reservation.checkinDate,
-  //     plusMessage: plusMessage,
-  //     price: selectedRoom[0].price,
-  //     roomtype: selectedRoom[0].roomType,
-  //     personAdult: personAdult,
-  //     personChild: personChild,
-  //     guestName: personName,
-  //     cellPhoneNumber: personNumber,
-  //     memberName: member.name,
-  //     memberNumber: member.phoneNumber,
-  //   };
-  //   localStorage.setItem('paymentData', JSON.stringify(paymentData));
-  // }
-
   function handlePaymentClick(response) {
-    // 데이터를 일일히 뜯어서 로컬 스토리지에 저장
-    // localStorage.setItem("hId", id);
-    // localStorage.setItem("checkoutDate", reservation.checkoutDate);
-    // localStorage.setItem("checkinDate", reservation.checkinDate);
-    // localStorage.setItem("plusMessage", plusMessage);
-    // localStorage.setItem("price", selectedRoom[0].price);
-    // localStorage.setItem("roomtype", selectedRoom[0].roomType);
-    // localStorage.setItem("personAdult", personAdult);
-    // localStorage.setItem("personChild", personChild);
-    // localStorage.setItem("guestName", personName);
-    // localStorage.setItem("cellPhoneNumber", personNumber);
-    // localStorage.setItem("memberName", member.name);
-    // localStorage.setItem("memberNumber", member.phoneNumber);
-
     if (isChecked) {
       if (!member.name || !member.phoneNumber) {
         toast({
@@ -172,17 +139,79 @@ export function HotelPay() {
       } else {
         navigate(`/PaymentPage/${id}?type=hotel`, {
           state: {
-            amount: selectedRoom[0].price,
+            // 호텔 id
             hId: id,
-            checkoutDate: reservation.checkoutDate,
+            // 결제 금액
+            amount: selectedRoom[0].price,
+            // 체크 인 날짜
             checkinDate: reservation.checkinDate,
+            // 체크 아웃 날짜
+            checkoutDate: reservation.checkoutDate,
+            // 요청 사항
             plusMessage: plusMessage,
+            // 최종 결제 금액
             price: selectedRoom[0].price,
+            // 호텔 룸타입
             roomtype: selectedRoom[0].roomType,
+            // 성인 인원 수
             personAdult: personAdult,
+            // 소인 인원 수
             personChild: personChild,
+            // 예약자 이름
+            userName: member.name,
+            // 이용자 이름
             guestName: isChecked ? member.name : personName,
+            // 이용자 휴대폰 번호
             cellPhoneNumber: isChecked ? member.phoneNumber : personNumber,
+            // 상품명
+            hotelName: hotel.name,
+          },
+        });
+      }
+    } else {
+      if (personName.length === 0) {
+        toast({
+          description: "이용자의 이름을 입력해 주세요.",
+          status: "warning",
+        });
+      } else if (
+        personNumber1.length === 0 ||
+        personNumber2.length === 0 ||
+        personNumber3.length === 0
+      ) {
+        toast({
+          description: "이용자의 휴대폰 번호를 입력해 주세요.",
+          status: "warning",
+        });
+      } else {
+        navigate(`/PaymentPage/${id}?type=hotel`, {
+          state: {
+            // 호텔 id
+            hId: id,
+            // 결제 금액
+            amount: selectedRoom[0].price,
+            // 체크 인 날짜
+            checkinDate: reservation.checkinDate,
+            // 체크 아웃 날짜
+            checkoutDate: reservation.checkoutDate,
+            // 요청 사항
+            plusMessage: plusMessage,
+            // 최종 결제 금액
+            price: selectedRoom[0].price,
+            // 호텔 룸타입
+            roomtype: selectedRoom[0].roomType,
+            // 성인 인원 수
+            personAdult: personAdult,
+            // 소인 인원 수
+            personChild: personChild,
+            // 예약자 이름
+            userName: member.name,
+            // 이용자 이름
+            guestName: isChecked ? member.name : personName,
+            // 이용자 휴대폰 번호
+            cellPhoneNumber: isChecked ? member.phoneNumber : personNumber,
+            // 상품명
+            hotelName: hotel.name,
           },
         });
       }
@@ -395,7 +424,7 @@ export function HotelPay() {
                           mt={2}
                           w={100}
                           maxLength={3}
-                          value={member ? a : ""}
+                          value={phoneNum1}
                         />
                         <span
                           style={{
@@ -420,7 +449,7 @@ export function HotelPay() {
                           mt={2}
                           w={100}
                           type={"number"}
-                          value={member ? b : ""}
+                          value={phoneNum2}
                         />
                         <span
                           style={{
@@ -445,7 +474,7 @@ export function HotelPay() {
                           mt={2}
                           w={100}
                           maxLength={4}
-                          value={member ? c : ""}
+                          value={phoneNum3}
                         />
                       </Flex>
                     </Flex>
@@ -534,7 +563,7 @@ export function HotelPay() {
                           w={100}
                           type={"text"}
                           maxLength={4}
-                          value={isChecked ? a : personNumber1}
+                          value={isChecked ? phoneNum1 : personNumber1}
                           onChange={handleInputChange1}
                         />
                         <span
@@ -561,7 +590,7 @@ export function HotelPay() {
                           ref={inputRef2}
                           type={"text"}
                           maxLength={4}
-                          value={isChecked ? b : personNumber2}
+                          value={isChecked ? phoneNum2 : personNumber2}
                           onChange={handleInputChange2}
                         />
                         <span
@@ -589,7 +618,7 @@ export function HotelPay() {
                           // type={"number"}
                           type={"text"}
                           maxLength={4}
-                          value={isChecked ? c : personNumber3}
+                          value={isChecked ? phoneNum3 : personNumber3}
                           onChange={handleInputChange3}
                         />
                       </Flex>

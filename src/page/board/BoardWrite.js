@@ -67,68 +67,73 @@ export function BoardWrite() {
     <Box w="80%" ml="10%">
       <br />
       <br />
-      <Flex textAlign={"center"}>
-        <Box w="20%" padding={"10px"}>
-          <LBanner />
-        </Box>
-
-        <Box w="60%" padding={"10px"}>
-          <br />
-          <Heading size="md">게시글 작성</Heading>
-          <br />
-
-          <Box>
-            <FormControl>
-              <FormLabel>제목</FormLabel>
-              <Input value={title} onChange={(e) => setTitle(e.target.value)} />
-              <br />
-            </FormControl>
-
-            <FormControl>
-              <FormLabel>본문</FormLabel>
-              <Textarea
-                value={content}
-                onChange={(e) => setContent(e.target.value)}
-              ></Textarea>
-              <br />
-            </FormControl>
-            <FormControl>
-              <FormLabel> 이미지</FormLabel>
-              <Input
-                type="file"
-                accept="image/*"
-                multiple
-                onChange={(e) => setUploadFiles(e.target.files)}
-              />
-              <FormHelperText>
-                한 개 파일은 1MB 이내 총 용량은 10MB 이내로 첨부하세요
-              </FormHelperText>
-              <br />
-            </FormControl>
-            <FormControl>
-              <FormLabel>작성자</FormLabel>
-              <Input
-                value={writer}
-                onChange={(e) => setWriter(e.target.value)}
-              ></Input>
-              <br />
-            </FormControl>
-            <br />
-            <Button
-              isDisabled={isSubmitting}
-              onClick={handleSubmit}
-              colorScheme="green"
-            >
-              {" "}
-              저장{" "}
-            </Button>
+      <Box w="80%" ml="10%">
+        <Flex textAlign={"center"}>
+          <Box w="20%" padding={"10px"}>
+            <LBanner />
           </Box>
-        </Box>
 
-        <Box w={"20%"} padding={"10px"}>
-          <RBanner />
-        </Box>
-      </Flex>
+          <Box w="60%" padding={"10px"}>
+            <br />
+            <Heading size="md">게시글 작성</Heading>
+            <br />
+
+            <Box>
+              <FormControl>
+                <FormLabel>제목</FormLabel>
+                <Input
+                  value={title}
+                  onChange={(e) => setTitle(e.target.value)}
+                />
+                <br />
+              </FormControl>
+
+              <FormControl>
+                <FormLabel>본문</FormLabel>
+                <Textarea
+                  value={content}
+                  onChange={(e) => setContent(e.target.value)}
+                ></Textarea>
+                <br />
+              </FormControl>
+              <FormControl>
+                <FormLabel> 이미지</FormLabel>
+                <Input
+                  type="file"
+                  accept="image/*"
+                  multiple
+                  onChange={(e) => setUploadFiles(e.target.files)}
+                />
+                <FormHelperText>
+                  한 개 파일은 1MB 이내 총 용량은 10MB 이내로 첨부하세요
+                </FormHelperText>
+                <br />
+              </FormControl>
+              <FormControl>
+                <FormLabel>작성자</FormLabel>
+                <Input
+                  value={writer}
+                  onChange={(e) => setWriter(e.target.value)}
+                ></Input>
+                <br />
+              </FormControl>
+              <br />
+              <Button
+                isDisabled={isSubmitting}
+                onClick={handleSubmit}
+                colorScheme="green"
+              >
+                {" "}
+                저장{" "}
+              </Button>
+            </Box>
+          </Box>
+
+          <Box w={"20%"} padding={"10px"}>
+            <RBanner />
+          </Box>
+        </Flex>
+      </Box>
     </Box>
   );
 }
