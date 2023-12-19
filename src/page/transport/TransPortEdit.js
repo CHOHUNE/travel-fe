@@ -26,6 +26,8 @@ import { useImmer } from "use-immer";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faTrash } from "@fortawesome/free-solid-svg-icons";
 import DatePicker from "react-datepicker";
+import "./DateRangePicker.css";
+import ko from "date-fns/locale/ko";
 
 export function TransPortEdit() {
   // 운송 상품 관련
@@ -293,6 +295,16 @@ export function TransPortEdit() {
               </FormLabel>
               <Flex className="date-range-picker-container">
                 <DatePicker
+                  popperClassName="trans-react-datepicker"
+                  customInput={
+                    <Input
+                      w={"200px"}
+                      h={"60px"}
+                      fontWeight={"bold"}
+                      fontSize={15}
+                    />
+                  }
+                  locale={ko}
                   value={trans.transStartDate}
                   className="date-picker"
                   selected={trans.transStartDate}
@@ -304,8 +316,39 @@ export function TransPortEdit() {
                   placeholderText="시작일"
                   dateFormat="yyyy년 MM월 dd일"
                   minDate={new Date()}
+                  autoComplete="off"
+                  formatWeekDay={(nameOfDay) => {
+                    switch (nameOfDay) {
+                      case "일요일":
+                        return "일";
+                      case "월요일":
+                        return "월";
+                      case "화요일":
+                        return "화";
+                      case "수요일":
+                        return "수";
+                      case "목요일":
+                        return "목";
+                      case "금요일":
+                        return "금";
+                      case "토요일":
+                        return "토";
+                      default:
+                        return nameOfDay;
+                    }
+                  }}
                 />
                 <DatePicker
+                  popperClassName="trans-react-datepicker"
+                  customInput={
+                    <Input
+                      w={"200px"}
+                      h={"60px"}
+                      fontWeight={"bold"}
+                      fontSize={15}
+                    />
+                  }
+                  locale={ko}
                   value={trans.transEndDate}
                   className="date-picker"
                   selected={trans.transEndDate}
@@ -317,6 +360,27 @@ export function TransPortEdit() {
                   placeholderText="마감일"
                   dateFormat="yyyy년 MM월 dd일"
                   minDate={trans.transStartDate}
+                  autoComplete="off"
+                  formatWeekDay={(nameOfDay) => {
+                    switch (nameOfDay) {
+                      case "일요일":
+                        return "일";
+                      case "월요일":
+                        return "월";
+                      case "화요일":
+                        return "화";
+                      case "수요일":
+                        return "수";
+                      case "목요일":
+                        return "목";
+                      case "금요일":
+                        return "금";
+                      case "토요일":
+                        return "토";
+                      default:
+                        return nameOfDay;
+                    }
+                  }}
                 />
               </Flex>
             </Flex>
