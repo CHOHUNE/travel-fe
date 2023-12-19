@@ -42,8 +42,7 @@ import {
 } from "react-router-dom";
 import { LoginContext } from "../../../component/LoginProvider";
 import { InfoIcon } from "@chakra-ui/icons";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faClipboard } from "@fortawesome/free-regular-svg-icons";
+import { Buffer } from "buffer";
 
 export function ReservationList() {
   const { fetchLogin, isAdmin } = useContext(LoginContext);
@@ -64,6 +63,15 @@ export function ReservationList() {
   const [selectedForCancellation, setSelectedForCancellation] = useState(null);
 
   const toast = useToast();
+
+  var clientID = process.env.REACT_APP_CLIENT_KEY;
+  var secretKey = process.env.REACT_APP_SECRET_KEY;
+
+  var encodedCredentials = Buffer.from(clientID + ":" + secretKey).toString(
+    "base64",
+  );
+
+  var authorizationHeader = "Basic " + encodedCredentials;
 
   useEffect(() => {
     axios.get("/api/toss/id/" + params.get("userId")).then((response) => {
@@ -136,8 +144,33 @@ export function ReservationList() {
   };
 
   const handleCancelClick = (reservation) => {
-    setSelectedForCancellation(reservation);
-    setIsCancelModalOpen(true);
+    // setSelectedForCancellation(reservation);
+    // setIsCancelModalOpen(true);
+    // async function confirm() {
+    //   const response = await fetch(
+    //       "https://api.tosspayments.com/v1/payments/confirm",
+    //       {
+    //         method: "POST",
+    //         headers: {
+    //           Authorization: encryptedSecretKey,
+    //           "Content-Type": "application/json",
+    //         },
+    //         body: JSON.stringify(requestData),
+    //       },
+    //   );
+    //
+    //   const json = await response.json();
+    //
+    //   if (!response.ok) {
+    //     // TODO: 구매 실패 비즈니스 로직 구현
+    //     console.log(json);
+    //     navigate(`/fail?code=${json.code}&message=${json.message}`);
+    //     return;
+    //   }
+    //
+    //   // TODO: 구매 완료 비즈니스 로직 구현
+    //   console.log(json);
+    // }
   };
 
   return (
