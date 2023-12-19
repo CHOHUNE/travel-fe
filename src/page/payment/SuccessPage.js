@@ -213,18 +213,6 @@ export function SuccessPage() {
   }, []);
 
   function handlesubmit() {
-    // axios
-    //   .postForm("/api/toss/save", {
-    //     orderId: searchParams.get("orderId"),
-    //     amount: searchParams.get("amount"),
-    //     id: searchParams.get("id"),
-    //     requested: payRequested,
-    //   })
-    //   .then((response) => {
-    //     console.log(response.data);
-    //     navigate("/");
-    //     localStorage.removeItem("payRequested");
-    //   });
     navigate("/");
   }
 
