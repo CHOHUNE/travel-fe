@@ -53,7 +53,7 @@ export function NoticeSound() {
                 >
                   고객 헌장
                 </Tab>
-              </TabList>
+              </TabList>{" "}
               <TabPanels>
                 <TabPanel>
                   <Img

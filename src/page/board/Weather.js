@@ -1,26 +1,31 @@
 import {
   Box,
-  Card,
-  CardBody,
   Flex,
-  Heading,
-  Image,
   Input,
   SimpleGrid,
-  Stack,
-  Text,
+  Tab,
+  TabList,
+  TabPanel,
+  TabPanels,
+  Tabs,
 } from "@chakra-ui/react";
 import { LBanner } from "./Banner/LBanner";
 import { RBanner } from "./Banner/RBanner";
 import React, { useState } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
-import { RMW } from "./weather/RMW";
-import { NYW } from "./weather/NYW";
-import { KRW } from "./weather/KRW";
-import { DUW } from "./weather/DUW";
-import { PAW } from "./weather/PAW";
-import { TKW } from "./weather/TKW";
+import { RMW } from "./weather/F/RMW";
+import { NYW } from "./weather/F/NYW";
+import { KRW } from "./weather/F/KRW";
+import { DUW } from "./weather/F/DUW";
+import { PAW } from "./weather/F/PAW";
+import { TKW } from "./weather/F/TKW";
+import { Seoul } from "./weather/D/Seoul";
+import { Busan } from "./weather/D/Busan";
+import { Gangneung } from "./weather/D/Gangneung";
+import { Incheon } from "./weather/D/Incheon";
+import { Jeonju } from "./weather/D/Jeonju";
+import { Jeju } from "./weather/D/Jeju";
 
 export function Weather() {
   const navigate = useNavigate();
@@ -28,7 +33,7 @@ export function Weather() {
   const [locaion, setLocaion] = useState("");
   const [result, setResult] = useState({});
 
-  const url = `https://api.openweathermap.org/data/2.5/weather?q=${locaion}&Gangwon-doappid=${API_KEY}`;
+  const url = `https://api.openweathermap.org/data/2.5/weather?q=${locaion}&appid=${API_KEY}`;
 
   const searchWeather = async (e) => {
     if (e.key === "Enter") {
@@ -62,6 +67,7 @@ export function Weather() {
               onChange={(e) => setLocaion(e.target.value)}
               onKeyDown={searchWeather}
             />
+
             {Object.keys(result).length !== 0 && (
               <Box>
                 <div> {result.data.name}</div>
@@ -72,17 +78,58 @@ export function Weather() {
                 <div> {result.data.weather[0].main}</div>
               </Box>
             )}
-            <SimpleGrid
-              spacing={2}
-              templateColumns="repeat(auto-fill, minmax(250px, 1fr))"
-            >
-              <NYW />
-              <RMW />
-              <KRW />
-              <DUW />
-              <PAW />
-              <TKW />
-            </SimpleGrid>
+            <br />
+            <br />
+
+            <Tabs isFitted variant="enclosed">
+              <TabList mb="1em">
+                <Tab
+                  _selected={{
+                    color: "white",
+                    bgColor: "blue.500",
+                  }}
+                >
+                  해외 도시 날씨
+                </Tab>
+                <Tab
+                  _selected={{
+                    color: "white",
+                    bgColor: "blue.500",
+                  }}
+                  _focus={{ boxShadow: "none" }}
+                >
+                  국내 도시 날씨
+                </Tab>
+              </TabList>{" "}
+              <TabPanels>
+                <TabPanel>
+                  <SimpleGrid
+                    spacing={2}
+                    templateColumns="repeat(auto-fill, minmax(250px, 1fr))"
+                  >
+                    <NYW />
+                    <RMW />
+                    <KRW />
+                    <DUW />
+                    <PAW />
+                    <TKW />
+                  </SimpleGrid>
+                </TabPanel>
+                <TabPanel>
+                  <SimpleGrid
+                    spacing={2}
+                    templateColumns="repeat(auto-fill, minmax(250px, 1fr))"
+                  >
+                    <Seoul />
+                    <Busan />
+                    <Incheon />
+                    <Jeonju />
+                    <Gangneung />
+                    <Jeju />
+                  </SimpleGrid>
+                </TabPanel>
+              </TabPanels>
+            </Tabs>
           </Box>
 
           <Box w={"20%"} padding={"10px"}>
