@@ -19,6 +19,7 @@ import {
   Checkbox,
   Stack,
   CheckboxGroup,
+  SimpleGrid,
 } from "@chakra-ui/react";
 import { useNavigate } from "react-router-dom";
 import DatePicker from "react-datepicker";
@@ -45,6 +46,9 @@ export function HotelWrite() {
   const [familyMood, setFamilyMood] = useState("");
   const [romanticMood, setRomanticMood] = useState("");
   const [campingMood, setCampingMood] = useState("");
+  const [natureMood, setNatureMood] = useState("");
+  const [surfing, setSurfing] = useState("");
+  const [winterSport, setWinterSport] = useState("");
 
   const toast = useToast();
   const navigate = useNavigate();
@@ -81,6 +85,9 @@ export function HotelWrite() {
         familyMood,
         romanticMood,
         campingMood,
+        natureMood,
+        surfing,
+        winterSport,
       });
 
       // 성공적으로 처리된 경우
@@ -174,6 +181,7 @@ export function HotelWrite() {
                 <option value="캠핑/카라반">캠핑/카라반</option>
                 <option value="리조트">리조트</option>
                 <option value="게스트 하우스">게스트 하우스</option>
+                <option value="한옥">한옥</option>
               </Select>
             </Flex>
             <Flex>
@@ -306,7 +314,7 @@ export function HotelWrite() {
             </FormLabel>
 
             <CheckboxGroup colorScheme="green">
-              <Stack spacing={[1, 5]} direction={["column", "row"]}>
+              <SimpleGrid columns={5} spacingY={"10px"}>
                 <Checkbox
                   value="반려견 동반"
                   onChange={(e) =>
@@ -359,7 +367,32 @@ export function HotelWrite() {
                 >
                   수영장
                 </Checkbox>
-              </Stack>
+                <Checkbox
+                  value="자연가옥"
+                  onChange={(e) =>
+                    setNatureMood(e.target.checked ? "자연가옥" : null)
+                  }
+                  isChecked={natureMood === "자연가옥"}
+                >
+                  자연가옥
+                </Checkbox>
+                <Checkbox
+                  value="스키"
+                  onChange={(e) =>
+                    setWinterSport(e.target.checked ? "스키" : null)
+                  }
+                  isChecked={winterSport === "스키"}
+                >
+                  스키
+                </Checkbox>
+                <Checkbox
+                  value="서핑"
+                  onChange={(e) => setSurfing(e.target.checked ? "서핑" : null)}
+                  isChecked={surfing === "서핑"}
+                >
+                  서핑
+                </Checkbox>
+              </SimpleGrid>
             </CheckboxGroup>
 
             <Flex mt={"20px"}>
