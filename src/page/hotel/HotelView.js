@@ -30,7 +30,7 @@ import { useLocation, useNavigate, useParams } from "react-router-dom";
 import axios from "axios";
 import { AddIcon, MinusIcon, StarIcon } from "@chakra-ui/icons";
 import { Swiper, SwiperSlide } from "swiper/react";
-import { Pagination } from "swiper/modules";
+import { Navigation, Pagination } from "swiper/modules";
 import "./style.css";
 import DatePicker from "react-datepicker";
 import { format } from "date-fns";
@@ -61,7 +61,7 @@ export function HotelView() {
 
   const navigate = useNavigate();
   const toast = useToast();
-  const [count, setCount] = useState(0);
+  const [count, setCount] = useState(1);
 
   const [selectedRoom, setSelectedRoom] = useState();
   const [roomTypePrices, setRoomTypePrices] = useState({});
@@ -246,12 +246,9 @@ export function HotelView() {
                 >
                   <Swiper
                     pagination={true}
-                    modules={[Pagination]}
-                    className="hoteViewlImg"
-                    h={"100%"}
-                    w={"65%"}
-                    ml={2}
-                    mb={2}
+                    navigation={true}
+                    modules={[Navigation, Pagination]}
+                    className="mySwiper"
                   >
                     <SwiperSlide>
                       {" "}
@@ -291,15 +288,16 @@ export function HotelView() {
                 </Box>
                 {/*</Box>*/}
 
-                <Flex
+                <Box
                   w="100%"
                   h="600px"
                   flexDirection="column"
                   // justifyContent={"center"}
                   alignItems={"center"}
+                  display={"flex"}
                   gap="10px"
-                  border="1px solid #ced8de"
-                  shadow="1px 1px 3px 1px #dadce0 inset"
+                  shadow={"1px 1px 3px 1px #dadce0 inset"}
+                  border={"1px solid #ced8de"}
                   borderRadius={10}
                 >
                   <Box
@@ -307,7 +305,7 @@ export function HotelView() {
                     h={"100px"}
                     w={"90%"}
                     borderRadius={"10px"}
-                    shadow={"1px 1px 3px 1px #dadce0 inset"}
+                    shadow={"1px 1px 3px 1px #dadce0"}
                     display={"flex"}
                     alignItems={"center"}
                   >
@@ -316,7 +314,7 @@ export function HotelView() {
                   <Box
                     my={"10px"}
                     h={"50px"}
-                    w={"400px"}
+                    w={"90%"}
                     borderRadius={"10px"}
                     shadow={"1px 1px 3px 1px #dadce0 inset"}
                     display={"flex"}
@@ -327,7 +325,7 @@ export function HotelView() {
                   <Box
                     my={"10px"}
                     h={"50px"}
-                    w={"400px"}
+                    w={"90%"}
                     borderRadius={"10px"}
                     shadow={"1px 1px 3px 1px #dadce0 inset"}
                     display={"flex"}
@@ -338,7 +336,7 @@ export function HotelView() {
                   <Box
                     my={"10px"}
                     h={"50px"}
-                    w={"400px"}
+                    w={"90%"}
                     borderRadius={"10px"}
                     shadow={"1px 1px 3px 1px #dadce0 inset"}
                     display={"flex"}
@@ -349,7 +347,7 @@ export function HotelView() {
                   <Box
                     my={"10px"}
                     h={"50px"}
-                    w={"400px"}
+                    w={"90%"}
                     borderRadius={"10px"}
                     shadow={"1px 1px 3px 1px #dadce0 inset"}
                     display={"flex"}
@@ -361,7 +359,7 @@ export function HotelView() {
                   <Box
                     mb={"20px"}
                     h={"180px"}
-                    w={"400px"}
+                    w={"90%"}
                     borderRadius={"10px"}
                     shadow={"1px 1px 3px 1px #dadce0 inset"}
                     // alignItems={"center"}
@@ -379,7 +377,7 @@ export function HotelView() {
                       </Box>
                     </Box>
                   </Box>
-                </Flex>
+                </Box>
 
                 {/*</Box>*/}
               </Flex>
@@ -393,10 +391,13 @@ export function HotelView() {
               mt={4}
               shadow={"xl"}
               display="flex" // Flexbox 사용
+              justifyContent={"center"}
               position={"sticky"}
+              top={0}
               zIndex={2}
               fontSize={14}
               fontWeight={"500"}
+              borderRadius={"10px"}
             >
               <Flex
                 className="date-range-picker-container"
@@ -405,6 +406,19 @@ export function HotelView() {
                 gap={2}
               >
                 <DatePicker
+                  customInput={
+                    <Input
+                      w={"200px"}
+                      h={"60px"}
+                      fontWeight={"bold"}
+                      fontSize={15}
+                      style={{
+                        background: "rgba(0, 0, 0, 0)",
+                        border: "none",
+                        outline: "none",
+                      }}
+                    />
+                  }
                   value={reservation.checkinDate}
                   className="date-picker"
                   selected={reservation.checkinDate}
@@ -423,6 +437,19 @@ export function HotelView() {
                   minDate={new Date()}
                 />
                 <DatePicker
+                  customInput={
+                    <Input
+                      w={"200px"}
+                      h={"60px"}
+                      fontWeight={"bold"}
+                      fontSize={15}
+                      style={{
+                        background: "rgba(0, 0, 0, 0)",
+                        border: "none",
+                        outline: "none",
+                      }}
+                    />
+                  }
                   value={reservation.checkoutDate}
                   className="date-picker"
                   selected={reservation.checkoutDate}
@@ -441,36 +468,50 @@ export function HotelView() {
                   minDate={reservation.checkinDate}
                 />
 
-                <Text fontWeight={"bold"} ml={"40px"} mr={"40px"} mt={"17px"}>
+                <Text fontSize={20} fontWeight={"bold"} ml={"15px"}>
+                  예약 기간:{" "}
+                </Text>
+
+                <Text fontWeight={"bold"} mr={"40px"}>
                   {reservation.checkinDate &&
                     reservation.checkoutDate &&
-                    "예약 기간 : " +
-                      reservation.checkinDate.toLocaleDateString("ko-KR") +
+                    // "예약 기간 : " +
+                    reservation.checkinDate.toLocaleDateString("ko-KR") +
                       " ~ " +
                       reservation.checkoutDate.toLocaleDateString("ko-KR")}
                 </Text>
-                <Text fontWeight={"bold"} mr={"20px"} mt={"17px"}>
-                  {/* 변경된 부분: 날짜가 선택되지 않았을 때는 평일 요금 표시 */}
+
+                <Text fontSize={20} fontWeight={"bold"} ml={"15px"}>
+                  숙박 기간:{" "}
+                </Text>
+
+                <Text fontWeight={"bold"} mr={"20px"}>
                   {reservation.checkinDate &&
                     reservation.checkoutDate &&
-                    "숙박 기간 : " +
-                      `${(
-                        (reservation.checkoutDate - reservation.checkinDate) /
-                        (1000 * 60 * 60 * 24)
-                      ).toFixed(0)}박 ${(
-                        (reservation.checkoutDate - reservation.checkinDate) /
-                          (1000 * 60 * 60 * 24) +
-                        1
-                      ).toFixed(0)}일`}
+                    `${(
+                      (reservation.checkoutDate - reservation.checkinDate) /
+                      (1000 * 60 * 60 * 24)
+                    ).toFixed(0)}박 ${(
+                      (reservation.checkoutDate - reservation.checkinDate) /
+                        (1000 * 60 * 60 * 24) +
+                      1
+                    ).toFixed(0)}일`}
                 </Text>
               </Flex>
             </Box>
             {/* 여기서 부터 객실 렌더링 */}
-            <Tabs isFitted variant="enclosed" mt={"40px"}>
+            <Tabs isFitted mt={"40px"}>
               <TabList mb="1em">
-                <Tab> 객실 </Tab>
-                <Tab>상세 설명</Tab>
-                <Tab>환불 및 유의사항</Tab>
+                <Tab fontWeight={"bold"} fontSize={"20px"}>
+                  {" "}
+                  객실{" "}
+                </Tab>
+                <Tab fontWeight={"bold"} fontSize={"20px"}>
+                  상세 설명
+                </Tab>
+                <Tab fontWeight={"bold"} fontSize={"20px"}>
+                  환불 및 유의사항
+                </Tab>
               </TabList>
               <TabPanels>
                 <TabPanel>
@@ -533,10 +574,7 @@ export function HotelView() {
                           </VStack>
 
                           <Stack>
-                            <Select
-                              placeholder="객실 수 "
-                              onChange={(e) => setCount(e.target.value)}
-                            >
+                            <Select onChange={(e) => setCount(e.target.value)}>
                               <option value="1">객실 1개</option>
                               <option value="2">객실 2개</option>
                               <option value="3">객실 3개</option>
@@ -571,8 +609,11 @@ export function HotelView() {
                     borderRadius={"lg"}
                     p={"10px"}
                   >
-                    {hotel.description}
-                  </Box>{" "}
+                    <Heading textColor={"orange.400"}>상세 설명</Heading>
+                    <Box ml="10px" mt={"30px"}>
+                      {hotel.description}
+                    </Box>
+                  </Box>
                   {/*주의 사항 탭*/}
                 </TabPanel>
                 <TabPanel>
@@ -587,36 +628,33 @@ export function HotelView() {
                     // justifyContent={"center"}
                     // alignItems={"center"}
                     borderRadius={"lg"}
+                    p={"10px"}
                   >
-                    <Box ml={"10px"} mt={"10px"}>
-                      <Box>
-                        <Heading textColor={"red.400"}>
-                          취소/환불/변경 유의사항
-                        </Heading>
-                      </Box>
-                      <Box mt={"10px"}>
-                        <Text>{hotel.cautionMessage}</Text>
-                        <Text>
-                          - 예약 취소, 접수는 마이페이지를 통해 가능합니다. -
-                          취소수수료가 발생하는 경우에는 마이페이지 상에서
-                          불가능하오니 고객센터로 문의하시기 바랍니다. - 취소,
-                          변경 규정은 업무 시간 기준으로 적용되며 영업시간 이후
-                          취소, 변경은 익일 영업시간 기준으로 적용됩니다. -
-                          근무시간 이후에 현지 프론트로 예약을 취소하셔도 환불이
-                          불가능합니다. - 현지 프론트로 직접 취소하셔도
-                          취소접수만 받으며, 현지에서는 환불에 대한 책임이
-                          없습니다. - 당사에서 예약한 예약건은 취소 및 변경도
-                          당사로 통보하셔야 합니다. - 변경 및 취소 약관은 당사에
-                          준하며 숙박지사와는 무관하오니 고객님의 개별적인
-                          숙박지사와의 취소는 당사에서 책임지지 않습니다. - 입실
-                          후 개인사정에 의한 조기퇴실은 어떤 경우에라도 환불이
-                          되지 않습니다. - 취소, 변경은 본사 근무 시간에 맞춰져
-                          있습니다. - 예약취소 가능시간 월-금요일: 09:00-
-                          17:00까지 / 토.일 공휴일은 휴무입니다. - 취소, 변경은
-                          필히 당사로 하셔야 하며 유선으로만 접수합니다.
-                          메일접수는 받지 않습니다. - 전화 : 02-535-0114
-                        </Text>
-                      </Box>
+                    <Heading textColor={"red.400"}>
+                      취소/환불/변경 유의사항
+                    </Heading>
+                    <Box ml={"10px"} mt={"30px"}>
+                      <Text>{hotel.cautionMessage}</Text>
+                      <Text>
+                        - 예약 취소, 접수는 마이페이지를 통해 가능합니다. -
+                        취소수수료가 발생하는 경우에는 마이페이지 상에서
+                        불가능하오니 고객센터로 문의하시기 바랍니다. - 취소,
+                        변경 규정은 업무 시간 기준으로 적용되며 영업시간 이후
+                        취소, 변경은 익일 영업시간 기준으로 적용됩니다. -
+                        근무시간 이후에 현지 프론트로 예약을 취소하셔도 환불이
+                        불가능합니다. - 현지 프론트로 직접 취소하셔도 취소접수만
+                        받으며, 현지에서는 환불에 대한 책임이 없습니다. -
+                        당사에서 예약한 예약건은 취소 및 변경도 당사로
+                        통보하셔야 합니다. - 변경 및 취소 약관은 당사에 준하며
+                        숙박지사와는 무관하오니 고객님의 개별적인 숙박지사와의
+                        취소는 당사에서 책임지지 않습니다. - 입실 후 개인사정에
+                        의한 조기퇴실은 어떤 경우에라도 환불이 되지 않습니다. -
+                        취소, 변경은 본사 근무 시간에 맞춰져 있습니다. -
+                        예약취소 가능시간 월-금요일: 09:00- 17:00까지 / 토.일
+                        공휴일은 휴무입니다. - 취소, 변경은 필히 당사로 하셔야
+                        하며 유선으로만 접수합니다. 메일접수는 받지 않습니다. -
+                        전화 : 02-535-0114
+                      </Text>
                     </Box>
                   </Box>
                 </TabPanel>

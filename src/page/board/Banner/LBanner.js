@@ -63,6 +63,7 @@ export function LBanner() {
               소비자 중심 경영
             </Text>
           </Box>
+
           <Divider my="4" />
           <Box>
             <Text
@@ -70,10 +71,9 @@ export function LBanner() {
               _hover={{ cursor: "pointer", color: "skyblue" }}
               onClick={() => navigate("/Kakao")}
             >
-              TRAVEL투어 지점 찾기
+              지점 찾기
             </Text>
           </Box>
-
           <Divider my="4" />
           <Box>
             <Text
@@ -81,7 +81,7 @@ export function LBanner() {
               _hover={{ cursor: "pointer", color: "skyblue" }}
               onClick={() => navigate("/weather")}
             >
-              유명 명소 날씨
+              유명 도시 날씨
             </Text>
           </Box>
         </Box>
