@@ -69,6 +69,20 @@ export function ReservationList() {
 
   const toast = useToast();
 
+  // let clientID = process.env.REACT_APP_CLIENT_KEY;
+  // let secretKey = process.env.REACT_APP_SECRET_KEY;
+  //
+  // let encodedCredentials = Buffer.from(clientID + ":" + secretKey).toString(
+  //   "base64",
+  // );
+
+  // let authorizationHeader = "Basic " + encodedCredentials;
+
+  // 키 찾는중
+  const apiSecretKey = process.env.REACT_APP_SECRET_KEY;
+  const secretKey = apiSecretKey;
+  const encryptedSecretKey = `Basic ${btoa(secretKey + ":")}`;
+
   useEffect(() => {
     axios.get("/api/toss/id/" + params.get("userId")).then((response) => {
       setTransToss(response.data.transToss);
@@ -139,48 +153,32 @@ export function ReservationList() {
     onOpen();
   };
 
-  let clientID = "test_ck_pP2YxJ4K87zREjvyqDLprRGZwXLO";
-  let secretKey = "test_sk_5OWRapdA8dG0eNk9RLLPro1zEqZK";
-
-  let encodedCredentials = Buffer.from(clientID + ":" + secretKey).toString(
-    "base64",
-  );
-
-  let authorizationHeader = "Basic " + encodedCredentials;
-
-  const [responseJson, setResponseJson] = useState(null);
-  const [isSuccess, setIsSuccess] = useState(null);
-
   // -------------------- 결제 취소 -------------------
   const handleCancelClick = (reservation) => {
-    // setSelectedForCancellation(reservation);
-    // setIsCancelModalOpen(true);
-
-    const paymentKey = "jvX2KBP9QADpexMgkW36WnxBzy7JbVGbR5ozO06yLYlaEJ7d"; // 여기에 실제 결제 키를 지정합니다.
-    const cancelReason = "고객 변심";
-
+    // 결제 취소 로직 실행
+    // 결제 취소 시 필요 데이터 입니다.
+    const requestData = {
+      orderId: reservation.orderId,
+      amount: reservation.amount,
+      paymentKey: reservation.paymentKey,
+    };
+    // 실질적 결제 취소 로직
+    var options = {
+      method: "POST",
+      url: `https://api.tosspayments.com/v1/payments/${requestData.paymentKey}/cancel`,
+      headers: {
+        Authorization: encryptedSecretKey,
+        "Content-Type": "application/json",
+      },
+      data: { cancelReason: "고객이 취소를 원함" },
+    };
     axios
-      .post(
-        `https://api.tosspayments.com/v1/payments/${paymentKey}/cancel`, // 여기에서 paymentKey 변수를 사용합니다.
-        {
-          cancelReason,
-        },
-        {
-          headers: {
-            Authorization: `Basic ${Buffer.from(
-              clientID + ":" + secretKey,
-            ).toString("base64")}`,
-            "Content-Type": "application/json",
-          },
-        },
-      )
-      .then((response) => {
-        setResponseJson(response.data); // 이 함수는 useState를 통해 정의되어야 합니다.
-        setIsSuccess(true); // 이 함수도 useState를 통해 정의되어야 합니다.
+      .request(options)
+      .then(function (response) {
+        console.log(response.data);
       })
-      .catch((error) => {
-        setResponseJson(error.response.data); // 이 함수는 useState를 통해 정의되어야 합니다.
-        setIsSuccess(false); // 이 함수도 useState를 통해 정의되어야 합니다.
+      .catch(function (error) {
+        console.error(error);
       });
   };
 
