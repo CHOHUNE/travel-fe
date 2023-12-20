@@ -71,25 +71,25 @@ export function TransPort() {
         </Box>
       </Card>
 
-      <Center>
-        <Box mt={"50px"} w={"55%"}>
-          <Card
-            w={"400px"}
-            h={"50px"}
+      <Flex justifyContent="center" w="100%" mt={5}>
+        <Box w={"85%"} mt={"40px"} mb={5}>
+          <Box fontSize={"40px"} fontSize={"1.8rem"}>
+            버스여행
+          </Box>
+          <Box
+            ml={"95%"}
+            w={"50px"}
+            h={"25px"}
+            mb={3}
             textAlign={"center"}
-            mb={10}
-            onClick={() => navigate("list?type=bus")}
+            onClick={() => navigate("/transport/list?type=bus")}
             _hover={{ cursor: "pointer", color: "#509896" }}
-            lineHeight={"50px"}
+            lineHeight={"30px"}
           >
-            <Box
-              fontWeight={"900"}
-              fontSize={"1.2rem"}
-              style={{ fontFamily: "GmarketSansMedium" }}
-            >
-              🚎 버스 카테고리 게시글
+            <Box color={"gray"} fontWeight={900} fontSize={"16px"}>
+              더보기
             </Box>
-          </Card>
+          </Box>
 
           <Flex justifyContent={"center"} flexWrap={"wrap"}>
             <SimpleGrid columns={4} w={"100%"} spacing={9}>
@@ -169,29 +169,29 @@ export function TransPort() {
             </SimpleGrid>
           </Flex>
         </Box>
-      </Center>
+      </Flex>
 
       <Box mt={10} boxShadow={"1px 2px 1px 2px #f5f6f6"}></Box>
 
-      <Center>
-        <Box mt={10} w={"55%"} mb={20}>
-          <Card
-            w={"400px"}
-            h={"50px"}
+      <Flex justifyContent="center" w="100%" mt={5}>
+        <Box w={"85%"} mt={"40px"} mb={12} mt={14}>
+          <Box fontSize={"40px"} fontSize={"1.8rem"}>
+            항공권 예매
+          </Box>
+          <Box
+            ml={"95%"}
+            w={"50px"}
+            h={"25px"}
+            mb={3}
             textAlign={"center"}
-            mb={10}
-            onClick={() => navigate("list?type=air")}
+            onClick={() => navigate("/transport/list?type=air")}
             _hover={{ cursor: "pointer", color: "#509896" }}
-            lineHeight={"50px"}
+            lineHeight={"30px"}
           >
-            <Box
-              fontWeight={"900"}
-              fontSize={"1.2rem"}
-              style={{ fontFamily: "GmarketSansMedium" }}
-            >
-              🛫항공 카테고리 게시글
+            <Box color={"gray"} fontWeight={900} fontSize={"16px"}>
+              더보기
             </Box>
-          </Card>
+          </Box>
 
           <Flex justifyContent={"center"} flexWrap={"wrap"}>
             <SimpleGrid columns={4} w={"100%"} spacing={9}>
@@ -284,7 +284,7 @@ export function TransPort() {
             </SimpleGrid>
           </Flex>
         </Box>
-      </Center>
+      </Flex>
     </Box>
   );
 }
