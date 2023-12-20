@@ -130,7 +130,8 @@ export function NavBar() {
               >
                 <Img
                   _hover={{ cursor: "pointer" }}
-                  src="https://study1993garbi.s3.ap-northeast-2.amazonaws.com/travel/sourceFile/logo/logo3.png"
+                  src="
+                 https://study1993garbi.s3.ap-northeast-2.amazonaws.com/travel/board/63/LOGO3.png"
                   alt="프로젝트 로고"
                   w="200px"
                   h="77px"

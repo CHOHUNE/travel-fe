@@ -221,7 +221,6 @@ export function BoardList() {
                   <Th>타이틀</Th>
                   <Th>컨텐츠</Th>
                   <Th>작성자</Th>
-                  <Th>작성일</Th>
                 </Tr>
               </Thead>
               <Tbody>
@@ -235,7 +234,6 @@ export function BoardList() {
                     <Td>{board.title}</Td>
                     <Td>{board.content}</Td>
                     <Td>{board.writer}</Td>
-                    <Td>{board.inserted}</Td>
                   </Tr>
                 ))}
               </Tbody>
