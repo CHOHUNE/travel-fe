@@ -126,6 +126,7 @@ export function TransPort() {
                       _hover={{ cursor: "pointer" }}
                       onClick={() => navigate("/transport/" + bus.tid)}
                       key={bus.tid}
+                      mt={-6}
                     >
                       <Box position="relative" overflow={"hidden"}>
                         <Image src={bus.url} h={"100%"} />
@@ -250,6 +251,7 @@ export function TransPort() {
                       _hover={{ cursor: "pointer" }}
                       onClick={() => navigate("/transport/" + air.tid)}
                       key={air.tid}
+                      mt={-6}
                     >
                       <Box position="relative" overflow={"hidden"}>
                         <Image src={air.url} h={"100%"} />
