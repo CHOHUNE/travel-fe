@@ -33,22 +33,22 @@ export function HotelWrite() {
   const [subImg2, setSubImg2] = useState(null);
   const [mapImg, setMapImg] = useState(null);
   const [mainImg, setMainImg] = useState(null);
-  const [lodgingType, setLodgingType] = useState("");
+  const [lodgingType, setLodgingType] = useState("호텔");
   const [salesFrom, setSalesFrom] = useState(null);
   const [salesTo, setSalesTo] = useState(null);
   const [rating, setRating] = useState(null);
   const [cautionMessage, setCautionMessage] = useState(null);
   const [numberOfRoom, setNumberOfRoom] = useState(null);
 
-  const [pool, setPool] = useState("");
-  const [pet, setPet] = useState("");
-  const [oceanview, setOceanview] = useState("");
-  const [familyMood, setFamilyMood] = useState("");
-  const [romanticMood, setRomanticMood] = useState("");
-  const [campingMood, setCampingMood] = useState("");
-  const [natureMood, setNatureMood] = useState("");
-  const [surfing, setSurfing] = useState("");
-  const [winterSport, setWinterSport] = useState("");
+  const [pool, setPool] = useState(null);
+  const [pet, setPet] = useState(null);
+  const [oceanview, setOceanview] = useState(null);
+  const [familyMood, setFamilyMood] = useState(null);
+  const [romanticMood, setRomanticMood] = useState(null);
+  const [campingMood, setCampingMood] = useState(null);
+  const [natureMood, setNatureMood] = useState(null);
+  const [surfing, setSurfing] = useState(null);
+  const [winterSport, setWinterSport] = useState(null);
 
   const toast = useToast();
   const navigate = useNavigate();
@@ -455,7 +455,7 @@ export function HotelWrite() {
                 alignItems={"center"}
               >
                 {" "}
-                지도 이미지{" "}
+                부가 이미지3{" "}
               </FormLabel>
               <Input
                 type="file"

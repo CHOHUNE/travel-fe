@@ -1003,7 +1003,7 @@ export function HomeBody() {
       {/* ------------------- 중간배너 ------------------- */}
       <Flex justifyContent="center" w="100%">
         <Box w={"65%"} justifyContent={"center"} mb={8}>
-          <Image src="https://study1993garbi.s3.ap-northeast-2.amazonaws.com/travel/sourceFile/imgeFile/%E1%84%87%E1%85%A2%E1%84%82%E1%85%A51.png" />
+          <Image src="https://study1993garbi.s3.ap-northeast-2.amazonaws.com/travel/sourceFile/imgeFile/travelbenner2.jpeg" />
         </Box>
       </Flex>
 
