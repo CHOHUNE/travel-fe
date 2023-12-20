@@ -44,7 +44,7 @@ export function HotelPay() {
 
   const [member, setMember] = useState("");
 
-  const [isChecked, setIsChecked] = useState(false);
+  const [isChecked, setIsChecked] = useState(true);
 
   const [personName, setPersonName] = useState("");
 

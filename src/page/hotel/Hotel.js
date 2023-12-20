@@ -120,7 +120,7 @@ function SearchComponent() {
         <Input
           w={"500px"}
           value={keyword}
-          placeholder={"호텔명, 지명, 숙소 타입, 테마"}
+          placeholder={"호텔명, 지명, 숙소 타입, 테마, 반려견 동반 여부, 레저"}
           onChange={(e) => setKeyword(e.target.value)}
           onKeyDown={(e) => {
             if (e.key === "Enter") {
@@ -306,55 +306,58 @@ export function Hotel() {
         </Box>
       </Box>
 
-      <Box display={"flex"} justifyContent={"space-evenly"} w={"100%"}>
-        <Center gap={5}>
-          <GrayscaleImageWithText
-            imageUrl="https://study1993garbi.s3.ap-northeast-2.amazonaws.com/travel/board/46/10ce1091-c854-40f3-a2fb-defc2995bcaf.jpg"
-            text="해변가"
-            navi={"/hotel/?k=바다"}
-          />
-          <GrayscaleImageWithText
-            imageUrl="https://study1993garbi.s3.ap-northeast-2.amazonaws.com/travel/board/46/ca25c7f3-0d1f-432b-9efa-b9f5dc6d8770.jpg"
-            text="캠핑, 글램핑"
-            navi={"/hotel/?k=바다"}
-          />
+      <Box
+        display={"flex"}
+        justifyContent={"space-evenly"}
+        w={"80%"}
+        ml={"10%"}
+      >
+        <GrayscaleImageWithText
+          imageUrl="https://study1993garbi.s3.ap-northeast-2.amazonaws.com/travel/board/46/10ce1091-c854-40f3-a2fb-defc2995bcaf.jpg"
+          text="해변가"
+          navi={"/hotel/?k=오션뷰"}
+        />
+        <GrayscaleImageWithText
+          imageUrl="https://study1993garbi.s3.ap-northeast-2.amazonaws.com/travel/board/46/ca25c7f3-0d1f-432b-9efa-b9f5dc6d8770.jpg"
+          text="캠핑, 글램핑"
+          navi={"/hotel/?k=캠핑"}
+        />
 
-          <GrayscaleImageWithText
-            imageUrl="https://study1993garbi.s3.ap-northeast-2.amazonaws.com/travel/board/46/3b1eb541-46d9-4bef-abc4-c37d77e3c21b.jpg"
-            text="전망"
-            navi={"/hotel/?k=전망"}
-          />
-          <GrayscaleImageWithText
-            imageUrl="https://study1993garbi.s3.ap-northeast-2.amazonaws.com/travel/board/46/6ad4bd95-f086-437d-97e3-14d12155ddfe.jpg"
-            text="촌캉스"
-            navi={"/hotel/?k=촌캉스"}
-          />
-          <GrayscaleImageWithText
-            imageUrl="https://study1993garbi.s3.ap-northeast-2.amazonaws.com/travel/board/46/51f5cf64-5821-400c-8033-8a10c7787d69.jpg"
-            text="한옥"
-            navi={"/hotel/?k=한옥"}
-          />
-          <GrayscaleImageWithText
-            imageUrl="https://study1993garbi.s3.ap-northeast-2.amazonaws.com/travel/board/46/732edad8-3ae0-49a8-a451-29a8010dcc0c.jpg"
-            text="자연가옥"
-            navi={"/hotel/?k=자연가옥"}
-          />
-          <GrayscaleImageWithText
-            imageUrl="https://study1993garbi.s3.ap-northeast-2.amazonaws.com/travel/board/46/957f8022-dfd7-426c-99fd-77ed792f6d7a.jpg"
-            text="서핑"
-            navi={"/hotel/?k=서핑"}
-          />
-          <GrayscaleImageWithText
-            imageUrl="https://study1993garbi.s3.ap-northeast-2.amazonaws.com/travel/board/46/c8bba3ed-34c0-464a-8e6e-27574d20e4d2.jpg"
-            text="스키"
-            navi={"/hotel/?k=스키"}
-          />
-          <GrayscaleImageWithText
-            imageUrl="https://study1993garbi.s3.ap-northeast-2.amazonaws.com/travel/board/47/3fb523a0-b622-4368-8142-b5e03df7549b.jpg"
-            text="수영장"
-            navi={"/hotel/?k=수영장"}
-          />
-        </Center>
+        {/*<GrayscaleImageWithText*/}
+        {/*  imageUrl="https://study1993garbi.s3.ap-northeast-2.amazonaws.com/travel/board/46/3b1eb541-46d9-4bef-abc4-c37d77e3c21b.jpg"*/}
+        {/*  text="전망"*/}
+        {/*  navi={"/hotel/?k=오션뷰"}*/}
+        {/*/>*/}
+        <GrayscaleImageWithText
+          imageUrl="https://study1993garbi.s3.ap-northeast-2.amazonaws.com/travel/board/46/6ad4bd95-f086-437d-97e3-14d12155ddfe.jpg"
+          text="촌캉스"
+          navi={"/hotel/?k=자연가옥"}
+        />
+        <GrayscaleImageWithText
+          imageUrl="https://study1993garbi.s3.ap-northeast-2.amazonaws.com/travel/board/46/51f5cf64-5821-400c-8033-8a10c7787d69.jpg"
+          text="한옥"
+          navi={"/hotel/?k=한옥"}
+        />
+        {/*<GrayscaleImageWithText*/}
+        {/*  imageUrl="https://study1993garbi.s3.ap-northeast-2.amazonaws.com/travel/board/46/732edad8-3ae0-49a8-a451-29a8010dcc0c.jpg"*/}
+        {/*  text="자연가옥"*/}
+        {/*  navi={"/hotel/?k=자연가옥"}*/}
+        {/*/>*/}
+        <GrayscaleImageWithText
+          imageUrl="https://study1993garbi.s3.ap-northeast-2.amazonaws.com/travel/board/46/957f8022-dfd7-426c-99fd-77ed792f6d7a.jpg"
+          text="서핑"
+          navi={"/hotel/?k=서핑"}
+        />
+        <GrayscaleImageWithText
+          imageUrl="https://study1993garbi.s3.ap-northeast-2.amazonaws.com/travel/board/46/c8bba3ed-34c0-464a-8e6e-27574d20e4d2.jpg"
+          text="스키"
+          navi={"/hotel/?k=스키"}
+        />
+        <GrayscaleImageWithText
+          imageUrl="https://study1993garbi.s3.ap-northeast-2.amazonaws.com/travel/board/47/3fb523a0-b622-4368-8142-b5e03df7549b.jpg"
+          text="수영장"
+          navi={"/hotel/?k=수영장"}
+        />
       </Box>
       {/* 검색 버튼 */}
       <Box mt={"50px"}>
