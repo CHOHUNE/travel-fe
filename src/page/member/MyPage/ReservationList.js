@@ -568,7 +568,7 @@ export function ReservationList() {
                   mr={3}
                   onClick={() => setIsCancelModalOpen(false)}
                 >
-                  닫기
+                  닫기닫기
                 </Button>
               </ModalFooter>
             </ModalContent>
