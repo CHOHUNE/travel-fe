@@ -90,7 +90,9 @@ export function ReservationList() {
     tossId,
     realUserPhoneNumber,
     messageContent,
+    e,
   ) => {
+    e.stopPropagation();
     try {
       // 문자 발송 처리
       const smsResponse = await axios.post(
@@ -112,10 +114,12 @@ export function ReservationList() {
     } catch (error) {
       console.error("처리 에러: ", error);
     }
-    axios.put("/api/toss/updateTransReservStatus", {
-      reservStatus: "예약완료",
-      tossId: tossId,
-    });
+    axios
+      .put("/api/toss/updateTransReservStatus", {
+        reservStatus: "예약완료",
+        tossId: tossId,
+      })
+      .finally(() => updateList());
   };
 
   // -------------------- 호텔상품용 문자 발송 및 DB에 예약번호 저장 --------------------
@@ -145,18 +149,22 @@ export function ReservationList() {
     } catch (error) {
       console.error("처리 에러: ", error);
     }
-    axios.put("/api/toss/updateHotelReservStatus", {
-      reservStatus: "예약완료",
-      hotelTossId: hotelTossId,
-    });
+    axios
+      .put("/api/toss/updateHotelReservStatus", {
+        reservStatus: "예약완료",
+        hotelTossId: hotelTossId,
+      })
+      .finally(() => updateList());
   };
 
-  const handleIconClickTrans = (request) => {
+  const handleIconClickTrans = (request, e) => {
+    e.stopPropagation();
     setSelectedRequest(request);
     onOpen();
   };
 
-  const handleIconClickHotel = (plusMessage) => {
+  const handleIconClickHotel = (plusMessage, e) => {
+    e.stopPropagation();
     setSelectedRequest(plusMessage);
     onOpen();
   };
@@ -273,7 +281,8 @@ export function ReservationList() {
   }
 
   // ----------------------- 호텔 상품 고객 취소요청 로직 -----------------------
-  function handleUserHotelCancelClick(h) {
+  function handleUserHotelCancelClick(h, e) {
+    e.stopPropagation();
     const updatedReservStatus = "취소중";
 
     axios
@@ -318,7 +327,7 @@ export function ReservationList() {
 
   return (
     <Center fontSize={"12px"} m={10}>
-      <Card w={"100%"}>
+      <Card w={"90%"}>
         <Tabs isFitted variant="enclosed">
           <TabList mb="1em">
             <Tab>
@@ -353,11 +362,13 @@ export function ReservationList() {
                       <Th textAlign={"center"}>아이디</Th>
                       <Th textAlign={"center"}>상품명</Th>
                       <Th textAlign={"center"}>출발시간 </Th>
-                      <Th textAlign={"center"} w={"100px"}>
+                      <Th textAlign={"center"} w={"95px"}>
                         요청사항
                       </Th>
-                      <Th textAlign={"center"}>연락처</Th>
-                      <Th textAlign={"center"} w={"100px"}>
+                      <Th textAlign={"center"} w={"150px"}>
+                        연락처
+                      </Th>
+                      <Th textAlign={"center"} w={"180px"}>
                         예약번호
                       </Th>
                       <Th textAlign={"center"}>가격</Th>
@@ -383,10 +394,14 @@ export function ReservationList() {
                           {formatDateTime(t.transStartDay)}
                         </Td>
                         <Td textAlign={"center"}>
-                          {t.request ? (
+                          {t.requested !== null ? (
                             <Icon
+                              textAlign={"center"}
+                              fontSize={"1.5rem"}
                               as={InfoIcon}
-                              onClick={() => handleIconClickTrans(t.request)}
+                              onClick={(e) =>
+                                handleIconClickTrans(t.requested, e)
+                              }
                               cursor="pointer"
                             />
                           ) : (
@@ -402,6 +417,7 @@ export function ReservationList() {
                                 fontSize={"10px"}
                                 w={"100px"}
                                 value={t.messageContent || t.reservNumber}
+                                onClick={(e) => e.stopPropagation()}
                                 onChange={(e) =>
                                   setTransToss(
                                     transToss.map((item) =>
@@ -418,11 +434,12 @@ export function ReservationList() {
                               />
                               <Button
                                 w={"30px"}
-                                onClick={() =>
+                                onClick={(e) =>
                                   handleConfirmation(
                                     t.tossId,
                                     t.realUserPhoneNumber,
                                     t.messageContent,
+                                    e,
                                   )
                                 }
                               >
@@ -437,6 +454,8 @@ export function ReservationList() {
                             <Flex gap={2}>
                               {t.reservNumber !== null ? (
                                 <Input
+                                  border={"none"}
+                                  textAlign={"center"}
                                   readOnly
                                   type="text"
                                   value={t.reservNumber}
@@ -511,16 +530,16 @@ export function ReservationList() {
                       <Th textAlign={"center"} w={"100px"}>
                         아이디
                       </Th>
-                      <Th w={"250px"} textAlign={"center"}>
+                      <Th w={"230px"} textAlign={"center"}>
                         상품명
                       </Th>
-                      <Th w={"210px"} textAlign={"center"}>
+                      <Th w={"250px"} textAlign={"center"}>
                         체크인{" "}
                       </Th>
-                      <Th w={"210px"} textAlign={"center"}>
+                      <Th w={"250px"} textAlign={"center"}>
                         체크아웃{" "}
                       </Th>
-                      <Th textAlign={"center"} w={"105px"}>
+                      <Th textAlign={"center"} w={"120px"}>
                         요청사항
                       </Th>
                       <Th textAlign={"center"}>연락처</Th>
@@ -530,35 +549,42 @@ export function ReservationList() {
                       <Th w={"120px"} textAlign={"center"}>
                         가격
                       </Th>
-                      <Th w={"100px"} textAlign={"center"}>
+                      <Th w={"120px"} textAlign={"center"}>
                         상태
                       </Th>
                     </Tr>
                   </Thead>
                   <Tbody>
                     {hotelToss.map((h) => (
-                      <Tr
-                        onClick={() => handleHotelClick(h)}
-                        key={h.hotelTossId}
-                        _hover={{ cursor: "pointer" }}
-                      >
+                      <Tr key={h.hotelTossId} _hover={{ cursor: "pointer" }}>
                         <Td textAlign={"center"}>{h.hotelTossId}</Td>
                         <Td textAlign={"center"}>{h.userId}</Td>
-                        <Td w={"250px"} textAlign={"center"}>
+                        <Td
+                          onClick={() => handleHotelClick(h)}
+                          w={"250px"}
+                          textAlign={"center"}
+                        >
                           {h.hotelName}
                         </Td>
-                        <Td textAlign={"center"}>
+                        <Td
+                          onClick={() => handleHotelClick(h)}
+                          textAlign={"center"}
+                        >
                           {formatDateTime(h.checkinDate)}
                         </Td>
-                        <Td textAlign={"center"}>
+                        <Td
+                          onClick={() => handleHotelClick(h)}
+                          textAlign={"center"}
+                        >
                           {formatDateTime(h.checkoutDate)}
                         </Td>
-                        <Td textAlign={"center"} textAlign={"center"}>
+                        <Td textAlign={"center"}>
                           {h.plusMessage ? (
                             <Icon
+                              fontSize={"1.5rem"}
                               as={InfoIcon}
-                              onClick={() =>
-                                handleIconClickHotel(h.plusMessage)
+                              onClick={(e) =>
+                                handleIconClickHotel(h.plusMessage, e)
                               }
                               cursor="pointer"
                             />
@@ -608,6 +634,8 @@ export function ReservationList() {
                             <Flex gap={2}>
                               {h.reservNumber !== null ? (
                                 <Input
+                                  border={"none"}
+                                  textAlign={"center"}
                                   readOnly
                                   type="text"
                                   value={h.reservNumber}
@@ -657,7 +685,9 @@ export function ReservationList() {
                               h.reservStatus !== "취소완료" && (
                                 <Button
                                   color={"red"}
-                                  onClick={() => handleUserHotelCancelClick(h)}
+                                  onClick={(e) =>
+                                    handleUserHotelCancelClick(h, e)
+                                  }
                                 >
                                   취소요청
                                 </Button>
@@ -679,6 +709,11 @@ export function ReservationList() {
               <ModalHeader>요청사항 상세</ModalHeader>
               <ModalCloseButton />
               <ModalBody>{selectedRequest}</ModalBody>
+              <ModalFooter>
+                <Button color={"blue"} onClick={() => onClose()}>
+                  닫기
+                </Button>
+              </ModalFooter>
             </ModalContent>
           </Modal>
 
@@ -726,11 +761,7 @@ export function ReservationList() {
               <ModalCloseButton />
               <ModalBody>고객 요청 사항 : {selectedRequest}</ModalBody>
               <ModalFooter>
-                <Button
-                  colorScheme="blue"
-                  mr={3}
-                  onClick={() => setIsCancelModalOpen(false)}
-                >
+                <Button colorScheme="blue" mr={3} onClick={() => onClose()}>
                   닫기
                 </Button>
               </ModalFooter>
