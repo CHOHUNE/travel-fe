@@ -15,6 +15,7 @@ import {
   Spinner,
   Center,
   Stack,
+  HStack,
 } from "@chakra-ui/react";
 import {
   useLocation,
@@ -477,37 +478,29 @@ export function Hotel() {
                   noOfLines={1}
                 >
                   {hotel.name}
-                  <Box display="flex" alignItems="baseline" flexWrap="wrap">
-                    <Box>
+                  <HStack spacing={"5px"}>
+                    {hotel.lodgingType !== null && (
                       <Badge>{hotel.lodgingType}</Badge>
-                      {hotel.lodgingType === "호텔" && (
-                        <Badge>{hotel.rating}</Badge>
-                      )}
-                    </Box>
-                    {hotel.pool != null && (
-                      <Badge color={"blue"}>{hotel.pool}</Badge>
                     )}
-                    {hotel.pet != null && (
-                      <Badge ml={"3px"} color={"green"}>
-                        {hotel.pet}
-                      </Badge>
+                    {hotel.lodgingType === "호텔" && hotel.rating !== null && (
+                      <Badge>{hotel.rating}</Badge>
                     )}
-                    {hotel.oceanview != null && (
-                      <Badge ml={"3px"} color={"blue"}>
-                        {hotel.oceanview}
-                      </Badge>
+                    {hotel.pool !== null && (
+                      <Badge colorScheme={"blue"}>{hotel.pool}</Badge>
                     )}
-                    {hotel.romanticMood != null && (
-                      <Badge ml={"3px"} color={"hotpink"}>
-                        {hotel.romanticMood}
-                      </Badge>
+                    {hotel.pet !== null && (
+                      <Badge colorScheme={"green"}>{hotel.pet}</Badge>
                     )}
-                    {hotel.familyMood != null && (
-                      <Badge ml={"3px"} color={"purple"}>
-                        {hotel.familyMood}
-                      </Badge>
+                    {hotel.oceanview !== null && (
+                      <Badge color={"blue"}>{hotel.oceanview}</Badge>
                     )}
-                  </Box>
+                    {hotel.romanticMood !== null && (
+                      <Badge color={"hotpink"}>{hotel.romanticMood}</Badge>
+                    )}
+                    {hotel.familyMood !== null && (
+                      <Badge color={"purple"}>{hotel.familyMood}</Badge>
+                    )}
+                  </HStack>
                 </Box>
 
                 {hotel.location}
