@@ -117,6 +117,10 @@ export function ReservationList() {
     } catch (error) {
       console.error("처리 에러: ", error);
     }
+    axios.put("/api/toss/updateTransReservStatus", {
+      reservStatus: "예약완료",
+      tossId: tossId,
+    });
   };
 
   // 문자 발송 및 DB에 예약번호 저장 ------------ 호텔상품용
@@ -148,13 +152,18 @@ export function ReservationList() {
     }
   };
 
-  const handleIconClick = (request) => {
+  const handleIconClickTrans = (request) => {
     setSelectedRequest(request);
     onOpen();
   };
 
+  const handleIconClickHotel = (plusMessage) => {
+    setSelectedRequest(plusMessage);
+    onOpen();
+  };
+
   // -------------------- 결제 취소 -------------------
-  const handleCancelClick = (reservation) => {
+  const handleAmdinCancelClick = (reservation) => {
     // 결제 취소 로직 실행
     // 결제 취소 시 필요 데이터 입니다.
     const requestData = {
@@ -180,11 +189,31 @@ export function ReservationList() {
       .catch(function (error) {
         console.error(error);
       });
+
+    axios.put("/api/toss/updateTransReservStatus", {
+      reservStatus: "취소완료",
+      tossId: reservation.tossId,
+    });
   };
 
-  function handleCancelClick2(h) {
-    setSelectedForCancellation2(h);
-    setIsCancelModalOpen2(true);
+  const [reservStatus, setReservStatus] = useState("");
+
+  useEffect(() => {}, []);
+
+  function handleUserTransCancelClick(t) {
+    const updatedReservStatus = "취소중";
+
+    axios
+      .put("/api/toss/updateTransReservStatus", {
+        reservStatus: updatedReservStatus,
+        tossId: t.tossId,
+      })
+      .then((response) => {
+        // 성공적으로 상태 업데이트 후 수행할 작업
+      })
+      .catch((error) => {
+        // 에러 처리
+      });
   }
 
   return (
@@ -218,6 +247,7 @@ export function ReservationList() {
               <CardBody>
                 <Table>
                   <Thead>
+                    {/* ----------------------- 항공 / 버스 상품 ----------------------- */}
                     <Tr>
                       <Th>주문번호</Th>
                       <Th>아이디</Th>
@@ -243,7 +273,7 @@ export function ReservationList() {
                           {t.request ? (
                             <Icon
                               as={InfoIcon}
-                              onClick={() => handleIconClick(t.request)}
+                              onClick={() => handleIconClickTrans(t.request)}
                               cursor="pointer"
                             />
                           ) : (
@@ -305,35 +335,42 @@ export function ReservationList() {
                         )}
                         <Td>{parseInt(t.amount).toLocaleString("ko-KR")}원</Td>
                         <Td>
-                          {t.reservNumber !== null ? (
+                          {t.reservStatus === "예약접수" && (
+                            <Text color={"black"}>예약접수</Text>
+                          )}
+                          {t.reservStatus === "예약완료" && (
                             <Text color={"blue"}>예약완료</Text>
-                          ) : (
-                            <Text>예약접수</Text>
+                          )}
+                          {t.reservStatus === "취소중" && (
+                            <Text color={"orange"}>취소중</Text>
+                          )}
+                          {t.reservStatus === "취소완료" && (
+                            <Text color={"red"}>취소완료</Text>
                           )}
                         </Td>
                         {isAdmin() && (
                           <Td>
-                            {t.cancels === null ? (
+                            {t.reservStatus !== "취소완료" && (
                               <Button
                                 color={"red"}
-                                onClick={() => handleCancelClick(t)}
+                                onClick={() => handleAmdinCancelClick(t)}
                               >
                                 취소
                               </Button>
-                            ) : (
-                              <></>
                             )}
                           </Td>
                         )}
 
                         {isAdmin() || (
                           <Td>
-                            <Button
-                              color={"red"}
-                              onClick={() => handleCancelClick(t)}
-                            >
-                              취소요청
-                            </Button>
+                            {t.reservStatus !== "취소중" && (
+                              <Button
+                                color={"red"}
+                                onClick={() => handleUserTransCancelClick(t)}
+                              >
+                                취소요청
+                              </Button>
+                            )}
                           </Td>
                         )}
                       </Tr>
@@ -346,6 +383,7 @@ export function ReservationList() {
               <CardBody>
                 <Table>
                   <Thead>
+                    {/* ----------------------- 호텔 상품 ----------------------- */}
                     <Tr>
                       <Th>주문번호</Th>
                       <Th>상품명 </Th>
@@ -365,7 +403,20 @@ export function ReservationList() {
                         <Td>{h.hotelName}</Td>
                         <Td>{h.checkinDate}</Td>
                         <Td>{h.checkoutDate}</Td>
-                        <Td>{h.plusMessage}</Td>
+                        {/*<Td>{h.plusMessage}</Td>*/}
+                        <Td textAlign={"center"}>
+                          {h.plusMessage ? (
+                            <Icon
+                              as={InfoIcon}
+                              onClick={() =>
+                                handleIconClickHotel(h.plusMessage)
+                              }
+                              cursor="pointer"
+                            />
+                          ) : (
+                            <></>
+                          )}
+                        </Td>
                         <Td>{h.cellPhoneNumber}</Td>
                         {isAdmin() && (
                           <Td>
@@ -433,7 +484,7 @@ export function ReservationList() {
                           <Td>
                             <Button
                               color={"red"}
-                              onClick={() => handleCancelClick2(h)}
+                              onClick={() => handleAmdinCancelClick(h)}
                             >
                               취소
                             </Button>
@@ -442,12 +493,12 @@ export function ReservationList() {
 
                         {isAdmin() || (
                           <Td>
-                            <Button
-                              color={"red"}
-                              onClick={() => handleCancelClick2(h)}
-                            >
-                              취소요청
-                            </Button>
+                            {/*<Button*/}
+                            {/*  color={"red"}*/}
+                            {/*  onClick={() => handleUserHotelCancelClick(h)}*/}
+                            {/*>*/}
+                            {/*  취소요청*/}
+                            {/*</Button>*/}
                           </Td>
                         )}
                       </Tr>
@@ -458,7 +509,7 @@ export function ReservationList() {
             </TabPanel>
           </TabPanels>
 
-          {/* ---------------------- 운송상품 고객 취소요청 모달 창 ---------------------- */}
+          {/* ---------------------- 운송상품 요청사항 모달 창 ---------------------- */}
           <Modal isOpen={isOpen} onClose={onClose}>
             <ModalOverlay />
             <ModalContent>
@@ -468,6 +519,7 @@ export function ReservationList() {
             </ModalContent>
           </Modal>
 
+          {/* ---------------------- 운송상품 취소요청 모달 창 ---------------------- */}
           <Modal
             isOpen={isCancelModalOpen}
             onClose={() => setIsCancelModalOpen(false)}
@@ -503,16 +555,26 @@ export function ReservationList() {
             </ModalContent>
           </Modal>
 
-          {/* ---------------------- 호텔상품 고객 취소요청 모달 창 ---------------------- */}
+          {/* ---------------------- 호텔상품 고객 요청사항 모달 창 ---------------------- */}
           <Modal isOpen={isOpen} onClose={onClose}>
             <ModalOverlay />
             <ModalContent>
               <ModalHeader>요청사항 상세</ModalHeader>
               <ModalCloseButton />
-              <ModalBody>{selectedRequest}</ModalBody>
+              <ModalBody>고객 요청 사항 : {selectedRequest}</ModalBody>
+              <ModalFooter>
+                <Button
+                  colorScheme="blue"
+                  mr={3}
+                  onClick={() => setIsCancelModalOpen(false)}
+                >
+                  닫기닫기
+                </Button>
+              </ModalFooter>
             </ModalContent>
           </Modal>
 
+          {/* ---------------------- 호텔상품 취소요청 모달 창 ---------------------- */}
           <Modal
             isOpen={isCancelModalOpen2}
             onClose={() => setIsCancelModalOpen2(false)}

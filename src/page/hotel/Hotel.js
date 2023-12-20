@@ -270,26 +270,28 @@ export function Hotel() {
   }
   const GrayscaleImageWithText = ({ imageUrl, text, navi }) => (
     <Center>
-      <Box
-        position="relative"
-        mt={"40px"}
-        w={"70px"}
-        opacity={"45%"}
-        _hover={{ cursor: "pointer", color: "black", opacity: 1 }}
-        onClick={() => navigate(navi)}
-      >
-        <Image brightness={"60%"} src={imageUrl} boxSize={"35px"} />
+      <Box>
         <Box
-          position="absolute"
-          top="50px"
-          left="-15px"
-          textAlign="center"
-          width="100%"
-          h={"100px"}
+          position="relative"
+          mt={"40px"}
+          w={"70px"}
+          opacity={"45%"}
+          _hover={{ cursor: "pointer", color: "black", opacity: 1 }}
+          onClick={() => navigate(navi)}
         >
-          <Text fontSize="0.8rrem" opacity={"85%"}>
-            {text}
-          </Text>
+          <Image brightness={"60%"} src={imageUrl} boxSize={"35px"} />
+          <Box
+            position="absolute"
+            top="50px"
+            left="-15px"
+            textAlign="center"
+            width="100%"
+            h={"100px"}
+          >
+            <Text fontSize="0.8rrem" opacity={"85%"}>
+              {text}
+            </Text>
+          </Box>
         </Box>
       </Box>
     </Center>
