@@ -64,7 +64,7 @@ export function HotelTypeWrite() {
         // roomImg: null,
         hrtId: null,
         maxMinPerRoom: null,
-        ableCooking: null,
+        ableCooking: "불가",
         numberOfBedRoom: null,
       },
     ]);

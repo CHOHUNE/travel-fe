@@ -455,7 +455,7 @@ export function HotelWrite() {
                 alignItems={"center"}
               >
                 {" "}
-                지도 이미지{" "}
+                부가 이미지3{" "}
               </FormLabel>
               <Input
                 type="file"

@@ -367,14 +367,14 @@ export function HotelView() {
                     flexDirection={"column"}
                   >
                     <Box ml={"10px"} mt={"10px"}>
-                      {/*<Box>{hotel.description}</Box>*/}
-                      <Box mb={"5px"}>
-                        {hotel.oceanview != null && "오션뷰"}
-                      </Box>
-                      <Box mb={"5px"}>{hotel.pool != null && "수영장"}</Box>
-                      <Box mb={"5px"}>
-                        {hotel.pet != null && "반려견 동반 가능"}
-                      </Box>
+                      <Box>{hotel.description}</Box>
+                      {/*<Box mb={"5px"}>*/}
+                      {/*  {hotel.oceanview != null && "오션뷰"}*/}
+                      {/*</Box>*/}
+                      {/*<Box mb={"5px"}>{hotel.pool != null && "수영장"}</Box>*/}
+                      {/*<Box mb={"5px"}>*/}
+                      {/*  {hotel.pet != null && "반려견 동반 가능"}*/}
+                      {/*</Box>*/}
                     </Box>
                   </Box>
                 </Box>
@@ -386,8 +386,7 @@ export function HotelView() {
               my={"10px"}
               bg={"whitesmoke"}
               h={"100px"}
-              w={"95%"}
-              ml={"2.5%"}
+              w={"100%"}
               mt={4}
               shadow={"xl"}
               display="flex" // Flexbox 사용
@@ -528,8 +527,7 @@ export function HotelView() {
                           textAlign={"center"}
                           alignItems={"center"}
                           justifyContent={"center"}
-                          ml={"30px"}
-                          w={"95%"}
+                          w={"100%"}
                           // maxWidth="600px" // Set the maximum width for the box
                           // mx="auto" // Center the box horizontally
                         >
@@ -635,7 +633,7 @@ export function HotelView() {
                     </Heading>
                     <Box ml={"10px"} mt={"30px"}>
                       <Text>{hotel.cautionMessage}</Text>
-                      <Text>
+                      <Text mt={"30px"}>
                         - 예약 취소, 접수는 마이페이지를 통해 가능합니다. -
                         취소수수료가 발생하는 경우에는 마이페이지 상에서
                         불가능하오니 고객센터로 문의하시기 바랍니다. - 취소,
