@@ -16,6 +16,11 @@ import {
   NumberInputField,
   NumberInputStepper,
   Spinner,
+  Tab,
+  TabList,
+  TabPanel,
+  TabPanels,
+  Tabs,
   Text,
   useToast,
 } from "@chakra-ui/react";
@@ -622,42 +627,123 @@ export function TransPortView() {
         {/*  */}
 
         {/* -------- 운송 상품 상세 설명 내용  -------- */}
-        <Card w={"95%"} mt={3} mb={20} ml="2.5%">
-          <CardBody>
-            {trans.contentImages != null ? (
-              <>
-                {trans.contentImages.map((file) => (
-                  <Image
-                    src={file.url}
-                    key={file.id}
+        <Tabs isFitted mt={"40px"}>
+          <TabList mb="1em">
+            <Tab fontWeight={"bold"} fontSize={"20px"}>
+              일정 및 상세 설명
+            </Tab>
+            <Tab fontWeight={"bold"} fontSize={"20px"}>
+              안내 사항
+            </Tab>
+            <Tab fontWeight={"bold"} fontSize={"20px"}>
+              취소 및 환불
+            </Tab>
+          </TabList>
+          <TabPanels>
+            <TabPanel>
+              <Card w={"95%"} mt={3} mb={20} ml="2.5%">
+                <CardBody>
+                  {trans.contentImages != null ? (
+                    <>
+                      {trans.contentImages.map((file) => (
+                        <Image
+                          src={file.url}
+                          key={file.id}
+                          w={"90%"}
+                          ml={"5%"}
+                          mt={2}
+                        />
+                      ))}
+                    </>
+                  ) : (
+                    <Box>빈값</Box>
+                  )}
+                </CardBody>
+              </Card>
+            </TabPanel>
+            <TabPanel>
+              <Card w={"95%"} mt={3} mb={20} ml="2.5%">
+                <CardBody>
+                  <FormControl
                     w={"90%"}
-                    ml={"5%"}
+                    mt={5}
+                    mb={10}
+                    ml="5%"
+                    border={"1px solid #ced8de"}
+                    borderRadius={10}
+                  >
+                    <FormLabel ml={2} mt={2}>
+                      안내 사항
+                    </FormLabel>
+                    <Box ml={2} mt={2} mb={2}>
+                      {trans.transContent}
+                    </Box>
+                  </FormControl>
+                </CardBody>
+              </Card>
+            </TabPanel>
+            <TabPanel>
+              <Card w={"95%"} mt={3} mb={20} ml="2.5%">
+                <CardBody>
+                  <FormControl
+                    w={"90%"}
+                    mt={5}
+                    mb={2}
+                    ml="5%"
+                    // border={"1px solid #ced8de"}
+                    borderRadius={10}
+                  >
+                    <Flex alignItems={"center"}>
+                      <FormLabel ml={10} mt={2} w={"150px"}>
+                        예약취소 / 변경
+                      </FormLabel>
+                      <Box ml={1} mt={2} mb={2}>
+                        <p>
+                          예약하신 상품의 취소와 변경은 평일 근무시간 내에
+                          전화로만 가능 합니다.
+                        </p>
+                        <p>평일 : 월 ~ 금 / 09:00 ~ 18:00</p>
+                        <p>
+                          주말 : 토요일 / 일요일 / 공휴일은 휴무일로 상품의 취소
+                          / 변경 처리가 되지 않습니다.
+                        </p>
+                      </Box>
+                    </Flex>
+                  </FormControl>
+                  <Box w={"90%"} ml="5%" border={"1px solid #ced8de"}></Box>
+                  <FormControl
+                    w={"90%"}
                     mt={2}
-                  />
-                ))}
-              </>
-            ) : (
-              <Box>빈값</Box>
-            )}
-          </CardBody>
-          <CardFooter>
-            <FormControl
-              w={"90%"}
-              mt={5}
-              mb={10}
-              ml="5%"
-              border={"1px solid #ced8de"}
-              borderRadius={10}
-            >
-              <FormLabel ml={2} mt={2}>
-                상품 설명
-              </FormLabel>
-              <Box ml={2} mt={2} mb={2}>
-                {trans.transContent}
-              </Box>
-            </FormControl>
-          </CardFooter>
-        </Card>
+                    mb={2}
+                    ml="5%"
+                    // border={"1px solid #ced8de"}
+                    borderRadius={10}
+                  >
+                    <Flex alignItems={"center"}>
+                      <FormLabel ml={10} mt={2} w={"150px"}>
+                        환불규정
+                      </FormLabel>
+                      <Box ml={1} mt={2} mb={2}>
+                        <p>출발 3일전 취소/변경: 전체경비의 100%환불</p>
+                        <p>출발 2일전 취소/변경: 전체경비의 70%환불</p>
+                        <p>출발 1일전 취소/변경: 전체경비의 50%환불</p>
+                        <p style={{ color: "red" }}>
+                          당일 불참/취소변경 시 전체여행경비 100%환불불가
+                        </p>
+                      </Box>
+                    </Flex>
+                  </FormControl>
+                  <Box
+                    w={"90%"}
+                    ml="5%"
+                    border={"1px solid #ced8de"}
+                    mb={10}
+                  ></Box>
+                </CardBody>
+              </Card>
+            </TabPanel>
+          </TabPanels>
+        </Tabs>
       </Box>
     </Center>
   );
