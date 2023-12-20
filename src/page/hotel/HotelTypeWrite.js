@@ -36,7 +36,7 @@ export function HotelTypeWrite() {
       // roomImg: null,
       hrtId: null,
       maxMinPerRoom: null,
-      ableCooking: null,
+      ableCooking: "불가",
       numberOfBedRoom: null,
     },
   ]);
@@ -131,7 +131,7 @@ export function HotelTypeWrite() {
 
   return (
     <Center>
-      <Card w={"1400px"} p={"30px"} my={"30px"}>
+      <Card w={"94%"} p={"30px"} my={"30px"}>
         <CardHeader>
           <Heading textAlign={"center"}>객실 관리</Heading>
         </CardHeader>
@@ -258,7 +258,7 @@ export function HotelTypeWrite() {
                 <Td>
                   <Select
                     w={"80px"}
-                    value={room.maxMinPerRoom}
+                    value={room.ableCooking}
                     onChange={(e) => {
                       const value = e.target.value;
                       setRoomtypes((prevRoomtypes) => {
@@ -268,8 +268,8 @@ export function HotelTypeWrite() {
                       });
                     }}
                   >
-                    <option value={room.ableCooking}>가능</option>
-                    <option value={room.ableCooking}>불가</option>
+                    <option value="불가">불가</option>
+                    <option value="가능">가능</option>
                   </Select>
                 </Td>
 
