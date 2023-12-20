@@ -22,6 +22,7 @@ import {
 import { RecentViewed } from "../../component/RecentViewed";
 import { LoginContext } from "../../component/LoginProvider";
 
+// 운송 상품 페이지 버튼 컴포넌트
 function TransPage({ pageInfo, params }) {
   const navigate = useNavigate();
   const pageNumbers = [];
@@ -30,9 +31,15 @@ function TransPage({ pageInfo, params }) {
   }
 
   return (
-    <Box>
+    <Flex gap={1}>
       {pageInfo.prevPageNumber && (
         <Button
+          bg={"white"}
+          shadow={"1px 1px 3px 1px #dadce0"}
+          _hover={{
+            shadow: "1px 1px 3px 1px #dadce0 inset",
+            backgroundColor: "whitesmoke",
+          }}
           onClick={() =>
             navigate(
               "/transport/list?type=" +
@@ -48,7 +55,13 @@ function TransPage({ pageInfo, params }) {
 
       {pageNumbers.map((pageNumber) => (
         <Button
+          bg={"white"}
           key={pageNumber}
+          shadow={"1px 1px 3px 1px #dadce0"}
+          _hover={{
+            shadow: "1px 1px 3px 1px #dadce0 inset",
+            backgroundColor: "whitesmoke",
+          }}
           onClick={() =>
             navigate("/transport/list?type=" + params + "&p=" + pageNumber)
           }
@@ -59,6 +72,12 @@ function TransPage({ pageInfo, params }) {
 
       {pageInfo.nextPageNumber && (
         <Button
+          color={"white"}
+          shadow={"1px 1px 3px 1px #dadce0"}
+          _hover={{
+            shadow: "1px 1px 3px 1px #dadce0 inset",
+            backgroundColor: "whitesmoke",
+          }}
           onClick={() =>
             navigate(
               "/transport/list?type=" +
@@ -71,7 +90,7 @@ function TransPage({ pageInfo, params }) {
           <FontAwesomeIcon icon={faAnglesRight} />
         </Button>
       )}
-    </Box>
+    </Flex>
   );
 }
 // 검색 컴포넌트
@@ -238,7 +257,7 @@ export function TransPortList() {
         h={"50px"}
         justifyContent={"space-between"}
       >
-        <Card
+        <Box
           w={"300px"}
           h={"50px"}
           textAlign={"center"}
@@ -246,10 +265,18 @@ export function TransPortList() {
           lineHeight={"50px"}
         >
           <Box fontWeight={"900"} fontSize={"1.5rem"}>
-            {params.get("type") === "bus" && <Box>🚎 버스 여행</Box>}
-            {params.get("type") === "air" && <Box>🛫 항공 여행</Box>}
+            {params.get("type") === "bus" && (
+              <Box color={"black"} fontSize={"40px"} fontSize={"1.8rem"}>
+                버스 여행
+              </Box>
+            )}
+            {params.get("type") === "air" && (
+              <Box color={"black"} fontSize={"40px"} fontSize={"1.8rem"}>
+                항공 여행
+              </Box>
+            )}
           </Box>
-        </Card>
+        </Box>
         {isAdmin() && (
           <Box>
             <Button
@@ -272,9 +299,14 @@ export function TransPortList() {
                   borderWidth="1px"
                   borderRadius="lg"
                   overflow="hidden"
-                  _hover={{ cursor: "pointer" }}
                   onClick={() => navigate("/transport/" + transport.tid)}
                   key={transport.tid}
+                  shadow={"1px 1px 3px 1px #dadce0"}
+                  _hover={{
+                    shadow: "1px 1px 3px 1px #dadce0 inset",
+                    backgroundColor: "whitesmoke",
+                    cursor: "pointer",
+                  }}
                 >
                   <Box position="relative" overflow={"hidden"}>
                     <Image src={transport.url} h={"100%"} />
@@ -367,7 +399,7 @@ export function TransPortList() {
           )}
         </SimpleGrid>
       </Flex>
-      <Flex w={"80%"} ml={"10%"} mt={10} justifyContent={"center"}>
+      <Flex w={"80%"} ml={"10%"} mt={10} mb={10} justifyContent={"center"}>
         <TransPage params={params.get("type")} pageInfo={pageInfo} />
       </Flex>
     </Box>

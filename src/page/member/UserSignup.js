@@ -63,6 +63,8 @@ export function UserSignup() {
   const toast = useToast();
   const navigate = useNavigate();
 
+  const [idPatternMatch, setIdPatternMatch] = useState(true);
+
   // ------------- 우편번호 검색 HOOK -------------
   // ------------- 카카오 우편번호 팝업 -------------
   const daumPostcode = useDaumPostcodePopup(postcodeScriptUrl);
@@ -141,6 +143,7 @@ export function UserSignup() {
   function handleIdCheck() {
     const searchParams = new URLSearchParams();
     searchParams.set("userId", userId);
+    setIdPatternMatch(true);
 
     axios
       .get("/api/member/check?" + searchParams.toString())
@@ -155,6 +158,10 @@ export function UserSignup() {
         setUserIdCheck(true);
 
         if (error.response.status === 400) {
+          console.log(error.response.data);
+          if (error.response.data.message) {
+            setIdPatternMatch(false);
+          }
           toast({
             description: "아이디를 입력해주시기 바랍니다.",
             status: "warning",
@@ -230,6 +237,22 @@ export function UserSignup() {
         }
       });
   }
+
+  // 비밀번호 정규식
+  const [isPasswordValid, setIsPasswordValid] = useState(true);
+  const passwordRegex =
+    /^(?=.*[A-Za-z])(?=.*\d)(?=.*[@$!%*#?&])[A-Za-z\d@$!%*#?&]{8,}$/;
+
+  const validatePassword = (password) => {
+    return passwordRegex.test(password);
+  };
+
+  // 비밀번호 입력 핸들러
+  const handlePasswordChange = (e) => {
+    const newPassword = e.target.value;
+    setUserPassword(newPassword);
+    setIsPasswordValid(validatePassword(newPassword)); // 입력값 유효성 검사
+  };
 
   // ---------- 카카오 우편번호 API 로직 ----------
   const handleDaumPostcode = () => {
@@ -322,6 +345,14 @@ export function UserSignup() {
             <FormErrorMessage w={"63%"} ml={120}>
               ID 중복체크 해주세요.
             </FormErrorMessage>
+            <FormHelperText
+              w={"63%"}
+              ml={120}
+              color={idPatternMatch ? "gray" : "red"}
+              fontSize={"12px"}
+            >
+              5자에서 20자 사이의 영문자와 숫자만 허용
+            </FormHelperText>
           </FormControl>
 
           <FormControl mb={3}>
@@ -337,9 +368,20 @@ export function UserSignup() {
               <Input
                 type="password"
                 value={userPassword}
-                onChange={(e) => setUserPassword(e.target.value)}
+                onChange={(e) => {
+                  handlePasswordChange(e);
+                  setUserPassword(e.target.value);
+                }}
               />
             </Flex>
+            <FormHelperText
+              w={"63%"}
+              ml={120}
+              color={!isPasswordValid ? "red" : "gray"}
+              fontSize={"12px"}
+            >
+              최소 8자 이상 숫자, 특수문자, 영문자 포함
+            </FormHelperText>
           </FormControl>
 
           {userPassword.length > 0 && (
@@ -398,6 +440,7 @@ export function UserSignup() {
                 placeholder="우편번호"
                 mb={3}
                 value={userPostCode}
+                readOnly
                 onChange={(e) => setUserPostCode(e.target.value)} // 주소검색 버튼 클릭 시 팝업 열도록 설정
               />
               <Button onClick={handleDaumPostcode}>주소검색</Button>
