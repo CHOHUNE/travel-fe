@@ -117,6 +117,10 @@ export function ReservationList() {
     } catch (error) {
       console.error("처리 에러: ", error);
     }
+    axios.put("/api/toss/updateTransReservStatus", {
+      reservStatus: "예약완료",
+      tossId: tossId,
+    });
   };
 
   // 문자 발송 및 DB에 예약번호 저장 ------------ 호텔상품용
@@ -148,8 +152,13 @@ export function ReservationList() {
     }
   };
 
-  const handleIconClick = (request) => {
+  const handleIconClickTrans = (request) => {
     setSelectedRequest(request);
+    onOpen();
+  };
+
+  const handleIconClickHotel = (plusMessage) => {
+    setSelectedRequest(plusMessage);
     onOpen();
   };
 
@@ -180,6 +189,11 @@ export function ReservationList() {
       .catch(function (error) {
         console.error(error);
       });
+
+    axios.put("/api/toss/updateTransReservStatus", {
+      reservStatus: "취소완료",
+      tossId: reservation.tossId,
+    });
   };
 
   const [reservStatus, setReservStatus] = useState("");
@@ -201,8 +215,6 @@ export function ReservationList() {
         // 에러 처리
       });
   }
-
-  function handleUserHotelCancelClick(h) {}
 
   return (
     <Center m={10}>
@@ -235,6 +247,7 @@ export function ReservationList() {
               <CardBody>
                 <Table>
                   <Thead>
+                    {/* ----------------------- 항공 / 버스 상품 ----------------------- */}
                     <Tr>
                       <Th>주문번호</Th>
                       <Th>아이디</Th>
@@ -260,7 +273,7 @@ export function ReservationList() {
                           {t.request ? (
                             <Icon
                               as={InfoIcon}
-                              onClick={() => handleIconClick(t.request)}
+                              onClick={() => handleIconClickTrans(t.request)}
                               cursor="pointer"
                             />
                           ) : (
@@ -323,26 +336,28 @@ export function ReservationList() {
                         <Td>{parseInt(t.amount).toLocaleString("ko-KR")}원</Td>
                         <Td>
                           {t.reservStatus === "예약접수" && (
-                            <Text color={"blue"}>예약접수</Text>
+                            <Text color={"black"}>예약접수</Text>
                           )}
                           {t.reservStatus === "예약완료" && (
                             <Text color={"blue"}>예약완료</Text>
                           )}
                           {t.reservStatus === "취소중" && (
-                            <Text color={"blue"}>취소중</Text>
+                            <Text color={"orange"}>취소중</Text>
                           )}
                           {t.reservStatus === "취소완료" && (
-                            <Text color={"blue"}>취소완료</Text>
+                            <Text color={"red"}>취소완료</Text>
                           )}
                         </Td>
                         {isAdmin() && (
                           <Td>
-                            <Button
-                              color={"red"}
-                              onClick={() => handleAmdinCancelClick(t)}
-                            >
-                              취소
-                            </Button>
+                            {t.reservStatus !== "취소완료" && (
+                              <Button
+                                color={"red"}
+                                onClick={() => handleAmdinCancelClick(t)}
+                              >
+                                취소
+                              </Button>
+                            )}
                           </Td>
                         )}
 
@@ -368,6 +383,7 @@ export function ReservationList() {
               <CardBody>
                 <Table>
                   <Thead>
+                    {/* ----------------------- 호텔 상품 ----------------------- */}
                     <Tr>
                       <Th>주문번호</Th>
                       <Th>상품명 </Th>
@@ -387,7 +403,20 @@ export function ReservationList() {
                         <Td>{h.hotelName}</Td>
                         <Td>{h.checkinDate}</Td>
                         <Td>{h.checkoutDate}</Td>
-                        <Td>{h.plusMessage}</Td>
+                        {/*<Td>{h.plusMessage}</Td>*/}
+                        <Td textAlign={"center"}>
+                          {h.plusMessage ? (
+                            <Icon
+                              as={InfoIcon}
+                              onClick={() =>
+                                handleIconClickHotel(h.plusMessage)
+                              }
+                              cursor="pointer"
+                            />
+                          ) : (
+                            <></>
+                          )}
+                        </Td>
                         <Td>{h.cellPhoneNumber}</Td>
                         {isAdmin() && (
                           <Td>
@@ -480,7 +509,7 @@ export function ReservationList() {
             </TabPanel>
           </TabPanels>
 
-          {/* ---------------------- 운송상품 고객 취소요청 모달 창 ---------------------- */}
+          {/* ---------------------- 운송상품 요청사항 모달 창 ---------------------- */}
           <Modal isOpen={isOpen} onClose={onClose}>
             <ModalOverlay />
             <ModalContent>
@@ -490,6 +519,7 @@ export function ReservationList() {
             </ModalContent>
           </Modal>
 
+          {/* ---------------------- 운송상품 취소요청 모달 창 ---------------------- */}
           <Modal
             isOpen={isCancelModalOpen}
             onClose={() => setIsCancelModalOpen(false)}
@@ -525,16 +555,26 @@ export function ReservationList() {
             </ModalContent>
           </Modal>
 
-          {/* ---------------------- 호텔상품 고객 취소요청 모달 창 ---------------------- */}
+          {/* ---------------------- 호텔상품 고객 요청사항 모달 창 ---------------------- */}
           <Modal isOpen={isOpen} onClose={onClose}>
             <ModalOverlay />
             <ModalContent>
               <ModalHeader>요청사항 상세</ModalHeader>
               <ModalCloseButton />
-              <ModalBody>{selectedRequest}</ModalBody>
+              <ModalBody>고객 요청 사항 : {selectedRequest}</ModalBody>
+              <ModalFooter>
+                <Button
+                  colorScheme="blue"
+                  mr={3}
+                  onClick={() => setIsCancelModalOpen(false)}
+                >
+                  닫기
+                </Button>
+              </ModalFooter>
             </ModalContent>
           </Modal>
 
+          {/* ---------------------- 호텔상품 취소요청 모달 창 ---------------------- */}
           <Modal
             isOpen={isCancelModalOpen2}
             onClose={() => setIsCancelModalOpen2(false)}
