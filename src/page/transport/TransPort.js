@@ -73,23 +73,45 @@ export function TransPort() {
 
       <Center>
         <Box mt={"50px"} w={"55%"}>
-          <Card
-            w={"400px"}
-            h={"50px"}
-            textAlign={"center"}
-            mb={10}
-            onClick={() => navigate("list?type=bus")}
-            _hover={{ cursor: "pointer", color: "#509896" }}
-            lineHeight={"50px"}
-          >
+          <Flex justifyContent={"space-between"}>
             <Box
-              fontWeight={"900"}
-              fontSize={"1.2rem"}
-              style={{ fontFamily: "GmarketSansMedium" }}
+              w={"150px"}
+              h={"50px"}
+              textAlign={"center"}
+              mb={10}
+              lineHeight={"50px"}
             >
-              🚎 버스 카테고리 게시글
+              <Box
+                fontWeight={"900"}
+                fontSize={"1.6rem"}
+                style={{ fontFamily: "GmarketSansMedium" }}
+              >
+                버스 여행
+              </Box>
             </Box>
-          </Card>
+            <Box
+              w={"100px"}
+              h={"50px"}
+              textAlign={"center"}
+              onClick={() => navigate("list?type=bus")}
+              lineHeight={"70px"}
+            >
+              <Box
+                fontSize={"1rem"}
+                style={{ fontFamily: "GmarketSansMedium" }}
+                _hover={{ cursor: "pointer", color: "black" }}
+                mb={0}
+                h={"50px"}
+                color={"#8f8f8f"}
+              >
+                더보기
+              </Box>
+
+              <Center>
+                <Box w={"60%"} mt={0} borderBottom={"1px solid #8f8f8f"}></Box>
+              </Center>
+            </Box>
+          </Flex>
 
           <Flex justifyContent={"center"} flexWrap={"wrap"}>
             <SimpleGrid columns={4} w={"100%"} spacing={9}>
@@ -175,23 +197,45 @@ export function TransPort() {
 
       <Center>
         <Box mt={10} w={"55%"} mb={20}>
-          <Card
-            w={"400px"}
-            h={"50px"}
-            textAlign={"center"}
-            mb={10}
-            onClick={() => navigate("list?type=air")}
-            _hover={{ cursor: "pointer", color: "#509896" }}
-            lineHeight={"50px"}
-          >
+          <Flex justifyContent={"space-between"}>
             <Box
-              fontWeight={"900"}
-              fontSize={"1.2rem"}
-              style={{ fontFamily: "GmarketSansMedium" }}
+              w={"150px"}
+              h={"50px"}
+              textAlign={"center"}
+              mb={10}
+              lineHeight={"50px"}
             >
-              🛫항공 카테고리 게시글
+              <Box
+                fontWeight={"900"}
+                fontSize={"1.6rem"}
+                style={{ fontFamily: "GmarketSansMedium" }}
+              >
+                항공 여행
+              </Box>
             </Box>
-          </Card>
+            <Box
+              w={"100px"}
+              h={"50px"}
+              textAlign={"center"}
+              onClick={() => navigate("list?type=air")}
+              lineHeight={"70px"}
+            >
+              <Box
+                fontSize={"1rem"}
+                style={{ fontFamily: "GmarketSansMedium" }}
+                _hover={{ cursor: "pointer", color: "black" }}
+                mb={0}
+                h={"50px"}
+                color={"#8f8f8f"}
+              >
+                더보기
+              </Box>
+
+              <Center>
+                <Box w={"60%"} mt={0} borderBottom={"1px solid #8f8f8f"}></Box>
+              </Center>
+            </Box>
+          </Flex>
 
           <Flex justifyContent={"center"} flexWrap={"wrap"}>
             <SimpleGrid columns={4} w={"100%"} spacing={9}>
