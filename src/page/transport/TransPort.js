@@ -71,47 +71,25 @@ export function TransPort() {
         </Box>
       </Card>
 
-      <Center>
-        <Box mt={"50px"} w={"55%"}>
-          <Flex justifyContent={"space-between"}>
-            <Box
-              w={"150px"}
-              h={"50px"}
-              textAlign={"center"}
-              mb={10}
-              lineHeight={"50px"}
-            >
-              <Box
-                fontWeight={"900"}
-                fontSize={"1.6rem"}
-                style={{ fontFamily: "GmarketSansMedium" }}
-              >
-                버스 여행
-              </Box>
+      <Flex justifyContent="center" w="100%" mt={5}>
+        <Box w={"85%"} mt={"40px"} mb={5}>
+          <Box fontSize={"40px"} fontSize={"1.8rem"}>
+            버스여행
+          </Box>
+          <Box
+            ml={"95%"}
+            w={"50px"}
+            h={"25px"}
+            mb={3}
+            textAlign={"center"}
+            onClick={() => navigate("/transport/list?type=bus")}
+            _hover={{ cursor: "pointer", color: "#509896" }}
+            lineHeight={"30px"}
+          >
+            <Box color={"gray"} fontWeight={900} fontSize={"16px"}>
+              더보기
             </Box>
-            <Box
-              w={"100px"}
-              h={"50px"}
-              textAlign={"center"}
-              onClick={() => navigate("list?type=bus")}
-              lineHeight={"70px"}
-            >
-              <Box
-                fontSize={"1rem"}
-                style={{ fontFamily: "GmarketSansMedium" }}
-                _hover={{ cursor: "pointer", color: "black" }}
-                mb={0}
-                h={"50px"}
-                color={"#8f8f8f"}
-              >
-                더보기
-              </Box>
-
-              <Center>
-                <Box w={"60%"} mt={0} borderBottom={"1px solid #8f8f8f"}></Box>
-              </Center>
-            </Box>
-          </Flex>
+          </Box>
 
           <Flex justifyContent={"center"} flexWrap={"wrap"}>
             <SimpleGrid columns={4} w={"100%"} spacing={9}>
@@ -126,7 +104,6 @@ export function TransPort() {
                       _hover={{ cursor: "pointer" }}
                       onClick={() => navigate("/transport/" + bus.tid)}
                       key={bus.tid}
-                      mt={-6}
                     >
                       <Box position="relative" overflow={"hidden"}>
                         <Image src={bus.url} h={"100%"} />
@@ -192,51 +169,29 @@ export function TransPort() {
             </SimpleGrid>
           </Flex>
         </Box>
-      </Center>
+      </Flex>
 
       <Box mt={10} boxShadow={"1px 2px 1px 2px #f5f6f6"}></Box>
 
-      <Center>
-        <Box mt={10} w={"55%"} mb={20}>
-          <Flex justifyContent={"space-between"}>
-            <Box
-              w={"150px"}
-              h={"50px"}
-              textAlign={"center"}
-              mb={10}
-              lineHeight={"50px"}
-            >
-              <Box
-                fontWeight={"900"}
-                fontSize={"1.6rem"}
-                style={{ fontFamily: "GmarketSansMedium" }}
-              >
-                항공 여행
-              </Box>
+      <Flex justifyContent="center" w="100%" mt={5}>
+        <Box w={"85%"} mt={"40px"} mb={12} mt={14}>
+          <Box fontSize={"40px"} fontSize={"1.8rem"}>
+            항공권 예매
+          </Box>
+          <Box
+            ml={"95%"}
+            w={"50px"}
+            h={"25px"}
+            mb={3}
+            textAlign={"center"}
+            onClick={() => navigate("/transport/list?type=air")}
+            _hover={{ cursor: "pointer", color: "#509896" }}
+            lineHeight={"30px"}
+          >
+            <Box color={"gray"} fontWeight={900} fontSize={"16px"}>
+              더보기
             </Box>
-            <Box
-              w={"100px"}
-              h={"50px"}
-              textAlign={"center"}
-              onClick={() => navigate("list?type=air")}
-              lineHeight={"70px"}
-            >
-              <Box
-                fontSize={"1rem"}
-                style={{ fontFamily: "GmarketSansMedium" }}
-                _hover={{ cursor: "pointer", color: "black" }}
-                mb={0}
-                h={"50px"}
-                color={"#8f8f8f"}
-              >
-                더보기
-              </Box>
-
-              <Center>
-                <Box w={"60%"} mt={0} borderBottom={"1px solid #8f8f8f"}></Box>
-              </Center>
-            </Box>
-          </Flex>
+          </Box>
 
           <Flex justifyContent={"center"} flexWrap={"wrap"}>
             <SimpleGrid columns={4} w={"100%"} spacing={9}>
@@ -251,7 +206,6 @@ export function TransPort() {
                       _hover={{ cursor: "pointer" }}
                       onClick={() => navigate("/transport/" + air.tid)}
                       key={air.tid}
-                      mt={-6}
                     >
                       <Box position="relative" overflow={"hidden"}>
                         <Image src={air.url} h={"100%"} />
@@ -330,7 +284,7 @@ export function TransPort() {
             </SimpleGrid>
           </Flex>
         </Box>
-      </Center>
+      </Flex>
     </Box>
   );
 }
