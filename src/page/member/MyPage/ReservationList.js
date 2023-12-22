@@ -256,8 +256,9 @@ export function ReservationList() {
   };
 
   // ----------------------- 운송 상품 고객 취소요청 로직 -----------------------
-  function handleUserTransCancelClick(t) {
+  function handleUserTransCancelClick(t, e) {
     const updatedReservStatus = "취소중";
+    e.stopPropagation();
 
     axios
       .put("/api/toss/updateTransReservStatus", {
@@ -505,7 +506,9 @@ export function ReservationList() {
                               t.reservStatus !== "취소완료" && (
                                 <Button
                                   color={"red"}
-                                  onClick={() => handleUserTransCancelClick(t)}
+                                  onClick={(e) =>
+                                    handleUserTransCancelClick(t, e)
+                                  }
                                 >
                                   취소요청
                                 </Button>
