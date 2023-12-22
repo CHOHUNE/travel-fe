@@ -66,8 +66,8 @@ export function PaymentPage() {
           customerName: userName, // 구매자 이름
 
           successUrl:
-            "http://localhost:3000/successpage?id=" + id + "&type=trans", // 결제 성공 시 이동할 페이지(이 주소는 예시입니다. 상점에서 직접 만들어주세요.)
-          failUrl: "http://localhost:3000/fail", // 결제 실패 시 이동할 페이지(이 주소는 예시입니다. 상점에서 직접 만들어주세요.)
+            "http://localhost:8080/successpage?id=" + id + "&type=trans", // 결제 성공 시 이동할 페이지(이 주소는 예시입니다. 상점에서 직접 만들어주세요.)
+          failUrl: "http://localhost:8080/fail", // 결제 실패 시 이동할 페이지(이 주소는 예시입니다. 상점에서 직접 만들어주세요.)
         })
         // ------결제창을 띄울 수 없는 에러 처리 ------
         // 메서드 실행에 실패해서 reject 된 에러를 처리하는 블록입니다.
@@ -148,8 +148,8 @@ export function PaymentPage() {
           customerName: userName, // 구매자 이름
 
           successUrl:
-            "http://localhost:3000/successpage?id=" + id + "&type=hotel", // 결제 성공 시 이동할 페이지(이 주소는 예시입니다. 상점에서 직접 만들어주세요.)
-          failUrl: "http://localhost:3000/fail", // 결제 실패 시 이동할 페이지(이 주소는 예시입니다. 상점에서 직접 만들어주세요.)
+            "http://localhost:8080/successpage?id=" + id + "&type=hotel", // 결제 성공 시 이동할 페이지(이 주소는 예시입니다. 상점에서 직접 만들어주세요.)
+          failUrl: "http://localhost:8080/fail", // 결제 실패 시 이동할 페이지(이 주소는 예시입니다. 상점에서 직접 만들어주세요.)
         })
         // ------결제창을 띄울 수 없는 에러 처리 ------
         // 메서드 실행에 실패해서 reject 된 에러를 처리하는 블록입니다.
