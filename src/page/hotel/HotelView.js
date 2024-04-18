@@ -37,8 +37,8 @@ import { format } from "date-fns";
 import { LoginContext } from "../../component/LoginProvider";
 
 export function HotelView() {
-  const { id } = useParams();
-  const [hotel, setHotel] = useState([]);
+  const { id } = useParams(); // URL 파라미터에서 id를 가져옴
+  const [hotel, setHotel] = useState([]); //
   const [roomtypeList, setRoomtypeList] = useState(null);
 
   const [reservation, setReservation] = useState({
